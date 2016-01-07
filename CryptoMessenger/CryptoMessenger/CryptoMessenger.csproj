@@ -32,6 +32,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,16 +66,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoginForm.cs">
+    <Compile Include="GUI\Dropshadow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoginForm.Designer.cs">
+    <Compile Include="Stuff\FontFactory.cs" />
+    <Compile Include="GUI\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\MyButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\MyButton.Designer.cs">
+      <DependentUpon>MyButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\MySplitContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\MySplitContainer.Designer.cs">
+      <DependentUpon>MySplitContainer.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="LoginForm.resx">
+    <EmbeddedResource Include="GUI\Dropshadow.resx">
+      <DependentUpon>Dropshadow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -76,52 +124,23 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Resources\Roboto-Light.ttf" />
+    <None Include="Resources\Neue.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\close_button_pressed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\close_button_hover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\close_button_normal.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\minimize_button_hover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\minimize_button_normal.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\minimize_button_pressed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\login_button_hover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\login_button_normal.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\login_button_pressed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\register_button_hover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\register_button_normal.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\register_button_pressed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\warninig.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\accept.png" />
+    <Content Include="Resources\close_button_hover.png" />
+    <Content Include="Resources\close_button_normal.png" />
+    <Content Include="Resources\close_button_pressed.png" />
+    <Content Include="Resources\icon.ico" />
+    <Content Include="Resources\icon.png" />
+    <Content Include="Resources\login.png" />
+    <Content Include="Resources\minimize_button_hover.png" />
+    <Content Include="Resources\minimize_button_normal.png" />
+    <Content Include="Resources\minimize_button_pressed.png" />
+    <Content Include="Resources\register.png" />
+    <Content Include="Resources\send.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
