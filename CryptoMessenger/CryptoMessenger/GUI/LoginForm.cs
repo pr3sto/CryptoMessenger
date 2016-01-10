@@ -3,12 +3,16 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
-using Shadow;
+using CryptoMessenger.Stuff;
+using CryptoMessenger.ClientServerCommunication;
 
-namespace CryptoMessenger
+namespace CryptoMessenger.GUI
 {
     public partial class LoginForm : Form
-    {		
+    {
+		// cleint 
+		Client client;
+
 		// main form, opens when user login
 		private MainForm mainForm;
 
@@ -47,7 +51,9 @@ namespace CryptoMessenger
 			};
             shadow.RefreshShadow();
             shadow.UpdateLocation();
-        }
+
+			client = new Client();
+		}
 
 
 		// login
@@ -56,65 +62,167 @@ namespace CryptoMessenger
 			if (e.KeyChar == Convert.ToChar(Keys.Return))
 				loginButton.PerformClick();
 		}
-		private void loginButton_Click(object sender, EventArgs e)
+		private async void loginButton_Click(object sender, EventArgs e)
         {
             if (userName.Text.Equals(""))
             {
-                namePanelBorderColor = Properties.Settings.Default.AlertColor;
-                userNamePanel.Refresh();
+				namePanelBorderColor = Properties.Settings.Default.AlertColor;
+				userNamePanel.Refresh();
 
-                incorrectName.ForeColor = Color.Red;
-                incorrectName.Text = "ИМЯ НЕ УКАЗАНО";
-            }
+				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+				notificationLabel.Text = "НЕКОРРЕКТНЫЕ ДАННЫЕ";
+			}
             if (userPassword.Text.Equals(""))
             {
-                passPanelBorderColor = Properties.Settings.Default.AlertColor;
-                userPasswordPanel.Refresh();
+				passPanelBorderColor = Properties.Settings.Default.AlertColor;
+				userPasswordPanel.Refresh();
 
-                incorrectPassword.ForeColor = Color.Red;
-                incorrectPassword.Text = "ПАРОЛЬ НЕ УКАЗАН";
-            }
+				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+				notificationLabel.Text = "НЕКОРРЕКТНЫЕ ДАННЫЕ";
+			}
             if (!userName.Text.Equals("") && !userPassword.Text.Equals(""))
             {
-                Hide();
-                userPassword.Text = null;
+				loginButton.Enabled = false;
+				registerButton.Enabled = false;
+				userName.Enabled = false;
+				userPassword.Enabled = false;
+				showPasswordCheckBox.Enabled = false;
 
-				mainForm = new MainForm(this, userName.Text);
-				mainForm.ShowDialog();
-				mainForm.Close();
+				// try login
+				notificationLabel.Text = "ВХОД...";
+				bool success;
+				try
+				{
+					success = await client.Login(userName.Text, userPassword.Text);
+				}
+				catch (ServerConnectionException)
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = "ОШИБКА СОЕДИНЕНИЯ С СЕРВЕРОМ";
 
-				// free memory
-				mainForm = null;
-				GC.Collect(); // ouch
-				GC.WaitForPendingFinalizers();
+					loginButton.Enabled = true;
+					registerButton.Enabled = true;
+					userName.Enabled = true;
+					userPassword.Enabled = true;
+					showPasswordCheckBox.Enabled = true;
+					ActiveControl = loginButton;
 
-				Show();
+					return;
+				}
+
+				if (success)
+				{
+					userPassword.Text = null;
+					Hide();
+
+					mainForm = new MainForm(this, userName.Text);
+					mainForm.ShowDialog();
+					mainForm.Close();
+
+					// free memory
+					mainForm = null;
+					GC.Collect(); // ouch
+					GC.WaitForPendingFinalizers();
+
+					notificationLabel.Text = "ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ";
+					Show();
+				}
+				else
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = "НЕ УДАЕТСЯ ВОЙТИ. ПРОВЕРЬТЕ ПРАВИЛЬНОСТЬ ДАННЫХ";
+
+					namePanelBorderColor = Properties.Settings.Default.AlertColor;
+					passPanelBorderColor = Properties.Settings.Default.AlertColor;
+				}
+
+				userNamePanel.Refresh();
+				userPasswordPanel.Refresh();
+				loginButton.Enabled = true;
+				registerButton.Enabled = true;
+				userName.Enabled = true;
+				userPassword.Enabled = true;
+				showPasswordCheckBox.Enabled = true;
+				ActiveControl = loginButton;
             }
         }
 
 
         // register
-        private void registerButton_Click(object sender, EventArgs e)
+        private async void registerButton_Click(object sender, EventArgs e)
         {
             if (userName.Text.Equals(""))
             {
                 namePanelBorderColor = Properties.Settings.Default.AlertColor;
                 userNamePanel.Refresh();
 
-                incorrectName.ForeColor = Color.Red;
-                incorrectName.Text = "ИМЯ НЕ УКАЗАНО";
+				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+				notificationLabel.Text = "НЕКОРРЕКТНЫЕ ДАННЫЕ";
             }
             if (userPassword.Text.Equals(""))
             {
                 passPanelBorderColor = Properties.Settings.Default.AlertColor;
                 userPasswordPanel.Refresh();
 
-                incorrectPassword.ForeColor = Color.Red;
-                incorrectPassword.Text = "ПАРОЛЬ НЕ УКАЗАН";
-            }
+				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+				notificationLabel.Text = "НЕКОРРЕКТНЫЕ ДАННЫЕ";
+			}
             if (!userName.Text.Equals("") && !userPassword.Text.Equals(""))
             {
-            }
+				loginButton.Enabled = false;
+				registerButton.Enabled = false;
+				userName.Enabled = false;
+				userPassword.Enabled = false;
+				showPasswordCheckBox.Enabled = false;
+
+				// try register
+				notificationLabel.Text = "РЕГИСТРАЦИЯ...";
+				bool success;
+				try
+				{
+					success = await client.Register(userName.Text, userPassword.Text);
+				}
+				catch (ServerConnectionException)
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = "ОШИБКА СОЕДИНЕНИЯ С СЕРВЕРОМ";
+					
+					loginButton.Enabled = true;
+					registerButton.Enabled = true;
+					userName.Enabled = true;
+					userPassword.Enabled = true;
+					showPasswordCheckBox.Enabled = true;
+					ActiveControl = loginButton;
+
+					return;
+				}
+
+				if (success)
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.SuccessColor;
+					notificationLabel.Text = "ВЫ УСПЕШНО ЗАРЕГИСТРИРОВАЛИСЬ";
+
+					namePanelBorderColor = Properties.Settings.Default.SuccessColor;
+					passPanelBorderColor = Properties.Settings.Default.SuccessColor;
+				}
+				else
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = "РЕГИСТРАЦИЯ НЕ УСПЕШНА";
+
+					namePanelBorderColor = Properties.Settings.Default.AlertColor;
+					passPanelBorderColor = Properties.Settings.Default.AlertColor;
+				}
+
+				userNamePanel.Refresh();
+				userPasswordPanel.Refresh();
+				loginButton.Enabled = true;
+				registerButton.Enabled = true;
+				userName.Enabled = true;
+				userPassword.Enabled = true;
+				showPasswordCheckBox.Enabled = true;
+				ActiveControl = loginButton;
+			}
         }
 	}
 }

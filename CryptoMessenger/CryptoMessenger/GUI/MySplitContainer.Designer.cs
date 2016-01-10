@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace CryptoMessenger
+namespace CryptoMessenger.GUI
 {
 	partial class MySplitContainer
 	{

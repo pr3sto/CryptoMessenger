@@ -29,5 +29,8 @@
     <Setting Name="PanelBorderColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">215, 215, 215</Value>
     </Setting>
+    <Setting Name="SuccessColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Lime</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

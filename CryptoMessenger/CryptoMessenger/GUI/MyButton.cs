@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace CryptoMessenger
+namespace CryptoMessenger.GUI
 {
     public partial class MyButton : Button
     {

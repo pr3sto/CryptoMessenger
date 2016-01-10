@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Shadow
+namespace CryptoMessenger.GUI
 {
 	/// <summary>
 	///     Dropshadow.

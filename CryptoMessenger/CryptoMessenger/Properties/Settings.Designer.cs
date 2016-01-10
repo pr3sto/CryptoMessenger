@@ -103,5 +103,14 @@ namespace CryptoMessenger.Properties {
                 return ((global::System.Drawing.Color)(this["PanelBorderColor"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Lime")]
+        public global::System.Drawing.Color SuccessColor {
+            get {
+                return ((global::System.Drawing.Color)(this["SuccessColor"]));
+            }
+        }
     }
 }

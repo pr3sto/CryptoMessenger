@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientServerCommunication\Client.cs" />
     <Compile Include="GUI\Dropshadow.cs">
       <SubType>Form</SubType>
     </Compile>

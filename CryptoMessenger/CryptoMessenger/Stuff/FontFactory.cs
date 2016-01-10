@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Drawing.Text;
 
-namespace CryptoMessenger
+namespace CryptoMessenger.Stuff
 {
 	class FontFactory
 	{

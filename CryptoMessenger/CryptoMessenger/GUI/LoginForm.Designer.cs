@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CryptoMessenger
+namespace CryptoMessenger.GUI
 {
     partial class LoginForm
     {
@@ -78,12 +78,11 @@ namespace CryptoMessenger
 		private void LoginForm_Load(object sender, EventArgs e)
 		{
 			appName.Font = NeueFont15;
+			notificationLabel.Font = NeueFont10;
 			loginButton.Font = NeueFont15;
 			registerButton.Font = NeueFont15;
 			userName.Font = NeueFont15;
 			userPassword.Font = NeueFont15;
-			incorrectName.Font = NeueFont10;
-			incorrectPassword.Font = NeueFont10;
 			showPasswordCheckBox.Font = NeueFont10;
 
 			ActiveControl = loginButton;
@@ -218,24 +217,29 @@ namespace CryptoMessenger
 
 		#endregion
 
+		#region Resize label when text changed (center alignment)
+
+		private void notificationLabel_SizeChanged(object sender, EventArgs e)
+		{
+			Point location = notificationLabel.Location;
+			location.X = (Width - notificationLabel.Width) / 2;
+			notificationLabel.Location = location;
+		}
+
+		#endregion
+
 		#region Focus user ad pass fields
 
-		// delete warning when focus textbox
-		private void userName_Enter(object sender, EventArgs e)
+		// default color when focus textbox
+		private void field_Enter(object sender, EventArgs e)
 		{
 			namePanelBorderColor = Properties.Settings.Default.PanelBorderColor;
 			userNamePanel.Refresh();
-
-			incorrectName.Text = null;
-		}
-
-		// delete warning when focus textbox
-		private void userPassword_Enter(object sender, EventArgs e)
-		{
 			passPanelBorderColor = Properties.Settings.Default.PanelBorderColor;
 			userPasswordPanel.Refresh();
 
-			incorrectPassword.Text = null;
+			notificationLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			notificationLabel.Text = "ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ";
 		}
 
 		#endregion
@@ -265,18 +269,17 @@ namespace CryptoMessenger
 			this.topPanel = new System.Windows.Forms.Panel();
 			this.iconBox = new System.Windows.Forms.PictureBox();
 			this.appName = new System.Windows.Forms.Label();
-			this.minimizeButton = new CryptoMessenger.MyButton();
-			this.closeButton = new CryptoMessenger.MyButton();
-			this.incorrectName = new System.Windows.Forms.Label();
-			this.incorrectPassword = new System.Windows.Forms.Label();
+			this.minimizeButton = new CryptoMessenger.GUI.MyButton();
+			this.closeButton = new CryptoMessenger.GUI.MyButton();
 			this.showPasswordCheckBox = new System.Windows.Forms.CheckBox();
 			this.userNamePanel = new System.Windows.Forms.Panel();
 			this.userName = new System.Windows.Forms.TextBox();
 			this.loginFormPanel = new System.Windows.Forms.Panel();
+			this.notificationLabel = new System.Windows.Forms.Label();
 			this.userPasswordPanel = new System.Windows.Forms.Panel();
 			this.userPassword = new System.Windows.Forms.TextBox();
-			this.registerButton = new CryptoMessenger.MyButton();
-			this.loginButton = new CryptoMessenger.MyButton();
+			this.registerButton = new CryptoMessenger.GUI.MyButton();
+			this.loginButton = new CryptoMessenger.GUI.MyButton();
 			this.topPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iconBox)).BeginInit();
 			this.userNamePanel.SuspendLayout();
@@ -362,26 +365,6 @@ namespace CryptoMessenger
 			this.closeButton.MouseEnter += new System.EventHandler(this.closeButton_MouseEnter);
 			this.closeButton.MouseLeave += new System.EventHandler(this.closeButton_MouseLeave);
 			// 
-			// incorrectName
-			// 
-			this.incorrectName.AutoSize = true;
-			this.incorrectName.BackColor = System.Drawing.Color.Transparent;
-			this.incorrectName.Font = new System.Drawing.Font("Roboto Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.incorrectName.Location = new System.Drawing.Point(47, 49);
-			this.incorrectName.Name = "incorrectName";
-			this.incorrectName.Size = new System.Drawing.Size(0, 16);
-			this.incorrectName.TabIndex = 2;
-			// 
-			// incorrectPassword
-			// 
-			this.incorrectPassword.AutoSize = true;
-			this.incorrectPassword.BackColor = System.Drawing.Color.Transparent;
-			this.incorrectPassword.Font = new System.Drawing.Font("Roboto Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.incorrectPassword.Location = new System.Drawing.Point(47, 109);
-			this.incorrectPassword.Name = "incorrectPassword";
-			this.incorrectPassword.Size = new System.Drawing.Size(0, 16);
-			this.incorrectPassword.TabIndex = 8;
-			// 
 			// showPasswordCheckBox
 			// 
 			this.showPasswordCheckBox.AutoSize = true;
@@ -394,7 +377,7 @@ namespace CryptoMessenger
 			this.showPasswordCheckBox.Font = new System.Drawing.Font("Roboto Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.showPasswordCheckBox.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.showPasswordCheckBox.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.showPasswordCheckBox.Location = new System.Drawing.Point(50, 171);
+			this.showPasswordCheckBox.Location = new System.Drawing.Point(50, 197);
 			this.showPasswordCheckBox.Name = "showPasswordCheckBox";
 			this.showPasswordCheckBox.Size = new System.Drawing.Size(135, 20);
 			this.showPasswordCheckBox.TabIndex = 3;
@@ -407,7 +390,7 @@ namespace CryptoMessenger
 			this.userNamePanel.BackColor = System.Drawing.Color.White;
 			this.userNamePanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.userNamePanel.Controls.Add(this.userName);
-			this.userNamePanel.Location = new System.Drawing.Point(50, 65);
+			this.userNamePanel.Location = new System.Drawing.Point(50, 95);
 			this.userNamePanel.Name = "userNamePanel";
 			this.userNamePanel.Size = new System.Drawing.Size(200, 40);
 			this.userNamePanel.TabIndex = 5;
@@ -422,14 +405,13 @@ namespace CryptoMessenger
 			this.userName.Name = "userName";
 			this.userName.Size = new System.Drawing.Size(182, 22);
 			this.userName.TabIndex = 0;
-			this.userName.Enter += new System.EventHandler(this.userName_Enter);
+			this.userName.Enter += new System.EventHandler(this.field_Enter);
 			// 
 			// loginFormPanel
 			// 
+			this.loginFormPanel.Controls.Add(this.notificationLabel);
 			this.loginFormPanel.Controls.Add(this.topPanel);
-			this.loginFormPanel.Controls.Add(this.incorrectPassword);
 			this.loginFormPanel.Controls.Add(this.showPasswordCheckBox);
-			this.loginFormPanel.Controls.Add(this.incorrectName);
 			this.loginFormPanel.Controls.Add(this.userNamePanel);
 			this.loginFormPanel.Controls.Add(this.userPasswordPanel);
 			this.loginFormPanel.Controls.Add(this.registerButton);
@@ -440,12 +422,23 @@ namespace CryptoMessenger
 			this.loginFormPanel.TabIndex = 9;
 			this.loginFormPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.loginFormPanel_Paint);
 			// 
+			// notificationLabel
+			// 
+			this.notificationLabel.AutoSize = true;
+			this.notificationLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.notificationLabel.Location = new System.Drawing.Point(0, 59);
+			this.notificationLabel.Name = "notificationLabel";
+			this.notificationLabel.Size = new System.Drawing.Size(298, 13);
+			this.notificationLabel.TabIndex = 7;
+			this.notificationLabel.Text = "ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ";
+			this.notificationLabel.SizeChanged += new System.EventHandler(this.notificationLabel_SizeChanged);
+			// 
 			// userPasswordPanel
 			// 
 			this.userPasswordPanel.BackColor = System.Drawing.Color.White;
 			this.userPasswordPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.userPasswordPanel.Controls.Add(this.userPassword);
-			this.userPasswordPanel.Location = new System.Drawing.Point(50, 125);
+			this.userPasswordPanel.Location = new System.Drawing.Point(50, 155);
 			this.userPasswordPanel.Name = "userPasswordPanel";
 			this.userPasswordPanel.Size = new System.Drawing.Size(200, 40);
 			this.userPasswordPanel.TabIndex = 6;
@@ -461,7 +454,7 @@ namespace CryptoMessenger
 			this.userPassword.PasswordChar = '*';
 			this.userPassword.Size = new System.Drawing.Size(182, 22);
 			this.userPassword.TabIndex = 1;
-			this.userPassword.Enter += new System.EventHandler(this.userPassword_Enter);
+			this.userPassword.Enter += new System.EventHandler(this.field_Enter);
 			// 
 			// registerButton
 			// 
@@ -475,7 +468,7 @@ namespace CryptoMessenger
 			this.registerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.registerButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.registerButton.ForeColor = System.Drawing.Color.White;
-			this.registerButton.Location = new System.Drawing.Point(50, 300);
+			this.registerButton.Location = new System.Drawing.Point(50, 320);
 			this.registerButton.Name = "registerButton";
 			this.registerButton.Size = new System.Drawing.Size(200, 50);
 			this.registerButton.TabIndex = 5;
@@ -497,7 +490,7 @@ namespace CryptoMessenger
 			this.loginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.loginButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.loginButton.ForeColor = System.Drawing.Color.White;
-			this.loginButton.Location = new System.Drawing.Point(50, 230);
+			this.loginButton.Location = new System.Drawing.Point(50, 250);
 			this.loginButton.Name = "loginButton";
 			this.loginButton.Size = new System.Drawing.Size(200, 50);
 			this.loginButton.TabIndex = 4;
@@ -548,10 +541,9 @@ namespace CryptoMessenger
         private Label appName;
         private Panel userNamePanel;
         private Panel userPasswordPanel;
-        private Label incorrectName;
-        private Label incorrectPassword;
         private CheckBox showPasswordCheckBox;
         private Panel loginFormPanel;
 		private PictureBox iconBox;
+		private Label notificationLabel;
 	}
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using Shadow;
-
-namespace CryptoMessenger
+namespace CryptoMessenger.GUI
 {
     public partial class MainForm : Form
     {

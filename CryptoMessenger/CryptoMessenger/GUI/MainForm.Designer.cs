@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace CryptoMessenger
+namespace CryptoMessenger.GUI
 {
     partial class MainForm
     {
@@ -368,19 +368,19 @@ namespace CryptoMessenger
         {
 			this.topPanel = new System.Windows.Forms.Panel();
 			this.iconBox = new System.Windows.Forms.PictureBox();
-			this.closeButton = new CryptoMessenger.MyButton();
-			this.minimizeButton = new CryptoMessenger.MyButton();
+			this.closeButton = new CryptoMessenger.GUI.MyButton();
+			this.minimizeButton = new CryptoMessenger.GUI.MyButton();
 			this.appName = new System.Windows.Forms.Label();
 			this.contactsPanel = new System.Windows.Forms.Panel();
 			this.friendsListBox = new System.Windows.Forms.ListBox();
 			this.friendsTitlePanel = new System.Windows.Forms.Panel();
 			this.friendsTitle = new System.Windows.Forms.Label();
 			this.mainFormPanel = new System.Windows.Forms.Panel();
-			this.splitContainer = new CryptoMessenger.MySplitContainer();
+			this.splitContainer = new CryptoMessenger.GUI.MySplitContainer();
 			this.activeTalkTitlePanel = new System.Windows.Forms.Panel();
 			this.activeTalkTitle = new System.Windows.Forms.Label();
 			this.message = new System.Windows.Forms.TextBox();
-			this.sendButton = new CryptoMessenger.MyButton();
+			this.sendButton = new CryptoMessenger.GUI.MyButton();
 			this.topPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iconBox)).BeginInit();
 			this.contactsPanel.SuspendLayout();
