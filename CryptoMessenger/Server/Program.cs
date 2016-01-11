@@ -17,8 +17,8 @@ namespace Server
 			Console.WriteLine();
 
 			// client handlers
-			LoginHandler loginHandler = new LoginHandler(4431);
-			RegistrationHandler registrationHandler = new RegistrationHandler(4432);			
+			LoginHandler loginHandler = new LoginHandler(44301);
+			RegistrationHandler registrationHandler = new RegistrationHandler(44302);			
 
 			// admin commands
 			while (true)
