@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,16 +100,27 @@ namespace CryptoMessenger.ClientServerCommunication
 			
 				string data = login + " " + password;
 
+				RemoteCertificateValidationCallback validationCallback =
+					new RemoteCertificateValidationCallback(CertificateCallback.ServerValidationCallback);
+
+				LocalCertificateSelectionCallback selectionCallback =
+					new LocalCertificateSelectionCallback(CertificateCallback.ClientCertificateSelectionCallback);
+
+				SslStream sslStream = new SslStream(client.GetStream(), true, 
+					validationCallback, selectionCallback, EncryptionPolicy.RequireEncryption);
+
+				SslHandshake.ClientSideHandshake(sslStream, ip);
+
+
 				// send login and password to server
 				byte[] bytes = Encoding.UTF8.GetBytes(data);
-				await client.GetStream().WriteAsync(bytes, 0, bytes.Length);
+				await sslStream.WriteAsync(bytes, 0, bytes.Length);
 
 				// server response
 				bytes = new byte[client.ReceiveBufferSize];
-				int bytesRead = await client.GetStream().ReadAsync(bytes, 0, client.ReceiveBufferSize);
-				byte[] response_bytes = new byte[bytesRead];
-				Array.Copy(bytes, response_bytes, bytesRead);
-				response = Encoding.UTF8.GetString(response_bytes);
+				int bytesRead = await sslStream.ReadAsync(bytes, 0, client.ReceiveBufferSize);
+				Array.Resize<byte>(ref bytes, bytesRead);
+				response = Encoding.UTF8.GetString(bytes);
 
 				client.Close();
 			}

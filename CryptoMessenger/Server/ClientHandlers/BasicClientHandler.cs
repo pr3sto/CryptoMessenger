@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Server.SslStuff;
 
 namespace Server
 {
@@ -141,8 +144,19 @@ namespace Server
 			{
 				try
 				{
-					string clientData = RecieveDataFromClient(client);
-					ProcessData(client, clientData);
+					RemoteCertificateValidationCallback validationCallback =
+						new RemoteCertificateValidationCallback(CertificateCallback.ClientValidationCallback);
+
+					LocalCertificateSelectionCallback selectionCallback =
+						new LocalCertificateSelectionCallback(CertificateCallback.ServerCertificateSelectionCallback);
+
+					SslStream sslStream = new SslStream(client.GetStream(), true, 
+						validationCallback, selectionCallback, EncryptionPolicy.RequireEncryption);
+
+					SslHandshake.ServerSideHandshake(sslStream);
+
+					string clientData = RecieveDataFromClient(sslStream, client.ReceiveBufferSize);
+					ProcessData(sslStream, clientData);
 				}
 				catch (ClientConnectionException)
 				{
@@ -169,15 +183,15 @@ namespace Server
 		/// <returns>Recieved string.</returns>
 		/// <exception cref="ClientConnectionException"></exception>
 		/// <exception cref="ClientMessageException"></exception>
-		private string RecieveDataFromClient(TcpClient client)
+		private string RecieveDataFromClient(SslStream sslStream, int receiveBufferSize)
 		{
 			byte[] bytes;  // bytes from client stream
 			int bytesRead; // number of bytes
 
 			try
 			{
-				bytes = new byte[client.ReceiveBufferSize];
-				bytesRead = client.GetStream().Read(bytes, 0, client.ReceiveBufferSize);
+				bytes = new byte[receiveBufferSize];
+				bytesRead = sslStream.Read(bytes, 0, receiveBufferSize);
 			}
 			catch
 			{
@@ -189,9 +203,8 @@ namespace Server
 			try
 			{
 				// data from client in bytes
-				byte[] data_bytes = new byte[bytesRead];
-				Array.Copy(bytes, data_bytes, bytesRead);
-				data = Encoding.UTF8.GetString(data_bytes);
+				Array.Resize<byte>(ref bytes, bytesRead);
+				data = Encoding.UTF8.GetString(bytes);
 			}
 			catch
 			{
@@ -206,7 +219,7 @@ namespace Server
 		/// </summary>
 		/// <param name="client">Connected client.</param>
 		/// <param name="data">Clients message.</param>
-		private void ProcessData(TcpClient client, string data)
+		private void ProcessData(SslStream sslStream, string data)
 		{
 			string response;
 			string[] login_password = data.Split(' ');
@@ -225,7 +238,7 @@ namespace Server
 
 			try
 			{
-				SendResponseToClient(client, response);
+				SendResponseToClient(sslStream, response);
 			}
 			catch (ClientConnectionException)
 			{
@@ -240,14 +253,14 @@ namespace Server
 		/// <param name="client">Connected client.</param>
 		/// <param name="response">Response message.</param>
 		/// <exception cref="ClientConnectionException"></exception>
-		private void SendResponseToClient(TcpClient client, string response)
+		private void SendResponseToClient(SslStream sslStream, string response)
 		{
 			if (string.IsNullOrEmpty(response)) response = "ERROR";
 			byte[] response_bytes = Encoding.UTF8.GetBytes(response);
 
 			try
 			{
-				client.GetStream().Write(response_bytes, 0, response_bytes.Length);
+				sslStream.Write(response_bytes, 0, response_bytes.Length);
 			}
 			catch
 			{
