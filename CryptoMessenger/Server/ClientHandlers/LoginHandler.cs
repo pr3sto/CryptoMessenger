@@ -1,6 +1,6 @@
 ﻿namespace Server
 {
-	class LoginHandler : BasicClientHandler
+	class LoginHandler : BasicLoginRegisterHandler
 	{
 		/// <summary>
 		/// Initialize Login Handler, that listen to clients.
@@ -17,7 +17,7 @@
 		protected override bool DoRequiredOperation(string[] login_password)
 		{
 			System.Threading.Thread.Sleep(2000);
-			return false;
+			return true;
 		}
 	}
 }

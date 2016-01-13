@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Server.SslStuff;
+using Server.Ssl;
 
 namespace Server
 {
@@ -47,7 +47,7 @@ namespace Server
 		}
 	}
 
-	public abstract class BasicClientHandler
+	public abstract class BasicLoginRegisterHandler
 	{
 		// port number
 		private int port;
@@ -63,7 +63,7 @@ namespace Server
 		/// <summary>
 		/// Initialize Handler, that listen to clients.
 		/// </summary>
-		public BasicClientHandler(int port)
+		public BasicLoginRegisterHandler(int port)
 		{
 			this.port = port;
 			activeTasks = new List<Task>();
@@ -112,7 +112,7 @@ namespace Server
 				}
 			}
 
-			// wait for finishing processing clients
+			// wait for finishing process clients
 			Task.WaitAll(activeTasks.ToArray());
 
 			Console.WriteLine("{0} is now stopped.", GetType().Name);
@@ -144,19 +144,20 @@ namespace Server
 			{
 				try
 				{
-					RemoteCertificateValidationCallback validationCallback =
-						new RemoteCertificateValidationCallback(CertificateCallback.ClientValidationCallback);
+					using (SslStream sslStream = new SslStream(client.GetStream(), true,
+						SslStuff.ClientValidationCallback,
+						SslStuff.ServerCertificateSelectionCallback,
+						EncryptionPolicy.RequireEncryption))
+					{
+						// handshake
+						SslStuff.ServerSideHandshake(sslStream);
 
-					LocalCertificateSelectionCallback selectionCallback =
-						new LocalCertificateSelectionCallback(CertificateCallback.ServerCertificateSelectionCallback);
+						// recieve user's login and password
+						string clientData = RecieveDataFromClient(sslStream, client.ReceiveBufferSize);
 
-					SslStream sslStream = new SslStream(client.GetStream(), true, 
-						validationCallback, selectionCallback, EncryptionPolicy.RequireEncryption);
-
-					SslHandshake.ServerSideHandshake(sslStream);
-
-					string clientData = RecieveDataFromClient(sslStream, client.ReceiveBufferSize);
-					ProcessData(sslStream, clientData);
+						// try login/register
+						ProcessData(sslStream, clientData);
+					}
 				}
 				catch (ClientConnectionException)
 				{
@@ -179,10 +180,11 @@ namespace Server
 		/// <summary>
 		/// Recieve string from clients stream.
 		/// </summary>
-		/// <param name="client">Connected client.</param>
-		/// <returns>Recieved string.</returns>
-		/// <exception cref="ClientConnectionException"></exception>
-		/// <exception cref="ClientMessageException"></exception>
+		/// <param name="sslStream">connected client's ssl stream.</param>
+		/// <param name="receiveBufferSize">client's receive buffer size</param>
+		/// <returns>recieved string.</returns>
+		/// <exception cref="ClientConnectionException">can't read from client's stream.</exception>
+		/// <exception cref="ClientMessageException">client's message is incorrect</exception>
 		private string RecieveDataFromClient(SslStream sslStream, int receiveBufferSize)
 		{
 			byte[] bytes;  // bytes from client stream
@@ -202,8 +204,7 @@ namespace Server
 
 			try
 			{
-				// data from client in bytes
-				Array.Resize<byte>(ref bytes, bytesRead);
+				Array.Resize(ref bytes, bytesRead);
 				data = Encoding.UTF8.GetString(bytes);
 			}
 			catch
@@ -217,7 +218,7 @@ namespace Server
 		/// <summary>
 		/// Process clients message. Send response to client about required operation.
 		/// </summary>
-		/// <param name="client">Connected client.</param>
+		/// <param name="sslStream">connected client's ssl stream.</param>
 		/// <param name="data">Clients message.</param>
 		private void ProcessData(SslStream sslStream, string data)
 		{
@@ -250,9 +251,9 @@ namespace Server
 		/// <summary>
 		/// Send response message to client.
 		/// </summary>
-		/// <param name="client">Connected client.</param>
+		/// <param name="sslStream">connected client's ssl stream.</param>
 		/// <param name="response">Response message.</param>
-		/// <exception cref="ClientConnectionException"></exception>
+		/// <exception cref="ClientConnectionException">can't write to client's stream.</exception>
 		private void SendResponseToClient(SslStream sslStream, string response)
 		{
 			if (string.IsNullOrEmpty(response)) response = "ERROR";

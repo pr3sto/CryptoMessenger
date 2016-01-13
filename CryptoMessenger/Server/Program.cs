@@ -18,7 +18,7 @@ namespace Server
 
 			// client handlers
 			LoginHandler loginHandler = new LoginHandler(44301);
-			RegistrationHandler registrationHandler = new RegistrationHandler(44302);			
+			RegisterHandler registrationHandler = new RegisterHandler(44302);			
 
 			// admin commands
 			while (true)

@@ -1,11 +1,11 @@
 ﻿namespace Server
 {
-	class RegistrationHandler : BasicClientHandler
+	class RegisterHandler : BasicLoginRegisterHandler
 	{
 		/// <summary>
 		/// Initialize Registration Handler, that listen to clients.
 		/// </summary>
-		public RegistrationHandler(int port) : base(port)
+		public RegisterHandler(int port) : base(port)
 		{
 		}
 
@@ -17,7 +17,7 @@
 		protected override bool DoRequiredOperation(string[] login_password)
 		{
 			System.Threading.Thread.Sleep(2000);
-			return false;
+			return true;
 		}
 	}
 }
