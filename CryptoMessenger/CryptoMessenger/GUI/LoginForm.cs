@@ -4,7 +4,7 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 
 using CryptoMessenger.Stuff;
-using CryptoMessenger.ClientServerCommunication;
+using CryptoMessenger.Net;
 
 namespace CryptoMessenger.GUI
 {
@@ -64,32 +64,12 @@ namespace CryptoMessenger.GUI
 		}
 		private async void loginButton_Click(object sender, EventArgs e)
         {
-            if (userName.Text.Equals(""))
-            {
-				namePanelBorderColor = Properties.Settings.Default.AlertColor;
-				userNamePanel.Refresh();
-
-				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
-				notificationLabel.Text = "НЕКОРРЕКТНЫЕ ДАННЫЕ";
-			}
-            if (userPassword.Text.Equals(""))
-            {
-				passPanelBorderColor = Properties.Settings.Default.AlertColor;
-				userPasswordPanel.Refresh();
-
-				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
-				notificationLabel.Text = "НЕКОРРЕКТНЫЕ ДАННЫЕ";
-			}
-            if (!userName.Text.Equals("") && !userPassword.Text.Equals(""))
-            {
-				loginButton.Enabled = false;
-				registerButton.Enabled = false;
-				userName.Enabled = false;
-				userPassword.Enabled = false;
-				showPasswordCheckBox.Enabled = false;
+            if (IsUserDataCorrect())
+			{
+				DisableInterface();
 
 				// try login
-				notificationLabel.Text = "ВХОД...";
+				notificationLabel.Text = Properties.Resources.LOGIN_NOTIFICATION;
 				bool success;
 				try
 				{
@@ -98,15 +78,17 @@ namespace CryptoMessenger.GUI
 				catch (ServerConnectionException)
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
-					notificationLabel.Text = "ОШИБКА СОЕДИНЕНИЯ С СЕРВЕРОМ";
+					notificationLabel.Text = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
 
-					loginButton.Enabled = true;
-					registerButton.Enabled = true;
-					userName.Enabled = true;
-					userPassword.Enabled = true;
-					showPasswordCheckBox.Enabled = true;
-					ActiveControl = loginButton;
+					EnableInterface();
+					return;
+				}
+				catch (ClientCertificateException)
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
 
+					EnableInterface();
 					return;
 				}
 
@@ -121,62 +103,35 @@ namespace CryptoMessenger.GUI
 
 					// free memory
 					mainForm = null;
-					GC.Collect(); // ouch
+					GC.Collect(); // ouch...
 					GC.WaitForPendingFinalizers();
 
-					notificationLabel.Text = "ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ";
+					notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
 					Show();
 				}
 				else
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
-					notificationLabel.Text = "НЕ УДАЕТСЯ ВОЙТИ. ПРОВЕРЬТЕ ПРАВИЛЬНОСТЬ ДАННЫХ";
+					notificationLabel.Text = Properties.Resources.LOGIN_ERROR_NOTIFICATION;
 
 					namePanelBorderColor = Properties.Settings.Default.AlertColor;
 					passPanelBorderColor = Properties.Settings.Default.AlertColor;
 				}
 
-				userNamePanel.Refresh();
-				userPasswordPanel.Refresh();
-				loginButton.Enabled = true;
-				registerButton.Enabled = true;
-				userName.Enabled = true;
-				userPassword.Enabled = true;
-				showPasswordCheckBox.Enabled = true;
-				ActiveControl = loginButton;
-            }
+				EnableInterface();
+			}
         }
 
 
         // register
         private async void registerButton_Click(object sender, EventArgs e)
-        {
-            if (userName.Text.Equals(""))
+        {  
+            if (IsUserDataCorrect())
             {
-                namePanelBorderColor = Properties.Settings.Default.AlertColor;
-                userNamePanel.Refresh();
-
-				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
-				notificationLabel.Text = "НЕКОРРЕКТНЫЕ ДАННЫЕ";
-            }
-            if (userPassword.Text.Equals(""))
-            {
-                passPanelBorderColor = Properties.Settings.Default.AlertColor;
-                userPasswordPanel.Refresh();
-
-				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
-				notificationLabel.Text = "НЕКОРРЕКТНЫЕ ДАННЫЕ";
-			}
-            if (!userName.Text.Equals("") && !userPassword.Text.Equals(""))
-            {
-				loginButton.Enabled = false;
-				registerButton.Enabled = false;
-				userName.Enabled = false;
-				userPassword.Enabled = false;
-				showPasswordCheckBox.Enabled = false;
+				DisableInterface();
 
 				// try register
-				notificationLabel.Text = "РЕГИСТРАЦИЯ...";
+				notificationLabel.Text = Properties.Resources.REGISTRATION_NOTIFICATION;
 				bool success;
 				try
 				{
@@ -185,22 +140,24 @@ namespace CryptoMessenger.GUI
 				catch (ServerConnectionException)
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
-					notificationLabel.Text = "ОШИБКА СОЕДИНЕНИЯ С СЕРВЕРОМ";
-					
-					loginButton.Enabled = true;
-					registerButton.Enabled = true;
-					userName.Enabled = true;
-					userPassword.Enabled = true;
-					showPasswordCheckBox.Enabled = true;
-					ActiveControl = loginButton;
+					notificationLabel.Text = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
 
+					EnableInterface();
+					return;
+				}
+				catch (ClientCertificateException)
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
+
+					EnableInterface();
 					return;
 				}
 
 				if (success)
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.SuccessColor;
-					notificationLabel.Text = "ВЫ УСПЕШНО ЗАРЕГИСТРИРОВАЛИСЬ";
+					notificationLabel.Text = Properties.Resources.REGISTRATION_SUCCESS_NOTIFICATION;
 
 					namePanelBorderColor = Properties.Settings.Default.SuccessColor;
 					passPanelBorderColor = Properties.Settings.Default.SuccessColor;
@@ -208,21 +165,66 @@ namespace CryptoMessenger.GUI
 				else
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
-					notificationLabel.Text = "РЕГИСТРАЦИЯ НЕ УСПЕШНА";
+					notificationLabel.Text = Properties.Resources.REGISTRATION_ERROR_NOTIFICATION;
 
 					namePanelBorderColor = Properties.Settings.Default.AlertColor;
 					passPanelBorderColor = Properties.Settings.Default.AlertColor;
 				}
 
-				userNamePanel.Refresh();
-				userPasswordPanel.Refresh();
-				loginButton.Enabled = true;
-				registerButton.Enabled = true;
-				userName.Enabled = true;
-				userPassword.Enabled = true;
-				showPasswordCheckBox.Enabled = true;
-				ActiveControl = loginButton;
+				EnableInterface();
 			}
         }
+
+		// check textfields
+		private bool IsUserDataCorrect()
+		{
+			bool ret = true;
+
+			if (string.IsNullOrEmpty(userName.Text))
+			{
+				namePanelBorderColor = Properties.Settings.Default.AlertColor;
+				userNamePanel.Refresh();
+
+				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+				notificationLabel.Text = Properties.Resources.INCORRECT_DATA_NOTIFICATION;
+
+				ret = false;
+			}
+			if (string.IsNullOrEmpty(userPassword.Text))
+			{
+				passPanelBorderColor = Properties.Settings.Default.AlertColor;
+				userPasswordPanel.Refresh();
+
+				notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+				notificationLabel.Text = Properties.Resources.INCORRECT_DATA_NOTIFICATION;
+
+				ret = false;
+			}
+
+			return ret;
+		}
+
+		// disable components when waiting for login/register
+		private void DisableInterface()
+		{
+			loginButton.Enabled = false;
+			registerButton.Enabled = false;
+			userName.Enabled = false;
+			userPassword.Enabled = false;
+			showPasswordCheckBox.Enabled = false;
+		}
+
+		// enable components after login/register
+		private void EnableInterface()
+		{
+			userNamePanel.Refresh();
+			userPasswordPanel.Refresh();
+			loginButton.Enabled = true;
+			registerButton.Enabled = true;
+			userName.Enabled = true;
+			userPassword.Enabled = true;
+			showPasswordCheckBox.Enabled = true;
+			ActiveControl = loginButton;
+		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CryptoMessenger.ClientServerCommunication
+namespace CryptoMessenger.Net
 {
 	[Serializable]
 	class ServerConnectionException : Exception
@@ -43,6 +43,7 @@ namespace CryptoMessenger.ClientServerCommunication
 		{
 			// get data from config.cfg
 			XDocument doc = XDocument.Load("config.cfg");
+
 			var _ip = doc.Descendants("ip");
 			var _logPort = doc.Descendants("loginPort");
 			var _regPort = doc.Descendants("registerPort");
@@ -80,14 +81,15 @@ namespace CryptoMessenger.ClientServerCommunication
 		}
 
 		/// <summary>
-		/// Send login and password to server.
-		/// Resieve response from server.
+		/// Send login and password to server;
+		/// resieve response from server.
 		/// </summary>
 		/// <param name="login">users login.</param>
 		/// <param name="password">users password.</param>
 		/// <param name="port">port number.</param>
 		/// <returns>true, if servers response is 'OK'.</returns>
-		/// <exception cref="ServerConnectionException"></exception>
+		/// <exception cref="ServerConnectionException">Connection problems.</exception>
+		/// <exception cref="ClientCertificateException">Can't get local certificate.</exception>
 		private async Task<bool> SendDataToServerAndRecieveResponse(string login, string password, int port)
 		{
 			// response from server
@@ -95,22 +97,35 @@ namespace CryptoMessenger.ClientServerCommunication
 
 			try
 			{
-				client = new TcpClient();
-				client.Connect(ip, port);
-			
+				// try to connect to server during 5 seconds
+				using (client = new TcpClient())
+				{
+					IAsyncResult ar = client.BeginConnect(ip, port, null, null);
+					System.Threading.WaitHandle wh = ar.AsyncWaitHandle;
+					try
+					{
+						if (!ar.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5), false))
+						{
+							client.Close();
+							throw new TimeoutException();
+						}
+
+						client.EndConnect(ar);
+					}
+					finally
+					{
+						wh.Close();
+					}
+				}
+
 				string data = login + " " + password;
 
-				RemoteCertificateValidationCallback validationCallback =
-					new RemoteCertificateValidationCallback(CertificateCallback.ServerValidationCallback);
+				SslStream sslStream = new SslStream(client.GetStream(), true,
+					SslStuff.ServerValidationCallback, SslStuff.ClientCertificateSelectionCallback, 
+					EncryptionPolicy.RequireEncryption);
 
-				LocalCertificateSelectionCallback selectionCallback =
-					new LocalCertificateSelectionCallback(CertificateCallback.ClientCertificateSelectionCallback);
-
-				SslStream sslStream = new SslStream(client.GetStream(), true, 
-					validationCallback, selectionCallback, EncryptionPolicy.RequireEncryption);
-
-				SslHandshake.ClientSideHandshake(sslStream, ip);
-
+				// handshake
+				SslStuff.ClientSideHandshake(sslStream, ip);
 
 				// send login and password to server
 				byte[] bytes = Encoding.UTF8.GetBytes(data);
@@ -119,23 +134,27 @@ namespace CryptoMessenger.ClientServerCommunication
 				// server response
 				bytes = new byte[client.ReceiveBufferSize];
 				int bytesRead = await sslStream.ReadAsync(bytes, 0, client.ReceiveBufferSize);
-				Array.Resize<byte>(ref bytes, bytesRead);
+				Array.Resize(ref bytes, bytesRead);
 				response = Encoding.UTF8.GetString(bytes);
-
-				client.Close();
+			}
+			catch (ClientCertificateException)
+			{
+				throw;
 			}
 			catch
 			{
 				throw new ServerConnectionException();
 			}
+			finally
+			{
+				client.Close();
+			}
 
 			// process response
 			if ("OK".Equals(response))
 				return true;
-			else if ("ERROR".Equals(response))
+			else 
 				return false;
-
-			return false;
 		}
 	}
 }

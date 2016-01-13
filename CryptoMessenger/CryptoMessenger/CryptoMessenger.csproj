@@ -101,9 +101,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientServerCommunication\CertificateCallback.cs" />
-    <Compile Include="ClientServerCommunication\Client.cs" />
-    <Compile Include="ClientServerCommunication\SslHandshake.cs" />
+    <Compile Include="Net\SslStuff.cs" />
+    <Compile Include="Net\Client.cs" />
     <Compile Include="GUI\Dropshadow.cs">
       <SubType>Form</SubType>
     </Compile>

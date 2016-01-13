@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace CryptoMessenger.GUI
 {
     partial class LoginForm
-    {
+	{
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -87,8 +87,10 @@ namespace CryptoMessenger.GUI
 
 			ActiveControl = loginButton;
 
-			NativeMethods.SendMessage(userName.Handle, NativeMethods.EM_SETCUEBANNER, IntPtr.Zero, "ИМЯ");
-			NativeMethods.SendMessage(userPassword.Handle, NativeMethods.EM_SETCUEBANNER, IntPtr.Zero, "ПАРОЛЬ");
+			NativeMethods.SendMessage(userName.Handle, NativeMethods.EM_SETCUEBANNER,
+				IntPtr.Zero, Properties.Resources.USERNAME_TEXTFIELD_PLACEHOLDER);
+			NativeMethods.SendMessage(userPassword.Handle, NativeMethods.EM_SETCUEBANNER,
+				IntPtr.Zero, Properties.Resources.USERPASSWORD_TEXTFIELD_PLACEHOLDER);
 			userPassword.PasswordChar = '*';
 		}
 
@@ -239,7 +241,7 @@ namespace CryptoMessenger.GUI
 			userPasswordPanel.Refresh();
 
 			notificationLabel.ForeColor = System.Drawing.SystemColors.GrayText;
-			notificationLabel.Text = "ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ";
+			notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
 		}
 
 		#endregion
@@ -325,7 +327,7 @@ namespace CryptoMessenger.GUI
 			this.appName.Name = "appName";
 			this.appName.Size = new System.Drawing.Size(169, 21);
 			this.appName.TabIndex = 5;
-			this.appName.Text = "CRYPTO MESSENGER";
+			this.appName.Text = Properties.Resources.APP_NAME;
 			this.appName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
 			this.appName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
 			this.appName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
@@ -381,7 +383,7 @@ namespace CryptoMessenger.GUI
 			this.showPasswordCheckBox.Name = "showPasswordCheckBox";
 			this.showPasswordCheckBox.Size = new System.Drawing.Size(135, 20);
 			this.showPasswordCheckBox.TabIndex = 3;
-			this.showPasswordCheckBox.Text = "СКРЫВАТЬ ПАРОЛЬ";
+			this.showPasswordCheckBox.Text = Properties.Resources.PASSWORD_CHECKBOX_TEXT;
 			this.showPasswordCheckBox.UseVisualStyleBackColor = false;
 			this.showPasswordCheckBox.CheckedChanged += new System.EventHandler(this.showPasswordCheckBox_CheckedChanged);
 			// 
@@ -430,7 +432,7 @@ namespace CryptoMessenger.GUI
 			this.notificationLabel.Name = "notificationLabel";
 			this.notificationLabel.Size = new System.Drawing.Size(298, 13);
 			this.notificationLabel.TabIndex = 7;
-			this.notificationLabel.Text = "ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ";
+			this.notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
 			this.notificationLabel.SizeChanged += new System.EventHandler(this.notificationLabel_SizeChanged);
 			// 
 			// userPasswordPanel
@@ -473,7 +475,7 @@ namespace CryptoMessenger.GUI
 			this.registerButton.Size = new System.Drawing.Size(200, 50);
 			this.registerButton.TabIndex = 5;
 			this.registerButton.TabStop = false;
-			this.registerButton.Text = "РЕГИСТРАЦИЯ";
+			this.registerButton.Text = Properties.Resources.REGISTRATION_BUTTON_TEXT;
 			this.registerButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.registerButton.UseVisualStyleBackColor = false;
 			this.registerButton.Click += new System.EventHandler(this.registerButton_Click);
@@ -495,7 +497,7 @@ namespace CryptoMessenger.GUI
 			this.loginButton.Size = new System.Drawing.Size(200, 50);
 			this.loginButton.TabIndex = 4;
 			this.loginButton.TabStop = false;
-			this.loginButton.Text = "ВХОД";
+			this.loginButton.Text = Properties.Resources.LOGIN_BUTTON_TEXT;
 			this.loginButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.loginButton.UseVisualStyleBackColor = false;
 			this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
