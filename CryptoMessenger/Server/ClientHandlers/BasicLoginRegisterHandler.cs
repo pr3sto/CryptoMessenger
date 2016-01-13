@@ -82,7 +82,7 @@ namespace Server
 			cts = new CancellationTokenSource();
 			IsStarted = true;
 
-			Console.WriteLine("{0} is now listening.", GetType().Name);
+			ConsoleWriter.WriteLine("{0} is now listening.", GetType().Name);
 
 			while (!cts.IsCancellationRequested)
 			{
@@ -97,14 +97,14 @@ namespace Server
 				catch (ObjectDisposedException)
 				{
 					// TODO logger
-					Console.WriteLine("logger-___-");
+					ConsoleWriter.WriteLine("logger-___-");
 
 					break;
 				}
 				catch (SocketException)
 				{
 					// TODO logger
-					Console.WriteLine("logger-___-");
+					ConsoleWriter.WriteLine("logger-___-");
 
 					listener = null;
 					listener = TcpListener.Create(port);
@@ -115,7 +115,7 @@ namespace Server
 			// wait for finishing process clients
 			Task.WaitAll(activeTasks.ToArray());
 
-			Console.WriteLine("{0} is now stopped.", GetType().Name);
+			ConsoleWriter.WriteLine("{0} is now stopped.", GetType().Name);
 			cts.Dispose();
 			IsStarted = false;
 		}
@@ -138,7 +138,8 @@ namespace Server
 		/// <param name="client">Connected client.</param>
 		private async Task ProcessClient(TcpClient client)
 		{
-			Console.WriteLine("client connected. ip {0}", ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+			ConsoleWriter.WriteLine("client connected. ip {0}", 
+				((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
 			await Task.Run(() =>
 			{
@@ -162,16 +163,17 @@ namespace Server
 				catch (ClientConnectionException)
 				{
 					// TODO logger
-					Console.WriteLine("logger-___-");
+					ConsoleWriter.WriteLine("logger-___-");
 				}
 				catch (ClientMessageException)
 				{
 					// TODO logger
-					Console.WriteLine("logger-___-");
+					ConsoleWriter.WriteLine("logger-___-");
 				}
 				finally
 				{
-					Console.WriteLine("client disconnected. ip {0}", ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+					ConsoleWriter.WriteLine("client disconnected. ip {0}", 
+						((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 					client.Close();
 				}
 			});
@@ -244,7 +246,7 @@ namespace Server
 			catch (ClientConnectionException)
 			{
 				// TODO logger
-				Console.WriteLine("logger-___-");
+				ConsoleWriter.WriteLine("logger-___-");
 			}
 		}
 
