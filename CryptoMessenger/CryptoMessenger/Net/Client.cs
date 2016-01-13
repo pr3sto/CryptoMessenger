@@ -88,8 +88,8 @@ namespace CryptoMessenger.Net
 		/// <param name="password">users password.</param>
 		/// <param name="port">port number.</param>
 		/// <returns>true, if servers response is 'OK'.</returns>
-		/// <exception cref="ServerConnectionException">Connection problems.</exception>
-		/// <exception cref="ClientCertificateException">Can't get local certificate.</exception>
+		/// <exception cref="ServerConnectionException">connection problems.</exception>
+		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
 		private async Task<bool> SendDataToServerAndRecieveResponse(string login, string password, int port)
 		{
 			// response from server
@@ -97,45 +97,31 @@ namespace CryptoMessenger.Net
 
 			try
 			{
-				// try to connect to server during 5 seconds
-				using (client = new TcpClient())
-				{
-					IAsyncResult ar = client.BeginConnect(ip, port, null, null);
-					System.Threading.WaitHandle wh = ar.AsyncWaitHandle;
-					try
-					{
-						if (!ar.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5), false))
-						{
-							client.Close();
-							throw new TimeoutException();
-						}
+				client = new TcpClient();
 
-						client.EndConnect(ar);
-					}
-					finally
-					{
-						wh.Close();
-					}
-				}
+				// timeout for waiting connection
+				if (!client.ConnectAsync(ip, port).Wait(5000))
+					throw new TimeoutException();
 
 				string data = login + " " + password;
 
-				SslStream sslStream = new SslStream(client.GetStream(), true,
-					SslStuff.ServerValidationCallback, SslStuff.ClientCertificateSelectionCallback, 
-					EncryptionPolicy.RequireEncryption);
+				using (SslStream sslStream = new SslStream(client.GetStream(), true,
+					SslStuff.ServerValidationCallback, SslStuff.ClientCertificateSelectionCallback,
+					EncryptionPolicy.RequireEncryption))
+				{
+					// handshake
+					SslStuff.ClientSideHandshake(sslStream, ip);
 
-				// handshake
-				SslStuff.ClientSideHandshake(sslStream, ip);
+					// send login and password to server
+					byte[] bytes = Encoding.UTF8.GetBytes(data);
+					await sslStream.WriteAsync(bytes, 0, bytes.Length);
 
-				// send login and password to server
-				byte[] bytes = Encoding.UTF8.GetBytes(data);
-				await sslStream.WriteAsync(bytes, 0, bytes.Length);
-
-				// server response
-				bytes = new byte[client.ReceiveBufferSize];
-				int bytesRead = await sslStream.ReadAsync(bytes, 0, client.ReceiveBufferSize);
-				Array.Resize(ref bytes, bytesRead);
-				response = Encoding.UTF8.GetString(bytes);
+					// server response
+					bytes = new byte[client.ReceiveBufferSize];
+					int bytesRead = await sslStream.ReadAsync(bytes, 0, client.ReceiveBufferSize);
+					Array.Resize(ref bytes, bytesRead);
+					response = Encoding.UTF8.GetString(bytes);
+				}
 			}
 			catch (ClientCertificateException)
 			{

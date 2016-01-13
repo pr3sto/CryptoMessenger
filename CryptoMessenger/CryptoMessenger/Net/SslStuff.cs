@@ -64,7 +64,7 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		/// <param name="sslStream">ssl stream with server.</param>
 		/// <param name="targetHost">server's ip address.</param>
-		/// <exception cref="ClientCertificateException">Can't get local certificate.</exception>
+		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
 		public static void ClientSideHandshake(SslStream sslStream, string targetHost)
 		{
 			X509CertificateCollection ccertificateCollection = new X509CertificateCollection();

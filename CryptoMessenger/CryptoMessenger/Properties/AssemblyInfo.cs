@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Alexey Chirukhin")]
 [assembly: AssemblyProduct("CryptoMessenger")]
-[assembly: AssemblyCopyright("Alexey Chirukhin ©  2015")]
+[assembly: AssemblyCopyright("Alexey Chirukhin ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
