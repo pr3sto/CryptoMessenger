@@ -29,7 +29,7 @@ namespace Server
 			{
 				foreach (User user in data)
 				{
-					if (user.password == _password)
+					if (PasswordHash.PasswordHash.ValidatePassword(_password, user.password))
 						return true;
 					else
 						return false;

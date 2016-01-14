@@ -36,7 +36,7 @@ namespace Server
 				User newUser = new User
 				{
 					login = _login,
-					password = _password
+					password = PasswordHash.PasswordHash.CreateHash(_password)
 				};
 				DBcontext.Users.InsertOnSubmit(newUser);
 

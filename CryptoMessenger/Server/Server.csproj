@@ -80,7 +80,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Ssl\SslStuff.cs" />
+    <Compile Include="Security\PasswordHash.cs" />
+    <Compile Include="Security\SslStuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LinqToDatabase.dbml.layout">

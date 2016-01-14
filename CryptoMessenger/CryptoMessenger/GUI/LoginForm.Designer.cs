@@ -327,7 +327,7 @@ namespace CryptoMessenger.GUI
 			this.appName.Name = "appName";
 			this.appName.Size = new System.Drawing.Size(169, 21);
 			this.appName.TabIndex = 5;
-			this.appName.Text = Properties.Resources.APP_NAME;
+			this.appName.Text = "CRYPTO MESSENGER";
 			this.appName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
 			this.appName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
 			this.appName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
@@ -383,7 +383,7 @@ namespace CryptoMessenger.GUI
 			this.showPasswordCheckBox.Name = "showPasswordCheckBox";
 			this.showPasswordCheckBox.Size = new System.Drawing.Size(135, 20);
 			this.showPasswordCheckBox.TabIndex = 3;
-			this.showPasswordCheckBox.Text = Properties.Resources.PASSWORD_CHECKBOX_TEXT;
+			this.showPasswordCheckBox.Text = global::CryptoMessenger.Properties.Resources.PASSWORD_CHECKBOX_TEXT;
 			this.showPasswordCheckBox.UseVisualStyleBackColor = false;
 			this.showPasswordCheckBox.CheckedChanged += new System.EventHandler(this.showPasswordCheckBox_CheckedChanged);
 			// 
@@ -404,6 +404,7 @@ namespace CryptoMessenger.GUI
 			this.userName.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.userName.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.userName.Location = new System.Drawing.Point(9, 9);
+			this.userName.MaxLength = 30;
 			this.userName.Name = "userName";
 			this.userName.Size = new System.Drawing.Size(182, 22);
 			this.userName.TabIndex = 0;
@@ -432,7 +433,7 @@ namespace CryptoMessenger.GUI
 			this.notificationLabel.Name = "notificationLabel";
 			this.notificationLabel.Size = new System.Drawing.Size(298, 13);
 			this.notificationLabel.TabIndex = 7;
-			this.notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
+			this.notificationLabel.Text = "ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ";
 			this.notificationLabel.SizeChanged += new System.EventHandler(this.notificationLabel_SizeChanged);
 			// 
 			// userPasswordPanel
@@ -452,6 +453,7 @@ namespace CryptoMessenger.GUI
 			this.userPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.userPassword.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.userPassword.Location = new System.Drawing.Point(9, 9);
+			this.userPassword.MaxLength = 30;
 			this.userPassword.Name = "userPassword";
 			this.userPassword.PasswordChar = '*';
 			this.userPassword.Size = new System.Drawing.Size(182, 22);
@@ -475,7 +477,7 @@ namespace CryptoMessenger.GUI
 			this.registerButton.Size = new System.Drawing.Size(200, 50);
 			this.registerButton.TabIndex = 5;
 			this.registerButton.TabStop = false;
-			this.registerButton.Text = Properties.Resources.REGISTRATION_BUTTON_TEXT;
+			this.registerButton.Text = global::CryptoMessenger.Properties.Resources.REGISTRATION_BUTTON_TEXT;
 			this.registerButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.registerButton.UseVisualStyleBackColor = false;
 			this.registerButton.Click += new System.EventHandler(this.registerButton_Click);
@@ -497,7 +499,7 @@ namespace CryptoMessenger.GUI
 			this.loginButton.Size = new System.Drawing.Size(200, 50);
 			this.loginButton.TabIndex = 4;
 			this.loginButton.TabStop = false;
-			this.loginButton.Text = Properties.Resources.LOGIN_BUTTON_TEXT;
+			this.loginButton.Text = global::CryptoMessenger.Properties.Resources.LOGIN_BUTTON_TEXT;
 			this.loginButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.loginButton.UseVisualStyleBackColor = false;
 			this.loginButton.Click += new System.EventHandler(this.loginButton_Click);

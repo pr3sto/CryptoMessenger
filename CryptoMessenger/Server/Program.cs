@@ -83,11 +83,12 @@ namespace Server
 				else if ("stop".Equals(command))
 				{
 					loginHandler.StopAcceptClients();
-					//System.Threading.Thread.Sleep(500);
 					registrationHandler.StopAcceptClients();
 				}
 				else if ("exit".Equals(command))
 				{
+					loginHandler.Dispose();
+					registrationHandler.Dispose();
 					return;
 				}
 			}
