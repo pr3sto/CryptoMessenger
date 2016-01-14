@@ -1,4 +1,6 @@
-﻿namespace Server
+﻿using System.Linq;
+
+namespace Server
 {
 	class LoginHandler : BasicLoginRegisterHandler
 	{
@@ -12,12 +14,34 @@
 		/// <summary>
 		/// Do required operation (login).
 		/// </summary>
-		/// <param name="login_password">Array of users login and password.</param>
+		/// <param name="_login">user's login.</param>
+		/// <param name="_password">user's password.</param>
 		/// <returns>true, if operation had success.</returns>
-		protected override bool DoRequiredOperation(string[] login_password)
+		protected override bool DoRequiredOperation(string _login, string _password)
 		{
-			System.Threading.Thread.Sleep(2000);
-			return true;
+			// get user
+			var data =
+				from user in DBcontext.Users
+				where user.login == _login
+				select user;
+
+			if (data.Any())
+			{
+				foreach (User user in data)
+				{
+					if (user.password == _password)
+						return true;
+					else
+						return false;
+				}
+
+				return false; // something wrong...
+			}
+			else
+			{
+				// user not registered
+				return false;
+			}
 		}
 	}
 }

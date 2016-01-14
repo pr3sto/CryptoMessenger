@@ -54,11 +54,16 @@ namespace Server
 		// tcp listener
 		private TcpListener listener;
 		// token for cancel listening
-		CancellationTokenSource cts;
+		private CancellationTokenSource cts;
 		// active tasks
-		List<Task> activeTasks;
+		private List<Task> activeTasks;
+
+		// database context
+		protected LinqToDatabaseDataContext DBcontext;
+
 		// is server started listening to clients
 		public bool IsStarted { get; private set; }
+		
 
 		/// <summary>
 		/// Initialize Handler, that listen to clients.
@@ -67,6 +72,7 @@ namespace Server
 		{
 			this.port = port;
 			activeTasks = new List<Task>();
+			DBcontext = new LinqToDatabaseDataContext();
 			IsStarted = false;
 		}
 
@@ -230,7 +236,7 @@ namespace Server
 			if (login_password.Length != 2 ||
 				string.IsNullOrEmpty(login_password[0]) ||
 				string.IsNullOrEmpty(login_password[1]) ||
-				!DoRequiredOperation(login_password))
+				!DoRequiredOperation(login_password[0], login_password[1]))
 			{
 				response = "ERROR";
 			}
@@ -274,8 +280,9 @@ namespace Server
 		/// <summary>
 		/// Do required operation (login or register).
 		/// </summary>
-		/// <param name="login_password">Array of users login and password.</param>
+		/// <param name="_login">user's login.</param>
+		/// <param name="_password">user's password.</param>
 		/// <returns>true, if operation had success.</returns>
-		protected abstract bool DoRequiredOperation(string[] login_password);
+		protected abstract bool DoRequiredOperation(string _login, string _password);
 	}
 }
