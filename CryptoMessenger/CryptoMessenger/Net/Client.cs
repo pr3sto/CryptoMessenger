@@ -64,7 +64,7 @@ namespace CryptoMessenger.Net
 		/// <param name="login">users login.</param>
 		/// <param name="password">users password.</param>
 		/// <returns>true, if login success.</returns>
-		public async Task<bool> Login(string login, string password)
+		public async Task<string> Login(string login, string password)
 		{
 			return await SendDataToServerAndRecieveResponse(login, password, loginPort);
 		}
@@ -75,7 +75,7 @@ namespace CryptoMessenger.Net
 		/// <param name="login">users login.</param>
 		/// <param name="password">users password.</param>
 		/// <returns>true, if registration success.</returns>
-		public async Task<bool> Register(string login, string password)
+		public async Task<string> Register(string login, string password)
 		{
 			return await SendDataToServerAndRecieveResponse(login, password, registerPort);
 		}
@@ -87,10 +87,10 @@ namespace CryptoMessenger.Net
 		/// <param name="login">users login.</param>
 		/// <param name="password">users password.</param>
 		/// <param name="port">port number.</param>
-		/// <returns>true, if servers response is 'OK'.</returns>
+		/// <returns>server's response.</returns>
 		/// <exception cref="ServerConnectionException">connection problems.</exception>
 		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
-		private async Task<bool> SendDataToServerAndRecieveResponse(string login, string password, int port)
+		private async Task<string> SendDataToServerAndRecieveResponse(string login, string password, int port)
 		{
 			// response from server
 			string response;
@@ -137,10 +137,12 @@ namespace CryptoMessenger.Net
 			}
 
 			// process response
-			if ("OK".Equals(response))
-				return true;
-			else 
-				return false;
+			if ("SUCCESS".Equals(response) ||
+				"FAIL".Equals(response) ||
+				"ERROR".Equals(response))
+				return response;
+			else
+				return "ERROR";
 		}
 	}
 }

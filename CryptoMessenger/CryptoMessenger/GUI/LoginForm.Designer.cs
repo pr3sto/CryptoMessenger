@@ -433,7 +433,7 @@ namespace CryptoMessenger.GUI
 			this.notificationLabel.Name = "notificationLabel";
 			this.notificationLabel.Size = new System.Drawing.Size(298, 13);
 			this.notificationLabel.TabIndex = 7;
-			this.notificationLabel.Text = "ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ";
+			this.notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
 			this.notificationLabel.SizeChanged += new System.EventHandler(this.notificationLabel_SizeChanged);
 			// 
 			// userPasswordPanel

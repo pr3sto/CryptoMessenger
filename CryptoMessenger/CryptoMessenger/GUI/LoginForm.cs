@@ -69,11 +69,12 @@ namespace CryptoMessenger.GUI
 				DisableInterface();
 
 				// try login
+				notificationLabel.Text = "";
 				notificationLabel.Text = Properties.Resources.LOGIN_NOTIFICATION;
-				bool success;
+				string response;
 				try
 				{
-					success = await client.Login(userName.Text, userPassword.Text);
+					response = await client.Login(userName.Text, userPassword.Text);
 				}
 				catch (ServerConnectionException)
 				{
@@ -92,7 +93,7 @@ namespace CryptoMessenger.GUI
 					return;
 				}
 
-				if (success)
+				if ("SUCCESS".Equals(response))
 				{
 					userPassword.Text = null;
 					Hide();
@@ -109,13 +110,21 @@ namespace CryptoMessenger.GUI
 					notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
 					Show();
 				}
-				else
+				else if ("FAIL".Equals(response))
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.LOGIN_ERROR_NOTIFICATION;
 
 					namePanelBorderColor = Properties.Settings.Default.AlertColor;
 					passPanelBorderColor = Properties.Settings.Default.AlertColor;
+				}
+				else if ("ERROR".Equals(response))
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = Properties.Resources.UNKNOWN_ERROR;
+
+					EnableInterface();
+					return;
 				}
 
 				EnableInterface();
@@ -131,11 +140,12 @@ namespace CryptoMessenger.GUI
 				DisableInterface();
 
 				// try register
+				notificationLabel.Text = "";
 				notificationLabel.Text = Properties.Resources.REGISTRATION_NOTIFICATION;
-				bool success;
+				string response;
 				try
 				{
-					success = await client.Register(userName.Text, userPassword.Text);
+					response = await client.Register(userName.Text, userPassword.Text);
 				}
 				catch (ServerConnectionException)
 				{
@@ -154,7 +164,7 @@ namespace CryptoMessenger.GUI
 					return;
 				}
 
-				if (success)
+				if ("SUCCESS".Equals(response))
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.SuccessColor;
 					notificationLabel.Text = Properties.Resources.REGISTRATION_SUCCESS_NOTIFICATION;
@@ -162,13 +172,21 @@ namespace CryptoMessenger.GUI
 					namePanelBorderColor = Properties.Settings.Default.SuccessColor;
 					passPanelBorderColor = Properties.Settings.Default.SuccessColor;
 				}
-				else
+				else if ("FAIL".Equals(response))
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.REGISTRATION_ERROR_NOTIFICATION;
 
 					namePanelBorderColor = Properties.Settings.Default.AlertColor;
 					passPanelBorderColor = Properties.Settings.Default.AlertColor;
+				}
+				else if ("ERROR".Equals(response))
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = Properties.Resources.UNKNOWN_ERROR;
+
+					EnableInterface();
+					return;
 				}
 
 				EnableInterface();

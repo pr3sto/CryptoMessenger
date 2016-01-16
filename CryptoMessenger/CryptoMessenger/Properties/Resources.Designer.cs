@@ -157,7 +157,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to НЕ УДАЕТСЯ ВОЙТИ. ПРОВЕРЬТЕ ПРАВИЛЬНОСТЬ ДАННЫХ.
+        ///   Looks up a localized string similar to НЕВЕРНАЯ КОМБИНАЦИЯ ЛОГИНА И ПАРОЛЯ.
         /// </summary>
         internal static string LOGIN_ERROR_NOTIFICATION {
             get {
@@ -243,7 +243,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to РЕГИСТРАЦИЯ НЕ УСПЕШНА.
+        ///   Looks up a localized string similar to АККАУНТ С ДАННЫМ ЛОГИНОМ УЖЕ ЗАРЕГИСТРИРОВАН.
         /// </summary>
         internal static string REGISTRATION_ERROR_NOTIFICATION {
             get {
@@ -280,7 +280,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ОШИБКА СОЕДИНЕНИЯ С СЕРВЕРОМ.
+        ///   Looks up a localized string similar to НЕ УДАЕТСЯ ПОДКЛЮЧИТЬСЯ К СЕРВЕРУ.
         /// </summary>
         internal static string SERVER_CONNECTION_ERROR_NOTIFICATION {
             get {
@@ -289,7 +289,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ПОЖАЛУЙСТА, ВОЙДИТЕ ИЛИ ЗАРЕГИСТРИРУЙТЕСЬ.
+        ///   Looks up a localized string similar to ДОБРО ПОЖАЛОВАТЬ.
         /// </summary>
         internal static string STANDART_NOTIFICATION {
             get {
@@ -298,7 +298,16 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ИМЯ.
+        ///   Looks up a localized string similar to НЕИЗВЕСТНАЯ ОШИБКА. ПОВТОРИТЕ ДЕЙСТВИЕ ПОЗЖЕ.
+        /// </summary>
+        internal static string UNKNOWN_ERROR {
+            get {
+                return ResourceManager.GetString("UNKNOWN_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ЛОГИН.
         /// </summary>
         internal static string USERNAME_TEXTFIELD_PLACEHOLDER {
             get {

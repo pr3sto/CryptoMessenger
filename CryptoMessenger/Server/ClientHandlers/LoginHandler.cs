@@ -19,28 +19,31 @@ namespace Server
 		/// <returns>true, if operation had success.</returns>
 		protected override bool DoRequiredOperation(string _login, string _password)
 		{
-			// get user
-			var data =
-				from user in DBcontext.Users
-				where user.login == _login
-				select user;
-
-			if (data.Any())
+			using (LinqToDatabaseDataContext DBcontext = new LinqToDatabaseDataContext())
 			{
-				foreach (User user in data)
+				// get user
+				var data =
+					from user in DBcontext.Users
+					where user.login == _login
+					select user;
+
+				if (data.Any())
 				{
-					if (PasswordHash.PasswordHash.ValidatePassword(_password, user.password))
-						return true;
-					else
-						return false;
-				}
+					foreach (User user in data)
+					{
+						if (PasswordHash.PasswordHash.ValidatePassword(_password, user.password))
+							return true;
+						else
+							return false;
+					}
 
-				return false; // something wrong...
-			}
-			else
-			{
-				// user not registered
-				return false;
+					return false; // something wrong
+				}
+				else
+				{
+					// user not registered
+					return false;
+				}
 			}
 		}
 	}

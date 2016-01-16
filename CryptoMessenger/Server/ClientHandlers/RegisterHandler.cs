@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Server
 {
@@ -19,39 +20,42 @@ namespace Server
 		/// <returns>true, if operation had success.</returns>
 		protected override bool DoRequiredOperation(string _login, string _password)
 		{
-			// if login already exist
-			var data =
-				from user in DBcontext.Users
-				where user.login == _login
-				select user;
-
-			if (data.Any())
+			using (LinqToDatabaseDataContext DBcontext = new LinqToDatabaseDataContext())
 			{
-				// login already exist
-				return false;
+				// if login already exist
+				var data =
+					from user in DBcontext.Users
+					where user.login == _login
+					select user;
+
+				if (data.Any())
+				{
+					// login already exist
+					return false;
+				}
+				else
+				{
+					// new user
+					User newUser = new User
+					{
+						login = _login,
+						password = PasswordHash.PasswordHash.CreateHash(_password)
+					};
+					DBcontext.Users.InsertOnSubmit(newUser);
+
+					try
+					{
+						DBcontext.SubmitChanges();
+						Console.WriteLine("New user: {0}", _login);
+						return true;
+					}
+					catch
+					{
+						// TODO logger
+						return false;
+					}
+				}
 			}
-			else
-			{
-				// new user
-				User newUser = new User
-				{
-					login = _login,
-					password = PasswordHash.PasswordHash.CreateHash(_password)
-				};
-				DBcontext.Users.InsertOnSubmit(newUser);
-
-				try
-				{
-					DBcontext.SubmitChanges();
-				}
-				catch
-				{
-					// TODO logger
-					return false; 
-				}
-
-				return true;
-			} 
 		}
 	}
 }

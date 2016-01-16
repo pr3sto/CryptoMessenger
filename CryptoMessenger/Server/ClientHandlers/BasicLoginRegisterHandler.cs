@@ -47,7 +47,7 @@ namespace Server
 		}
 	}
 
-	public abstract class BasicLoginRegisterHandler : IDisposable
+	public abstract class BasicLoginRegisterHandler
 	{
 		// port number
 		private int port;
@@ -57,10 +57,6 @@ namespace Server
 		private CancellationTokenSource cts;
 		// active tasks
 		private List<Task> activeTasks;
-
-		// database context
-		protected LinqToDatabaseDataContext DBcontext;
-
 		// is server started listening to clients
 		public bool IsStarted { get; private set; }
 		
@@ -72,41 +68,7 @@ namespace Server
 		{
 			this.port = port;
 			activeTasks = new List<Task>();
-			DBcontext = new LinqToDatabaseDataContext();
 			IsStarted = false;
-		}
-
-		/// <summary>
-		/// Destructor.
-		/// </summary>
-		~BasicLoginRegisterHandler()
-		{
-			// Finalizer calls Dispose(false)
-			Dispose(false);
-		}
-
-		/// <summary>
-		/// Dispose members.
-		/// </summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary>
-		/// Free managed resources.
-		/// </summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (DBcontext != null)
-				{
-					DBcontext.Dispose();
-					DBcontext = null;
-				}
-			}
 		}
 
 		/// <summary>
@@ -121,7 +83,7 @@ namespace Server
 			cts = new CancellationTokenSource();
 			IsStarted = true;
 
-			ConsoleWriter.WriteLine("{0} is now listening.", GetType().Name);
+			Console.WriteLine("{0} is now listening.", port);
 
 			while (!cts.IsCancellationRequested)
 			{
@@ -136,15 +98,16 @@ namespace Server
 				catch (ObjectDisposedException)
 				{
 					// TODO logger
-					ConsoleWriter.WriteLine("logger-___-");
+					Console.WriteLine("logger-___-");
 
 					break;
 				}
 				catch (SocketException)
 				{
 					// TODO logger
-					ConsoleWriter.WriteLine("logger-___-");
+					Console.WriteLine("logger-___-");
 
+					listener.Stop();
 					listener = null;
 					listener = TcpListener.Create(port);
 					listener.Start();
@@ -154,7 +117,7 @@ namespace Server
 			// wait for finishing process clients
 			Task.WaitAll(activeTasks.ToArray());
 
-			ConsoleWriter.WriteLine("{0} is now stopped.", GetType().Name);
+			Console.WriteLine("{0} is now stopped.", port);
 			cts.Dispose();
 			IsStarted = false;
 		}
@@ -177,7 +140,7 @@ namespace Server
 		/// <param name="client">Connected client.</param>
 		private async Task ProcessClient(TcpClient client)
 		{
-			ConsoleWriter.WriteLine("client connected. ip {0}", 
+			Console.WriteLine("{0}: client connected. ip {1}", port, 
 				((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
 			await Task.Run(() =>
@@ -202,16 +165,16 @@ namespace Server
 				catch (ClientConnectionException)
 				{
 					// TODO logger
-					ConsoleWriter.WriteLine("logger-___-");
+					Console.WriteLine("logger-___-");
 				}
 				catch (ClientMessageException)
 				{
 					// TODO logger
-					ConsoleWriter.WriteLine("logger-___-");
+					Console.WriteLine("logger-___-");
 				}
 				finally
 				{
-					ConsoleWriter.WriteLine("client disconnected. ip {0}", 
+					Console.WriteLine("{0}: client disconnected. ip {1}", port, 
 						((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 					client.Close();
 				}
@@ -269,14 +232,17 @@ namespace Server
 			if (login_password.Length != 2 ||
 				string.IsNullOrEmpty(login_password[0]) ||
 				string.IsNullOrEmpty(login_password[1]) ||
-				login_password[0].Length > 30 ||
-				!DoRequiredOperation(login_password[0], login_password[1]))
+				login_password[0].Length > 30)
 			{
 				response = "ERROR";
 			}
+			else if (!DoRequiredOperation(login_password[0], login_password[1]))
+			{
+				response = "FAIL";
+			}
 			else
 			{
-				response = "OK";
+				response = "SUCCESS";
 			}
 
 			try
@@ -286,7 +252,7 @@ namespace Server
 			catch (ClientConnectionException)
 			{
 				// TODO logger
-				ConsoleWriter.WriteLine("logger-___-");
+				Console.WriteLine("logger-___-");
 			}
 		}
 
