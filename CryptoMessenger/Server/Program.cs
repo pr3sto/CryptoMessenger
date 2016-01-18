@@ -8,9 +8,8 @@ namespace Server
 		{
 			Console.Title = "Server";
 
-			// client handlers
-			LoginHandler loginHandler = new LoginHandler(44301);
-			RegisterHandler registrationHandler = new RegisterHandler(44302);
+			// server
+			Server server = new Server(44300);
 
 			// commands
 			Console.WriteLine("Server is running.");
@@ -27,13 +26,11 @@ namespace Server
 
 				if ("start".Equals(command))
 				{
-					loginHandler.StartAcceptClients();
-					registrationHandler.StartAcceptClients();
+					server.Start();
 				}
 				else if ("stop".Equals(command))
 				{
-					loginHandler.StopAcceptClients();
-					registrationHandler.StopAcceptClients();
+					server.Stop();
 				}
 				else if ("exit".Equals(command))
 				{

@@ -62,8 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientHandlers\BasicLoginRegisterHandler.cs" />
-    <Compile Include="ClientHandlers\LoginHandler.cs" />
     <Compile Include="LinqToDatabase.cs">
       <DependentUpon>LinqToDatabase.dbml</DependentUpon>
     </Compile>
@@ -74,7 +72,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ClientHandlers\RegisterHandler.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -82,6 +79,7 @@
     </Compile>
     <Compile Include="Security\PasswordHash.cs" />
     <Compile Include="Security\SslStuff.cs" />
+    <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LinqToDatabase.dbml.layout">
@@ -123,6 +121,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MessageTypes\MessageTypes.csproj">
+      <Project>{0f6c4d75-a3cf-4c46-a1c8-e2903181660e}</Project>
+      <Name>MessageTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

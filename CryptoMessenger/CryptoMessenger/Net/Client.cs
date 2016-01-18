@@ -4,6 +4,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.Serialization;
+using MessageTypes;
 
 namespace CryptoMessenger.Net
 {
@@ -27,10 +29,8 @@ namespace CryptoMessenger.Net
 
 	class Client
 	{
-		// port number for login
-		private int loginPort;
-		// port number for register
-		private int registerPort;
+		// server's port 
+		private int port;
 		// servers ip addres
 		private string ip;
 		// client
@@ -41,60 +41,65 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public Client()
 		{
-			// get data from config.cfg
-			XDocument doc = XDocument.Load("config.cfg");
+			// get data from connection.cfg
+			XDocument doc = XDocument.Load("connection.cfg");
 
 			var _ip = doc.Descendants("ip");
-			var _logPort = doc.Descendants("loginPort");
-			var _regPort = doc.Descendants("registerPort");
+			var _port = doc.Descendants("port");
 
 			ip = "";
 			foreach (var i in _ip) ip = i.Value;
 
-			loginPort = 0;
-			foreach (var i in _logPort) loginPort = int.Parse(i.Value);
-
-			registerPort = 0;
-			foreach (var i in _regPort) registerPort = int.Parse(i.Value);
+			port = 0;
+			foreach (var i in _port) port = int.Parse(i.Value);
 		}
 
 		/// <summary>
 		/// Try to login into user account.
 		/// </summary>
-		/// <param name="login">users login.</param>
-		/// <param name="password">users password.</param>
-		/// <returns>true, if login success.</returns>
-		public async Task<string> Login(string login, string password)
+		/// <param name="_login">users login.</param>
+		/// <param name="_password">users password.</param>
+		/// <returns>server's response.</returns>
+		public async Task<LoginRegisterResponseMessage> Login(string _login, string _password)
 		{
-			return await SendDataToServerAndRecieveResponse(login, password, loginPort);
+			LoginRegisterMessage message = new LoginRegisterMessage
+			{
+				type = MessageType.LOGIN,
+				login = _login,
+				password = _password
+			};
+
+			return await SendMessageToServerAndRecieveResponse(message);
 		}
 
 		/// <summary>
 		/// Try to register client on the server.
 		/// </summary>
-		/// <param name="login">users login.</param>
-		/// <param name="password">users password.</param>
-		/// <returns>true, if registration success.</returns>
-		public async Task<string> Register(string login, string password)
+		/// <param name="_login">users login.</param>
+		/// <param name="_password">users password.</param>
+		/// <returns>server's response.</returns>
+		public async Task<LoginRegisterResponseMessage> Register(string _login, string _password)
 		{
-			return await SendDataToServerAndRecieveResponse(login, password, registerPort);
+			LoginRegisterMessage message = new LoginRegisterMessage
+			{
+				type = MessageType.REGISTER,
+				login = _login,
+				password = _password
+			};
+
+			return await SendMessageToServerAndRecieveResponse(message);
 		}
 
 		/// <summary>
-		/// Send login and password to server;
+		/// Send message to server;
 		/// resieve response from server.
 		/// </summary>
-		/// <param name="login">users login.</param>
-		/// <param name="password">users password.</param>
-		/// <param name="port">port number.</param>
+		/// <param name="message">message with user's data.</param>
 		/// <returns>server's response.</returns>
 		/// <exception cref="ServerConnectionException">connection problems.</exception>
 		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
-		private async Task<string> SendDataToServerAndRecieveResponse(string login, string password, int port)
+		private async Task<LoginRegisterResponseMessage> SendMessageToServerAndRecieveResponse(LoginRegisterMessage message)
 		{
-			// response from server
-			string response;
-
 			try
 			{
 				client = new TcpClient();
@@ -103,25 +108,28 @@ namespace CryptoMessenger.Net
 				if (!client.ConnectAsync(ip, port).Wait(5000))
 					throw new TimeoutException();
 
-				string data = login + " " + password;
+				// asynchronous communicate with server
+				return await Task.Run(() => { 
 
-				using (SslStream sslStream = new SslStream(client.GetStream(), true,
-					SslStuff.ServerValidationCallback, SslStuff.ClientCertificateSelectionCallback,
-					EncryptionPolicy.RequireEncryption))
-				{
-					// handshake
-					SslStuff.ClientSideHandshake(sslStream, ip);
+					using (SslStream sslStream = new SslStream(client.GetStream(), true,
+						SslStuff.ServerValidationCallback, SslStuff.ClientCertificateSelectionCallback,
+						EncryptionPolicy.RequireEncryption))
+					{
+						// handshake
+						SslStuff.ClientSideHandshake(sslStream, ip);
 
-					// send login and password to server
-					byte[] bytes = Encoding.UTF8.GetBytes(data);
-					await sslStream.WriteAsync(bytes, 0, bytes.Length);
+						XmlSerializer messageSerializer = new XmlSerializer(typeof(LoginRegisterMessage));
+						XmlSerializer responseSerializer = new XmlSerializer(typeof(LoginRegisterResponseMessage));
 
-					// server response
-					bytes = new byte[client.ReceiveBufferSize];
-					int bytesRead = await sslStream.ReadAsync(bytes, 0, client.ReceiveBufferSize);
-					Array.Resize(ref bytes, bytesRead);
-					response = Encoding.UTF8.GetString(bytes);
-				}
+						// send login and password to server
+						messageSerializer.Serialize(sslStream, message);
+						client.Client.Shutdown(SocketShutdown.Send);
+
+						// server response
+						return (LoginRegisterResponseMessage)responseSerializer.Deserialize(sslStream);
+					}
+
+				});
 			}
 			catch (ClientCertificateException)
 			{
@@ -135,14 +143,6 @@ namespace CryptoMessenger.Net
 			{
 				client.Close();
 			}
-
-			// process response
-			if ("SUCCESS".Equals(response) ||
-				"FAIL".Equals(response) ||
-				"ERROR".Equals(response))
-				return response;
-			else
-				return "ERROR";
 		}
 	}
 }
