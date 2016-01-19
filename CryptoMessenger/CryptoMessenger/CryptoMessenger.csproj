@@ -153,6 +153,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Certificate\cert.pfx" />
+    <None Include="connection.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Windows.Forms;
 
+using CryptoMessenger.Net;
+
 namespace CryptoMessenger.GUI
 {
     public partial class MainForm : Form
     {
+		// cleint 
+		private Client client;
 		// user name
 		private string login;
-
 		// parent form
-		LoginForm loginForm;
+		private LoginForm loginForm;
 
         // shadow around window
         private Dropshadow shadow;
 
-        public MainForm(LoginForm parent, string login)
+        public MainForm(LoginForm parent, Client client, string login)
         {
             InitializeComponent();
 
 			loginForm = parent;
 			this.login = login;
+			this.client = client;
+			// listen for messages from server
+			this.client.Listen();
 
 			// create shadow, set shadow params
 			shadow = new Dropshadow(this)
@@ -48,6 +54,19 @@ namespace CryptoMessenger.GUI
 		}
 		private void sendButton_Click(object sender, EventArgs e)
 		{
+		}
+
+		// logout when form closing
+		private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			try
+			{
+				await client.Logout();
+			}
+			catch
+			{
+				// dont mind because we close app
+			}
 		}
 	}
 }

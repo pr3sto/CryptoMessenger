@@ -62,10 +62,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LinqToDatabase.cs">
+    <Compile Include="Database\LinqToDatabase.cs">
       <DependentUpon>LinqToDatabase.dbml</DependentUpon>
     </Compile>
-    <Compile Include="LinqToDatabase.designer.cs">
+    <Compile Include="Database\LinqToDatabase.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LinqToDatabase.dbml</DependentUpon>
@@ -80,16 +80,16 @@
     <Compile Include="Security\PasswordHash.cs" />
     <Compile Include="Security\SslStuff.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="OnlineUser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LinqToDatabase.dbml.layout">
+    <None Include="Database\LinqToDatabase.dbml.layout">
       <DependentUpon>LinqToDatabase.dbml</DependentUpon>
     </None>
     <None Include="App.config" />
     <EmbeddedResource Include="Certificate\cert.pfx" />
-    <None Include="LinqToDatabase.dbml">
+    <None Include="Database\LinqToDatabase.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>LinqToDatabase.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
@@ -99,10 +99,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database.mdf">
+    <Content Include="Database\Database.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Database_log.ldf">
+    <Content Include="Database\Database_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Database.mdf</DependentUpon>
     </Content>

@@ -1,16 +1,20 @@
 ﻿using System;
+using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+
 using MessageTypes;
 
 namespace CryptoMessenger.Net
 {
+	/// <summary>
+	/// Connection problems.
+	/// </summary>
 	[Serializable]
-	class ServerConnectionException : Exception
+	public class ServerConnectionException : Exception
 	{
 		public ServerConnectionException()
 		{
@@ -27,7 +31,7 @@ namespace CryptoMessenger.Net
 		}
 	}
 
-	class Client
+	public class Client
 	{
 		// server's port 
 		private int port;
@@ -35,6 +39,8 @@ namespace CryptoMessenger.Net
 		private string ip;
 		// client
 		private TcpClient client;
+		// ssl stream with server
+		private SslStream sslStream;
 
 		/// <summary>
 		/// Initialize Client.
@@ -42,10 +48,11 @@ namespace CryptoMessenger.Net
 		public Client()
 		{
 			// get data from connection.cfg
-			XDocument doc = XDocument.Load("connection.cfg");
+			XDocument doc = XDocument.Load("connection.config");
 
 			var _ip = doc.Descendants("ip");
 			var _port = doc.Descendants("port");
+
 
 			ip = "";
 			foreach (var i in _ip) ip = i.Value;
@@ -55,21 +62,121 @@ namespace CryptoMessenger.Net
 		}
 
 		/// <summary>
+		/// Connect to server.
+		/// </summary>
+		/// <exception cref="ServerConnectionException">connection problems.</exception>
+		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
+		private void Connect()
+		{
+			try
+			{
+				client = new TcpClient();
+
+				// timeout for waiting connection
+				if (!client.ConnectAsync(ip, port).Wait(5000))
+					throw new TimeoutException();
+
+				sslStream = new SslStream(client.GetStream(), true,
+					SslStuff.ServerValidationCallback, 
+					SslStuff.ClientCertificateSelectionCallback,
+					EncryptionPolicy.RequireEncryption);
+				
+				// handshake
+				SslStuff.ClientSideHandshake(sslStream, ip);
+			}
+			catch (ClientCertificateException)
+			{
+				throw;
+			}
+			catch
+			{
+				throw new ServerConnectionException();
+			}
+		}
+
+		/// <summary>
+		/// Disconnect from server.
+		/// </summary>
+		/// <exception cref="ServerConnectionException">connection problems.</exception>
+		private void Disconnect()
+		{
+			try
+			{
+				client.Client.Shutdown(SocketShutdown.Both);
+			}
+			catch
+			{
+				throw new ServerConnectionException();
+			}
+			finally
+			{
+				sslStream.Dispose();
+				client.Close();
+			}
+		}
+
+		/// <summary>
+		/// Listen for messages from server.
+		/// </summary>
+		public async void Listen()
+		{
+			XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
+			XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
+
+			await Task.Run(() =>
+			{
+				try
+				{
+					while (true)
+					{
+						byte[] buffer = new byte[client.ReceiveBufferSize];
+						int length = sslStream.Read(buffer, 0, buffer.Length);
+						MemoryStream ms = new MemoryStream(buffer, 0, length);
+						// server's incoming message
+						// RequestMessage message = (RequestMessage)requestSerializer.Deserialize(ms);
+					}
+				}
+				catch
+				{
+					
+				}
+			});
+		}
+
+		/// <summary>
 		/// Try to login into user account.
 		/// </summary>
 		/// <param name="_login">users login.</param>
 		/// <param name="_password">users password.</param>
 		/// <returns>server's response.</returns>
-		public async Task<LoginRegisterResponseMessage> Login(string _login, string _password)
+		/// <exception cref="ServerConnectionException">connection problems.</exception>
+		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
+		public async Task<LoginRegisterResponse> Login(string _login, string _password)
 		{
-			LoginRegisterMessage message = new LoginRegisterMessage
+			Connect();
+
+			LoginRequestMessage message = new LoginRequestMessage
 			{
-				type = MessageType.LOGIN,
 				login = _login,
 				password = _password
 			};
+			LoginResponseMessage serverResp = (LoginResponseMessage) await SendMessage(message);
 
-			return await SendMessageToServerAndRecieveResponse(message);
+			// don't disconnect if login success
+			if (!LoginRegisterResponse.SUCCESS.Equals(serverResp.response))
+				Disconnect();
+
+			return serverResp.response;
+		}
+
+		/// <summary>
+		/// Logout from server.
+		/// </summary>
+		/// <exception cref="ServerConnectionException">connection problems.</exception>
+		public async Task Logout()
+		{
+			await SendMessage(new LogoutRequestMessage());
+			Disconnect();
 		}
 
 		/// <summary>
@@ -78,16 +185,22 @@ namespace CryptoMessenger.Net
 		/// <param name="_login">users login.</param>
 		/// <param name="_password">users password.</param>
 		/// <returns>server's response.</returns>
-		public async Task<LoginRegisterResponseMessage> Register(string _login, string _password)
+		/// <exception cref="ServerConnectionException">connection problems.</exception>
+		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
+		public async Task<LoginRegisterResponse> Register(string _login, string _password)
 		{
-			LoginRegisterMessage message = new LoginRegisterMessage
+			Connect();
+
+			RegisterRequestMessage message = new RegisterRequestMessage
 			{
-				type = MessageType.REGISTER,
 				login = _login,
 				password = _password
 			};
+			RegisterResponseMessage serverResp = (RegisterResponseMessage)await SendMessage(message);
+			
+			Disconnect();
 
-			return await SendMessageToServerAndRecieveResponse(message);
+			return serverResp.response;
 		}
 
 		/// <summary>
@@ -98,51 +211,32 @@ namespace CryptoMessenger.Net
 		/// <returns>server's response.</returns>
 		/// <exception cref="ServerConnectionException">connection problems.</exception>
 		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
-		private async Task<LoginRegisterResponseMessage> SendMessageToServerAndRecieveResponse(LoginRegisterMessage message)
+		private async Task<ResponseMessage> SendMessage(RequestMessage message)
 		{
-			try
-			{
-				client = new TcpClient();
+			// asynchronous communicate with server
+			return await Task.Run(() => {
 
-				// timeout for waiting connection
-				if (!client.ConnectAsync(ip, port).Wait(5000))
-					throw new TimeoutException();
+				try
+				{
+					XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
+					XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
 
-				// asynchronous communicate with server
-				return await Task.Run(() => { 
+					// send login and password to server
+					requestSerializer.Serialize(sslStream, message);
 
-					using (SslStream sslStream = new SslStream(client.GetStream(), true,
-						SslStuff.ServerValidationCallback, SslStuff.ClientCertificateSelectionCallback,
-						EncryptionPolicy.RequireEncryption))
-					{
-						// handshake
-						SslStuff.ClientSideHandshake(sslStream, ip);
+					// server response
+					byte[] buffer = new byte[client.ReceiveBufferSize];
+					int length = sslStream.Read(buffer, 0, buffer.Length);
+					MemoryStream ms = new MemoryStream(buffer, 0, length);
 
-						XmlSerializer messageSerializer = new XmlSerializer(typeof(LoginRegisterMessage));
-						XmlSerializer responseSerializer = new XmlSerializer(typeof(LoginRegisterResponseMessage));
+					return (ResponseMessage)responseSerializer.Deserialize(ms);
+				}
+				catch
+				{
+					throw new ServerConnectionException();
+				}
 
-						// send login and password to server
-						messageSerializer.Serialize(sslStream, message);
-						client.Client.Shutdown(SocketShutdown.Send);
-
-						// server response
-						return (LoginRegisterResponseMessage)responseSerializer.Deserialize(sslStream);
-					}
-
-				});
-			}
-			catch (ClientCertificateException)
-			{
-				throw;
-			}
-			catch
-			{
-				throw new ServerConnectionException();
-			}
-			finally
-			{
-				client.Close();
-			}
+			});
 		}
 	}
 }

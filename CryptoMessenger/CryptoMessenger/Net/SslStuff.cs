@@ -7,6 +7,9 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace CryptoMessenger.Net
 {
+	/// <summary>
+	/// Problems with local certificate.
+	/// </summary>
 	[Serializable]
 	class ClientCertificateException : Exception
 	{

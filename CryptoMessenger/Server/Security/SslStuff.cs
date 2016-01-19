@@ -7,6 +7,9 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Server.Security
 {
+	/// <summary>
+	/// Problems with local certificate.
+	/// </summary>
 	[Serializable]
 	class ServerCertificateException : Exception
 	{
