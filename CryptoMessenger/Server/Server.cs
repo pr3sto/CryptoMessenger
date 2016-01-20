@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Linq;
+using System.IO;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 using Server.Security;
+using Server.Database;
 using MessageTypes;
-using System.Xml.Serialization;
-using System.IO;
 
 namespace Server
 {
@@ -157,7 +157,7 @@ namespace Server
 			// login
 			if (message is LoginRequestMessage)
 			{
-				LoginRequestMessage req = message as LoginRequestMessage;
+				LoginRequestMessage req = (LoginRequestMessage)message;
 
 				if (string.IsNullOrEmpty(req.login) ||
 					string.IsNullOrEmpty(req.password) ||
@@ -169,7 +169,7 @@ namespace Server
 				{
 					int id;
 
-					if (Login(req.login, req.password, out id))
+					if (DBoperations.Login(req.login, req.password, out id))
 					{
 						// user is online
 						OnlineUser user = new OnlineUser(id, req.login, client, sslStream);
@@ -188,7 +188,7 @@ namespace Server
 			// register
 			else if (message is RegisterRequestMessage)
 			{
-				RegisterRequestMessage req = message as RegisterRequestMessage;
+				RegisterRequestMessage req = (RegisterRequestMessage)message;
 
 				if (string.IsNullOrEmpty(req.login) ||
 					string.IsNullOrEmpty(req.password) ||
@@ -198,7 +198,7 @@ namespace Server
 				}
 				else
 				{
-					if (Register(req.login, req.password))
+					if (DBoperations.Register(req.login, req.password))
 						response = new RegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
 					else
 						response = new RegisterResponseMessage { response = LoginRegisterResponse.FAIL };
@@ -237,97 +237,6 @@ namespace Server
 		}
 
 		/// <summary>
-		/// Do login.
-		/// </summary>
-		/// <param name="_login">user's login.</param>
-		/// <param name="_password">user's password.</param>
-		/// <param name="_id">client's id in db.</param>
-		/// <returns>true, if operation had success.</returns>
-		private bool Login(string _login, string _password, out int _id)
-		{
-			using (LinqToDatabaseDataContext DBcontext = new LinqToDatabaseDataContext())
-			{
-				// get user
-				var data =
-					from user in DBcontext.Users
-					where user.login == _login
-					select user;
-
-				if (data.Any())
-				{
-					foreach (User user in data)
-					{
-						if (PasswordHash.PasswordHash.ValidatePassword(_password, user.password))
-						{
-							_id = user.user_id;
-							return true;
-						}
-						else
-						{
-							_id = 0;
-							return false;
-						}
-					}
-
-					_id = 0;
-					return false; // something wrong
-				}
-				else
-				{
-					// user not registered
-					_id = 0;
-					return false;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Do registration.
-		/// </summary>
-		/// <param name="_login">user's login.</param>
-		/// <param name="_password">user's password.</param>
-		/// <returns>true, if operation had success.</returns>
-		private bool Register(string _login, string _password)
-		{
-			using (LinqToDatabaseDataContext DBcontext = new LinqToDatabaseDataContext())
-			{
-				// if login already exist
-				var data =
-					from user in DBcontext.Users
-					where user.login == _login
-					select user;
-
-				if (data.Any())
-				{
-					// login already exist
-					return false;
-				}
-				else
-				{
-					// new user
-					User newUser = new User
-					{
-						login = _login,
-						password = PasswordHash.PasswordHash.CreateHash(_password)
-					};
-					DBcontext.Users.InsertOnSubmit(newUser);
-
-					try
-					{
-						DBcontext.SubmitChanges();
-						Console.WriteLine(" - new user: {0}", _login);
-						return true;
-					}
-					catch
-					{
-						// TODO logger
-						return false;
-					}
-				}
-			}
-		}
-
-		/// <summary>
 		/// Listen to user's messages.
 		/// </summary>
 		/// <param name="user">user.</param>
@@ -349,12 +258,14 @@ namespace Server
 					// process message
 					if (message is LogoutRequestMessage)
 					{
-						// response to user
-						responseSerializer.Serialize(user.sslStream, new LogoutResponseMessage());
-
 						onlineUsers.Remove(user);
 						user.Dispose();
 						break;
+					}
+					else if (message is GetAllUsersRequestMessage)
+					{
+						GetUsersResponseMessage response = new GetUsersResponseMessage { users = DBoperations.GetAllUsers() };
+						responseSerializer.Serialize(user.sslStream, response);
 					}
 				}
 			}

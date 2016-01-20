@@ -62,13 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\LinqToDatabase.cs">
-      <DependentUpon>LinqToDatabase.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Database\LinqToDatabase.designer.cs">
+    <Compile Include="Database\DBoperations.cs" />
+    <Compile Include="Database\LinqToSql.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LinqToDatabase.dbml</DependentUpon>
+      <DependentUpon>LinqToSql.dbml</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,13 +81,14 @@
     <Compile Include="OnlineUser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Database\LinqToDatabase.dbml.layout">
-      <DependentUpon>LinqToDatabase.dbml</DependentUpon>
+    <None Include="Database\LinqToSql.dbml.layout">
+      <DependentUpon>LinqToSql.dbml</DependentUpon>
     </None>
     <None Include="App.config" />
     <EmbeddedResource Include="Certificate\cert.pfx" />
-    <None Include="Database\LinqToDatabase.dbml">
+    <None Include="Database\LinqToSql.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>LinqToSql.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />

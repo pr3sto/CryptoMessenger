@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Database" Class="LinqToSqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\Database.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="Server.Properties.Settings" SettingsPropertyName="DatabaseConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="Users">
+      <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="login" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="password" Type="System.String" DbType="VarChar(70) NOT NULL" CanBeNull="false" />
+      <Association Name="Users_Friends" Member="Friends" ThisKey="user_id" OtherKey="friend_one" Type="Friends" />
+      <Association Name="Users_Friends1" Member="Friends1" ThisKey="user_id" OtherKey="friend_two" Type="Friends" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Friends" Member="Friends">
+    <Type Name="Friends">
+      <Column Name="friend_one" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="friend_two" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Users_Friends" Member="Users" ThisKey="friend_one" OtherKey="user_id" Type="Users" IsForeignKey="true" />
+      <Association Name="Users_Friends1" Member="Users1" ThisKey="friend_two" OtherKey="user_id" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

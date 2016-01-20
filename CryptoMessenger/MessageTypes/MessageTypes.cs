@@ -15,8 +15,9 @@ namespace MessageTypes
 	/// </summary>
 	[Serializable]
 	[XmlInclude(typeof(LoginRequestMessage))]
-	[XmlInclude(typeof(RegisterRequestMessage))]
 	[XmlInclude(typeof(LogoutRequestMessage))]
+	[XmlInclude(typeof(RegisterRequestMessage))]
+	[XmlInclude(typeof(GetAllUsersRequestMessage))]
 	public abstract class RequestMessage
 	{
 	}
@@ -34,6 +35,15 @@ namespace MessageTypes
 
 	/// <summary>
 	/// Message, that client send to server 
+	/// when log out.
+	/// </summary>
+	[Serializable]
+	public class LogoutRequestMessage : RequestMessage
+	{
+	}
+
+	/// <summary>
+	/// Message, that client send to server 
 	/// when try to register.
 	/// </summary>
 	[Serializable]
@@ -45,10 +55,10 @@ namespace MessageTypes
 
 	/// <summary>
 	/// Message, that client send to server 
-	/// when he log out.
+	/// to get all users.
 	/// </summary>
 	[Serializable]
-	public class LogoutRequestMessage : RequestMessage
+	public class GetAllUsersRequestMessage : RequestMessage
 	{
 	}
 
@@ -61,8 +71,9 @@ namespace MessageTypes
 	/// </summary>
 	[Serializable]
 	[XmlInclude(typeof(LoginResponseMessage))]
-	[XmlInclude(typeof(RegisterResponseMessage))]
 	[XmlInclude(typeof(LogoutResponseMessage))]
+	[XmlInclude(typeof(RegisterResponseMessage))]
+	[XmlInclude(typeof(GetUsersResponseMessage))]
 	public abstract class ResponseMessage
 	{
 	}
@@ -79,6 +90,15 @@ namespace MessageTypes
 
 	/// <summary>
 	/// Message, that server send to client
+	/// after client's log out.
+	/// </summary>
+	/// [Serializable]
+	public class LogoutResponseMessage : ResponseMessage
+	{
+	}
+
+	/// <summary>
+	/// Message, that server send to client
 	/// after register attempt.
 	/// </summary>
 	[Serializable]
@@ -88,12 +108,12 @@ namespace MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that server send to client
-	/// after client's log out.
+	/// Message with user's logins.
 	/// </summary>
-	/// [Serializable]
-	public class LogoutResponseMessage : ResponseMessage
+	[Serializable]
+	public class GetUsersResponseMessage : ResponseMessage
 	{
+		public string[] users;
 	}
 
 	#endregion

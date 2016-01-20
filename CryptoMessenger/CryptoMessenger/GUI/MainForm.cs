@@ -17,15 +17,15 @@ namespace CryptoMessenger.GUI
         // shadow around window
         private Dropshadow shadow;
 
-        public MainForm(LoginForm parent, Client client, string login)
+		public MainForm(LoginForm parent, Client client, string login)
         {
             InitializeComponent();
 
 			loginForm = parent;
 			this.login = login;
 			this.client = client;
-			// listen for messages from server
-			this.client.Listen();
+			// start listeninig for messages from server
+			this.client.Listen(this);
 
 			// create shadow, set shadow params
 			shadow = new Dropshadow(this)
@@ -38,13 +38,41 @@ namespace CryptoMessenger.GUI
             shadow.UpdateLocation();
         }
 
+		// update users
+		public void UpdateUsersList(string[] users)
+		{
+			usersListBox.Items.Clear();
+			usersListBox.Items.AddRange(users);
+			usersListBox.Update();
+
+			loadingLabel.Visible = false;
+			usersListBox.Visible = true;
+		}
+
+		// show users
+		private async void Click_ShowUsers(object sender, EventArgs e)
+		{
+			Label label = (Label)sender;
+
+			if ("friendsTitle".Equals(label.Name))
+			{
+			}
+			else if ("searchTitle".Equals(label.Name))
+			{
+				usersListBox.Visible = false;
+				loadingLabel.Visible = true;
+				await client.GetAllUsers();
+			}
+		}
 
 		// select friend and change chat
 		private void friendsListBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			activeTalkTitle.Text = friendsListBox.Text;
+			if (showChat)
+			{
+				activeTalkTitle.Text = usersListBox.Text;
+			}
 		}
-
 
 		// send message
 		private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
@@ -63,7 +91,7 @@ namespace CryptoMessenger.GUI
 			{
 				await client.Logout();
 			}
-			catch
+			catch (ServerConnectionException)
 			{
 				// dont mind because we close app
 			}

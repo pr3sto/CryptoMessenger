@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
+using CryptoMessenger.GUI;
 using MessageTypes;
 
 namespace CryptoMessenger.Net
@@ -62,85 +63,34 @@ namespace CryptoMessenger.Net
 		}
 
 		/// <summary>
-		/// Connect to server.
-		/// </summary>
-		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
-		private void Connect()
-		{
-			try
-			{
-				client = new TcpClient();
-
-				// timeout for waiting connection
-				if (!client.ConnectAsync(ip, port).Wait(5000))
-					throw new TimeoutException();
-
-				sslStream = new SslStream(client.GetStream(), true,
-					SslStuff.ServerValidationCallback, 
-					SslStuff.ClientCertificateSelectionCallback,
-					EncryptionPolicy.RequireEncryption);
-				
-				// handshake
-				SslStuff.ClientSideHandshake(sslStream, ip);
-			}
-			catch (ClientCertificateException)
-			{
-				throw;
-			}
-			catch
-			{
-				throw new ServerConnectionException();
-			}
-		}
-
-		/// <summary>
-		/// Disconnect from server.
-		/// </summary>
-		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		private void Disconnect()
-		{
-			try
-			{
-				client.Client.Shutdown(SocketShutdown.Both);
-			}
-			catch
-			{
-				throw new ServerConnectionException();
-			}
-			finally
-			{
-				sslStream.Dispose();
-				client.Close();
-			}
-		}
-
-		/// <summary>
 		/// Listen for messages from server.
 		/// </summary>
-		public async void Listen()
+		/// <param name="form">form to update when message come.</param>
+		public async void Listen(MainForm form)
 		{
 			XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
 			XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
 
-			await Task.Run(() =>
+			try
 			{
-				try
+				while (true)
 				{
-					while (true)
+					// wait for message
+					ResponseMessage message = await ReceiveMessage();
+
+					// process message
+					if (message is GetUsersResponseMessage)
 					{
-						byte[] buffer = new byte[client.ReceiveBufferSize];
-						int length = sslStream.Read(buffer, 0, buffer.Length);
-						MemoryStream ms = new MemoryStream(buffer, 0, length);
-						// server's incoming message
-						// RequestMessage message = (RequestMessage)requestSerializer.Deserialize(ms);
+						string[] users = ((GetUsersResponseMessage)message).users;
+						form.UpdateUsersList(users);
 					}
 				}
-				catch
-				{
-					
-				}
-			});
+			}
+			catch (ServerConnectionException)
+			{
+				// disconnect from server
+				// TODO do something -__-
+			}
 		}
 
 		/// <summary>
@@ -160,7 +110,9 @@ namespace CryptoMessenger.Net
 				login = _login,
 				password = _password
 			};
-			LoginResponseMessage serverResp = (LoginResponseMessage) await SendMessage(message);
+
+			await SendMessage(message);
+			LoginResponseMessage serverResp = (LoginResponseMessage)await ReceiveMessage();
 
 			// don't disconnect if login success
 			if (!LoginRegisterResponse.SUCCESS.Equals(serverResp.response))
@@ -196,7 +148,9 @@ namespace CryptoMessenger.Net
 				login = _login,
 				password = _password
 			};
-			RegisterResponseMessage serverResp = (RegisterResponseMessage)await SendMessage(message);
+
+			await SendMessage(message);
+			RegisterResponseMessage serverResp = (RegisterResponseMessage)await ReceiveMessage();
 			
 			Disconnect();
 
@@ -204,27 +158,98 @@ namespace CryptoMessenger.Net
 		}
 
 		/// <summary>
-		/// Send message to server;
-		/// resieve response from server.
+		/// Get all users from server.
 		/// </summary>
-		/// <param name="message">message with user's data.</param>
-		/// <returns>server's response.</returns>
+		public async Task GetAllUsers()
+		{
+			await SendMessage(new GetAllUsersRequestMessage());
+		}
+
+		#region Communication with server
+
+		/// <summary>
+		/// Connect to server.
+		/// </summary>
 		/// <exception cref="ServerConnectionException">connection problems.</exception>
 		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
-		private async Task<ResponseMessage> SendMessage(RequestMessage message)
+		private void Connect()
+		{
+			try
+			{
+				client = new TcpClient();
+
+				// timeout for waiting connection
+				if (!client.ConnectAsync(ip, port).Wait(5000))
+					throw new TimeoutException();
+
+				sslStream = new SslStream(client.GetStream(), true,
+					SslStuff.ServerValidationCallback,
+					SslStuff.ClientCertificateSelectionCallback,
+					EncryptionPolicy.RequireEncryption);
+
+				// handshake
+				SslStuff.ClientSideHandshake(sslStream, ip);
+			}
+			catch (ClientCertificateException)
+			{
+				throw;
+			}
+			catch
+			{
+				throw new ServerConnectionException();
+			}
+		}
+
+		/// <summary>
+		/// Disconnect from server.
+		/// </summary>
+		/// <exception cref="ServerConnectionException">connection problems.</exception>
+		private void Disconnect()
+		{
+			try
+			{
+				client.Client.Shutdown(SocketShutdown.Both);
+			}
+			catch
+			{
+				throw new ServerConnectionException();
+			}
+			finally
+			{
+				sslStream.Dispose();
+				client.Close();
+			}
+		}
+
+		/// <summary>
+		/// Send message to server.
+		/// </summary>
+		/// <param name="message">user's message.</param>
+		private async Task SendMessage(RequestMessage message)
+		{
+			// asynchronous communicate with server
+			await Task.Run(() => {
+
+				XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
+				requestSerializer.Serialize(sslStream, message);
+
+			});
+		}
+
+		/// <summary>
+		/// Reseive response from server.
+		/// </summary>
+		/// <returns>server's response.</returns>
+		/// <exception cref="ServerConnectionException">connection problems.</exception>
+		private async Task<ResponseMessage> ReceiveMessage()
 		{
 			// asynchronous communicate with server
 			return await Task.Run(() => {
 
 				try
 				{
-					XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
 					XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
 
-					// send login and password to server
-					requestSerializer.Serialize(sslStream, message);
-
-					// server response
 					byte[] buffer = new byte[client.ReceiveBufferSize];
 					int length = sslStream.Read(buffer, 0, buffer.Length);
 					MemoryStream ms = new MemoryStream(buffer, 0, length);
@@ -238,5 +263,7 @@ namespace CryptoMessenger.Net
 
 			});
 		}
+
+		#endregion
 	}
 }
