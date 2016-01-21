@@ -227,7 +227,9 @@ namespace CryptoMessenger.GUI
 		private void DisableInterface()
 		{
 			loginButton.Enabled = false;
+			loginButton.Update();
 			registerButton.Enabled = false;
+			registerButton.Update();
 			userName.Enabled = false;
 			userPassword.Enabled = false;
 			showPasswordCheckBox.Enabled = false;
@@ -239,7 +241,9 @@ namespace CryptoMessenger.GUI
 			userNamePanel.Refresh();
 			userPasswordPanel.Refresh();
 			loginButton.Enabled = true;
+			loginButton.Update();
 			registerButton.Enabled = true;
+			registerButton.Update();
 			userName.Enabled = true;
 			userPassword.Enabled = true;
 			showPasswordCheckBox.Enabled = true;
