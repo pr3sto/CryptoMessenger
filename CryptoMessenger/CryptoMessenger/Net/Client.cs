@@ -2,9 +2,11 @@
 using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 using CryptoMessenger.GUI;
 using MessageTypes;
@@ -82,7 +84,7 @@ namespace CryptoMessenger.Net
 					if (message is GetUsersResponseMessage)
 					{
 						string[] users = ((GetUsersResponseMessage)message).users;
-						form.UpdateUsersList(users);
+						form.UpdateAllUsersList(users);
 					}
 				}
 			}
@@ -103,7 +105,7 @@ namespace CryptoMessenger.Net
 		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
 		public async Task<LoginRegisterResponse> Login(string _login, string _password)
 		{
-			Connect();
+			await Connect();
 
 			LoginRequestMessage message = new LoginRequestMessage
 			{
@@ -141,7 +143,7 @@ namespace CryptoMessenger.Net
 		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
 		public async Task<LoginRegisterResponse> Register(string _login, string _password)
 		{
-			Connect();
+			await Connect();
 
 			RegisterRequestMessage message = new RegisterRequestMessage
 			{
@@ -172,15 +174,18 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		/// <exception cref="ServerConnectionException">connection problems.</exception>
 		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
-		private void Connect()
+		private async Task Connect()
 		{
 			try
 			{
 				client = new TcpClient();
-
-				// timeout for waiting connection
-				if (!client.ConnectAsync(ip, port).Wait(5000))
-					throw new TimeoutException();
+				
+				await Task.Run(()=>
+				{
+					// timeout for waiting connection
+					if (!client.ConnectAsync(ip, port).Wait(5000))
+						throw new TimeoutException();
+				});
 
 				sslStream = new SslStream(client.GetStream(), true,
 					SslStuff.ServerValidationCallback,
