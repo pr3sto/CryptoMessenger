@@ -28,7 +28,7 @@ namespace CryptoMessenger.GUI
         }
 
 		/// <summary>
-		/// Parameters for minimazing form.
+		/// Parameters for minimizing form.
 		/// </summary>
 		protected override CreateParams CreateParams
 		{
@@ -71,19 +71,36 @@ namespace CryptoMessenger.GUI
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			appName.Font = loginForm.NeueFont15;
+			appNameLabel.Font = loginForm.NeueFont15;
+			loadingLabel.Font = loginForm.NeueFont15;
+			friendsLabel.Font = loginForm.NeueFont15;
+			friendsListBox.Font = loginForm.NeueFont15;
+			removeFriendButton.Font = loginForm.NeueFont15;
+			searchLabel.Font = loginForm.NeueFont10;
+			allUsersListBox.Font = loginForm.NeueFont15;
+			addFriendButton.Font = loginForm.NeueFont15;
+			friendshipRequestsLabel.Font = loginForm.NeueFont10;
+			incomeFriendshipRequestsLabel.Font = loginForm.NeueFont15;
+			outcomeFriendshipRequestsLabel.Font = loginForm.NeueFont15;
+			incomeFriendshipRequestsListBox.Font = loginForm.NeueFont15;
+			outcomeFriendshipRequestsListBox.Font = loginForm.NeueFont15;
+			cancelFriendshipRequestButton.Font = loginForm.NeueFont15;
+			acceptFriendshipButton.Font = loginForm.NeueFont15;
+			rejectFriendshipButton.Font = loginForm.NeueFont15;
 			message.Font = loginForm.NeueFont15;
 			sendButton.Font = loginForm.NeueFont15;
-			friendsTitle.Font = loginForm.NeueFont15;
-			searchTitle.Font = loginForm.NeueFont15;
-			loadingLabel.Font = loginForm.NeueFont15;
-			activeTalkTitle.Font = loginForm.NeueFont15;
-			usersListBox.Font = loginForm.NeueFont15;
+			activeTalkLabel.Font = loginForm.NeueFont15;
+
+			ResizeContactLabels();
+
+			this.searchLabel.Click += new System.EventHandler(this.UpdateUserPanel);
+			this.friendsLabel.Click += new System.EventHandler(this.UpdateUserPanel);
+			this.friendshipRequestsLabel.Click += new System.EventHandler(this.UpdateUserPanel);
 
 			ActiveControl = sendButton;
 
 			Text = login;
-			appName.Text = login;
+			appNameLabel.Text = login;
 		}
 
 		#endregion
@@ -102,7 +119,7 @@ namespace CryptoMessenger.GUI
 		}
 		private void contactsPanel_Paint(object sender, PaintEventArgs e)
 		{
-			Rectangle rect = contactsPanel.ClientRectangle;
+			Rectangle rect = usersPanel.ClientRectangle;
 			rect.Width--;
 			rect.Height--;
 			e.Graphics.DrawRectangle(new Pen(Properties.Settings.Default.PanelBorderColor), rect);
@@ -141,13 +158,13 @@ namespace CryptoMessenger.GUI
 		}
 		private void activeTalkTitlePanel_Paint(object sender, PaintEventArgs e)
 		{
-			Rectangle rect = activeTalkTitlePanel.ClientRectangle;
+			Rectangle rect = activeTalkLabelPanel.ClientRectangle;
 			e.Graphics.DrawLine(new Pen(Properties.Settings.Default.MainFirstColor),
 				new Point(1, rect.Height - 1), new Point(rect.Width - 2, rect.Height - 1));
 		}
 		private void friendsTitlePanel_Paint(object sender, PaintEventArgs e)
 		{
-			Rectangle rect = friendsTitlePanel.ClientRectangle;
+			Rectangle rect = usersLabelsPanel.ClientRectangle;
 			e.Graphics.DrawLine(new Pen(Properties.Settings.Default.MainFirstColor),
 				new Point(1, rect.Height - 1), new Point(rect.Width - 2, rect.Height - 1));
 		}
@@ -251,9 +268,9 @@ namespace CryptoMessenger.GUI
 		// resize label when text changed (center alignment)
 		private void activeTalkTitle_SizeChanged(object sender, EventArgs e)
 		{
-			Point location = activeTalkTitle.Location;
-			location.X = (activeTalkTitlePanel.Width - activeTalkTitle.Width) / 2;
-			activeTalkTitle.Location = location;
+			Point location = activeTalkLabel.Location;
+			location.X = (activeTalkLabelPanel.Width - activeTalkLabel.Width) / 2;
+			activeTalkLabel.Location = location;
 		}
 
 		// resize button and textbox when split control change size
@@ -316,38 +333,60 @@ namespace CryptoMessenger.GUI
 
 		#endregion
 
-		#region Switch friends / all
+		#region Switch friends / all / requests
 
-		// show chat with selected user
-		private bool showChat;
+		// show friendship requests
+		private void friendRequestTitle_Click(object sender, EventArgs e)
+		{
+			friendshipRequestsLabel.Font = loginForm.NeueFont15;
+			friendsLabel.Font = loginForm.NeueFont10;
+			searchLabel.Font = loginForm.NeueFont10;
+
+			ResizeContactLabels();
+
+			selectedPanel = UsersPanels.REQUESTS;
+		}
 
 		// show friends
 		private void friendsTitle_Click(object sender, EventArgs e)
 		{
-			showChat = true;
+			friendshipRequestsLabel.Font = loginForm.NeueFont10;
+			friendsLabel.Font = loginForm.NeueFont15;
+			searchLabel.Font = loginForm.NeueFont10;
 
-			Point tmp = friendsTitle.Location;
-			tmp.X = (friendsTitlePanel.Width - friendsTitle.Width) / 2;
-			friendsTitle.Location = tmp;
+			ResizeContactLabels();
 
-			tmp = searchTitle.Location;
-			tmp.X = friendsTitlePanel.Width - searchTitle.Width;
-			searchTitle.Location = tmp;
+			selectedPanel = UsersPanels.FRIENDS;
 		}
 
 		// show all users
 		private void searchTitle_Click(object sender, EventArgs e)
 		{
-			showChat = false;
+			friendshipRequestsLabel.Font = loginForm.NeueFont10;
+			friendsLabel.Font = loginForm.NeueFont10;
+			searchLabel.Font = loginForm.NeueFont15;
 
-			Point tmp = searchTitle.Location;
-			tmp.X = (friendsTitlePanel.Width - searchTitle.Width) / 2;
-			searchTitle.Location = tmp;
+			ResizeContactLabels();
 
-			tmp = friendsTitle.Location;
+			selectedPanel = UsersPanels.SEARCH;
+		}	
+		
+		// resize labels
+		private void ResizeContactLabels()
+		{
+			Point tmp = new Point();
 			tmp.X = 0;
-			friendsTitle.Location = tmp;
-		}
+			tmp.Y = usersLabelsPanel.Height / 2 - friendshipRequestsLabel.Height / 2;
+			friendshipRequestsLabel.Location = tmp;
+
+			tmp.X = (usersLabelsPanel.Width - friendsLabel.Width) / 2;
+			tmp.Y = usersLabelsPanel.Height / 2 - friendsLabel.Height / 2;
+			friendsLabel.Location = tmp;
+
+			tmp.X = usersLabelsPanel.Width - searchLabel.Width;
+			tmp.Y = usersLabelsPanel.Height / 2 - searchLabel.Height / 2;
+			searchLabel.Location = tmp;
+		}	
 
 		#endregion
 
@@ -363,6 +402,8 @@ namespace CryptoMessenger.GUI
 		// Custom item draw of listbox.
 		private void listBox_DrawItem(object sender, DrawItemEventArgs e)
 		{
+			ListBox listBox = (ListBox)sender;
+
 			if (e.Index < 0) return;
 			//if the item state is selected them change the back color 
 			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
@@ -380,7 +421,7 @@ namespace CryptoMessenger.GUI
 				// Draw the current item text
 				Rectangle bounds = e.Bounds;
 				bounds.X += 10;
-				e.Graphics.DrawString(this.usersListBox.Items[e.Index].ToString(), e.Font, Brushes.White, bounds, StringFormat.GenericDefault);
+				e.Graphics.DrawString(listBox.Items[e.Index].ToString(), e.Font, Brushes.White, bounds, StringFormat.GenericDefault);
 			}
 			else
 			{
@@ -389,7 +430,7 @@ namespace CryptoMessenger.GUI
 				// Draw the current item text
 				Rectangle bounds = e.Bounds;
 				bounds.X += 10;
-				e.Graphics.DrawString(this.usersListBox.Items[e.Index].ToString(), e.Font, Brushes.Black, bounds, StringFormat.GenericDefault);
+				e.Graphics.DrawString(listBox.Items[e.Index].ToString(), e.Font, Brushes.Black, bounds, StringFormat.GenericDefault);
 			}
 		}
 
@@ -407,29 +448,46 @@ namespace CryptoMessenger.GUI
 			this.iconBox = new System.Windows.Forms.PictureBox();
 			this.closeButton = new CryptoMessenger.GUI.MyButton();
 			this.minimizeButton = new CryptoMessenger.GUI.MyButton();
-			this.appName = new System.Windows.Forms.Label();
-			this.contactsPanel = new System.Windows.Forms.Panel();
-			this.usersListBox = new System.Windows.Forms.ListBox();
-			this.friendsTitlePanel = new System.Windows.Forms.Panel();
-			this.searchTitle = new System.Windows.Forms.Label();
-			this.friendsTitle = new System.Windows.Forms.Label();
+			this.appNameLabel = new System.Windows.Forms.Label();
+			this.usersPanel = new System.Windows.Forms.Panel();
+			this.allUsersPanel = new System.Windows.Forms.Panel();
+			this.allUsersListBox = new System.Windows.Forms.ListBox();
+			this.addFriendButton = new CryptoMessenger.GUI.MyButton();
+			this.friendsPanel = new System.Windows.Forms.Panel();
+			this.friendsListBox = new System.Windows.Forms.ListBox();
+			this.removeFriendButton = new CryptoMessenger.GUI.MyButton();
+			this.friendshipRequestsPanel = new System.Windows.Forms.Panel();
+			this.outcomeFriendshipRequestsListBox = new System.Windows.Forms.ListBox();
+			this.incomeFriendshipRequestsListBox = new System.Windows.Forms.ListBox();
+			this.cancelFriendshipRequestButton = new CryptoMessenger.GUI.MyButton();
+			this.acceptFriendshipButton = new CryptoMessenger.GUI.MyButton();
+			this.rejectFriendshipButton = new CryptoMessenger.GUI.MyButton();
+			this.outcomeFriendshipRequestsLabel = new System.Windows.Forms.Label();
+			this.incomeFriendshipRequestsLabel = new System.Windows.Forms.Label();
+			this.usersLabelsPanel = new System.Windows.Forms.Panel();
+			this.friendshipRequestsLabel = new System.Windows.Forms.Label();
+			this.searchLabel = new System.Windows.Forms.Label();
+			this.friendsLabel = new System.Windows.Forms.Label();
 			this.loadingLabel = new System.Windows.Forms.Label();
 			this.mainFormPanel = new System.Windows.Forms.Panel();
 			this.splitContainer = new CryptoMessenger.GUI.MySplitContainer();
-			this.activeTalkTitlePanel = new System.Windows.Forms.Panel();
-			this.activeTalkTitle = new System.Windows.Forms.Label();
+			this.activeTalkLabelPanel = new System.Windows.Forms.Panel();
+			this.activeTalkLabel = new System.Windows.Forms.Label();
 			this.message = new System.Windows.Forms.TextBox();
 			this.sendButton = new CryptoMessenger.GUI.MyButton();
 			this.topPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iconBox)).BeginInit();
-			this.contactsPanel.SuspendLayout();
-			this.friendsTitlePanel.SuspendLayout();
+			this.usersPanel.SuspendLayout();
+			this.allUsersPanel.SuspendLayout();
+			this.friendsPanel.SuspendLayout();
+			this.friendshipRequestsPanel.SuspendLayout();
+			this.usersLabelsPanel.SuspendLayout();
 			this.mainFormPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
-			this.activeTalkTitlePanel.SuspendLayout();
+			this.activeTalkLabelPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// topPanel
@@ -438,11 +496,12 @@ namespace CryptoMessenger.GUI
 			this.topPanel.Controls.Add(this.iconBox);
 			this.topPanel.Controls.Add(this.closeButton);
 			this.topPanel.Controls.Add(this.minimizeButton);
-			this.topPanel.Controls.Add(this.appName);
+			this.topPanel.Controls.Add(this.appNameLabel);
 			this.topPanel.Location = new System.Drawing.Point(0, 0);
 			this.topPanel.Name = "topPanel";
 			this.topPanel.Size = new System.Drawing.Size(700, 35);
 			this.topPanel.TabIndex = 0;
+			this.topPanel.TabStop = false;
 			this.topPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
 			this.topPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
 			this.topPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
@@ -454,7 +513,8 @@ namespace CryptoMessenger.GUI
 			this.iconBox.Location = new System.Drawing.Point(10, 5);
 			this.iconBox.Name = "iconBox";
 			this.iconBox.Size = new System.Drawing.Size(25, 25);
-			this.iconBox.TabIndex = 10;
+			this.iconBox.TabIndex = 0;
+			this.iconBox.TabStop = false;
 			this.iconBox.TabStop = false;
 			this.iconBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
 			this.iconBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
@@ -470,7 +530,7 @@ namespace CryptoMessenger.GUI
 			this.closeButton.Location = new System.Drawing.Point(670, 2);
 			this.closeButton.Name = "closeButton";
 			this.closeButton.Size = new System.Drawing.Size(20, 31);
-			this.closeButton.TabIndex = 4;
+			this.closeButton.TabIndex = 0;
 			this.closeButton.TabStop = false;
 			this.closeButton.UseVisualStyleBackColor = false;
 			this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -487,7 +547,7 @@ namespace CryptoMessenger.GUI
 			this.minimizeButton.Location = new System.Drawing.Point(640, 2);
 			this.minimizeButton.Name = "minimizeButton";
 			this.minimizeButton.Size = new System.Drawing.Size(20, 31);
-			this.minimizeButton.TabIndex = 3;
+			this.minimizeButton.TabIndex = 0;
 			this.minimizeButton.TabStop = false;
 			this.minimizeButton.UseVisualStyleBackColor = false;
 			this.minimizeButton.Click += new System.EventHandler(this.minimizeButton_Click);
@@ -495,85 +555,314 @@ namespace CryptoMessenger.GUI
 			this.minimizeButton.MouseEnter += new System.EventHandler(this.minimizeButton_MouseEnter);
 			this.minimizeButton.MouseLeave += new System.EventHandler(this.minimizeButton_MouseLeave);
 			// 
-			// appName
+			// appNameLabel
 			// 
-			this.appName.AutoSize = true;
-			this.appName.BackColor = System.Drawing.Color.Transparent;
-			this.appName.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.appName.ForeColor = System.Drawing.Color.White;
-			this.appName.Location = new System.Drawing.Point(40, 5);
-			this.appName.Name = "appName";
-			this.appName.Size = new System.Drawing.Size(54, 21);
-			this.appName.TabIndex = 1;
-			this.appName.Text = "LOGIN";
-			this.appName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
-			this.appName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
-			this.appName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
+			this.appNameLabel.AutoSize = true;
+			this.appNameLabel.BackColor = System.Drawing.Color.Transparent;
+			this.appNameLabel.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.appNameLabel.ForeColor = System.Drawing.Color.White;
+			this.appNameLabel.Location = new System.Drawing.Point(40, 5);
+			this.appNameLabel.Name = "appNameLabel";
+			this.appNameLabel.Size = new System.Drawing.Size(54, 21);
+			this.appNameLabel.TabIndex = 0;
+			this.appNameLabel.TabStop = false;
+			this.appNameLabel.Text = "LOGIN";
+			this.appNameLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
+			this.appNameLabel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
+			this.appNameLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
 			// 
-			// contactsPanel
+			// usersPanel
 			// 
-			this.contactsPanel.BackColor = System.Drawing.Color.White;
-			this.contactsPanel.Controls.Add(this.usersListBox);
-			this.contactsPanel.Controls.Add(this.friendsTitlePanel);
-			this.contactsPanel.Controls.Add(this.loadingLabel);
-			this.contactsPanel.Location = new System.Drawing.Point(10, 45);
-			this.contactsPanel.Name = "contactsPanel";
-			this.contactsPanel.Size = new System.Drawing.Size(200, 445);
-			this.contactsPanel.TabIndex = 1;
-			this.contactsPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.contactsPanel_Paint);
+			this.usersPanel.BackColor = System.Drawing.Color.White;
+			this.usersPanel.Controls.Add(this.allUsersPanel);
+			this.usersPanel.Controls.Add(this.friendsPanel);
+			this.usersPanel.Controls.Add(this.friendshipRequestsPanel);
+			this.usersPanel.Controls.Add(this.usersLabelsPanel);
+			this.usersPanel.Controls.Add(this.loadingLabel);
+			this.usersPanel.Location = new System.Drawing.Point(10, 45);
+			this.usersPanel.Name = "usersPanel";
+			this.usersPanel.Size = new System.Drawing.Size(200, 445);
+			this.usersPanel.TabIndex = 0;
+			this.usersPanel.TabStop = false;
+			this.usersPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.contactsPanel_Paint);
 			// 
-			// usersListBox
+			// allUsersPanel
 			// 
-			this.usersListBox.BackColor = System.Drawing.SystemColors.Window;
-			this.usersListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.usersListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-			this.usersListBox.FormattingEnabled = true;
-			this.usersListBox.Location = new System.Drawing.Point(1, 35);
-			this.usersListBox.Name = "usersListBox";
-			this.usersListBox.Size = new System.Drawing.Size(198, 400);
-			this.usersListBox.TabIndex = 2;
-			this.usersListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_DrawItem);
-			this.usersListBox.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.listBox_MeasureItem);
-			this.usersListBox.SelectedIndexChanged += new System.EventHandler(this.friendsListBox_SelectedIndexChanged);
+			this.allUsersPanel.Controls.Add(this.allUsersListBox);
+			this.allUsersPanel.Controls.Add(this.addFriendButton);
+			this.allUsersPanel.Location = new System.Drawing.Point(1, 30);
+			this.allUsersPanel.Name = "allUsersPanel";
+			this.allUsersPanel.Size = new System.Drawing.Size(198, 414);
+			this.allUsersPanel.TabIndex = 0;
+			this.allUsersPanel.TabStop = false;
+			this.allUsersPanel.Visible = false;
 			// 
-			// friendsTitlePanel
+			// allUsersListBox
 			// 
-			this.friendsTitlePanel.BackColor = System.Drawing.Color.Transparent;
-			this.friendsTitlePanel.Controls.Add(this.searchTitle);
-			this.friendsTitlePanel.Controls.Add(this.friendsTitle);
-			this.friendsTitlePanel.Location = new System.Drawing.Point(0, 0);
-			this.friendsTitlePanel.Name = "friendsTitlePanel";
-			this.friendsTitlePanel.Size = new System.Drawing.Size(200, 25);
-			this.friendsTitlePanel.TabIndex = 2;
-			this.friendsTitlePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.friendsTitlePanel_Paint);
+			this.allUsersListBox.BackColor = System.Drawing.SystemColors.Window;
+			this.allUsersListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.allUsersListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+			this.allUsersListBox.FormattingEnabled = true;
+			this.allUsersListBox.Location = new System.Drawing.Point(0, 0);
+			this.allUsersListBox.Name = "allUsersListBox";
+			this.allUsersListBox.Size = new System.Drawing.Size(198, 380);
+			this.allUsersListBox.TabIndex = 0;
+			this.allUsersListBox.TabStop = false;
+			this.allUsersListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_DrawItem);
+			this.allUsersListBox.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.listBox_MeasureItem);
+			this.allUsersListBox.SelectedIndexChanged += new System.EventHandler(this.friendsListBox_SelectedIndexChanged);
 			// 
-			// searchTitle
+			// addFriendButton
 			// 
-			this.searchTitle.AutoSize = true;
-			this.searchTitle.BackColor = System.Drawing.Color.Transparent;
-			this.searchTitle.Font = new System.Drawing.Font("Roboto Light", 12F);
-			this.searchTitle.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.searchTitle.Location = new System.Drawing.Point(150, 0);
-			this.searchTitle.Name = "searchTitle";
-			this.searchTitle.Size = new System.Drawing.Size(63, 21);
-			this.searchTitle.TabIndex = 12;
-			this.searchTitle.Text = "ПОИСК";
-			this.searchTitle.Click += new System.EventHandler(this.searchTitle_Click);
-			this.searchTitle.Click += new System.EventHandler(this.Click_ShowUsers);
+			this.addFriendButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.MainFirstColor;
+			this.addFriendButton.Cursor = System.Windows.Forms.Cursors.Default;
+			this.addFriendButton.FlatAppearance.BorderSize = 0;
+			this.addFriendButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
+			this.addFriendButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
+			this.addFriendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.addFriendButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.addFriendButton.ForeColor = System.Drawing.Color.White;
+			this.addFriendButton.Location = new System.Drawing.Point(0, 384);
+			this.addFriendButton.Name = "addFriendButton";
+			this.addFriendButton.Size = new System.Drawing.Size(198, 30);
+			this.addFriendButton.TabIndex = 0;
+			this.addFriendButton.TabStop = false;
+			this.addFriendButton.Text = "ДОБАВИТЬ В ДРУЗЬЯ";
+			this.addFriendButton.UseVisualStyleBackColor = true;
+			this.addFriendButton.Click += new System.EventHandler(this.addFriendButton_Click);
 			// 
-			// friendsTitle
+			// friendsPanel
 			// 
-			this.friendsTitle.AutoSize = true;
-			this.friendsTitle.BackColor = System.Drawing.Color.Transparent;
-			this.friendsTitle.Font = new System.Drawing.Font("Roboto Light", 12F);
-			this.friendsTitle.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.friendsTitle.Location = new System.Drawing.Point(64, 0);
-			this.friendsTitle.Name = "friendsTitle";
-			this.friendsTitle.Size = new System.Drawing.Size(72, 21);
-			this.friendsTitle.TabIndex = 2;
-			this.friendsTitle.Text = "ДРУЗЬЯ";
-			this.friendsTitle.Click += new System.EventHandler(this.friendsTitle_Click);
-			this.friendsTitle.Click += new System.EventHandler(this.Click_ShowUsers);
+			this.friendsPanel.Controls.Add(this.friendsListBox);
+			this.friendsPanel.Controls.Add(this.removeFriendButton);
+			this.friendsPanel.Location = new System.Drawing.Point(1, 30);
+			this.friendsPanel.Name = "friendsPanel";
+			this.friendsPanel.Size = new System.Drawing.Size(198, 414);
+			this.friendsPanel.TabIndex = 0;
+			this.friendsPanel.TabStop = false;
+			// 
+			// friendsListBox
+			// 
+			this.friendsListBox.BackColor = System.Drawing.SystemColors.Window;
+			this.friendsListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.friendsListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+			this.friendsListBox.FormattingEnabled = true;
+			this.friendsListBox.Location = new System.Drawing.Point(0, 0);
+			this.friendsListBox.Name = "friendsListBox";
+			this.friendsListBox.Size = new System.Drawing.Size(198, 380);
+			this.friendsListBox.TabIndex = 0;
+			this.friendsListBox.TabStop = false;
+			this.friendsListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_DrawItem);
+			this.friendsListBox.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.listBox_MeasureItem);
+			this.friendsListBox.SelectedIndexChanged += new System.EventHandler(this.friendsListBox_SelectedIndexChanged);
+			// 
+			// removeFriendButton
+			// 
+			this.removeFriendButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.MainFirstColor;
+			this.removeFriendButton.Cursor = System.Windows.Forms.Cursors.Default;
+			this.removeFriendButton.FlatAppearance.BorderSize = 0;
+			this.removeFriendButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
+			this.removeFriendButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
+			this.removeFriendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.removeFriendButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.removeFriendButton.ForeColor = System.Drawing.Color.White;
+			this.removeFriendButton.Location = new System.Drawing.Point(0, 384);
+			this.removeFriendButton.Name = "removeFriendButton";
+			this.removeFriendButton.Size = new System.Drawing.Size(198, 30);
+			this.removeFriendButton.TabIndex = 0;
+			this.removeFriendButton.TabStop = false;
+			this.removeFriendButton.Text = "УБРАТЬ ИЗ ДРУЗЕЙ";
+			this.removeFriendButton.UseVisualStyleBackColor = true;
+			this.removeFriendButton.Click += new System.EventHandler(this.removeFriendButton_Click);
+			// 
+			// friendshipRequestsPanel
+			// 
+			this.friendshipRequestsPanel.Controls.Add(this.outcomeFriendshipRequestsListBox);
+			this.friendshipRequestsPanel.Controls.Add(this.incomeFriendshipRequestsListBox);
+			this.friendshipRequestsPanel.Controls.Add(this.cancelFriendshipRequestButton);
+			this.friendshipRequestsPanel.Controls.Add(this.acceptFriendshipButton);
+			this.friendshipRequestsPanel.Controls.Add(this.rejectFriendshipButton);
+			this.friendshipRequestsPanel.Controls.Add(this.outcomeFriendshipRequestsLabel);
+			this.friendshipRequestsPanel.Controls.Add(this.incomeFriendshipRequestsLabel);
+			this.friendshipRequestsPanel.Location = new System.Drawing.Point(1, 30);
+			this.friendshipRequestsPanel.Name = "friendshipRequestsPanel";
+			this.friendshipRequestsPanel.Size = new System.Drawing.Size(198, 414);
+			this.friendshipRequestsPanel.TabIndex = 0;
+			this.friendshipRequestsPanel.TabStop = false;
+			this.friendshipRequestsPanel.Visible = false;
+			// 
+			// outcomeFriendshipRequestsListBox
+			// 
+			this.outcomeFriendshipRequestsListBox.BackColor = System.Drawing.SystemColors.Window;
+			this.outcomeFriendshipRequestsListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.outcomeFriendshipRequestsListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+			this.outcomeFriendshipRequestsListBox.FormattingEnabled = true;
+			this.outcomeFriendshipRequestsListBox.Location = new System.Drawing.Point(0, 204);
+			this.outcomeFriendshipRequestsListBox.Name = "outcomeFriendshipRequestsListBox";
+			this.outcomeFriendshipRequestsListBox.Size = new System.Drawing.Size(198, 150);
+			this.outcomeFriendshipRequestsListBox.TabIndex = 0;
+			this.outcomeFriendshipRequestsListBox.TabStop = false;
+			this.outcomeFriendshipRequestsListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_DrawItem);
+			this.outcomeFriendshipRequestsListBox.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.listBox_MeasureItem);
+			this.outcomeFriendshipRequestsListBox.SelectedIndexChanged += new System.EventHandler(this.friendsListBox_SelectedIndexChanged);
+			this.outcomeFriendshipRequestsListBox.Enter += new System.EventHandler(this.outcomeRequestsListBox_Enter);
+			// 
+			// incomeFriendshipRequestsListBox
+			// 
+			this.incomeFriendshipRequestsListBox.BackColor = System.Drawing.SystemColors.Window;
+			this.incomeFriendshipRequestsListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.incomeFriendshipRequestsListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+			this.incomeFriendshipRequestsListBox.FormattingEnabled = true;
+			this.incomeFriendshipRequestsListBox.Location = new System.Drawing.Point(0, 33);
+			this.incomeFriendshipRequestsListBox.Name = "incomeFriendshipRequestsListBox";
+			this.incomeFriendshipRequestsListBox.Size = new System.Drawing.Size(198, 150);
+			this.incomeFriendshipRequestsListBox.TabIndex = 0;
+			this.incomeFriendshipRequestsListBox.TabStop = false;
+			this.incomeFriendshipRequestsListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_DrawItem);
+			this.incomeFriendshipRequestsListBox.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.listBox_MeasureItem);
+			this.incomeFriendshipRequestsListBox.SelectedIndexChanged += new System.EventHandler(this.friendsListBox_SelectedIndexChanged);
+			this.incomeFriendshipRequestsListBox.Enter += new System.EventHandler(this.incomeRequestsListBox_Enter);
+			// 
+			// cancelFriendshipRequestButton
+			// 
+			this.cancelFriendshipRequestButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.MainFirstColor;
+			this.cancelFriendshipRequestButton.Cursor = System.Windows.Forms.Cursors.Default;
+			this.cancelFriendshipRequestButton.FlatAppearance.BorderSize = 0;
+			this.cancelFriendshipRequestButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
+			this.cancelFriendshipRequestButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
+			this.cancelFriendshipRequestButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.cancelFriendshipRequestButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.cancelFriendshipRequestButton.ForeColor = System.Drawing.Color.White;
+			this.cancelFriendshipRequestButton.Location = new System.Drawing.Point(0, 384);
+			this.cancelFriendshipRequestButton.Name = "cancelFriendshipRequestButton";
+			this.cancelFriendshipRequestButton.Text = "ОТМЕНИТЬ";
+			this.cancelFriendshipRequestButton.Size = new System.Drawing.Size(198, 30);
+			this.cancelFriendshipRequestButton.TabIndex = 0;
+			this.cancelFriendshipRequestButton.TabStop = false;
+			this.cancelFriendshipRequestButton.UseVisualStyleBackColor = true;
+			this.cancelFriendshipRequestButton.Visible = false;
+			this.cancelFriendshipRequestButton.Click += new System.EventHandler(this.cancelFriendshipRequestButton_Click);
+			// 
+			// acceptFriendshipButton
+			// 
+			this.acceptFriendshipButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.MainFirstColor;
+			this.acceptFriendshipButton.Cursor = System.Windows.Forms.Cursors.Default;
+			this.acceptFriendshipButton.FlatAppearance.BorderSize = 0;
+			this.acceptFriendshipButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
+			this.acceptFriendshipButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
+			this.acceptFriendshipButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.acceptFriendshipButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.acceptFriendshipButton.ForeColor = System.Drawing.Color.White;
+			this.acceptFriendshipButton.Location = new System.Drawing.Point(0, 384);
+			this.acceptFriendshipButton.Name = "acceptFriendshipButton";
+			this.acceptFriendshipButton.Text = "ПРИНЯТЬ";
+			this.acceptFriendshipButton.Size = new System.Drawing.Size(94, 30);
+			this.acceptFriendshipButton.TabIndex = 0;
+			this.acceptFriendshipButton.TabStop = false;
+			this.acceptFriendshipButton.Visible = false;
+			this.acceptFriendshipButton.UseVisualStyleBackColor = true;
+			this.acceptFriendshipButton.Click += new System.EventHandler(this.acceptFriendshipButton_Click);
+			// 
+			// rejectFriendshipButton
+			// 
+			this.rejectFriendshipButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.MainFirstColor;
+			this.rejectFriendshipButton.Cursor = System.Windows.Forms.Cursors.Default;
+			this.rejectFriendshipButton.FlatAppearance.BorderSize = 0;
+			this.rejectFriendshipButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
+			this.rejectFriendshipButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
+			this.rejectFriendshipButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.rejectFriendshipButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.rejectFriendshipButton.ForeColor = System.Drawing.Color.White;
+			this.rejectFriendshipButton.Location = new System.Drawing.Point(104, 384);
+			this.rejectFriendshipButton.Name = "rejectFriendshipButton";
+			this.rejectFriendshipButton.Text = "ОТКЛОНИТЬ";
+			this.rejectFriendshipButton.Size = new System.Drawing.Size(94, 30);
+			this.rejectFriendshipButton.TabIndex = 0;
+			this.rejectFriendshipButton.TabStop = false;
+			this.rejectFriendshipButton.UseVisualStyleBackColor = true;
+			this.rejectFriendshipButton.Visible = false;
+			this.rejectFriendshipButton.Click += new System.EventHandler(this.rejectFriendshipButton_Click);
+			// 
+			// outcomeFriendshipRequestsLabel
+			// 
+			this.outcomeFriendshipRequestsLabel.AutoSize = true;
+			this.outcomeFriendshipRequestsLabel.BackColor = System.Drawing.Color.Transparent;
+			this.outcomeFriendshipRequestsLabel.Font = new System.Drawing.Font("Roboto Light", 12F);
+			this.outcomeFriendshipRequestsLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.outcomeFriendshipRequestsLabel.Location = new System.Drawing.Point(34, 180);
+			this.outcomeFriendshipRequestsLabel.Name = "outcomeFriendshipRequestsLabel";
+			this.outcomeFriendshipRequestsLabel.Size = new System.Drawing.Size(124, 21);
+			this.outcomeFriendshipRequestsLabel.TabIndex = 0;
+			this.outcomeFriendshipRequestsLabel.TabStop = false;
+			this.outcomeFriendshipRequestsLabel.Text = "ВАШИ ЗАЯВКИ:";
+			// 
+			// incomeFriendshipRequestsLabel
+			// 
+			this.incomeFriendshipRequestsLabel.AutoSize = true;
+			this.incomeFriendshipRequestsLabel.BackColor = System.Drawing.Color.Transparent;
+			this.incomeFriendshipRequestsLabel.Font = new System.Drawing.Font("Roboto Light", 12F);
+			this.incomeFriendshipRequestsLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.incomeFriendshipRequestsLabel.Location = new System.Drawing.Point(34, 11);
+			this.incomeFriendshipRequestsLabel.Name = "incomeFriendshipRequestsLabel";
+			this.incomeFriendshipRequestsLabel.Size = new System.Drawing.Size(112, 21);
+			this.incomeFriendshipRequestsLabel.TabIndex = 0;
+			this.incomeFriendshipRequestsLabel.TabStop = false;
+			this.incomeFriendshipRequestsLabel.Text = "ЗАЯВКИ ВАМ:";
+			// 
+			// usersLabelsPanel
+			// 
+			this.usersLabelsPanel.BackColor = System.Drawing.Color.Transparent;
+			this.usersLabelsPanel.Controls.Add(this.friendshipRequestsLabel);
+			this.usersLabelsPanel.Controls.Add(this.searchLabel);
+			this.usersLabelsPanel.Controls.Add(this.friendsLabel);
+			this.usersLabelsPanel.Location = new System.Drawing.Point(0, 0);
+			this.usersLabelsPanel.Name = "usersLabelsPanel";
+			this.usersLabelsPanel.Size = new System.Drawing.Size(200, 25);
+			this.usersLabelsPanel.TabIndex = 0;
+			this.usersLabelsPanel.TabStop = false;
+			this.usersLabelsPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.friendsTitlePanel_Paint);
+			// 
+			// friendshipRequestsLabel
+			// 
+			this.friendshipRequestsLabel.AutoSize = true;
+			this.friendshipRequestsLabel.BackColor = System.Drawing.Color.Transparent;
+			this.friendshipRequestsLabel.Font = new System.Drawing.Font("Roboto Light", 12F);
+			this.friendshipRequestsLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.friendshipRequestsLabel.Location = new System.Drawing.Point(3, 0);
+			this.friendshipRequestsLabel.Name = "friendshipRequestsLabel";
+			this.friendshipRequestsLabel.Size = new System.Drawing.Size(71, 21);
+			this.friendshipRequestsLabel.TabIndex = 0;
+			this.friendshipRequestsLabel.TabStop = false;
+			this.friendshipRequestsLabel.Text = "ЗАЯВКИ";
+			this.friendshipRequestsLabel.Click += new System.EventHandler(this.friendRequestTitle_Click);
+			// 
+			// searchLabel
+			// 
+			this.searchLabel.AutoSize = true;
+			this.searchLabel.BackColor = System.Drawing.Color.Transparent;
+			this.searchLabel.Font = new System.Drawing.Font("Roboto Light", 12F);
+			this.searchLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.searchLabel.Location = new System.Drawing.Point(141, 0);
+			this.searchLabel.Name = "searchLabel";
+			this.searchLabel.Size = new System.Drawing.Size(63, 21);
+			this.searchLabel.TabIndex = 0;
+			this.searchLabel.TabStop = false;
+			this.searchLabel.Text = "ПОИСК";
+			this.searchLabel.Click += new System.EventHandler(this.searchTitle_Click);
+			// 
+			// friendsLabel
+			// 
+			this.friendsLabel.AutoSize = true;
+			this.friendsLabel.BackColor = System.Drawing.Color.Transparent;
+			this.friendsLabel.Font = new System.Drawing.Font("Roboto Light", 12F);
+			this.friendsLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.friendsLabel.Location = new System.Drawing.Point(64, 0);
+			this.friendsLabel.Name = "friendsLabel";
+			this.friendsLabel.Size = new System.Drawing.Size(72, 21);
+			this.friendsLabel.TabIndex = 0;
+			this.friendsLabel.TabStop = false;
+			this.friendsLabel.Text = "ДРУЗЬЯ";
+			this.friendsLabel.Click += new System.EventHandler(this.friendsTitle_Click);
 			// 
 			// loadingLabel
 			// 
@@ -584,7 +873,8 @@ namespace CryptoMessenger.GUI
 			this.loadingLabel.Location = new System.Drawing.Point(65, 200);
 			this.loadingLabel.Name = "loadingLabel";
 			this.loadingLabel.Size = new System.Drawing.Size(101, 21);
-			this.loadingLabel.TabIndex = 2;
+			this.loadingLabel.TabIndex = 0;
+			this.loadingLabel.TabStop = false;
 			this.loadingLabel.Text = "ЗАГРУЗКА...";
 			this.loadingLabel.Visible = false;
 			// 
@@ -592,11 +882,12 @@ namespace CryptoMessenger.GUI
 			// 
 			this.mainFormPanel.Controls.Add(this.splitContainer);
 			this.mainFormPanel.Controls.Add(this.topPanel);
-			this.mainFormPanel.Controls.Add(this.contactsPanel);
+			this.mainFormPanel.Controls.Add(this.usersPanel);
 			this.mainFormPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainFormPanel.Name = "mainFormPanel";
 			this.mainFormPanel.Size = new System.Drawing.Size(700, 500);
-			this.mainFormPanel.TabIndex = 11;
+			this.mainFormPanel.TabIndex = 0;
+			this.mainFormPanel.TabStop = false;
 			this.mainFormPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mainFormPanel_Paint);
 			// 
 			// splitContainer
@@ -608,7 +899,7 @@ namespace CryptoMessenger.GUI
 			// 
 			// splitContainer.Panel1
 			// 
-			this.splitContainer.Panel1.Controls.Add(this.activeTalkTitlePanel);
+			this.splitContainer.Panel1.Controls.Add(this.activeTalkLabelPanel);
 			this.splitContainer.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer_Panel1_Paint);
 			this.splitContainer.Panel1MinSize = 150;
 			// 
@@ -621,33 +912,35 @@ namespace CryptoMessenger.GUI
 			this.splitContainer.Size = new System.Drawing.Size(470, 445);
 			this.splitContainer.SplitterDistance = 376;
 			this.splitContainer.SplitterWidth = 9;
-			this.splitContainer.TabIndex = 2;
+			this.splitContainer.TabIndex = 0;
 			this.splitContainer.TabStop = false;
 			this.splitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_SplitterMoved);
 			this.splitContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer_Paint);
 			// 
-			// activeTalkTitlePanel
+			// activeTalkLabelPanel
 			// 
-			this.activeTalkTitlePanel.BackColor = System.Drawing.Color.Transparent;
-			this.activeTalkTitlePanel.Controls.Add(this.activeTalkTitle);
-			this.activeTalkTitlePanel.Location = new System.Drawing.Point(0, 0);
-			this.activeTalkTitlePanel.Name = "activeTalkTitlePanel";
-			this.activeTalkTitlePanel.Size = new System.Drawing.Size(470, 25);
-			this.activeTalkTitlePanel.TabIndex = 1;
-			this.activeTalkTitlePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.activeTalkTitlePanel_Paint);
+			this.activeTalkLabelPanel.BackColor = System.Drawing.Color.Transparent;
+			this.activeTalkLabelPanel.Controls.Add(this.activeTalkLabel);
+			this.activeTalkLabelPanel.Location = new System.Drawing.Point(0, 0);
+			this.activeTalkLabelPanel.Name = "activeTalkLabelPanel";
+			this.activeTalkLabelPanel.Size = new System.Drawing.Size(470, 25);
+			this.activeTalkLabelPanel.TabIndex = 0;
+			this.activeTalkLabelPanel.TabStop = false;
+			this.activeTalkLabelPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.activeTalkTitlePanel_Paint);
 			// 
-			// activeTalkTitle
+			// activeTalkLabel
 			// 
-			this.activeTalkTitle.AutoSize = true;
-			this.activeTalkTitle.BackColor = System.Drawing.Color.Transparent;
-			this.activeTalkTitle.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.activeTalkTitle.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.activeTalkTitle.Location = new System.Drawing.Point(195, 0);
-			this.activeTalkTitle.Name = "activeTalkTitle";
-			this.activeTalkTitle.Size = new System.Drawing.Size(74, 21);
-			this.activeTalkTitle.TabIndex = 0;
-			this.activeTalkTitle.Text = "ДИАЛОГ";
-			this.activeTalkTitle.SizeChanged += new System.EventHandler(this.activeTalkTitle_SizeChanged);
+			this.activeTalkLabel.AutoSize = true;
+			this.activeTalkLabel.BackColor = System.Drawing.Color.Transparent;
+			this.activeTalkLabel.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.activeTalkLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.activeTalkLabel.Location = new System.Drawing.Point(195, 0);
+			this.activeTalkLabel.Name = "activeTalkLabel";
+			this.activeTalkLabel.Size = new System.Drawing.Size(74, 21);
+			this.activeTalkLabel.TabIndex = 0;
+			this.activeTalkLabel.TabStop = false;
+			this.activeTalkLabel.Text = "ДИАЛОГ";
+			this.activeTalkLabel.SizeChanged += new System.EventHandler(this.activeTalkTitle_SizeChanged);
 			// 
 			// message
 			// 
@@ -660,6 +953,7 @@ namespace CryptoMessenger.GUI
 			this.message.Name = "message";
 			this.message.Size = new System.Drawing.Size(392, 50);
 			this.message.TabIndex = 0;
+			this.message.TabStop = false;
 			this.message.Text = "ВВЕДИТЕ СООБЩЕНИЕ...";
 			this.message.TextChanged += new System.EventHandler(this.message_TextChanged);
 			this.message.Enter += new System.EventHandler(this.message_Enter);
@@ -680,7 +974,7 @@ namespace CryptoMessenger.GUI
 			this.sendButton.Location = new System.Drawing.Point(412, 1);
 			this.sendButton.Name = "sendButton";
 			this.sendButton.Size = new System.Drawing.Size(58, 58);
-			this.sendButton.TabIndex = 1;
+			this.sendButton.TabIndex = 0;
 			this.sendButton.TabStop = false;
 			this.sendButton.UseVisualStyleBackColor = true;
 			this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
@@ -705,18 +999,22 @@ namespace CryptoMessenger.GUI
 			this.topPanel.ResumeLayout(false);
 			this.topPanel.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iconBox)).EndInit();
-			this.contactsPanel.ResumeLayout(false);
-			this.contactsPanel.PerformLayout();
-			this.friendsTitlePanel.ResumeLayout(false);
-			this.friendsTitlePanel.PerformLayout();
+			this.usersPanel.ResumeLayout(false);
+			this.usersPanel.PerformLayout();
+			this.allUsersPanel.ResumeLayout(false);
+			this.friendsPanel.ResumeLayout(false);
+			this.friendshipRequestsPanel.ResumeLayout(false);
+			this.friendshipRequestsPanel.PerformLayout();
+			this.usersLabelsPanel.ResumeLayout(false);
+			this.usersLabelsPanel.PerformLayout();
 			this.mainFormPanel.ResumeLayout(false);
 			this.splitContainer.Panel1.ResumeLayout(false);
 			this.splitContainer.Panel2.ResumeLayout(false);
 			this.splitContainer.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
 			this.splitContainer.ResumeLayout(false);
-			this.activeTalkTitlePanel.ResumeLayout(false);
-			this.activeTalkTitlePanel.PerformLayout();
+			this.activeTalkLabelPanel.ResumeLayout(false);
+			this.activeTalkLabelPanel.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -724,21 +1022,35 @@ namespace CryptoMessenger.GUI
         #endregion
 
         private Panel topPanel;
-        private Label appName;
+        private Label appNameLabel;
         private MyButton minimizeButton;
         private MyButton closeButton;
-        private Panel contactsPanel;
+        private Panel usersPanel; 
         private TextBox message;
         private MyButton sendButton;
-        private Label activeTalkTitle;
-        private Panel activeTalkTitlePanel;
+        private Label activeTalkLabel;
+        private Panel activeTalkLabelPanel;
         private Panel mainFormPanel;
 		private PictureBox iconBox;
 		private MySplitContainer splitContainer;
-		private Panel friendsTitlePanel;
-		private Label friendsTitle;
-		private ListBox usersListBox;
-		private Label searchTitle;
+		private Panel usersLabelsPanel; 
+		private Label friendsLabel;
+		private ListBox friendsListBox;
+		private Label searchLabel;
 		private Label loadingLabel;
+		private MyButton removeFriendButton;
+		private Panel friendsPanel;
+		private Panel friendshipRequestsPanel;
+		private Panel allUsersPanel;
+		private ListBox allUsersListBox;
+		private MyButton addFriendButton;
+		private Label friendshipRequestsLabel;
+		private Label outcomeFriendshipRequestsLabel;
+		private Label incomeFriendshipRequestsLabel;
+		private ListBox outcomeFriendshipRequestsListBox;
+		private ListBox incomeFriendshipRequestsListBox;
+		private MyButton cancelFriendshipRequestButton;
+		private MyButton acceptFriendshipButton;
+		private MyButton rejectFriendshipButton;
 	}
 }

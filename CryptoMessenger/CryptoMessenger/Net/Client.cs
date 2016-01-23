@@ -2,11 +2,9 @@
 using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 using CryptoMessenger.GUI;
 using MessageTypes;
@@ -70,9 +68,6 @@ namespace CryptoMessenger.Net
 		/// <param name="form">form to update when message come.</param>
 		public async void Listen(MainForm form)
 		{
-			XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
-			XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
-
 			try
 			{
 				while (true)
@@ -81,10 +76,21 @@ namespace CryptoMessenger.Net
 					ResponseMessage message = await ReceiveMessage();
 
 					// process message
-					if (message is GetUsersResponseMessage)
+					if (message is GetAllUsersResponseMessage)
 					{
-						string[] users = ((GetUsersResponseMessage)message).users;
+						string[] users = ((GetAllUsersResponseMessage)message).users;
 						form.UpdateAllUsersList(users);
+					}
+					else if (message is GetFriendsResponseMessage)
+					{
+						string[] friends = ((GetFriendsResponseMessage)message).friends;
+						form.UpdateFriendsList(friends);
+					}
+					else if (message is GetFriendsReqsResponseMessage)
+					{
+						string[] income = ((GetFriendsReqsResponseMessage)message).income_requests;
+						string[] outcome = ((GetFriendsReqsResponseMessage)message).outcome_requests;
+						form.UpdateFriendshipRequests(income, outcome);
 					}
 				}
 			}
@@ -160,11 +166,91 @@ namespace CryptoMessenger.Net
 		}
 
 		/// <summary>
-		/// Get all users from server.
+		/// Get array of all users from server;
+		/// listener should recieve response message.
 		/// </summary>
 		public async Task GetAllUsers()
 		{
 			await SendMessage(new GetAllUsersRequestMessage());
+		}
+
+		/// <summary>
+		/// Get array of friends from server;
+		/// listener should recieve response message.
+		/// </summary>
+		public async Task GetFriends()
+		{
+			await SendMessage(new GetFriendsRequestMessage());
+		}
+
+		/// <summary>
+		/// Get arrays of friendship requests from server;
+		/// listener should recieve response message.
+		/// </summary>
+		public async Task GetFriendshipRequests()
+		{
+			await SendMessage(new GetFriendshipReqsRequestMessage());
+		}
+
+		/// <summary>
+		/// Send friendship request to server.
+		/// </summary>
+		/// <param name="login">login of needed user.</param>
+		public async Task SendFriendshipRequest(string login)
+		{
+			await SendMessage(new FriendshipReqRequestMessage { login_of_needed_user = login });
+		}
+
+		/// <summary>
+		/// Send message to server about cancellation of friendship request.
+		/// </summary>
+		/// <param name="login">needed friend login.</param>
+		public async Task CancelFriendshipRequest(string login)
+		{
+			await SendMessage(new FriendActionRequestMessage
+			{
+				friends_login = login,
+				action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
+			});
+		}
+		
+		/// <summary>
+		/// Send to server request about accepting friendship request.
+		/// </summary>
+		/// <param name="login">accepted friend login.</param>
+		public async Task AcceptFriendshipRequest(string login)
+		{
+			await SendMessage(new FriendActionRequestMessage
+			{
+				friends_login = login,
+				action = ActionsWithFriend.ACCEPT_FRIENDSHIP
+			});
+		}
+
+		/// <summary>
+		/// Send to server request about rejecting friendship request.
+		/// </summary>
+		/// <param name="login">rejected user login.</param>
+		public async Task RejectFriendshipRequest(string login)
+		{
+			await SendMessage(new FriendActionRequestMessage
+			{
+				friends_login = login,
+				action = ActionsWithFriend.REJECT_FRIENDSHIP
+			});
+		}
+
+		/// <summary>
+		/// Send to server request about removing friend from friends.
+		/// </summary>
+		/// <param name="login">friend's login.</param>
+		public async Task RemoveFriend(string login)
+		{
+			await SendMessage(new FriendActionRequestMessage
+			{
+				friends_login = login,
+				action = ActionsWithFriend.REMOVE_FROM_FRIENDS
+			});
 		}
 
 		#region Communication with server

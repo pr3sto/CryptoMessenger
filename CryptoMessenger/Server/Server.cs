@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
@@ -264,8 +265,58 @@ namespace Server
 					}
 					else if (message is GetAllUsersRequestMessage)
 					{
-						GetUsersResponseMessage response = new GetUsersResponseMessage { users = DBoperations.GetAllUsers() };
+						GetAllUsersResponseMessage response = new GetAllUsersResponseMessage { users = DBoperations.GetAllUsers() };
 						responseSerializer.Serialize(user.sslStream, response);
+					}
+					else if (message is GetFriendsRequestMessage)
+					{
+						GetFriendsResponseMessage response = new GetFriendsResponseMessage { friends = DBoperations.GetFriends(user.login) };
+						responseSerializer.Serialize(user.sslStream, response);
+					}
+					else if (message is FriendshipReqRequestMessage)
+					{
+						string login = ((FriendshipReqRequestMessage)message).login_of_needed_user;
+						// set friendship
+						DBoperations.SetFriendship(false, user.login, login);
+						// send notification if user online
+						var user_two = onlineUsers.Select(x => x.login == login);
+						if (user_two.Any())
+						{
+							GetFriendsReqsResponseMessage response = new GetFriendsReqsResponseMessage
+							{
+								income_requests = DBoperations.GetIncomeRequests(login),
+								outcome_requests = DBoperations.GetOutcomeRequests(login)
+							};
+							responseSerializer.Serialize(onlineUsers.Find(x => x.login == login).sslStream, response);
+						}
+					}
+					else if (message is GetFriendshipReqsRequestMessage)
+					{
+						GetFriendsReqsResponseMessage response = new GetFriendsReqsResponseMessage
+						{
+							income_requests = DBoperations.GetIncomeRequests(user.login),
+							outcome_requests = DBoperations.GetOutcomeRequests(user.login)
+						};
+						responseSerializer.Serialize(user.sslStream, response);
+					}
+					else if (message is FriendActionRequestMessage)
+					{
+						if (ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST.Equals(((FriendActionRequestMessage)message).action))
+						{
+							DBoperations.RemoveFriendshipRequest(user.login, ((FriendActionRequestMessage)message).friends_login);
+						}
+						else if (ActionsWithFriend.ACCEPT_FRIENDSHIP.Equals(((FriendActionRequestMessage)message).action))
+						{
+							DBoperations.SetFriendship(true, ((FriendActionRequestMessage)message).friends_login, user.login);
+						}
+						else if (ActionsWithFriend.REJECT_FRIENDSHIP.Equals(((FriendActionRequestMessage)message).action))
+						{
+							DBoperations.RemoveFriendshipRequest(((FriendActionRequestMessage)message).friends_login, user.login);
+						}
+						else if (ActionsWithFriend.REMOVE_FROM_FRIENDS.Equals(((FriendActionRequestMessage)message).action))
+						{
+							DBoperations.RemoveFriend(user.login, ((FriendActionRequestMessage)message).friends_login);
+						}
 					}
 				}
 			}

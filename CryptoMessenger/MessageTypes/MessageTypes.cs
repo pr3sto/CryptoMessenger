@@ -6,7 +6,23 @@ namespace MessageTypes
 	/// <summary>
 	/// Server's response on login/registration request.
 	/// </summary>
-	public enum LoginRegisterResponse { SUCCESS, FAIL, ERROR };
+	public enum LoginRegisterResponse
+	{
+		SUCCESS,
+		FAIL,
+		ERROR
+	};
+
+	/// <summary>
+	/// Actions with frends and friendship requests.
+	/// </summary>
+	public enum ActionsWithFriend
+	{
+		CANCEL_FRIENDSHIP_REQUEST,
+		ACCEPT_FRIENDSHIP,
+		REJECT_FRIENDSHIP,
+		REMOVE_FROM_FRIENDS
+	};
 
 	#region Request messages
 
@@ -18,6 +34,10 @@ namespace MessageTypes
 	[XmlInclude(typeof(LogoutRequestMessage))]
 	[XmlInclude(typeof(RegisterRequestMessage))]
 	[XmlInclude(typeof(GetAllUsersRequestMessage))]
+	[XmlInclude(typeof(GetFriendsRequestMessage))]
+	[XmlInclude(typeof(GetFriendshipReqsRequestMessage))]
+	[XmlInclude(typeof(FriendshipReqRequestMessage))]
+	[XmlInclude(typeof(FriendActionRequestMessage))]
 	public abstract class RequestMessage
 	{
 	}
@@ -55,11 +75,50 @@ namespace MessageTypes
 
 	/// <summary>
 	/// Message, that client send to server 
-	/// to get all users.
+	/// to get array of all users.
 	/// </summary>
 	[Serializable]
 	public class GetAllUsersRequestMessage : RequestMessage
 	{
+	}
+
+	/// <summary>
+	/// Message, that client send to server 
+	/// to get array of friends.
+	/// </summary>
+	[Serializable]
+	public class GetFriendsRequestMessage : RequestMessage
+	{
+	}
+
+	/// <summary>
+	/// Message, that client send to server 
+	/// to get friendship requests.
+	/// </summary>
+	[Serializable]
+	public class GetFriendshipReqsRequestMessage : RequestMessage
+	{
+	}
+
+	/// <summary>
+	/// Message, that client send to server 
+	/// with friendship request.
+	/// </summary>
+	[Serializable]
+	public class FriendshipReqRequestMessage : RequestMessage
+	{
+		public string login_of_needed_user;
+	}
+
+	/// <summary>
+	/// Message, that client send to server 
+	/// to get friends requests.
+	/// </summary>
+	[Serializable]
+	public class FriendActionRequestMessage : RequestMessage
+	{
+		public string friends_login;
+		public ActionsWithFriend action;
 	}
 
 	#endregion
@@ -71,9 +130,10 @@ namespace MessageTypes
 	/// </summary>
 	[Serializable]
 	[XmlInclude(typeof(LoginResponseMessage))]
-	[XmlInclude(typeof(LogoutResponseMessage))]
 	[XmlInclude(typeof(RegisterResponseMessage))]
-	[XmlInclude(typeof(GetUsersResponseMessage))]
+	[XmlInclude(typeof(GetAllUsersResponseMessage))]
+	[XmlInclude(typeof(GetFriendsResponseMessage))]
+	[XmlInclude(typeof(GetFriendsReqsResponseMessage))]
 	public abstract class ResponseMessage
 	{
 	}
@@ -90,15 +150,6 @@ namespace MessageTypes
 
 	/// <summary>
 	/// Message, that server send to client
-	/// after client's log out.
-	/// </summary>
-	/// [Serializable]
-	public class LogoutResponseMessage : ResponseMessage
-	{
-	}
-
-	/// <summary>
-	/// Message, that server send to client
 	/// after register attempt.
 	/// </summary>
 	[Serializable]
@@ -108,12 +159,31 @@ namespace MessageTypes
 	}
 
 	/// <summary>
-	/// Message with user's logins.
+	/// Message with all user's logins.
 	/// </summary>
 	[Serializable]
-	public class GetUsersResponseMessage : ResponseMessage
+	public class GetAllUsersResponseMessage : ResponseMessage
 	{
 		public string[] users;
+	}
+
+	/// <summary>
+	/// Message with friend's logins.
+	/// </summary>
+	[Serializable]
+	public class GetFriendsResponseMessage : ResponseMessage
+	{
+		public string[] friends;
+	}
+
+	/// <summary>
+	/// Message with friends requests.
+	/// </summary>
+	[Serializable]
+	public class GetFriendsReqsResponseMessage : ResponseMessage
+	{
+		public string[] outcome_requests;
+		public string[] income_requests;
 	}
 
 	#endregion
