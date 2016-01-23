@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
@@ -26,7 +25,7 @@ namespace Server
 		private bool IsStarted;
 
 		// list of online users
-		private List<OnlineUser> onlineUsers;
+		public List<OnlineUser> onlineUsers;
 
 		/// <summary>
 		/// Initialize server, that listen to clients.
@@ -57,7 +56,7 @@ namespace Server
 				try
 				{
 					var client = await listener.AcceptTcpClientAsync();
-					Task t = ProcessConnection(client);
+					Task t = ProcessClient(client);
 					activeTasks.Add(t);
 
 					// remove completed tasks
@@ -66,15 +65,11 @@ namespace Server
 				catch (ObjectDisposedException)
 				{
 					// TODO logger
-					Console.WriteLine("logger-___-");
-
 					break;
 				}
 				catch (SocketException)
 				{
 					// TODO logger
-					Console.WriteLine("logger-___-");
-
 					listener.Stop();
 					listener = null;
 					listener = TcpListener.Create(port);
@@ -107,7 +102,7 @@ namespace Server
 		/// Process connected client.
 		/// </summary>
 		/// <param name="client">Connected client.</param>
-		private async Task ProcessConnection(TcpClient client)
+		private async Task ProcessClient(TcpClient client)
 		{
 			Console.WriteLine(" - client connected. ip {0}",
 				((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
@@ -124,117 +119,112 @@ namespace Server
 					// handshake
 					SslStuff.ServerSideHandshake(sslStream);
 
-					// recieve user's login and password
-					XmlSerializer messageSerializer = new XmlSerializer(typeof(RequestMessage));
+					// recieve user's message
+					RequestMessage message = ReceiveMessage(client, sslStream);
 
-					byte[] buffer = new byte[client.ReceiveBufferSize];
-					int length = sslStream.Read(buffer, 0, buffer.Length);
-					MemoryStream ms = new MemoryStream(buffer, 0, length);
-
-					RequestMessage message = (RequestMessage)messageSerializer.Deserialize(ms);
-
-					// try login/register
-					ProcessData(client, sslStream, message);
+					// login / register
+					if (message != null)
+					{
+						if (message is LoginRequestMessage)
+							LoginClient(client, sslStream, (LoginRequestMessage)message);
+						else if (message is RegisterRequestMessage)
+							RegisterClient(client, sslStream, (RegisterRequestMessage)message);
+					}
 				}
 				catch
 				{
 					// TODO logger
-					Console.WriteLine("logger-___-");
 				}
 			});
 		}
 
 		/// <summary>
-		/// Process clients message. Send response to client about required operation.
+		/// Try to login client. Send response about result.
 		/// </summary>
 		/// <param name="client">tcp client.</param>
 		/// <param name="sslStream">connected client's ssl stream.</param>
 		/// <param name="message">client's message.</param>
-		private void ProcessData(TcpClient client, SslStream sslStream, RequestMessage message)
+		private void LoginClient(TcpClient client, SslStream sslStream, LoginRequestMessage message)
 		{
 			bool isLoggedIn = false;
 			ResponseMessage response;
 
-			// login
-			if (message is LoginRequestMessage)
+			if (string.IsNullOrEmpty(message.login) ||
+				string.IsNullOrEmpty(message.password) ||
+				message.login.Length > 30)
 			{
-				LoginRequestMessage req = (LoginRequestMessage)message;
-
-				if (string.IsNullOrEmpty(req.login) ||
-					string.IsNullOrEmpty(req.password) ||
-					req.login.Length > 30)
-				{
-					response = new LoginResponseMessage { response = LoginRegisterResponse.ERROR };
-				}
-				else
-				{
-					int id;
-
-					if (DBoperations.Login(req.login, req.password, out id))
-					{
-						// user is online
-						OnlineUser user = new OnlineUser(id, req.login, client, sslStream);
-						onlineUsers.Add(user);
-						// listen this user
-						Task.Run(() => OnlineUserListener(user));
-						isLoggedIn = true;
-						response = new LoginResponseMessage { response = LoginRegisterResponse.SUCCESS };
-					}
-					else
-					{
-						response = new LoginResponseMessage { response = LoginRegisterResponse.FAIL };
-					}
-				}
+				response = new LoginResponseMessage { response = LoginRegisterResponse.ERROR };
 			}
-			// register
-			else if (message is RegisterRequestMessage)
-			{
-				RegisterRequestMessage req = (RegisterRequestMessage)message;
-
-				if (string.IsNullOrEmpty(req.login) ||
-					string.IsNullOrEmpty(req.password) ||
-					req.login.Length > 30)
-				{
-					response = new RegisterResponseMessage { response = LoginRegisterResponse.ERROR };
-				}
-				else
-				{
-					if (DBoperations.Register(req.login, req.password))
-						response = new RegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
-					else
-						response = new RegisterResponseMessage { response = LoginRegisterResponse.FAIL };
-				}
-			}
-			// error
 			else
 			{
-				response = null;
-			}
+				int id;
 
-			try
-			{
-				// response to client
-				XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
-				responseSerializer.Serialize(sslStream, response);
-			}
-			catch
-			{
-				// TODO logger
-				Console.WriteLine("logger-___-");
-			}
-			finally
-			{
-				// close connection with client if client not logged in
-				if (!isLoggedIn)
+				if (DBoperations.Login(message.login, message.password, out id))
 				{
-					Console.WriteLine(" - client disconnected. ip {0}",
-						((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
-
-					client.Client.Shutdown(SocketShutdown.Both);
-					sslStream.Dispose();
-					client.Close();
+					// user is online
+					OnlineUser user = new OnlineUser(id, message.login, client, sslStream);
+					onlineUsers.Add(user);
+					// listen this user
+					Task.Run(() => OnlineUserListener(user));
+					isLoggedIn = true;
+					response = new LoginResponseMessage { response = LoginRegisterResponse.SUCCESS };
+				}
+				else
+				{
+					response = new LoginResponseMessage { response = LoginRegisterResponse.FAIL };
 				}
 			}
+
+			// response to client
+			SendMessage(sslStream, response);
+				
+			// close connection with client if client not logged in
+			if (!isLoggedIn)
+			{
+				Console.WriteLine(" - client disconnected. ip {0}",
+					((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+
+				client.Client.Shutdown(SocketShutdown.Both);
+				sslStream.Dispose();
+				client.Close();
+			}
+			
+		}
+
+		/// <summary>
+		/// Try to register client. Send response about result.
+		/// </summary>
+		/// <param name="client">tcp client.</param>
+		/// <param name="sslStream">connected client's ssl stream.</param>
+		/// <param name="message">client's message.</param>
+		private void RegisterClient(TcpClient client, SslStream sslStream, RegisterRequestMessage message)
+		{
+			ResponseMessage response;
+
+			if (string.IsNullOrEmpty(message.login) ||
+				string.IsNullOrEmpty(message.password) ||
+				message.login.Length > 30)
+			{
+				response = new RegisterResponseMessage { response = LoginRegisterResponse.ERROR };
+			}
+			else
+			{
+				if (DBoperations.Register(message.login, message.password))
+					response = new RegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
+				else
+					response = new RegisterResponseMessage { response = LoginRegisterResponse.FAIL };
+			}
+
+			// response to client
+			SendMessage(sslStream, response);
+
+			// close connection
+			Console.WriteLine(" - client disconnected. ip {0}",
+				((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+
+			client.Client.Shutdown(SocketShutdown.Both);
+			sslStream.Dispose();
+			client.Close();
 		}
 
 		/// <summary>
@@ -243,18 +233,12 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void OnlineUserListener(OnlineUser user)
 		{
-			XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
-			XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
-
 			try
 			{
 				while (true)
 				{
-					byte[] buffer = new byte[user.client.ReceiveBufferSize];
-					int length = user.sslStream.Read(buffer, 0, buffer.Length);
-					MemoryStream ms = new MemoryStream(buffer, 0, length);
 					// user's incoming message
-					RequestMessage message = (RequestMessage)requestSerializer.Deserialize(ms);
+					RequestMessage message = ReceiveMessage(user.client, user.sslStream);
 
 					// process message
 					if (message is LogoutRequestMessage)
@@ -265,13 +249,28 @@ namespace Server
 					}
 					else if (message is GetAllUsersRequestMessage)
 					{
-						GetAllUsersResponseMessage response = new GetAllUsersResponseMessage { users = DBoperations.GetAllUsers() };
-						responseSerializer.Serialize(user.sslStream, response);
+						GetAllUsersResponseMessage response = new GetAllUsersResponseMessage
+						{
+							users = DBoperations.GetAllUsers()
+						};
+						SendMessage(user.sslStream, response);
 					}
 					else if (message is GetFriendsRequestMessage)
 					{
-						GetFriendsResponseMessage response = new GetFriendsResponseMessage { friends = DBoperations.GetFriends(user.login) };
-						responseSerializer.Serialize(user.sslStream, response);
+						GetFriendsResponseMessage response = new GetFriendsResponseMessage
+						{
+							friends = DBoperations.GetFriends(user.login)
+						};
+						SendMessage(user.sslStream, response);
+					}
+					else if (message is GetFriendshipReqsRequestMessage)
+					{
+						GetFriendsReqsResponseMessage response = new GetFriendsReqsResponseMessage
+						{
+							income_requests = DBoperations.GetIncomeFriendshipRequests(user.login),
+							outcome_requests = DBoperations.GetOutcomeFriendshipRequests(user.login)
+						};
+						SendMessage(user.sslStream, response);
 					}
 					else if (message is FriendshipReqRequestMessage)
 					{
@@ -279,43 +278,36 @@ namespace Server
 						// set friendship
 						DBoperations.SetFriendship(false, user.login, login);
 						// send notification if user online
-						var user_two = onlineUsers.Select(x => x.login == login);
-						if (user_two.Any())
-						{
+						OnlineUser friend = GetOnlineUser(login);
+						if (friend != null)
+						{ 
 							GetFriendsReqsResponseMessage response = new GetFriendsReqsResponseMessage
 							{
-								income_requests = DBoperations.GetIncomeRequests(login),
-								outcome_requests = DBoperations.GetOutcomeRequests(login)
+								income_requests = DBoperations.GetIncomeFriendshipRequests(login),
+								outcome_requests = DBoperations.GetOutcomeFriendshipRequests(login)
 							};
-							responseSerializer.Serialize(onlineUsers.Find(x => x.login == login).sslStream, response);
+							SendMessage(friend.sslStream, response);
 						}
-					}
-					else if (message is GetFriendshipReqsRequestMessage)
-					{
-						GetFriendsReqsResponseMessage response = new GetFriendsReqsResponseMessage
-						{
-							income_requests = DBoperations.GetIncomeRequests(user.login),
-							outcome_requests = DBoperations.GetOutcomeRequests(user.login)
-						};
-						responseSerializer.Serialize(user.sslStream, response);
 					}
 					else if (message is FriendActionRequestMessage)
 					{
-						if (ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST.Equals(((FriendActionRequestMessage)message).action))
+						FriendActionRequestMessage msg = (FriendActionRequestMessage)message;
+
+						if (ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST.Equals(msg.action))
 						{
-							DBoperations.RemoveFriendshipRequest(user.login, ((FriendActionRequestMessage)message).friends_login);
+							DBoperations.RemoveFriendshipRequest(user.login, msg.friends_login);
 						}
-						else if (ActionsWithFriend.ACCEPT_FRIENDSHIP.Equals(((FriendActionRequestMessage)message).action))
+						else if (ActionsWithFriend.ACCEPT_FRIENDSHIP.Equals(msg.action))
 						{
-							DBoperations.SetFriendship(true, ((FriendActionRequestMessage)message).friends_login, user.login);
+							DBoperations.SetFriendship(true, msg.friends_login, user.login);
 						}
-						else if (ActionsWithFriend.REJECT_FRIENDSHIP.Equals(((FriendActionRequestMessage)message).action))
+						else if (ActionsWithFriend.REJECT_FRIENDSHIP.Equals(msg.action))
 						{
-							DBoperations.RemoveFriendshipRequest(((FriendActionRequestMessage)message).friends_login, user.login);
+							DBoperations.RemoveFriendshipRequest(msg.friends_login, user.login);
 						}
-						else if (ActionsWithFriend.REMOVE_FROM_FRIENDS.Equals(((FriendActionRequestMessage)message).action))
+						else if (ActionsWithFriend.REMOVE_FROM_FRIENDS.Equals(msg.action))
 						{
-							DBoperations.RemoveFriend(user.login, ((FriendActionRequestMessage)message).friends_login);
+							DBoperations.RemoveFriend(user.login, msg.friends_login);
 						}
 					}
 				}
@@ -330,6 +322,51 @@ namespace Server
 				}
 				// or server has been stopped
 			}
+		}
+
+		/// <summary>
+		/// Get online user.
+		/// </summary>
+		/// <param name="login">user's login.</param>
+		/// <returns>user, if he online; otherwise - null.</returns>
+		private OnlineUser GetOnlineUser(string login)
+		{
+			return onlineUsers.Find(x => x.login == login);
+		}
+
+		/// <summary>
+		/// Send message to client.
+		/// </summary>
+		/// <param name="sslStream">stream with client.</param>
+		/// <param name="message">client's message.</param>
+		private void SendMessage(SslStream sslStream, ResponseMessage message)
+		{
+			try
+			{
+				XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
+				responseSerializer.Serialize(sslStream, message);
+			}
+			catch
+			{
+				// TODO logger
+			}
+		}
+
+		/// <summary>
+		/// Reseive request from client.
+		/// </summary>
+		/// <param name="client">tcp client.</param>
+		/// <param name="sslStream">stream with client.</param>
+		/// <returns>client's message.</returns>
+		private RequestMessage ReceiveMessage(TcpClient client, SslStream sslStream)
+		{
+			XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
+
+			byte[] buffer = new byte[client.ReceiveBufferSize];
+			int length = sslStream.Read(buffer, 0, buffer.Length);
+			MemoryStream ms = new MemoryStream(buffer, 0, length);
+
+			return (RequestMessage)requestSerializer.Deserialize(ms);
 		}
 	}
 }

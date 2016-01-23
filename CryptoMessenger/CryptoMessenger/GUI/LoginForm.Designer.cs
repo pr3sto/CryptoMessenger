@@ -77,21 +77,21 @@ namespace CryptoMessenger.GUI
 
 		private void LoginForm_Load(object sender, EventArgs e)
 		{
-			appName.Font = NeueFont15;
+			appNameLabel.Font = NeueFont15;
 			notificationLabel.Font = NeueFont10;
 			loginButton.Font = NeueFont15;
 			registerButton.Font = NeueFont15;
-			userName.Font = NeueFont15;
-			userPassword.Font = NeueFont15;
+			userNameTextBox.Font = NeueFont15;
+			userPasswordTextBox.Font = NeueFont15;
 			showPasswordCheckBox.Font = NeueFont10;
 
 			ActiveControl = loginButton;
 
-			NativeMethods.SendMessage(userName.Handle, NativeMethods.EM_SETCUEBANNER,
+			NativeMethods.SendMessage(userNameTextBox.Handle, NativeMethods.EM_SETCUEBANNER,
 				IntPtr.Zero, Properties.Resources.USERNAME_TEXTFIELD_PLACEHOLDER);
-			NativeMethods.SendMessage(userPassword.Handle, NativeMethods.EM_SETCUEBANNER,
+			NativeMethods.SendMessage(userPasswordTextBox.Handle, NativeMethods.EM_SETCUEBANNER,
 				IntPtr.Zero, Properties.Resources.USERPASSWORD_TEXTFIELD_PLACEHOLDER);
-			userPassword.PasswordChar = '*';
+			userPasswordTextBox.PasswordChar = '*';
 		}
 
 		#endregion
@@ -230,7 +230,7 @@ namespace CryptoMessenger.GUI
 
 		#endregion
 
-		#region Focus user ad pass fields
+		#region Focus user and pass fields
 
 		// default color when focus textbox
 		private void field_Enter(object sender, EventArgs e)
@@ -240,7 +240,7 @@ namespace CryptoMessenger.GUI
 			passPanelBorderColor = Properties.Settings.Default.PanelBorderColor;
 			userPasswordPanel.Refresh();
 
-			notificationLabel.ForeColor = System.Drawing.SystemColors.GrayText;
+			notificationLabel.ForeColor = SystemColors.GrayText;
 			notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
 		}
 
@@ -252,9 +252,9 @@ namespace CryptoMessenger.GUI
 		private void showPasswordCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			if (showPasswordCheckBox.Checked)
-				userPassword.PasswordChar = '*';
+				userPasswordTextBox.PasswordChar = '*';
 			else
-				userPassword.PasswordChar = '\0';
+				userPasswordTextBox.PasswordChar = '\0';
 		}
 
 		#endregion
@@ -270,16 +270,16 @@ namespace CryptoMessenger.GUI
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
 			this.topPanel = new System.Windows.Forms.Panel();
 			this.iconBox = new System.Windows.Forms.PictureBox();
-			this.appName = new System.Windows.Forms.Label();
+			this.appNameLabel = new System.Windows.Forms.Label();
 			this.minimizeButton = new CryptoMessenger.GUI.MyButton();
 			this.closeButton = new CryptoMessenger.GUI.MyButton();
 			this.showPasswordCheckBox = new System.Windows.Forms.CheckBox();
 			this.userNamePanel = new System.Windows.Forms.Panel();
-			this.userName = new System.Windows.Forms.TextBox();
+			this.userNameTextBox = new System.Windows.Forms.TextBox();
 			this.loginFormPanel = new System.Windows.Forms.Panel();
 			this.notificationLabel = new System.Windows.Forms.Label();
 			this.userPasswordPanel = new System.Windows.Forms.Panel();
-			this.userPassword = new System.Windows.Forms.TextBox();
+			this.userPasswordTextBox = new System.Windows.Forms.TextBox();
 			this.registerButton = new CryptoMessenger.GUI.MyButton();
 			this.loginButton = new CryptoMessenger.GUI.MyButton();
 			this.topPanel.SuspendLayout();
@@ -293,13 +293,14 @@ namespace CryptoMessenger.GUI
 			// 
 			this.topPanel.BackColor = global::CryptoMessenger.Properties.Settings.Default.LoginFirstColor;
 			this.topPanel.Controls.Add(this.iconBox);
-			this.topPanel.Controls.Add(this.appName);
+			this.topPanel.Controls.Add(this.appNameLabel);
 			this.topPanel.Controls.Add(this.minimizeButton);
 			this.topPanel.Controls.Add(this.closeButton);
 			this.topPanel.Location = new System.Drawing.Point(0, 0);
 			this.topPanel.Name = "topPanel";
 			this.topPanel.Size = new System.Drawing.Size(300, 35);
-			this.topPanel.TabIndex = 4;
+			this.topPanel.TabIndex = 0;
+			this.topPanel.TabStop = false;
 			this.topPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
 			this.topPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
 			this.topPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
@@ -311,26 +312,27 @@ namespace CryptoMessenger.GUI
 			this.iconBox.Location = new System.Drawing.Point(10, 5);
 			this.iconBox.Name = "iconBox";
 			this.iconBox.Size = new System.Drawing.Size(25, 25);
-			this.iconBox.TabIndex = 9;
+			this.iconBox.TabIndex = 0;
 			this.iconBox.TabStop = false;
 			this.iconBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
 			this.iconBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
 			this.iconBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
 			// 
-			// appName
+			// appNameLabel
 			// 
-			this.appName.AutoSize = true;
-			this.appName.BackColor = System.Drawing.Color.Transparent;
-			this.appName.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.appName.ForeColor = System.Drawing.Color.White;
-			this.appName.Location = new System.Drawing.Point(40, 5);
-			this.appName.Name = "appName";
-			this.appName.Size = new System.Drawing.Size(169, 21);
-			this.appName.TabIndex = 5;
-			this.appName.Text = "CRYPTO MESSENGER";
-			this.appName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
-			this.appName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
-			this.appName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
+			this.appNameLabel.AutoSize = true;
+			this.appNameLabel.BackColor = System.Drawing.Color.Transparent;
+			this.appNameLabel.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.appNameLabel.ForeColor = System.Drawing.Color.White;
+			this.appNameLabel.Location = new System.Drawing.Point(40, 5);
+			this.appNameLabel.Name = "appNameLabel";
+			this.appNameLabel.Size = new System.Drawing.Size(169, 21);
+			this.appNameLabel.TabIndex = 0;
+			this.appNameLabel.TabStop = false;
+			this.appNameLabel.Text = global::CryptoMessenger.Properties.Resources.APP_NAME;
+			this.appNameLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
+			this.appNameLabel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
+			this.appNameLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
 			// 
 			// minimizeButton
 			// 
@@ -341,7 +343,7 @@ namespace CryptoMessenger.GUI
 			this.minimizeButton.Location = new System.Drawing.Point(240, 2);
 			this.minimizeButton.Name = "minimizeButton";
 			this.minimizeButton.Size = new System.Drawing.Size(20, 31);
-			this.minimizeButton.TabIndex = 2;
+			this.minimizeButton.TabIndex = 0;
 			this.minimizeButton.TabStop = false;
 			this.minimizeButton.UseVisualStyleBackColor = false;
 			this.minimizeButton.Click += new System.EventHandler(this.minimizeButton_Click);
@@ -359,7 +361,7 @@ namespace CryptoMessenger.GUI
 			this.closeButton.Location = new System.Drawing.Point(270, 2);
 			this.closeButton.Name = "closeButton";
 			this.closeButton.Size = new System.Drawing.Size(20, 31);
-			this.closeButton.TabIndex = 3;
+			this.closeButton.TabIndex = 0;
 			this.closeButton.TabStop = false;
 			this.closeButton.UseVisualStyleBackColor = false;
 			this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
@@ -391,24 +393,25 @@ namespace CryptoMessenger.GUI
 			// 
 			this.userNamePanel.BackColor = System.Drawing.Color.White;
 			this.userNamePanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.userNamePanel.Controls.Add(this.userName);
+			this.userNamePanel.Controls.Add(this.userNameTextBox);
 			this.userNamePanel.Location = new System.Drawing.Point(50, 95);
 			this.userNamePanel.Name = "userNamePanel";
 			this.userNamePanel.Size = new System.Drawing.Size(200, 40);
-			this.userNamePanel.TabIndex = 5;
+			this.userNamePanel.TabIndex = 0;
+			this.userNamePanel.TabStop = false;
 			this.userNamePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.userNamePanel_Paint);
 			// 
-			// userName
+			// userNameTextBox
 			// 
-			this.userName.BackColor = System.Drawing.Color.White;
-			this.userName.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.userName.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.userName.Location = new System.Drawing.Point(9, 9);
-			this.userName.MaxLength = 30;
-			this.userName.Name = "userName";
-			this.userName.Size = new System.Drawing.Size(182, 22);
-			this.userName.TabIndex = 0;
-			this.userName.Enter += new System.EventHandler(this.field_Enter);
+			this.userNameTextBox.BackColor = System.Drawing.Color.White;
+			this.userNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.userNameTextBox.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.userNameTextBox.Location = new System.Drawing.Point(9, 9);
+			this.userNameTextBox.MaxLength = 30;
+			this.userNameTextBox.Name = "userNameTextBox";
+			this.userNameTextBox.Size = new System.Drawing.Size(182, 22);
+			this.userNameTextBox.TabIndex = 1;
+			this.userNameTextBox.Enter += new System.EventHandler(this.field_Enter);
 			// 
 			// loginFormPanel
 			// 
@@ -422,7 +425,8 @@ namespace CryptoMessenger.GUI
 			this.loginFormPanel.Location = new System.Drawing.Point(0, 0);
 			this.loginFormPanel.Name = "loginFormPanel";
 			this.loginFormPanel.Size = new System.Drawing.Size(300, 400);
-			this.loginFormPanel.TabIndex = 9;
+			this.loginFormPanel.TabIndex = 0;
+			this.loginFormPanel.TabStop = false;
 			this.loginFormPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.loginFormPanel_Paint);
 			// 
 			// notificationLabel
@@ -432,7 +436,8 @@ namespace CryptoMessenger.GUI
 			this.notificationLabel.Location = new System.Drawing.Point(0, 59);
 			this.notificationLabel.Name = "notificationLabel";
 			this.notificationLabel.Size = new System.Drawing.Size(298, 13);
-			this.notificationLabel.TabIndex = 7;
+			this.notificationLabel.TabIndex = 0;
+			this.notificationLabel.TabStop = false;
 			this.notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
 			this.notificationLabel.SizeChanged += new System.EventHandler(this.notificationLabel_SizeChanged);
 			// 
@@ -440,25 +445,26 @@ namespace CryptoMessenger.GUI
 			// 
 			this.userPasswordPanel.BackColor = System.Drawing.Color.White;
 			this.userPasswordPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.userPasswordPanel.Controls.Add(this.userPassword);
+			this.userPasswordPanel.Controls.Add(this.userPasswordTextBox);
 			this.userPasswordPanel.Location = new System.Drawing.Point(50, 155);
 			this.userPasswordPanel.Name = "userPasswordPanel";
 			this.userPasswordPanel.Size = new System.Drawing.Size(200, 40);
-			this.userPasswordPanel.TabIndex = 6;
+			this.userPasswordPanel.TabIndex = 0;
+			this.userPasswordPanel.TabStop = false;
 			this.userPasswordPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.userPasswordPanel_Paint);
 			// 
-			// userPassword
+			// userPasswordTextBox
 			// 
-			this.userPassword.BackColor = System.Drawing.Color.White;
-			this.userPassword.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.userPassword.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.userPassword.Location = new System.Drawing.Point(9, 9);
-			this.userPassword.MaxLength = 30;
-			this.userPassword.Name = "userPassword";
-			this.userPassword.PasswordChar = '*';
-			this.userPassword.Size = new System.Drawing.Size(182, 22);
-			this.userPassword.TabIndex = 1;
-			this.userPassword.Enter += new System.EventHandler(this.field_Enter);
+			this.userPasswordTextBox.BackColor = System.Drawing.Color.White;
+			this.userPasswordTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.userPasswordTextBox.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.userPasswordTextBox.Location = new System.Drawing.Point(9, 9);
+			this.userPasswordTextBox.MaxLength = 30;
+			this.userPasswordTextBox.Name = "userPasswordTextBox";
+			this.userPasswordTextBox.PasswordChar = '*';
+			this.userPasswordTextBox.Size = new System.Drawing.Size(182, 22);
+			this.userPasswordTextBox.TabIndex = 2;
+			this.userPasswordTextBox.Enter += new System.EventHandler(this.field_Enter);
 			// 
 			// registerButton
 			// 
@@ -475,7 +481,7 @@ namespace CryptoMessenger.GUI
 			this.registerButton.Location = new System.Drawing.Point(50, 320);
 			this.registerButton.Name = "registerButton";
 			this.registerButton.Size = new System.Drawing.Size(200, 50);
-			this.registerButton.TabIndex = 5;
+			this.registerButton.TabIndex = 0;
 			this.registerButton.TabStop = false;
 			this.registerButton.Text = global::CryptoMessenger.Properties.Resources.REGISTRATION_BUTTON_TEXT;
 			this.registerButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -497,7 +503,7 @@ namespace CryptoMessenger.GUI
 			this.loginButton.Location = new System.Drawing.Point(50, 250);
 			this.loginButton.Name = "loginButton";
 			this.loginButton.Size = new System.Drawing.Size(200, 50);
-			this.loginButton.TabIndex = 4;
+			this.loginButton.TabIndex = 0;
 			this.loginButton.TabStop = false;
 			this.loginButton.Text = global::CryptoMessenger.Properties.Resources.LOGIN_BUTTON_TEXT;
 			this.loginButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -535,14 +541,14 @@ namespace CryptoMessenger.GUI
 
         #endregion
 
-        private TextBox userName;
-        private TextBox userPassword;
+        private TextBox userNameTextBox;
+        private TextBox userPasswordTextBox;
         private MyButton minimizeButton;
         private MyButton closeButton;
         private Panel topPanel;
         private MyButton loginButton;
         private MyButton registerButton;
-        private Label appName;
+        private Label appNameLabel;
         private Panel userNamePanel;
         private Panel userPasswordPanel;
         private CheckBox showPasswordCheckBox;

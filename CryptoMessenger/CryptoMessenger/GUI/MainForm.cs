@@ -210,14 +210,7 @@ namespace CryptoMessenger.GUI
 		// logout when form closing
 		private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			try
-			{
-				await client.Logout();
-			}
-			catch (ServerConnectionException)
-			{
-				// dont mind because we close app
-			}
+			await client.Logout();
 		}
 	}
 }

@@ -2,30 +2,30 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="LinqToSql">
   <DataContextMoniker Name="/LinqToSqlDataContext" />
   <nestedChildShapes>
-    <classShape Id="7324a3d6-7b4c-4f7c-93cf-7fcc7e743887" absoluteBounds="3, 1.25, 2, 1.26050048828125">
+    <classShape Id="5795b501-e549-4914-a679-36a833655378" absoluteBounds="1.875, 0.875, 2, 1.26050048828125">
       <DataClassMoniker Name="/LinqToSqlDataContext/Users" />
       <nestedChildShapes>
-        <elementListCompartment Id="5e474aad-1820-4540-bec0-5dbfe321f6a2" absoluteBounds="3.015, 1.71, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="db1f08f1-d54f-4cf5-a134-c298a134658d" absoluteBounds="1.8899999999999997, 1.335, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="7993f42e-b7ce-42f8-ad62-a94e48e0c04d" absoluteBounds="5.5, 1.25, 2, 1.26050048828125">
+    <classShape Id="9cd4e51d-8e17-4051-aeaf-f66d734d89be" absoluteBounds="5, 1, 2, 1.26050048828125">
       <DataClassMoniker Name="/LinqToSqlDataContext/Friends" />
       <nestedChildShapes>
-        <elementListCompartment Id="2d6f4db0-9838-4cda-b264-5cf2b0f6bb02" absoluteBounds="5.515, 1.71, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="01fbc0bc-9c9a-43df-b0b6-d55ee298a72c" absoluteBounds="5.015, 1.46, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5 : 1.88025024414063); (5.5 : 1.88025024414063)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.875 : 1.56775024414062); (5 : 1.56775024414062)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/LinqToSqlDataContext/Users/Users_Friends" />
       <nodes>
-        <classShapeMoniker Id="7324a3d6-7b4c-4f7c-93cf-7fcc7e743887" />
-        <classShapeMoniker Id="7993f42e-b7ce-42f8-ad62-a94e48e0c04d" />
+        <classShapeMoniker Id="5795b501-e549-4914-a679-36a833655378" />
+        <classShapeMoniker Id="9cd4e51d-8e17-4051-aeaf-f66d734d89be" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5 : 1.50262512207031); (5.5 : 1.50262512207031)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.875 : 1.22137512207031); (5 : 1.22137512207031)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/LinqToSqlDataContext/Users/Users_Friends1" />
       <nodes>
-        <classShapeMoniker Id="7324a3d6-7b4c-4f7c-93cf-7fcc7e743887" />
-        <classShapeMoniker Id="7993f42e-b7ce-42f8-ad62-a94e48e0c04d" />
+        <classShapeMoniker Id="5795b501-e549-4914-a679-36a833655378" />
+        <classShapeMoniker Id="9cd4e51d-8e17-4051-aeaf-f66d734d89be" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

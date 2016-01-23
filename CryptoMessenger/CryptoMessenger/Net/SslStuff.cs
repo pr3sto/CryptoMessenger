@@ -54,7 +54,7 @@ namespace CryptoMessenger.Net
 		/// <param name="localCertificates">local certificates clooection.</param>
 		/// <param name="remoteCertificate">server's certificate.</param>
 		/// <param name="acceptableIssuers">acceptable issuers for remote host.</param>
-		/// <returns></returns>
+		/// <returns>certificate.</returns>
 		public static X509Certificate ClientCertificateSelectionCallback(object sender, 
 			string targetHost, X509CertificateCollection localCertificates, 
 			X509Certificate remoteCertificate, string[] acceptableIssuers)

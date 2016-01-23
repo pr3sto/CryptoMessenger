@@ -136,7 +136,14 @@ namespace CryptoMessenger.Net
 		public async Task Logout()
 		{
 			await SendMessage(new LogoutRequestMessage());
-			Disconnect();
+			try
+			{
+				Disconnect();
+			}
+			catch
+			{
+				// dont mind because we close application
+			}
 		}
 
 		/// <summary>
@@ -321,8 +328,14 @@ namespace CryptoMessenger.Net
 			// asynchronous communicate with server
 			await Task.Run(() => {
 
-				XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
-				requestSerializer.Serialize(sslStream, message);
+				try
+				{
+					XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
+					requestSerializer.Serialize(sslStream, message);
+				}
+				catch
+				{
+				}
 
 			});
 		}

@@ -65,6 +65,9 @@ namespace CryptoMessenger.GUI
 		}
 		private async void loginButton_Click(object sender, EventArgs e)
         {
+			// clear notifications
+			field_Enter(null, EventArgs.Empty);
+
             if (IsUserDataCorrect())
 			{
 				DisableInterface();
@@ -75,7 +78,7 @@ namespace CryptoMessenger.GUI
 				LoginRegisterResponse response;
 				try
 				{
-					response = await client.Login(userName.Text, userPassword.Text);
+					response = await client.Login(userNameTextBox.Text, userPasswordTextBox.Text);
 				}
 				catch (ServerConnectionException)
 				{
@@ -96,10 +99,10 @@ namespace CryptoMessenger.GUI
 
 				if (LoginRegisterResponse.SUCCESS.Equals(response))
 				{
-					userPassword.Text = null;
+					userPasswordTextBox.Text = null;
 					Hide();
 
-					mainForm = new MainForm(this, client, userName.Text);
+					mainForm = new MainForm(this, client, userNameTextBox.Text);
 					mainForm.ShowDialog();
 					mainForm.Close();
 
@@ -123,20 +126,19 @@ namespace CryptoMessenger.GUI
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.UNKNOWN_ERROR;
-
-					EnableInterface();
-					return;
 				}
 
 				EnableInterface();
 			}
         }
 
-
         // register
         private async void registerButton_Click(object sender, EventArgs e)
-        {  
-            if (IsUserDataCorrect())
+        {
+			// clear notifications
+			field_Enter(null, EventArgs.Empty);
+
+			if (IsUserDataCorrect())
             {
 				DisableInterface();
 
@@ -146,7 +148,7 @@ namespace CryptoMessenger.GUI
 				LoginRegisterResponse response;
 				try
 				{
-					response = await client.Register(userName.Text, userPassword.Text);
+					response = await client.Register(userNameTextBox.Text, userPasswordTextBox.Text);
 				}
 				catch (ServerConnectionException)
 				{
@@ -185,9 +187,6 @@ namespace CryptoMessenger.GUI
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.UNKNOWN_ERROR;
-
-					EnableInterface();
-					return;
 				}
 
 				EnableInterface();
@@ -199,7 +198,7 @@ namespace CryptoMessenger.GUI
 		{
 			bool ret = true;
 
-			if (string.IsNullOrEmpty(userName.Text))
+			if (string.IsNullOrEmpty(userNameTextBox.Text))
 			{
 				namePanelBorderColor = Properties.Settings.Default.AlertColor;
 				userNamePanel.Refresh();
@@ -209,7 +208,7 @@ namespace CryptoMessenger.GUI
 
 				ret = false;
 			}
-			if (string.IsNullOrEmpty(userPassword.Text))
+			if (string.IsNullOrEmpty(userPasswordTextBox.Text))
 			{
 				passPanelBorderColor = Properties.Settings.Default.AlertColor;
 				userPasswordPanel.Refresh();
@@ -230,8 +229,8 @@ namespace CryptoMessenger.GUI
 			loginButton.Update();
 			registerButton.Enabled = false;
 			registerButton.Update();
-			userName.Enabled = false;
-			userPassword.Enabled = false;
+			userNameTextBox.Enabled = false;
+			userPasswordTextBox.Enabled = false;
 			showPasswordCheckBox.Enabled = false;
 		}
 
@@ -244,8 +243,8 @@ namespace CryptoMessenger.GUI
 			loginButton.Update();
 			registerButton.Enabled = true;
 			registerButton.Update();
-			userName.Enabled = true;
-			userPassword.Enabled = true;
+			userNameTextBox.Enabled = true;
+			userPasswordTextBox.Enabled = true;
 			showPasswordCheckBox.Enabled = true;
 			ActiveControl = loginButton;
 		}

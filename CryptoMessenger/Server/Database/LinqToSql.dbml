@@ -13,7 +13,7 @@
     <Type Name="Friends">
       <Column Name="friend_one" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="friend_two" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="accepted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Users_Friends" Member="Users" ThisKey="friend_one" OtherKey="user_id" Type="Users" IsForeignKey="true" />
       <Association Name="Users_Friends1" Member="Users1" ThisKey="friend_two" OtherKey="user_id" Type="Users" IsForeignKey="true" />
     </Type>

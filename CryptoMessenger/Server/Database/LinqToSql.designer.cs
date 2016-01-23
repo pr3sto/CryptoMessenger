@@ -261,7 +261,7 @@ namespace Server.Database
 		
 		private int _friend_two;
 		
-		private bool _status;
+		private bool _accepted;
 		
 		private EntityRef<User> _Users;
 		
@@ -275,8 +275,8 @@ namespace Server.Database
     partial void Onfriend_oneChanged();
     partial void Onfriend_twoChanging(int value);
     partial void Onfriend_twoChanged();
-    partial void OnstatusChanging(bool value);
-    partial void OnstatusChanged();
+    partial void OnacceptedChanging(bool value);
+    partial void OnacceptedChanged();
     #endregion
 		
 		public Friendship()
@@ -334,22 +334,22 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_status", DbType="Bit NOT NULL")]
-		public bool status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_accepted", DbType="Bit NOT NULL")]
+		public bool accepted
 		{
 			get
 			{
-				return this._status;
+				return this._accepted;
 			}
 			set
 			{
-				if ((this._status != value))
+				if ((this._accepted != value))
 				{
-					this.OnstatusChanging(value);
+					this.OnacceptedChanging(value);
 					this.SendPropertyChanging();
-					this._status = value;
-					this.SendPropertyChanged("status");
-					this.OnstatusChanged();
+					this._accepted = value;
+					this.SendPropertyChanged("accepted");
+					this.OnacceptedChanged();
 				}
 			}
 		}

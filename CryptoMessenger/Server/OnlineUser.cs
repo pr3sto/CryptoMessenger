@@ -51,7 +51,6 @@ namespace Server
 			catch
 			{
 				// TODO logger
-				Console.WriteLine("logger-___-");
 			}
 			finally
 			{

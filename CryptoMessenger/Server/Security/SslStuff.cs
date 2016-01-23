@@ -53,7 +53,7 @@ namespace Server.Security
 		/// <param name="localCertificates">local certificates clooection.</param>
 		/// <param name="remoteCertificate">client's certificate.</param>
 		/// <param name="acceptableIssuers">acceptable issuers for remote client.</param>
-		/// <returns></returns>
+		/// <returns>certificate.</returns>
 		public static X509Certificate ServerCertificateSelectionCallback(object sender, 
 			string targetHost, X509CertificateCollection localCertificates, 
 			X509Certificate remoteCertificate, string[] acceptableIssuers)
