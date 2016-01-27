@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientConnection.cs" />
     <Compile Include="Database\DBoperations.cs" />
     <Compile Include="Database\LinqToSql.designer.cs">
       <AutoGen>True</AutoGen>
@@ -78,7 +79,7 @@
     <Compile Include="Security\PasswordHash.cs" />
     <Compile Include="Security\SslStuff.cs" />
     <Compile Include="Server.cs" />
-    <Compile Include="OnlineUser.cs" />
+    <Compile Include="OnlineUsersHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database\LinqToSql.dbml.layout">

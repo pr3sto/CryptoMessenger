@@ -157,10 +157,7 @@ namespace Server.Database
 					}
 				}
 
-				if (friends.Count == 0)
-					return null;
-				else
-					return friends.ToArray();
+				return friends.ToArray();
 			}
 		}
 
@@ -170,7 +167,8 @@ namespace Server.Database
 		/// <param name="accepted">is friendship request accepted.</param>
 		/// <param name="user_one">user one login.</param>
 		/// <param name="user_two">user two login.</param>
-		public static void SetFriendship(bool accepted, string user_one, string user_two)
+		/// <returns>true, if operations success.</returns>
+		public static bool SetFriendship(bool accepted, string user_one, string user_two)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
@@ -180,7 +178,7 @@ namespace Server.Database
 					select user.user_id;
 
 				// user not found
-				if (!user_one_id.Any()) return;
+				if (!user_one_id.Any()) return false;
 
 				var user_two_id =
 					from user in DBcontext.Users
@@ -188,23 +186,25 @@ namespace Server.Database
 					select user.user_id;
 
 				// user not found
-				if (!user_two_id.Any()) return;
+				if (!user_two_id.Any()) return false;
 
 				var data =
 					from friendship in DBcontext.Friends
-					where friendship.friend_one == user_one_id.First() &
-					friendship.friend_two == user_two_id.First()
+					where (friendship.friend_one == user_one_id.First() &
+					friendship.friend_two == user_two_id.First()) |
+					(friendship.friend_two == user_one_id.First() &
+					friendship.friend_one == user_two_id.First())
 					select friendship;
 
 				// already friends
-				if (data.Any() && data.First().accepted == accepted)
+				if (data.Any() && data.First().accepted)
 				{
-					return;
+					return false;
 				}
 				else 
 				{
 					// accept friendship request
-					if (data.Any() && data.First().accepted != accepted)
+					if (data.Any() && !data.First().accepted)
 					{
 						data.First().accepted = accepted;
 					}
@@ -223,10 +223,12 @@ namespace Server.Database
 					try
 					{
 						DBcontext.SubmitChanges();
+						return true;
 					}
 					catch
 					{
 						// TODO logger
+						return false;
 					}
 				}
 			}
@@ -256,9 +258,10 @@ namespace Server.Database
 					friendship.accepted == false
 					select friendship.friend_one;
 
+				List<string> logins = new List<string>();
+
 				if (data.Any())
 				{
-					List<string> logins = new List<string>();
 					foreach (int id in data)
 					{
 						var user_login =
@@ -268,17 +271,10 @@ namespace Server.Database
 
 						if (user_login.Any())
 							logins.Add(user_login.First());
-					}
+					}					
+				}
 
-					if (logins.Count == 0)
-						return null;
-					else
-						return logins.ToArray();
-				}
-				else
-				{
-					return null;
-				}
+				return logins.ToArray();
 			}
 		}
 
@@ -306,9 +302,10 @@ namespace Server.Database
 					friendship.accepted == false
 					select friendship.friend_two;
 
+				List<string> logins = new List<string>();
+
 				if (data.Any())
-				{
-					List<string> logins = new List<string>();
+				{	
 					foreach (int id in data)
 					{
 						var user_login =
@@ -318,17 +315,10 @@ namespace Server.Database
 
 						if (user_login.Any())
 							logins.Add(user_login.First());
-					}
+					}						
+				}
 
-					if (logins.Count == 0)
-						return null;
-					else
-						return logins.ToArray();
-				}
-				else
-				{
-					return null;
-				}
+				return logins.ToArray();
 			}
 		}
 
@@ -337,7 +327,8 @@ namespace Server.Database
 		/// </summary>
 		/// <param name="user_one">user one login.</param>
 		/// <param name="user_two">user two login.</param>
-		public static void RemoveFriendshipRequest(string user_one, string user_two)
+		/// <returns>true, if operations success.</returns>
+		public static bool RemoveFriendshipRequest(string user_one, string user_two)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
@@ -347,7 +338,7 @@ namespace Server.Database
 					select user.user_id;
 
 				// user not found
-				if (!user_one_id.Any()) return;
+				if (!user_one_id.Any()) return false;
 
 				var user_two_id =
 					from user in DBcontext.Users
@@ -355,7 +346,7 @@ namespace Server.Database
 					select user.user_id;
 
 				// user not found
-				if (!user_two_id.Any()) return;
+				if (!user_two_id.Any()) return false;
 
 				var data =
 					from friendship in DBcontext.Friends
@@ -371,10 +362,12 @@ namespace Server.Database
 				try
 				{
 					DBcontext.SubmitChanges();
+					return true;
 				}
 				catch
 				{
-					
+					// TODO logger
+					return false;
 				}
 			}
 		}
@@ -384,7 +377,8 @@ namespace Server.Database
 		/// </summary>
 		/// <param name="user_one">user one login.</param>
 		/// <param name="user_two">user two login.</param>
-		public static void RemoveFriend(string user_one, string user_two)
+		/// <returns>true, if operations success.</returns>
+		public static bool RemoveFriend(string user_one, string user_two)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
@@ -394,7 +388,7 @@ namespace Server.Database
 					select user.user_id;
 
 				// user not found
-				if (!user_one_id.Any()) return;
+				if (!user_one_id.Any()) return false;
 
 				var user_two_id =
 					from user in DBcontext.Users
@@ -402,7 +396,7 @@ namespace Server.Database
 					select user.user_id;
 
 				// user not found
-				if (!user_two_id.Any()) return;
+				if (!user_two_id.Any()) return false;
 
 				var data =
 					from friendship in DBcontext.Friends
@@ -422,10 +416,12 @@ namespace Server.Database
 				try
 				{
 					DBcontext.SubmitChanges();
+					return true;
 				}
 				catch
 				{
-
+					// TODO logger
+					return false;
 				}
 			}
 		}

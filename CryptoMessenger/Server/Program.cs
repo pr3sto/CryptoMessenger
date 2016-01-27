@@ -9,7 +9,7 @@ namespace Server
 			Console.Title = "Server";
 
 			// server
-			Server server = new Server(44300);
+			Server server = new Server(443);
 
 			// commands
 			Console.WriteLine("Server is running.");
