@@ -10,7 +10,8 @@ namespace MessageTypes
 	{
 		SUCCESS,
 		FAIL,
-		ERROR
+		ERROR,
+		ALREADY_LOGIN
 	};
 
 	/// <summary>

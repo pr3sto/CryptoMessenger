@@ -21,6 +21,13 @@ namespace CryptoMessenger.GUI
 		// selected panel
 		private UsersPanels selectedPanel;
 
+		// 'cache' 
+		// We dont ask server for it if we have in cache;
+		// server sends it to us if something changes.
+		public string[] cache_friends = null;
+		public string[] cache_income_reqs = null;
+		public string[] cache_outcome_reqs = null;
+
 		public MainForm(LoginForm parent, Client client, string login)
         {
             InitializeComponent();
@@ -45,54 +52,8 @@ namespace CryptoMessenger.GUI
 			selectedPanel = UsersPanels.FRIENDS;
         }
 
-		// update all users list box
-		public void UpdateAllUsersList(string[] users)
-		{
-			if (UsersPanels.SEARCH.Equals(selectedPanel))
-			{
-				allUsersListBox.Items.Clear();
-				if (users != null) allUsersListBox.Items.AddRange(users);
-				allUsersListBox.Update();
-
-				loadingLabel.Visible = false;
-				allUsersPanel.Visible = true;
-			}
-		}
-
-		// update friends list box
-		public void UpdateFriendsList(string[] friends)
-		{
-			if (UsersPanels.FRIENDS.Equals(selectedPanel))
-			{
-				friendsListBox.Items.Clear();
-				if (friends != null) friendsListBox.Items.AddRange(friends);
-				friendsListBox.Update();
-
-				loadingLabel.Visible = false;
-				friendsPanel.Visible = true;
-			}
-		}
-
-		// update friendship requests list box
-		public void UpdateFriendshipRequests(string[] income, string[] outcome)
-		{
-			if (UsersPanels.REQUESTS.Equals(selectedPanel))
-			{
-				incomeFriendshipRequestsListBox.Items.Clear();
-				if (income != null) incomeFriendshipRequestsListBox.Items.AddRange(income);
-				incomeFriendshipRequestsListBox.Update();
-
-				outcomeFriendshipRequestsListBox.Items.Clear();
-				if (outcome != null) outcomeFriendshipRequestsListBox.Items.AddRange(outcome);
-				outcomeFriendshipRequestsListBox.Update();
-
-				loadingLabel.Visible = false;
-				friendshipRequestsPanel.Visible = true;
-			}
-		}
-
-		// send request to server to update info
-		private async void UpdateUserPanel(object sender, EventArgs e)
+		// send request to server to update listboxes
+		private void UpdateUserPanel(object sender, EventArgs e)
 		{
 			Label label = (Label)sender;
 
@@ -104,7 +65,11 @@ namespace CryptoMessenger.GUI
 
 				loadingLabel.Visible = true;
 
-				await client.GetFriends();
+				// if we dont have it in cache ask server for it
+				if (cache_friends == null)
+					client.GetFriends();
+				else
+					UpdateFriendsList(cache_friends);
 			}
 			else if ("searchLabel".Equals(label.Name))
 			{
@@ -114,7 +79,7 @@ namespace CryptoMessenger.GUI
 
 				loadingLabel.Visible = true;
 
-				await client.GetAllUsers();
+				client.GetAllUsers();
 			}
 			else if ("friendshipRequestsLabel".Equals(label.Name))
 			{
@@ -124,77 +89,78 @@ namespace CryptoMessenger.GUI
 
 				loadingLabel.Visible = true;
 
-				await client.GetFriendshipRequests();
-			}
-		}
-
-		// remove user from friends
-		private async void removeFriendButton_Click(object sender, EventArgs e)
-		{
-			if (friendsListBox.SelectedItem != null)
-			{
-				await client.RemoveFriend(friendsListBox.SelectedItem.ToString());
+				// if we dont have it in cache ask server for it
+				if (cache_income_reqs == null && cache_outcome_reqs == null)
+					client.GetFriendshipRequests();
+				else
+					UpdateFriendshipRequests(cache_income_reqs, cache_outcome_reqs);
+				
 			}
 		}
 
 		// send request for friendship
-		private async void addFriendButton_Click(object sender, EventArgs e)
+		private void addFriendButton_Click(object sender, EventArgs e)
 		{
 			if (allUsersListBox.SelectedItem != null)
 			{
-				await client.SendFriendshipRequest(allUsersListBox.SelectedItem.ToString());
+				addFriendButton.Enabled = false;
+				addFriendButton.Text = "ЗАЯВКА ОТПРАВЛЕНА";
+				client.SendFriendshipRequest(allUsersListBox.SelectedItem.ToString());
 			}
 		}
-		
-		// switch between income and outcome requests
-		private void incomeRequestsListBox_Enter(object sender, EventArgs e)
-		{
-			outcomeFriendshipRequestsListBox.ClearSelected();
-			cancelFriendshipRequestButton.Visible = false;
-			acceptFriendshipButton.Visible = true;
-			rejectFriendshipButton.Visible = true;
-		}
 
-		// switch between income and outcome requests
-		private void outcomeRequestsListBox_Enter(object sender, EventArgs e)
+		// remove user from friends
+		private void removeFriendButton_Click(object sender, EventArgs e)
 		{
-			incomeFriendshipRequestsListBox.ClearSelected();
-			cancelFriendshipRequestButton.Visible = true;
-			acceptFriendshipButton.Visible = false;
-			rejectFriendshipButton.Visible = false;
+			if (friendsListBox.SelectedItem != null)
+			{
+				removeFriendButton.Enabled = false;
+				removeFriendButton.Text = "ПОЛЬЗОВАТЕЛЬ УДАЛЕН";
+				client.RemoveFriend(friendsListBox.SelectedItem.ToString());
+			}
 		}
 
 		// cancel friendship request
-		private async void cancelFriendshipRequestButton_Click(object sender, EventArgs e)
+		private void cancelFriendshipRequestButton_Click(object sender, EventArgs e)
 		{
 			if (outcomeFriendshipRequestsListBox.SelectedItem != null)
 			{
-				await client.CancelFriendshipRequest(outcomeFriendshipRequestsListBox.SelectedItem.ToString());
+				cancelFriendshipRequestButton.Enabled = false;
+				cancelFriendshipRequestButton.Text = "ЗАЯВКА ОТМЕНЕНА";
+				client.CancelFriendshipRequest(outcomeFriendshipRequestsListBox.SelectedItem.ToString());
 			}
 		}
 
 		// accept friendship
-		private async void acceptFriendshipButton_Click(object sender, EventArgs e)
+		private void acceptFriendshipButton_Click(object sender, EventArgs e)
 		{
 			if (incomeFriendshipRequestsListBox.SelectedItem != null)
 			{
-				await client.AcceptFriendshipRequest(incomeFriendshipRequestsListBox.SelectedItem.ToString());
+				acceptFriendshipButton.Visible = false;
+				rejectFriendshipButton.Visible = false;
+
+				cancelFriendshipRequestButton.Visible = true;
+				cancelFriendshipRequestButton.Enabled = false;
+				cancelFriendshipRequestButton.Text = "ЗАЯВКА ПРИНЯТА";
+
+				client.AcceptFriendshipRequest(incomeFriendshipRequestsListBox.SelectedItem.ToString());
 			}
 		}
 		
 		// reject friendship
-		private async void rejectFriendshipButton_Click(object sender, EventArgs e)
+		private void rejectFriendshipButton_Click(object sender, EventArgs e)
 		{
 			if (incomeFriendshipRequestsListBox.SelectedItem != null)
 			{
-				await client.RejectFriendshipRequest(incomeFriendshipRequestsListBox.SelectedItem.ToString());
-			}
-		}
+				acceptFriendshipButton.Visible = false;
+				rejectFriendshipButton.Visible = false;
 
-		// select friend and change chat
-		private void friendsListBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			activeTalkLabel.Text = friendsListBox.Text;
+				cancelFriendshipRequestButton.Visible = true;
+				cancelFriendshipRequestButton.Enabled = false;
+				cancelFriendshipRequestButton.Text = "ЗАЯВКА ОТКЛОНЕНА";
+
+				client.RejectFriendshipRequest(incomeFriendshipRequestsListBox.SelectedItem.ToString());
+			}
 		}
 
 		// send message
@@ -208,9 +174,9 @@ namespace CryptoMessenger.GUI
 		}
 
 		// logout when form closing
-		private async void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			await client.Logout();
+			client.Logout();
 		}
 	}
 }

@@ -42,6 +42,8 @@ namespace CryptoMessenger.Net
 		private TcpClient client;
 		// ssl stream with server
 		private SslStream sslStream;
+		// form to update
+		private MainForm form;
 
 		/// <summary>
 		/// Initialize Client.
@@ -54,7 +56,6 @@ namespace CryptoMessenger.Net
 			var _ip = doc.Descendants("ip");
 			var _port = doc.Descendants("port");
 
-
 			ip = "";
 			foreach (var i in _ip) ip = i.Value;
 
@@ -65,9 +66,10 @@ namespace CryptoMessenger.Net
 		/// <summary>
 		/// Listen for messages from server.
 		/// </summary>
-		/// <param name="form">form to update when message come.</param>
-		public async void Listen(MainForm form)
+		/// <param name="_form">form to update when message come.</param>
+		public async void Listen(MainForm _form)
 		{
+			form = _form;
 			try
 			{
 				while (true)
@@ -83,14 +85,14 @@ namespace CryptoMessenger.Net
 					}
 					else if (message is GetFriendsResponseMessage)
 					{
-						string[] friends = ((GetFriendsResponseMessage)message).friends;
-						form.UpdateFriendsList(friends);
+						form.cache_friends = ((GetFriendsResponseMessage)message).friends;
+						form.UpdateFriendsList(form.cache_friends);
 					}
 					else if (message is GetFriendsReqsResponseMessage)
 					{
-						string[] income = ((GetFriendsReqsResponseMessage)message).income_requests;
-						string[] outcome = ((GetFriendsReqsResponseMessage)message).outcome_requests;
-						form.UpdateFriendshipRequests(income, outcome);
+						form.cache_income_reqs = ((GetFriendsReqsResponseMessage)message).income_requests;
+						form.cache_outcome_reqs = ((GetFriendsReqsResponseMessage)message).outcome_requests;
+						form.UpdateFriendshipRequests(form.cache_income_reqs, form.cache_outcome_reqs);
 					}
 				}
 			}
@@ -119,7 +121,7 @@ namespace CryptoMessenger.Net
 				password = _password
 			};
 
-			await SendMessage(message);
+			SendMessage(message);
 			LoginResponseMessage serverResp = (LoginResponseMessage)await ReceiveMessage();
 
 			// don't disconnect if login success
@@ -133,9 +135,9 @@ namespace CryptoMessenger.Net
 		/// Logout from server.
 		/// </summary>
 		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		public async Task Logout()
+		public void Logout()
 		{
-			await SendMessage(new LogoutRequestMessage());
+			SendMessage(new LogoutRequestMessage());
 			try
 			{
 				Disconnect();
@@ -164,7 +166,7 @@ namespace CryptoMessenger.Net
 				password = _password
 			};
 
-			await SendMessage(message);
+			SendMessage(message);
 			RegisterResponseMessage serverResp = (RegisterResponseMessage)await ReceiveMessage();
 			
 			Disconnect();
@@ -176,45 +178,45 @@ namespace CryptoMessenger.Net
 		/// Get array of all users from server;
 		/// listener should recieve response message.
 		/// </summary>
-		public async Task GetAllUsers()
+		public void GetAllUsers()
 		{
-			await SendMessage(new GetAllUsersRequestMessage());
+			SendMessage(new GetAllUsersRequestMessage());
 		}
 
 		/// <summary>
 		/// Get array of friends from server;
 		/// listener should recieve response message.
 		/// </summary>
-		public async Task GetFriends()
+		public void GetFriends()
 		{
-			await SendMessage(new GetFriendsRequestMessage());
+			SendMessage(new GetFriendsRequestMessage());
 		}
 
 		/// <summary>
 		/// Get arrays of friendship requests from server;
 		/// listener should recieve response message.
 		/// </summary>
-		public async Task GetFriendshipRequests()
+		public void GetFriendshipRequests()
 		{
-			await SendMessage(new GetFriendshipReqsRequestMessage());
+			SendMessage(new GetFriendshipReqsRequestMessage());
 		}
 
 		/// <summary>
 		/// Send friendship request to server.
 		/// </summary>
 		/// <param name="login">login of needed user.</param>
-		public async Task SendFriendshipRequest(string login)
+		public void SendFriendshipRequest(string login)
 		{
-			await SendMessage(new FriendshipReqRequestMessage { login_of_needed_user = login });
+			SendMessage(new FriendshipReqRequestMessage { login_of_needed_user = login });
 		}
 
 		/// <summary>
 		/// Send message to server about cancellation of friendship request.
 		/// </summary>
 		/// <param name="login">needed friend login.</param>
-		public async Task CancelFriendshipRequest(string login)
+		public void CancelFriendshipRequest(string login)
 		{
-			await SendMessage(new FriendActionRequestMessage
+			SendMessage(new FriendActionRequestMessage
 			{
 				friends_login = login,
 				action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
@@ -225,9 +227,9 @@ namespace CryptoMessenger.Net
 		/// Send to server request about accepting friendship request.
 		/// </summary>
 		/// <param name="login">accepted friend login.</param>
-		public async Task AcceptFriendshipRequest(string login)
+		public void AcceptFriendshipRequest(string login)
 		{
-			await SendMessage(new FriendActionRequestMessage
+			SendMessage(new FriendActionRequestMessage
 			{
 				friends_login = login,
 				action = ActionsWithFriend.ACCEPT_FRIENDSHIP
@@ -238,9 +240,9 @@ namespace CryptoMessenger.Net
 		/// Send to server request about rejecting friendship request.
 		/// </summary>
 		/// <param name="login">rejected user login.</param>
-		public async Task RejectFriendshipRequest(string login)
+		public void RejectFriendshipRequest(string login)
 		{
-			await SendMessage(new FriendActionRequestMessage
+			SendMessage(new FriendActionRequestMessage
 			{
 				friends_login = login,
 				action = ActionsWithFriend.REJECT_FRIENDSHIP
@@ -251,9 +253,9 @@ namespace CryptoMessenger.Net
 		/// Send to server request about removing friend from friends.
 		/// </summary>
 		/// <param name="login">friend's login.</param>
-		public async Task RemoveFriend(string login)
+		public void RemoveFriend(string login)
 		{
-			await SendMessage(new FriendActionRequestMessage
+			SendMessage(new FriendActionRequestMessage
 			{
 				friends_login = login,
 				action = ActionsWithFriend.REMOVE_FROM_FRIENDS
@@ -323,21 +325,16 @@ namespace CryptoMessenger.Net
 		/// Send message to server.
 		/// </summary>
 		/// <param name="message">user's message.</param>
-		private async Task SendMessage(RequestMessage message)
+		private void SendMessage(RequestMessage message)
 		{
-			// asynchronous communicate with server
-			await Task.Run(() => {
-
-				try
-				{
-					XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
-					requestSerializer.Serialize(sslStream, message);
-				}
-				catch
-				{
-				}
-
-			});
+			try
+			{
+				XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
+				requestSerializer.Serialize(sslStream, message);
+			}
+			catch
+			{
+			}
 		}
 
 		/// <summary>

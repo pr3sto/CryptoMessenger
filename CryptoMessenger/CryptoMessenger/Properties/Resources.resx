@@ -202,4 +202,7 @@
   <data name="UNKNOWN_ERROR" xml:space="preserve">
     <value>НЕИЗВЕСТНАЯ ОШИБКА. ПОВТОРИТЕ ДЕЙСТВИЕ ПОЗЖЕ</value>
   </data>
+  <data name="ALREADY_LOGIN_NOTIFICATION" xml:space="preserve">
+    <value>ВХОД В ДАННЫЙ АККАУНТ УЖЕ ВЫПОЛНЕН </value>
+  </data>
 </root>

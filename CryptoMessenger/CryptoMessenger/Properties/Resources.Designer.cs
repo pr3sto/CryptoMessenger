@@ -61,6 +61,15 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ВХОД В ДАННЫЙ АККАУНТ УЖЕ ВЫПОЛНЕН .
+        /// </summary>
+        internal static string ALREADY_LOGIN_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("ALREADY_LOGIN_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CRYPTO MESSENGER.
         /// </summary>
         internal static string APP_NAME {

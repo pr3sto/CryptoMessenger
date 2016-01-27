@@ -77,6 +77,7 @@ namespace CryptoMessenger.GUI
 
 		private void LoginForm_Load(object sender, EventArgs e)
 		{
+			// interface fonts
 			appNameLabel.Font = NeueFont15;
 			notificationLabel.Font = NeueFont10;
 			loginButton.Font = NeueFont15;
@@ -87,6 +88,7 @@ namespace CryptoMessenger.GUI
 
 			ActiveControl = loginButton;
 
+			// placeholders
 			NativeMethods.SendMessage(userNameTextBox.Handle, NativeMethods.EM_SETCUEBANNER,
 				IntPtr.Zero, Properties.Resources.USERNAME_TEXTFIELD_PLACEHOLDER);
 			NativeMethods.SendMessage(userPasswordTextBox.Handle, NativeMethods.EM_SETCUEBANNER,
@@ -300,7 +302,6 @@ namespace CryptoMessenger.GUI
 			this.topPanel.Name = "topPanel";
 			this.topPanel.Size = new System.Drawing.Size(300, 35);
 			this.topPanel.TabIndex = 0;
-			this.topPanel.TabStop = false;
 			this.topPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
 			this.topPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
 			this.topPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
@@ -328,8 +329,7 @@ namespace CryptoMessenger.GUI
 			this.appNameLabel.Name = "appNameLabel";
 			this.appNameLabel.Size = new System.Drawing.Size(169, 21);
 			this.appNameLabel.TabIndex = 0;
-			this.appNameLabel.TabStop = false;
-			this.appNameLabel.Text = global::CryptoMessenger.Properties.Resources.APP_NAME;
+			this.appNameLabel.Text = "CRYPTO MESSENGER";
 			this.appNameLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseDown);
 			this.appNameLabel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseMove);
 			this.appNameLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.moveForm_MouseUp);
@@ -398,7 +398,6 @@ namespace CryptoMessenger.GUI
 			this.userNamePanel.Name = "userNamePanel";
 			this.userNamePanel.Size = new System.Drawing.Size(200, 40);
 			this.userNamePanel.TabIndex = 0;
-			this.userNamePanel.TabStop = false;
 			this.userNamePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.userNamePanel_Paint);
 			// 
 			// userNameTextBox
@@ -426,7 +425,6 @@ namespace CryptoMessenger.GUI
 			this.loginFormPanel.Name = "loginFormPanel";
 			this.loginFormPanel.Size = new System.Drawing.Size(300, 400);
 			this.loginFormPanel.TabIndex = 0;
-			this.loginFormPanel.TabStop = false;
 			this.loginFormPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.loginFormPanel_Paint);
 			// 
 			// notificationLabel
@@ -435,10 +433,9 @@ namespace CryptoMessenger.GUI
 			this.notificationLabel.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.notificationLabel.Location = new System.Drawing.Point(0, 59);
 			this.notificationLabel.Name = "notificationLabel";
-			this.notificationLabel.Size = new System.Drawing.Size(298, 13);
+			this.notificationLabel.Size = new System.Drawing.Size(127, 13);
 			this.notificationLabel.TabIndex = 0;
-			this.notificationLabel.TabStop = false;
-			this.notificationLabel.Text = Properties.Resources.STANDART_NOTIFICATION;
+			this.notificationLabel.Text = "ДОБРО ПОЖАЛОВАТЬ";
 			this.notificationLabel.SizeChanged += new System.EventHandler(this.notificationLabel_SizeChanged);
 			// 
 			// userPasswordPanel
@@ -450,7 +447,6 @@ namespace CryptoMessenger.GUI
 			this.userPasswordPanel.Name = "userPasswordPanel";
 			this.userPasswordPanel.Size = new System.Drawing.Size(200, 40);
 			this.userPasswordPanel.TabIndex = 0;
-			this.userPasswordPanel.TabStop = false;
 			this.userPasswordPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.userPasswordPanel_Paint);
 			// 
 			// userPasswordTextBox
@@ -471,7 +467,7 @@ namespace CryptoMessenger.GUI
 			this.registerButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.LoginFirstColor;
 			this.registerButton.BackgroundImage = global::CryptoMessenger.Properties.Resources.register;
 			this.registerButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.registerButton.Cursor = System.Windows.Forms.Cursors.Default;
+			this.registerButton.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.registerButton.FlatAppearance.BorderSize = 0;
 			this.registerButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(200)))), ((int)(((byte)(160)))));
 			this.registerButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(225)))), ((int)(((byte)(190)))));
@@ -493,7 +489,7 @@ namespace CryptoMessenger.GUI
 			this.loginButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.LoginFirstColor;
 			this.loginButton.BackgroundImage = global::CryptoMessenger.Properties.Resources.login;
 			this.loginButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.loginButton.Cursor = System.Windows.Forms.Cursors.Default;
+			this.loginButton.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.loginButton.FlatAppearance.BorderSize = 0;
 			this.loginButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(200)))), ((int)(((byte)(160)))));
 			this.loginButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(105)))), ((int)(((byte)(225)))), ((int)(((byte)(190)))));

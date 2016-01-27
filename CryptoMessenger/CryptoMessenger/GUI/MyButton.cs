@@ -21,7 +21,7 @@ namespace CryptoMessenger.GUI
 
         protected override void OnPaint(PaintEventArgs pe)
         {
-            base.OnPaint(pe);
-        }
-    }
+			base.OnPaint(pe);
+		}
+	}
 }

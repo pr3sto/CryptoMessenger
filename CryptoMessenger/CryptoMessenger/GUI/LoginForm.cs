@@ -127,6 +127,11 @@ namespace CryptoMessenger.GUI
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.UNKNOWN_ERROR;
 				}
+				else if (LoginRegisterResponse.ALREADY_LOGIN.Equals(response))
+				{
+					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
+					notificationLabel.Text = Properties.Resources.ALREADY_LOGIN_NOTIFICATION;
+				}
 
 				EnableInterface();
 			}
@@ -225,6 +230,7 @@ namespace CryptoMessenger.GUI
 		// disable components when waiting for login/register
 		private void DisableInterface()
 		{
+			this.Cursor = Cursors.AppStarting;
 			loginButton.Enabled = false;
 			loginButton.Update();
 			registerButton.Enabled = false;
@@ -237,6 +243,7 @@ namespace CryptoMessenger.GUI
 		// enable components after login/register
 		private void EnableInterface()
 		{
+			this.Cursor = Cursors.Default;
 			userNamePanel.Refresh();
 			userPasswordPanel.Refresh();
 			loginButton.Enabled = true;
