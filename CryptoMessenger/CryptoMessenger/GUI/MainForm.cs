@@ -18,11 +18,11 @@ namespace CryptoMessenger.GUI
 
         // shadow around window
         private Dropshadow shadow;
-		// selected panel
+		// whitch panel selected now
 		private UsersPanels selectedPanel;
 
 		// 'cache' 
-		// We dont ask server for it if we have in cache;
+		// We dont ask server for it if we have it in cache;
 		// server sends it to us if something changes.
 		public string[] cache_friends = null;
 		public string[] cache_income_reqs = null;
@@ -52,7 +52,7 @@ namespace CryptoMessenger.GUI
 			selectedPanel = UsersPanels.FRIENDS;
         }
 
-		// send request to server to update listboxes
+		// update listboxes
 		private void UpdateUserPanel(object sender, EventArgs e)
 		{
 			Label label = (Label)sender;
@@ -90,11 +90,16 @@ namespace CryptoMessenger.GUI
 				loadingLabel.Visible = true;
 
 				// if we dont have it in cache ask server for it
-				if (cache_income_reqs == null && cache_outcome_reqs == null)
-					client.GetFriendshipRequests();
+				if (cache_income_reqs == null)
+					client.GetIncomeFriendshipRequests();
 				else
-					UpdateFriendshipRequests(cache_income_reqs, cache_outcome_reqs);
-				
+					UpdateIncomeFriendshipRequests(cache_income_reqs);
+
+				// if we dont have it in cache ask server for it
+				if (cache_outcome_reqs == null)
+					client.GetOutcomeFriendshipRequests();
+				else
+					UpdateOutcomeFriendshipRequests(cache_outcome_reqs);
 			}
 		}
 

@@ -11,6 +11,9 @@ using MessageTypes;
 
 namespace Server
 {
+	/// <summary>
+	/// Server side code.
+	/// </summary>
 	class Server
 	{
 		// port number
@@ -20,10 +23,10 @@ namespace Server
 		// active tasks
 		private List<Task> activeTasks;
 		// is server started listening to clients
-		private bool IsStarted;
+		private bool isStarted;
 
 		// handler of online users
-		OnlineUsersHandler usersHandler;
+		private OnlineUsersHandler usersHandler;
 
 		/// <summary>
 		/// Initialize server, that listen to clients.
@@ -33,7 +36,7 @@ namespace Server
 			this.port = port;
 			activeTasks = new List<Task>();
 			usersHandler = new OnlineUsersHandler();
-			IsStarted = false;
+			isStarted = false;
 		}
 
 		/// <summary>
@@ -41,11 +44,11 @@ namespace Server
 		/// </summary>
 		public async void Start()
 		{
-			if (IsStarted) return;
+			if (isStarted) return;
 
 			listener = TcpListener.Create(port);
 			listener.Start();
-			IsStarted = true;
+			isStarted = true;
 
 			Console.WriteLine("Server is now listening.");
 
@@ -79,7 +82,7 @@ namespace Server
 			Task.WaitAll(activeTasks.ToArray());
 
 			Console.WriteLine("Server is now stopped listening.");
-			IsStarted = false;
+			isStarted = false;
 		}
 
 		/// <summary>
@@ -87,7 +90,7 @@ namespace Server
 		/// </summary>
 		public void Stop()
 		{
-			if (!IsStarted) return;
+			if (!isStarted) return;
 
 			usersHandler.Dispose();
 			listener.Stop();

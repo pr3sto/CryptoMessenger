@@ -7,6 +7,9 @@ using MessageTypes;
 
 namespace Server
 {
+	/// <summary>
+	/// Contains methods to communicate with client.
+	/// </summary>
 	class ClientConnection
 	{
 		/// <summary>

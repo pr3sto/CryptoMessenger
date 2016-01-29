@@ -36,7 +36,8 @@ namespace MessageTypes
 	[XmlInclude(typeof(RegisterRequestMessage))]
 	[XmlInclude(typeof(GetAllUsersRequestMessage))]
 	[XmlInclude(typeof(GetFriendsRequestMessage))]
-	[XmlInclude(typeof(GetFriendshipReqsRequestMessage))]
+	[XmlInclude(typeof(GetIncomeFriendshipReqsRequestMessage))]
+	[XmlInclude(typeof(GetOutcomeFriendshipReqsRequestMessage))]
 	[XmlInclude(typeof(FriendshipReqRequestMessage))]
 	[XmlInclude(typeof(FriendActionRequestMessage))]
 	public abstract class RequestMessage
@@ -94,16 +95,24 @@ namespace MessageTypes
 
 	/// <summary>
 	/// Message, that client send to server 
-	/// to get friendship requests.
+	/// to get income friendship requests.
 	/// </summary>
 	[Serializable]
-	public class GetFriendshipReqsRequestMessage : RequestMessage
+	public class GetIncomeFriendshipReqsRequestMessage : RequestMessage
 	{
 	}
 
 	/// <summary>
 	/// Message, that client send to server 
-	/// with friendship request.
+	/// to get outcome friendship requests.
+	/// </summary>
+	[Serializable]
+	public class GetOutcomeFriendshipReqsRequestMessage : RequestMessage
+	{
+	}
+
+	/// <summary>
+	/// Message with friendship request.
 	/// </summary>
 	[Serializable]
 	public class FriendshipReqRequestMessage : RequestMessage
@@ -112,8 +121,7 @@ namespace MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
-	/// to get friends requests.
+	/// Message with action.
 	/// </summary>
 	[Serializable]
 	public class FriendActionRequestMessage : RequestMessage
@@ -134,7 +142,8 @@ namespace MessageTypes
 	[XmlInclude(typeof(RegisterResponseMessage))]
 	[XmlInclude(typeof(GetAllUsersResponseMessage))]
 	[XmlInclude(typeof(GetFriendsResponseMessage))]
-	[XmlInclude(typeof(GetFriendsReqsResponseMessage))]
+	[XmlInclude(typeof(GetIncomeFriendshipReqsResponseMessage))]
+	[XmlInclude(typeof(GetOutcomeFriendshipReqsResponseMessage))]
 	public abstract class ResponseMessage
 	{
 	}
@@ -178,13 +187,21 @@ namespace MessageTypes
 	}
 
 	/// <summary>
-	/// Message with friends requests.
+	/// Message with income friendship requests.
 	/// </summary>
 	[Serializable]
-	public class GetFriendsReqsResponseMessage : ResponseMessage
+	public class GetIncomeFriendshipReqsResponseMessage : ResponseMessage
 	{
-		public string[] outcome_requests;
-		public string[] income_requests;
+		public string[] logins;
+	}
+
+	/// <summary>
+	/// Message with outcome friendship requests.
+	/// </summary>
+	[Serializable]
+	public class GetOutcomeFriendshipReqsResponseMessage : ResponseMessage
+	{
+		public string[] logins;
 	}
 
 	#endregion

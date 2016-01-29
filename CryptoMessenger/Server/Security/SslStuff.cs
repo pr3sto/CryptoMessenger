@@ -28,6 +28,10 @@ namespace Server.Security
 		}
 	}
 
+	/// <summary>
+	/// Things needed for organizing ssl stream 
+	/// between client and server.
+	/// </summary>
 	class SslStuff
 	{
 		/// <summary>

@@ -32,6 +32,9 @@ namespace CryptoMessenger.Net
 		}
 	}
 
+	/// <summary>
+	/// Client side code.
+	/// </summary>
 	public class Client
 	{
 		// server's port 
@@ -77,7 +80,7 @@ namespace CryptoMessenger.Net
 					// wait for message
 					ResponseMessage message = await ReceiveMessage();
 
-					// process message
+					// handle message
 					if (message is GetAllUsersResponseMessage)
 					{
 						string[] users = ((GetAllUsersResponseMessage)message).users;
@@ -88,11 +91,15 @@ namespace CryptoMessenger.Net
 						form.cache_friends = ((GetFriendsResponseMessage)message).friends;
 						form.UpdateFriendsList(form.cache_friends);
 					}
-					else if (message is GetFriendsReqsResponseMessage)
+					else if (message is GetIncomeFriendshipReqsResponseMessage)
 					{
-						form.cache_income_reqs = ((GetFriendsReqsResponseMessage)message).income_requests;
-						form.cache_outcome_reqs = ((GetFriendsReqsResponseMessage)message).outcome_requests;
-						form.UpdateFriendshipRequests(form.cache_income_reqs, form.cache_outcome_reqs);
+						form.cache_income_reqs = ((GetIncomeFriendshipReqsResponseMessage)message).logins;
+						form.UpdateIncomeFriendshipRequests(form.cache_income_reqs);
+					}
+					else if (message is GetOutcomeFriendshipReqsResponseMessage)
+					{
+						form.cache_outcome_reqs = ((GetOutcomeFriendshipReqsResponseMessage)message).logins;
+						form.UpdateOutcomeFriendshipRequests(form.cache_outcome_reqs);
 					}
 				}
 			}
@@ -122,6 +129,7 @@ namespace CryptoMessenger.Net
 			};
 
 			SendMessage(message);
+			// async wait for server's response
 			LoginResponseMessage serverResp = (LoginResponseMessage)await ReceiveMessage();
 
 			// don't disconnect if login success
@@ -167,6 +175,7 @@ namespace CryptoMessenger.Net
 			};
 
 			SendMessage(message);
+			// async wait for server's response
 			RegisterResponseMessage serverResp = (RegisterResponseMessage)await ReceiveMessage();
 			
 			Disconnect();
@@ -193,12 +202,21 @@ namespace CryptoMessenger.Net
 		}
 
 		/// <summary>
-		/// Get arrays of friendship requests from server;
+		/// Get array of income friendship requests from server;
 		/// listener should recieve response message.
 		/// </summary>
-		public void GetFriendshipRequests()
+		public void GetIncomeFriendshipRequests()
 		{
-			SendMessage(new GetFriendshipReqsRequestMessage());
+			SendMessage(new GetIncomeFriendshipReqsRequestMessage());
+		}
+
+		/// <summary>
+		/// Get array of outcome friendship requests from server;
+		/// listener should recieve response message.
+		/// </summary>
+		public void GetOutcomeFriendshipRequests()
+		{
+			SendMessage(new GetOutcomeFriendshipReqsRequestMessage());
 		}
 
 		/// <summary>

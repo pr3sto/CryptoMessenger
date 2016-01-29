@@ -145,9 +145,13 @@ namespace Server
 					{
 						SendFriends(user);
 					}
-					else if (message is GetFriendshipReqsRequestMessage)
+					else if (message is GetIncomeFriendshipReqsRequestMessage)
 					{
-						SendFriendshipRequests(user);
+						SendIncomeFriendshipRequests(user);
+					}
+					else if (message is GetOutcomeFriendshipReqsRequestMessage)
+					{
+						SendOutcomeFriendshipRequests(user);
 					}
 					else if (message is FriendshipReqRequestMessage)
 					{
@@ -157,21 +161,20 @@ namespace Server
 					{
 						FriendActionRequestMessage msg = (FriendActionRequestMessage)message;
 
-						if (ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST.Equals(msg.action))
+						switch (msg.action)
 						{
-							CancelFriendshipRequest(user, msg.friends_login);
-						}
-						else if (ActionsWithFriend.ACCEPT_FRIENDSHIP.Equals(msg.action))
-						{
-							AcceptFriendshipRequest(user, msg.friends_login);
-						}
-						else if (ActionsWithFriend.REJECT_FRIENDSHIP.Equals(msg.action))
-						{
-							RejectFriendshipRequest(user, msg.friends_login);
-						}
-						else if (ActionsWithFriend.REMOVE_FROM_FRIENDS.Equals(msg.action))
-						{
-							RemoveFriend(user, msg.friends_login);
+							case ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST:
+								CancelFriendshipRequest(user, msg.friends_login);
+								break;
+							case ActionsWithFriend.ACCEPT_FRIENDSHIP:
+								AcceptFriendshipRequest(user, msg.friends_login);
+								break;
+							case ActionsWithFriend.REJECT_FRIENDSHIP:
+								RejectFriendshipRequest(user, msg.friends_login);
+								break;
+							case ActionsWithFriend.REMOVE_FROM_FRIENDS:
+								RemoveFriend(user, msg.friends_login);
+								break;
 						}
 					}
 				}
@@ -207,9 +210,9 @@ namespace Server
 		private void SendAllUsers(OnlineUser user)
 		{
 			string[] all_users = DBoperations.GetAllUsers();
-			string[] income_requests = DBoperations.GetIncomeFriendshipRequests(user.login);
-			string[] outcome_requests = DBoperations.GetOutcomeFriendshipRequests(user.login);
-			string[] friends = DBoperations.GetFriends(user.login);
+			string[] income_requests = DBoperations.GetIncomeFriendshipRequests(user.id);
+			string[] outcome_requests = DBoperations.GetOutcomeFriendshipRequests(user.id);
+			string[] friends = DBoperations.GetFriends(user.id);
 
 			string[] users = all_users.Where(x =>
 				!income_requests.Contains(x) & 
@@ -232,21 +235,33 @@ namespace Server
 		{
 			GetFriendsResponseMessage response = new GetFriendsResponseMessage
 			{
-				friends = DBoperations.GetFriends(user.login)
+				friends = DBoperations.GetFriends(user.id)
 			};
 			ClientConnection.SendMessage(user.sslStream, response);
 		}
 
 		/// <summary>
-		/// Send arrays of friendship requests to user.
+		/// Send array of income friendship requests to user.
 		/// </summary>
 		/// <param name="user">user.</param>
-		private void SendFriendshipRequests(OnlineUser user)
+		private void SendIncomeFriendshipRequests(OnlineUser user)
 		{
-			GetFriendsReqsResponseMessage response = new GetFriendsReqsResponseMessage
+			GetIncomeFriendshipReqsResponseMessage response = new GetIncomeFriendshipReqsResponseMessage
 			{
-				income_requests = DBoperations.GetIncomeFriendshipRequests(user.login),
-				outcome_requests = DBoperations.GetOutcomeFriendshipRequests(user.login)
+				logins = DBoperations.GetIncomeFriendshipRequests(user.id)
+			};
+			ClientConnection.SendMessage(user.sslStream, response);
+		}
+
+		/// <summary>
+		/// Send array of outcome friendship requests to user.
+		/// </summary>
+		/// <param name="user">user.</param>
+		private void SendOutcomeFriendshipRequests(OnlineUser user)
+		{
+			GetOutcomeFriendshipReqsResponseMessage response = new GetOutcomeFriendshipReqsResponseMessage
+			{
+				logins = DBoperations.GetOutcomeFriendshipRequests(user.id)
 			};
 			ClientConnection.SendMessage(user.sslStream, response);
 		}
@@ -258,15 +273,18 @@ namespace Server
 		/// <param name="friends_login">friend's login.</param>
 		private void SetFriendshipRequest(OnlineUser user, string friends_login)
 		{
+			int friends_id = DBoperations.GetUserId(friends_login);
+			if (friends_id == 0) return;
+
 			// set friendship request
-			if (DBoperations.SetFriendship(false, user.login, friends_login))
+			if (DBoperations.SetFriendship(false, user.id, friends_id))
 			{
 				// send new lists to user one
 				SendAllUsers(user);
-				SendFriendshipRequests(user);
+				SendOutcomeFriendshipRequests(user);
 				// send new lists to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
-				if (friend != null) SendFriendshipRequests(friend);
+				if (friend != null) SendIncomeFriendshipRequests(friend);
 			}
 		}
 
@@ -277,13 +295,16 @@ namespace Server
 		/// <param name="friends_login">friend's login.</param>
 		private void CancelFriendshipRequest(OnlineUser user, string friends_login)
 		{
-			if (DBoperations.RemoveFriendshipRequest(user.login, friends_login))
+			int friends_id = DBoperations.GetUserId(friends_login);
+			if (friends_id == 0) return;
+
+			if (DBoperations.RemoveFriendshipRequest(user.id, friends_id))
 			{
 				// send new lists to user one
-				SendFriendshipRequests(user);
+				SendOutcomeFriendshipRequests(user);
 				// send new lists to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
-				if (friend != null) SendFriendshipRequests(friend);
+				if (friend != null) SendIncomeFriendshipRequests(friend);
 			}
 		}
 
@@ -294,16 +315,19 @@ namespace Server
 		/// <param name="friends_login">friend's login.</param>
 		private void AcceptFriendshipRequest(OnlineUser user, string friends_login)
 		{
-			if (DBoperations.SetFriendship(true, friends_login, user.login))
+			int friends_id = DBoperations.GetUserId(friends_login);
+			if (friends_id == 0) return;
+
+			if (DBoperations.SetFriendship(true, friends_id, user.id))
 			{
 				// send new lists to user one
-				SendFriendshipRequests(user);
+				SendIncomeFriendshipRequests(user);
 				SendFriends(user);
 				// send new lists to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
 				if (friend != null)
 				{
-					SendFriendshipRequests(friend);
+					SendOutcomeFriendshipRequests(friend);
 					SendFriends(friend);
 				}
 			}
@@ -316,13 +340,16 @@ namespace Server
 		/// <param name="friends_login">friend's login.</param>
 		private void RejectFriendshipRequest(OnlineUser user, string friends_login)
 		{
-			if (DBoperations.RemoveFriendshipRequest(friends_login, user.login))
+			int friends_id = DBoperations.GetUserId(friends_login);
+			if (friends_id == 0) return;
+
+			if (DBoperations.RemoveFriendshipRequest(friends_id, user.id))
 			{
 				// send new lists to user one
-				SendFriendshipRequests(user);
+				SendIncomeFriendshipRequests(user);
 				// send new lists to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
-				if (friend != null) SendFriendshipRequests(friend);
+				if (friend != null) SendOutcomeFriendshipRequests(friend);
 			}
 		}
 
@@ -333,7 +360,10 @@ namespace Server
 		/// <param name="friends_login">friend's login.</param>
 		private void RemoveFriend(OnlineUser user, string friends_login)
 		{
-			if (DBoperations.RemoveFriend(user.login, friends_login))
+			int friends_id = DBoperations.GetUserId(friends_login);
+			if (friends_id == 0) return;
+
+			if (DBoperations.RemoveFriend(user.id, friends_id))
 			{
 				// send new friends list to user one
 				SendFriends(user);

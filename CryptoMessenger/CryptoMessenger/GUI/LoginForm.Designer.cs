@@ -376,7 +376,7 @@ namespace CryptoMessenger.GUI
 			this.showPasswordCheckBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.showPasswordCheckBox.Checked = true;
 			this.showPasswordCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.showPasswordCheckBox.Cursor = System.Windows.Forms.Cursors.Default;
+			this.showPasswordCheckBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.showPasswordCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.showPasswordCheckBox.Font = new System.Drawing.Font("Roboto Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.showPasswordCheckBox.ForeColor = System.Drawing.SystemColors.GrayText;

@@ -4,6 +4,9 @@ using System.Drawing.Text;
 
 namespace CryptoMessenger.Stuff
 {
+	/// <summary>
+	/// Contains methods to create fonts.
+	/// </summary>
 	class FontFactory
 	{
 		internal class NativeMethods

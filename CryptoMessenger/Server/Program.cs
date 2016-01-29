@@ -4,6 +4,9 @@ namespace Server
 {
 	class Program
 	{
+		/// <summary>
+		/// The main entry point for the server application.
+		/// </summary>
 		static void Main(string[] args)
 		{
 			Console.Title = "Server";
@@ -13,10 +16,10 @@ namespace Server
 
 			// commands
 			Console.WriteLine("Server is running.");
-			Console.WriteLine("===============");
+			Console.WriteLine("==================");
 			Console.WriteLine("Commands:");
 			Console.WriteLine("start - Start listening to clients.");
-			Console.WriteLine("stop - Stop listening to clients and wait for processing clients.");
+			Console.WriteLine("stop - Stop listening to clients.");
 			Console.WriteLine("exit - Close server.");
 			Console.WriteLine();
 

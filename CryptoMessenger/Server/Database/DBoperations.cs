@@ -4,8 +4,32 @@ using System.Linq;
 
 namespace Server.Database
 {
+	/// <summary>
+	/// Operations with database.
+	/// </summary>
 	class DBoperations
 	{
+		/// <summary>
+		/// Get id of user by his login.
+		/// </summary>
+		/// <param name="login">user's login.</param>
+		/// <returns>user's id.</returns>
+		public static int GetUserId(string login)
+		{
+			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			{
+				var user_id =
+					from user in DBcontext.Users
+					where user.login == login
+					select user.user_id;
+
+				if (user_id.Any())
+					return user_id.First();
+				else
+					return 0;
+			}
+		}
+
 		/// <summary>
 		/// Do login.
 		/// </summary>
@@ -114,22 +138,12 @@ namespace Server.Database
 		/// <summary>
 		/// Get friends from database.
 		/// </summary>
+		/// <param name="id">user's id</param>
 		/// <returns>array with friends.</returns>
-		public static string[] GetFriends(string login)
+		public static string[] GetFriends(int id)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
-				var user_id =
-					from user in DBcontext.Users
-					where user.login == login
-					select user.user_id;
-
-				// user not found
-				if (!user_id.Any()) return null;
-
-				// user id
-				int id = user_id.First();
-
 				// select friends
 				var data =
 					from friendship in DBcontext.Friends
@@ -165,35 +179,19 @@ namespace Server.Database
 		/// Add or update friendship in database.
 		/// </summary>
 		/// <param name="accepted">is friendship request accepted.</param>
-		/// <param name="user_one">user one login.</param>
-		/// <param name="user_two">user two login.</param>
+		/// <param name="user_one_id">user one id.</param>
+		/// <param name="user_two_id">user two id.</param>
 		/// <returns>true, if operations success.</returns>
-		public static bool SetFriendship(bool accepted, string user_one, string user_two)
+		public static bool SetFriendship(bool accepted, int user_one_id, int user_two_id)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
-				var user_one_id =
-					from user in DBcontext.Users
-					where user.login == user_one
-					select user.user_id;
-
-				// user not found
-				if (!user_one_id.Any()) return false;
-
-				var user_two_id =
-					from user in DBcontext.Users
-					where user.login == user_two
-					select user.user_id;
-
-				// user not found
-				if (!user_two_id.Any()) return false;
-
 				var data =
 					from friendship in DBcontext.Friends
-					where (friendship.friend_one == user_one_id.First() &
-					friendship.friend_two == user_two_id.First()) |
-					(friendship.friend_two == user_one_id.First() &
-					friendship.friend_one == user_two_id.First())
+					where (friendship.friend_one == user_one_id &
+					friendship.friend_two == user_two_id) |
+					(friendship.friend_two == user_one_id &
+					friendship.friend_one == user_two_id)
 					select friendship;
 
 				// already friends
@@ -213,8 +211,8 @@ namespace Server.Database
 					{
 						Friendship f = new Friendship
 						{
-							friend_one = user_one_id.First(),
-							friend_two = user_two_id.First(),
+							friend_one = user_one_id,
+							friend_two = user_two_id,
 							accepted = accepted
 						};
 						DBcontext.Friends.InsertOnSubmit(f);
@@ -237,24 +235,16 @@ namespace Server.Database
 		/// <summary>
 		/// Get array of income friendship requests.
 		/// </summary>
-		/// <param name="login">user's login.</param>
+		/// <param name="id">user's id.</param>
 		/// <returns>array of income friendship requests.</returns>
-		public static string[] GetIncomeFriendshipRequests(string login)
+		public static string[] GetIncomeFriendshipRequests(int id)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
-				var user_id =
-					from user in DBcontext.Users
-					where user.login == login
-					select user.user_id;
-
-				// user not found
-				if (!user_id.Any()) return null;
-
 				// get friendsip requests
 				var data =
 					from friendship in DBcontext.Friends
-					where friendship.friend_two == user_id.First() &
+					where friendship.friend_two == id &
 					friendship.accepted == false
 					select friendship.friend_one;
 
@@ -262,11 +252,11 @@ namespace Server.Database
 
 				if (data.Any())
 				{
-					foreach (int id in data)
+					foreach (int uid in data)
 					{
 						var user_login =
 							from user in DBcontext.Users
-							where user.user_id == id
+							where user.user_id == uid
 							select user.login;
 
 						if (user_login.Any())
@@ -281,24 +271,16 @@ namespace Server.Database
 		/// <summary>
 		/// Get array of outcome friendship requests.
 		/// </summary>
-		/// <param name="login">user's login.</param>
+		/// <param name="id">user's id.</param>
 		/// <returns>array of outcome friendship requests.</returns>
-		public static string[] GetOutcomeFriendshipRequests(string login)
+		public static string[] GetOutcomeFriendshipRequests(int id)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
-				var user_id =
-					from user in DBcontext.Users
-					where user.login == login
-					select user.user_id;
-
-				// user not found
-				if (!user_id.Any()) return null;
-
 				// get friendsip requests
 				var data =
 					from friendship in DBcontext.Friends
-					where friendship.friend_one == user_id.First() &
+					where friendship.friend_one == id &
 					friendship.accepted == false
 					select friendship.friend_two;
 
@@ -306,11 +288,11 @@ namespace Server.Database
 
 				if (data.Any())
 				{	
-					foreach (int id in data)
+					foreach (int uid in data)
 					{
 						var user_login =
 							from user in DBcontext.Users
-							where user.user_id == id
+							where user.user_id == uid
 							select user.login;
 
 						if (user_login.Any())
@@ -325,33 +307,17 @@ namespace Server.Database
 		/// <summary>
 		/// Remove friendship request.
 		/// </summary>
-		/// <param name="user_one">user one login.</param>
-		/// <param name="user_two">user two login.</param>
+		/// <param name="user_one_id">user one id.</param>
+		/// <param name="user_two_id">user two id.</param>
 		/// <returns>true, if operations success.</returns>
-		public static bool RemoveFriendshipRequest(string user_one, string user_two)
+		public static bool RemoveFriendshipRequest(int user_one_id, int user_two_id)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
-				var user_one_id =
-					from user in DBcontext.Users
-					where user.login == user_one
-					select user.user_id;
-
-				// user not found
-				if (!user_one_id.Any()) return false;
-
-				var user_two_id =
-					from user in DBcontext.Users
-					where user.login == user_two
-					select user.user_id;
-
-				// user not found
-				if (!user_two_id.Any()) return false;
-
 				var data =
 					from friendship in DBcontext.Friends
-					where friendship.friend_one == user_one_id.First() &
-					friendship.friend_two == user_two_id.First()
+					where friendship.friend_one == user_one_id &
+					friendship.friend_two == user_two_id
 					select friendship;
 
 				foreach (var friendship in data)
@@ -375,36 +341,20 @@ namespace Server.Database
 		/// <summary>
 		/// Remove friend.
 		/// </summary>
-		/// <param name="user_one">user one login.</param>
-		/// <param name="user_two">user two login.</param>
+		/// <param name="user_one_id">user one id.</param>
+		/// <param name="user_two_id">user two id.</param>
 		/// <returns>true, if operations success.</returns>
-		public static bool RemoveFriend(string user_one, string user_two)
+		public static bool RemoveFriend(int user_one_id, int user_two_id)
 		{
 			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
 			{
-				var user_one_id =
-					from user in DBcontext.Users
-					where user.login == user_one
-					select user.user_id;
-
-				// user not found
-				if (!user_one_id.Any()) return false;
-
-				var user_two_id =
-					from user in DBcontext.Users
-					where user.login == user_two
-					select user.user_id;
-
-				// user not found
-				if (!user_two_id.Any()) return false;
-
 				var data =
 					from friendship in DBcontext.Friends
-					where (friendship.friend_one == user_one_id.First() &
-					friendship.friend_two == user_two_id.First() &
+					where (friendship.friend_one == user_one_id &
+					friendship.friend_two == user_two_id &
 					friendship.accepted == true) |
-					(friendship.friend_one == user_two_id.First() &
-					friendship.friend_two == user_one_id.First() &
+					(friendship.friend_one == user_two_id &
+					friendship.friend_two == user_one_id &
 					friendship.accepted == true)
 					select friendship;
 

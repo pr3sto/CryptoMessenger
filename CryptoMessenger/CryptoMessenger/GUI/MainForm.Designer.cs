@@ -434,8 +434,8 @@ namespace CryptoMessenger.GUI
 			}
 		}
 
-		// update friendship requests list box
-		public void UpdateFriendshipRequests(string[] income, string[] outcome)
+		// update income friendship requests list box
+		public void UpdateIncomeFriendshipRequests(string[] income)
 		{
 			if (UsersPanels.REQUESTS.Equals(selectedPanel))
 			{
@@ -443,10 +443,20 @@ namespace CryptoMessenger.GUI
 				if (income != null) incomeFriendshipRequestsListBox.Items.AddRange(income);
 				incomeFriendshipRequestsListBox.Update();
 
+				loadingLabel.Visible = false;
+				friendshipRequestsPanel.Visible = true;
+			}
+		}
+
+		// update outcome friendship requests list box
+		public void UpdateOutcomeFriendshipRequests(string[] outcome)
+		{
+			if (UsersPanels.REQUESTS.Equals(selectedPanel))
+			{
 				outcomeFriendshipRequestsListBox.Items.Clear();
 				if (outcome != null) outcomeFriendshipRequestsListBox.Items.AddRange(outcome);
 				outcomeFriendshipRequestsListBox.Update();
-				
+
 				OutcomeRequestsListBoxesSelectedChanged(null, EventArgs.Empty);
 
 				loadingLabel.Visible = false;
@@ -480,6 +490,7 @@ namespace CryptoMessenger.GUI
 
 		private async void AllUsersListBoxSelectedChanged(object sender, EventArgs e)
 		{
+			// show this text for some time
 			if ("ЗАЯВКА ОТПРАВЛЕНА".Equals(addFriendButton.Text))
 				await Task.Delay(TimeSpan.FromMilliseconds(800));
 
@@ -497,6 +508,7 @@ namespace CryptoMessenger.GUI
 
 		private async void FriendsListBoxSelectedChanged(object sender, EventArgs e)
 		{
+			// show this text for some time
 			if ("ПОЛЬЗОВАТЕЛЬ УДАЛЕН".Equals(removeFriendButton.Text))
 				await Task.Delay(TimeSpan.FromMilliseconds(800));
 
@@ -514,6 +526,7 @@ namespace CryptoMessenger.GUI
 
 		private async void OutcomeRequestsListBoxesSelectedChanged(object sender, EventArgs e)
 		{
+			// show this text for some time
 			if ("ЗАЯВКА ОТМЕНЕНА".Equals(cancelFriendshipRequestButton.Text) ||
 				"ЗАЯВКА ПРИНЯТА".Equals(cancelFriendshipRequestButton.Text) ||
 				"ЗАЯВКА ОТКЛОНЕНА".Equals(cancelFriendshipRequestButton.Text))
