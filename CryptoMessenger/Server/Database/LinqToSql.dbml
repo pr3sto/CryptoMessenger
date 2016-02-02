@@ -7,6 +7,9 @@
       <Column Name="password" Type="System.String" DbType="VarChar(70) NOT NULL" CanBeNull="false" />
       <Association Name="Users_Friends" Member="Friends" ThisKey="user_id" OtherKey="friend_one" Type="Friends" />
       <Association Name="Users_Friends1" Member="Friends1" ThisKey="user_id" OtherKey="friend_two" Type="Friends" />
+      <Association Name="Users_Conversations" Member="Conversations" ThisKey="user_id" OtherKey="user_one" Type="Conversations" />
+      <Association Name="Users_Conversations1" Member="Conversations1" ThisKey="user_id" OtherKey="user_two" Type="Conversations" />
+      <Association Name="Users_Conversation_replies" Member="Conversation_replies" ThisKey="user_id" OtherKey="user_id" Type="Conversation_replies" />
     </Type>
   </Table>
   <Table Name="dbo.Friends" Member="Friends">
@@ -16,6 +19,27 @@
       <Column Name="accepted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Users_Friends" Member="Users" ThisKey="friend_one" OtherKey="user_id" Type="Users" IsForeignKey="true" />
       <Association Name="Users_Friends1" Member="Users1" ThisKey="friend_two" OtherKey="user_id" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Conversations" Member="Conversations">
+    <Type Name="Conversations">
+      <Column Name="conversation_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="user_one" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="user_two" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Conversations_Conversation_replies" Member="Conversation_replies" ThisKey="conversation_id" OtherKey="conversation_id" Type="Conversation_replies" />
+      <Association Name="Users_Conversations" Member="Users" ThisKey="user_one" OtherKey="user_id" Type="Users" IsForeignKey="true" />
+      <Association Name="Users_Conversations1" Member="Users1" ThisKey="user_two" OtherKey="user_id" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Conversation_replies" Member="Conversation_replies">
+    <Type Name="Conversation_replies">
+      <Column Name="reply_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="reply" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="conversation_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="time" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Conversations_Conversation_replies" Member="Conversations" ThisKey="conversation_id" OtherKey="conversation_id" Type="Conversations" IsForeignKey="true" />
+      <Association Name="Users_Conversation_replies" Member="Users" ThisKey="user_id" OtherKey="user_id" Type="Users" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

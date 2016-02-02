@@ -14,18 +14,58 @@
         <elementListCompartment Id="01fbc0bc-9c9a-43df-b0b6-d55ee298a72c" absoluteBounds="5.015, 1.46, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3.875 : 1.56775024414062); (5 : 1.56775024414062)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.875 : 1.56775024414062); (5 : 1.56775024414062)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqToSqlDataContext/Users/Users_Friends" />
       <nodes>
         <classShapeMoniker Id="5795b501-e549-4914-a679-36a833655378" />
         <classShapeMoniker Id="9cd4e51d-8e17-4051-aeaf-f66d734d89be" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(3.875 : 1.22137512207031); (5 : 1.22137512207031)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.875 : 1.22137512207031); (5 : 1.22137512207031)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqToSqlDataContext/Users/Users_Friends1" />
       <nodes>
         <classShapeMoniker Id="5795b501-e549-4914-a679-36a833655378" />
         <classShapeMoniker Id="9cd4e51d-8e17-4051-aeaf-f66d734d89be" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="09c87016-7dc6-42ed-b6ab-07ef64c2b35f" absoluteBounds="1.875, 3.125, 2, 1.26050048828125">
+      <DataClassMoniker Name="/LinqToSqlDataContext/Conversations" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b4ca8c90-0199-4861-bc13-96ba82f54b04" absoluteBounds="1.8900000000000001, 3.585, 1.9700000000000002, 0.70050048828125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.59375 : 2.13550048828125); (2.59375 : 3.125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/LinqToSqlDataContext/Users/Users_Conversations" />
+      <nodes>
+        <classShapeMoniker Id="5795b501-e549-4914-a679-36a833655378" />
+        <classShapeMoniker Id="09c87016-7dc6-42ed-b6ab-07ef64c2b35f" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(3.4375 : 2.13550048828125); (3.4375 : 3.125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/LinqToSqlDataContext/Users/Users_Conversations1" />
+      <nodes>
+        <classShapeMoniker Id="5795b501-e549-4914-a679-36a833655378" />
+        <classShapeMoniker Id="09c87016-7dc6-42ed-b6ab-07ef64c2b35f" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="155791e6-4d4a-44a3-9121-16edc591ea02" absoluteBounds="5, 2.875, 2, 1.5891951497395831">
+      <DataClassMoniker Name="/LinqToSqlDataContext/Conversation_replies" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4503a92b-4c0d-4531-8ad9-935ab1524832" absoluteBounds="5.015, 3.335, 1.9700000000000002, 1.0291951497395833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.875 : 3.75525024414063); (5 : 3.75525024414063)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/LinqToSqlDataContext/Conversations/Conversations_Conversation_replies" />
+      <nodes>
+        <classShapeMoniker Id="09c87016-7dc6-42ed-b6ab-07ef64c2b35f" />
+        <classShapeMoniker Id="155791e6-4d4a-44a3-9121-16edc591ea02" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(3.875 : 2.13550048828125); (4.25 : 2.51050048828125); (4.25 : 3.28387312207031); (5 : 3.28387312207031)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/LinqToSqlDataContext/Users/Users_Conversation_replies" />
+      <nodes>
+        <classShapeMoniker Id="5795b501-e549-4914-a679-36a833655378" />
+        <classShapeMoniker Id="155791e6-4d4a-44a3-9121-16edc591ea02" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

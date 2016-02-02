@@ -36,6 +36,12 @@ namespace Server.Database
     partial void InsertFriends(Friendship instance);
     partial void UpdateFriends(Friendship instance);
     partial void DeleteFriends(Friendship instance);
+    partial void InsertConversations(Conversation instance);
+    partial void UpdateConversations(Conversation instance);
+    partial void DeleteConversations(Conversation instance);
+    partial void InsertConversation_replies(ConversationReply instance);
+    partial void UpdateConversation_replies(ConversationReply instance);
+    partial void DeleteConversation_replies(ConversationReply instance);
     #endregion
 		
 		public LinqToSqlDataContext() : 
@@ -83,6 +89,22 @@ namespace Server.Database
 				return this.GetTable<Friendship>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Conversation> Conversations
+		{
+			get
+			{
+				return this.GetTable<Conversation>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ConversationReply> Conversation_replies
+		{
+			get
+			{
+				return this.GetTable<ConversationReply>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Users")]
@@ -101,6 +123,12 @@ namespace Server.Database
 		
 		private EntitySet<Friendship> _Friends1;
 		
+		private EntitySet<Conversation> _Conversations;
+		
+		private EntitySet<Conversation> _Conversations1;
+		
+		private EntitySet<ConversationReply> _Conversation_replies;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -117,6 +145,9 @@ namespace Server.Database
 		{
 			this._Friends = new EntitySet<Friendship>(new Action<Friendship>(this.attach_Friends), new Action<Friendship>(this.detach_Friends));
 			this._Friends1 = new EntitySet<Friendship>(new Action<Friendship>(this.attach_Friends1), new Action<Friendship>(this.detach_Friends1));
+			this._Conversations = new EntitySet<Conversation>(new Action<Conversation>(this.attach_Conversations), new Action<Conversation>(this.detach_Conversations));
+			this._Conversations1 = new EntitySet<Conversation>(new Action<Conversation>(this.attach_Conversations1), new Action<Conversation>(this.detach_Conversations1));
+			this._Conversation_replies = new EntitySet<ConversationReply>(new Action<ConversationReply>(this.attach_Conversation_replies), new Action<ConversationReply>(this.detach_Conversation_replies));
 			OnCreated();
 		}
 		
@@ -206,6 +237,45 @@ namespace Server.Database
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversations", Storage="_Conversations", ThisKey="user_id", OtherKey="user_one")]
+		public EntitySet<Conversation> Conversations
+		{
+			get
+			{
+				return this._Conversations;
+			}
+			set
+			{
+				this._Conversations.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversations1", Storage="_Conversations1", ThisKey="user_id", OtherKey="user_two")]
+		public EntitySet<Conversation> Conversations1
+		{
+			get
+			{
+				return this._Conversations1;
+			}
+			set
+			{
+				this._Conversations1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversation_replies", Storage="_Conversation_replies", ThisKey="user_id", OtherKey="user_id")]
+		public EntitySet<ConversationReply> Conversation_replies
+		{
+			get
+			{
+				return this._Conversation_replies;
+			}
+			set
+			{
+				this._Conversation_replies.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -248,6 +318,42 @@ namespace Server.Database
 		{
 			this.SendPropertyChanging();
 			entity.Users1 = null;
+		}
+		
+		private void attach_Conversations(Conversation entity)
+		{
+			this.SendPropertyChanging();
+			entity.Users = this;
+		}
+		
+		private void detach_Conversations(Conversation entity)
+		{
+			this.SendPropertyChanging();
+			entity.Users = null;
+		}
+		
+		private void attach_Conversations1(Conversation entity)
+		{
+			this.SendPropertyChanging();
+			entity.Users1 = this;
+		}
+		
+		private void detach_Conversations1(Conversation entity)
+		{
+			this.SendPropertyChanging();
+			entity.Users1 = null;
+		}
+		
+		private void attach_Conversation_replies(ConversationReply entity)
+		{
+			this.SendPropertyChanging();
+			entity.Users = this;
+		}
+		
+		private void detach_Conversation_replies(ConversationReply entity)
+		{
+			this.SendPropertyChanging();
+			entity.Users = null;
 		}
 	}
 	
@@ -418,6 +524,466 @@ namespace Server.Database
 						this._friend_two = default(int);
 					}
 					this.SendPropertyChanged("Users1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Conversations")]
+	public partial class Conversation : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _conversation_id;
+		
+		private int _user_one;
+		
+		private int _user_two;
+		
+		private EntitySet<ConversationReply> _Conversation_replies;
+		
+		private EntityRef<User> _Users;
+		
+		private EntityRef<User> _Users1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onconversation_idChanging(int value);
+    partial void Onconversation_idChanged();
+    partial void Onuser_oneChanging(int value);
+    partial void Onuser_oneChanged();
+    partial void Onuser_twoChanging(int value);
+    partial void Onuser_twoChanged();
+    #endregion
+		
+		public Conversation()
+		{
+			this._Conversation_replies = new EntitySet<ConversationReply>(new Action<ConversationReply>(this.attach_Conversation_replies), new Action<ConversationReply>(this.detach_Conversation_replies));
+			this._Users = default(EntityRef<User>);
+			this._Users1 = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_conversation_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int conversation_id
+		{
+			get
+			{
+				return this._conversation_id;
+			}
+			set
+			{
+				if ((this._conversation_id != value))
+				{
+					this.Onconversation_idChanging(value);
+					this.SendPropertyChanging();
+					this._conversation_id = value;
+					this.SendPropertyChanged("conversation_id");
+					this.Onconversation_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_one", DbType="Int NOT NULL")]
+		public int user_one
+		{
+			get
+			{
+				return this._user_one;
+			}
+			set
+			{
+				if ((this._user_one != value))
+				{
+					if (this._Users.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onuser_oneChanging(value);
+					this.SendPropertyChanging();
+					this._user_one = value;
+					this.SendPropertyChanged("user_one");
+					this.Onuser_oneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_two", DbType="Int NOT NULL")]
+		public int user_two
+		{
+			get
+			{
+				return this._user_two;
+			}
+			set
+			{
+				if ((this._user_two != value))
+				{
+					if (this._Users1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onuser_twoChanging(value);
+					this.SendPropertyChanging();
+					this._user_two = value;
+					this.SendPropertyChanged("user_two");
+					this.Onuser_twoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Conversations_Conversation_replies", Storage="_Conversation_replies", ThisKey="conversation_id", OtherKey="conversation_id")]
+		public EntitySet<ConversationReply> Conversation_replies
+		{
+			get
+			{
+				return this._Conversation_replies;
+			}
+			set
+			{
+				this._Conversation_replies.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversations", Storage="_Users", ThisKey="user_one", OtherKey="user_id", IsForeignKey=true)]
+		public User Users
+		{
+			get
+			{
+				return this._Users.Entity;
+			}
+			set
+			{
+				User previousValue = this._Users.Entity;
+				if (((previousValue != value) 
+							|| (this._Users.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Users.Entity = null;
+						previousValue.Conversations.Remove(this);
+					}
+					this._Users.Entity = value;
+					if ((value != null))
+					{
+						value.Conversations.Add(this);
+						this._user_one = value.user_id;
+					}
+					else
+					{
+						this._user_one = default(int);
+					}
+					this.SendPropertyChanged("Users");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversations1", Storage="_Users1", ThisKey="user_two", OtherKey="user_id", IsForeignKey=true)]
+		public User Users1
+		{
+			get
+			{
+				return this._Users1.Entity;
+			}
+			set
+			{
+				User previousValue = this._Users1.Entity;
+				if (((previousValue != value) 
+							|| (this._Users1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Users1.Entity = null;
+						previousValue.Conversations1.Remove(this);
+					}
+					this._Users1.Entity = value;
+					if ((value != null))
+					{
+						value.Conversations1.Add(this);
+						this._user_two = value.user_id;
+					}
+					else
+					{
+						this._user_two = default(int);
+					}
+					this.SendPropertyChanged("Users1");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Conversation_replies(ConversationReply entity)
+		{
+			this.SendPropertyChanging();
+			entity.Conversations = this;
+		}
+		
+		private void detach_Conversation_replies(ConversationReply entity)
+		{
+			this.SendPropertyChanging();
+			entity.Conversations = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Conversation_replies")]
+	public partial class ConversationReply : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _reply_id;
+		
+		private string _reply;
+		
+		private int _conversation_id;
+		
+		private int _user_id;
+		
+		private System.DateTime _time;
+		
+		private EntityRef<Conversation> _Conversations;
+		
+		private EntityRef<User> _Users;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onreply_idChanging(int value);
+    partial void Onreply_idChanged();
+    partial void OnreplyChanging(string value);
+    partial void OnreplyChanged();
+    partial void Onconversation_idChanging(int value);
+    partial void Onconversation_idChanged();
+    partial void Onuser_idChanging(int value);
+    partial void Onuser_idChanged();
+    partial void OntimeChanging(System.DateTime value);
+    partial void OntimeChanged();
+    #endregion
+		
+		public ConversationReply()
+		{
+			this._Conversations = default(EntityRef<Conversation>);
+			this._Users = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reply_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int reply_id
+		{
+			get
+			{
+				return this._reply_id;
+			}
+			set
+			{
+				if ((this._reply_id != value))
+				{
+					this.Onreply_idChanging(value);
+					this.SendPropertyChanging();
+					this._reply_id = value;
+					this.SendPropertyChanged("reply_id");
+					this.Onreply_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reply", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string reply
+		{
+			get
+			{
+				return this._reply;
+			}
+			set
+			{
+				if ((this._reply != value))
+				{
+					this.OnreplyChanging(value);
+					this.SendPropertyChanging();
+					this._reply = value;
+					this.SendPropertyChanged("reply");
+					this.OnreplyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_conversation_id", DbType="Int NOT NULL")]
+		public int conversation_id
+		{
+			get
+			{
+				return this._conversation_id;
+			}
+			set
+			{
+				if ((this._conversation_id != value))
+				{
+					if (this._Conversations.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onconversation_idChanging(value);
+					this.SendPropertyChanging();
+					this._conversation_id = value;
+					this.SendPropertyChanged("conversation_id");
+					this.Onconversation_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_id", DbType="Int NOT NULL")]
+		public int user_id
+		{
+			get
+			{
+				return this._user_id;
+			}
+			set
+			{
+				if ((this._user_id != value))
+				{
+					if (this._Users.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onuser_idChanging(value);
+					this.SendPropertyChanging();
+					this._user_id = value;
+					this.SendPropertyChanged("user_id");
+					this.Onuser_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_time", DbType="SmallDateTime NOT NULL")]
+		public System.DateTime time
+		{
+			get
+			{
+				return this._time;
+			}
+			set
+			{
+				if ((this._time != value))
+				{
+					this.OntimeChanging(value);
+					this.SendPropertyChanging();
+					this._time = value;
+					this.SendPropertyChanged("time");
+					this.OntimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Conversations_Conversation_replies", Storage="_Conversations", ThisKey="conversation_id", OtherKey="conversation_id", IsForeignKey=true)]
+		public Conversation Conversations
+		{
+			get
+			{
+				return this._Conversations.Entity;
+			}
+			set
+			{
+				Conversation previousValue = this._Conversations.Entity;
+				if (((previousValue != value) 
+							|| (this._Conversations.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Conversations.Entity = null;
+						previousValue.Conversation_replies.Remove(this);
+					}
+					this._Conversations.Entity = value;
+					if ((value != null))
+					{
+						value.Conversation_replies.Add(this);
+						this._conversation_id = value.conversation_id;
+					}
+					else
+					{
+						this._conversation_id = default(int);
+					}
+					this.SendPropertyChanged("Conversations");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversation_replies", Storage="_Users", ThisKey="user_id", OtherKey="user_id", IsForeignKey=true)]
+		public User Users
+		{
+			get
+			{
+				return this._Users.Entity;
+			}
+			set
+			{
+				User previousValue = this._Users.Entity;
+				if (((previousValue != value) 
+							|| (this._Users.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Users.Entity = null;
+						previousValue.Conversation_replies.Remove(this);
+					}
+					this._Users.Entity = value;
+					if ((value != null))
+					{
+						value.Conversation_replies.Add(this);
+						this._user_id = value.user_id;
+					}
+					else
+					{
+						this._user_id = default(int);
+					}
+					this.SendPropertyChanged("Users");
 				}
 			}
 		}
