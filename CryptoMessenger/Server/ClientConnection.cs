@@ -17,11 +17,11 @@ namespace Server
 		/// </summary>
 		/// <param name="sslStream">stream with client.</param>
 		/// <param name="message">client's message.</param>
-		public static void SendMessage(SslStream sslStream, ResponseMessage message)
+		public static void SendMessage(SslStream sslStream, Message message)
 		{
 			try
 			{
-				XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
+				XmlSerializer responseSerializer = new XmlSerializer(typeof(Message));
 				responseSerializer.Serialize(sslStream, message);
 			}
 			catch
@@ -36,15 +36,15 @@ namespace Server
 		/// <param name="client">tcp client.</param>
 		/// <param name="sslStream">stream with client.</param>
 		/// <returns>client's message.</returns>
-		public static RequestMessage ReceiveMessage(TcpClient client, SslStream sslStream)
+		public static Message ReceiveMessage(TcpClient client, SslStream sslStream)
 		{
-			XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
+			XmlSerializer requestSerializer = new XmlSerializer(typeof(Message));
 
 			byte[] buffer = new byte[client.ReceiveBufferSize];
 			int length = sslStream.Read(buffer, 0, buffer.Length);
 			MemoryStream ms = new MemoryStream(buffer, 0, length);
 
-			return (RequestMessage)requestSerializer.Deserialize(ms);
+			return (Message)requestSerializer.Deserialize(ms);
 		}
 	}
 }

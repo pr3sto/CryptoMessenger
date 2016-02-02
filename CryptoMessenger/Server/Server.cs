@@ -120,7 +120,7 @@ namespace Server
 					SslStuff.ServerSideHandshake(sslStream);
 
 					// recieve client's message
-					RequestMessage message = ClientConnection.ReceiveMessage(client, sslStream);
+					Message message = ClientConnection.ReceiveMessage(client, sslStream);
 
 					// login / register
 					if (message != null)
@@ -147,7 +147,7 @@ namespace Server
 		private void LoginClient(TcpClient client, SslStream sslStream, LoginRequestMessage message)
 		{
 			bool isLoggedIn = false;
-			ResponseMessage response;
+			Message response;
 
 			if (string.IsNullOrEmpty(message.login) ||
 				string.IsNullOrEmpty(message.password) ||
@@ -201,7 +201,7 @@ namespace Server
 		/// <param name="message">client's message.</param>
 		private void RegisterClient(TcpClient client, SslStream sslStream, RegisterRequestMessage message)
 		{
-			ResponseMessage response;
+			Message response;
 
 			if (string.IsNullOrEmpty(message.login) ||
 				string.IsNullOrEmpty(message.password) ||

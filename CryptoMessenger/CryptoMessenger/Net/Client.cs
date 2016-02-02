@@ -78,27 +78,27 @@ namespace CryptoMessenger.Net
 				while (true)
 				{
 					// wait for message
-					ResponseMessage message = await ReceiveMessage();
+					Message message = await ReceiveMessage();
 
 					// handle message
-					if (message is GetAllUsersResponseMessage)
+					if (message is AllUsersMessage)
 					{
-						string[] users = ((GetAllUsersResponseMessage)message).users;
+						string[] users = ((AllUsersMessage)message).users;
 						form.UpdateAllUsersList(users);
 					}
-					else if (message is GetFriendsResponseMessage)
+					else if (message is FriendsMessage)
 					{
-						form.cache_friends = ((GetFriendsResponseMessage)message).friends;
+						form.cache_friends = ((FriendsMessage)message).friends;
 						form.UpdateFriendsList(form.cache_friends);
 					}
-					else if (message is GetIncomeFriendshipReqsResponseMessage)
+					else if (message is IncomeFriendshipRequestsMessage)
 					{
-						form.cache_income_reqs = ((GetIncomeFriendshipReqsResponseMessage)message).logins;
+						form.cache_income_reqs = ((IncomeFriendshipRequestsMessage)message).logins;
 						form.UpdateIncomeFriendshipRequests(form.cache_income_reqs);
 					}
-					else if (message is GetOutcomeFriendshipReqsResponseMessage)
+					else if (message is OutcomeFriendshipRequestsMessage)
 					{
-						form.cache_outcome_reqs = ((GetOutcomeFriendshipReqsResponseMessage)message).logins;
+						form.cache_outcome_reqs = ((OutcomeFriendshipRequestsMessage)message).logins;
 						form.UpdateOutcomeFriendshipRequests(form.cache_outcome_reqs);
 					}
 				}
@@ -189,7 +189,7 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public void GetAllUsers()
 		{
-			SendMessage(new GetAllUsersRequestMessage());
+			SendMessage(new GetAllUsersMessage());
 		}
 
 		/// <summary>
@@ -198,7 +198,7 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public void GetFriends()
 		{
-			SendMessage(new GetFriendsRequestMessage());
+			SendMessage(new GetFriendsMessage());
 		}
 
 		/// <summary>
@@ -207,7 +207,7 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public void GetIncomeFriendshipRequests()
 		{
-			SendMessage(new GetIncomeFriendshipReqsRequestMessage());
+			SendMessage(new GetIncomeFriendshipRequestsMessage());
 		}
 
 		/// <summary>
@@ -216,7 +216,7 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public void GetOutcomeFriendshipRequests()
 		{
-			SendMessage(new GetOutcomeFriendshipReqsRequestMessage());
+			SendMessage(new GetOutcomeFriendshipRequestsMessage());
 		}
 
 		/// <summary>
@@ -225,7 +225,7 @@ namespace CryptoMessenger.Net
 		/// <param name="login">login of needed user.</param>
 		public void SendFriendshipRequest(string login)
 		{
-			SendMessage(new FriendshipReqRequestMessage { login_of_needed_user = login });
+			SendMessage(new FriendshipRequestMessage { login_of_needed_user = login });
 		}
 
 		/// <summary>
@@ -234,7 +234,7 @@ namespace CryptoMessenger.Net
 		/// <param name="login">needed friend login.</param>
 		public void CancelFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionRequestMessage
+			SendMessage(new FriendActionMessage
 			{
 				friends_login = login,
 				action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
@@ -247,7 +247,7 @@ namespace CryptoMessenger.Net
 		/// <param name="login">accepted friend login.</param>
 		public void AcceptFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionRequestMessage
+			SendMessage(new FriendActionMessage
 			{
 				friends_login = login,
 				action = ActionsWithFriend.ACCEPT_FRIENDSHIP
@@ -260,7 +260,7 @@ namespace CryptoMessenger.Net
 		/// <param name="login">rejected user login.</param>
 		public void RejectFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionRequestMessage
+			SendMessage(new FriendActionMessage
 			{
 				friends_login = login,
 				action = ActionsWithFriend.REJECT_FRIENDSHIP
@@ -273,7 +273,7 @@ namespace CryptoMessenger.Net
 		/// <param name="login">friend's login.</param>
 		public void RemoveFriend(string login)
 		{
-			SendMessage(new FriendActionRequestMessage
+			SendMessage(new FriendActionMessage
 			{
 				friends_login = login,
 				action = ActionsWithFriend.REMOVE_FROM_FRIENDS
@@ -343,11 +343,11 @@ namespace CryptoMessenger.Net
 		/// Send message to server.
 		/// </summary>
 		/// <param name="message">user's message.</param>
-		private void SendMessage(RequestMessage message)
+		private void SendMessage(Message message)
 		{
 			try
 			{
-				XmlSerializer requestSerializer = new XmlSerializer(typeof(RequestMessage));
+				XmlSerializer requestSerializer = new XmlSerializer(typeof(Message));
 				requestSerializer.Serialize(sslStream, message);
 			}
 			catch
@@ -360,20 +360,20 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		/// <returns>server's response.</returns>
 		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		private async Task<ResponseMessage> ReceiveMessage()
+		private async Task<Message> ReceiveMessage()
 		{
 			// asynchronous communicate with server
 			return await Task.Run(() => {
 
 				try
 				{
-					XmlSerializer responseSerializer = new XmlSerializer(typeof(ResponseMessage));
+					XmlSerializer responseSerializer = new XmlSerializer(typeof(Message));
 
 					byte[] buffer = new byte[client.ReceiveBufferSize];
 					int length = sslStream.Read(buffer, 0, buffer.Length);
 					MemoryStream ms = new MemoryStream(buffer, 0, length);
 
-					return (ResponseMessage)responseSerializer.Deserialize(ms);
+					return (Message)responseSerializer.Deserialize(ms);
 				}
 				catch
 				{

@@ -25,22 +25,26 @@ namespace MessageTypes
 		REMOVE_FROM_FRIENDS
 	};
 
-	#region Request messages
-
 	/// <summary>
-	/// Basic class for request messages.
+	/// Basic class for messages.
 	/// </summary>
 	[Serializable]
 	[XmlInclude(typeof(LoginRequestMessage))]
 	[XmlInclude(typeof(LogoutRequestMessage))]
 	[XmlInclude(typeof(RegisterRequestMessage))]
-	[XmlInclude(typeof(GetAllUsersRequestMessage))]
-	[XmlInclude(typeof(GetFriendsRequestMessage))]
-	[XmlInclude(typeof(GetIncomeFriendshipReqsRequestMessage))]
-	[XmlInclude(typeof(GetOutcomeFriendshipReqsRequestMessage))]
-	[XmlInclude(typeof(FriendshipReqRequestMessage))]
-	[XmlInclude(typeof(FriendActionRequestMessage))]
-	public abstract class RequestMessage
+	[XmlInclude(typeof(GetAllUsersMessage))]
+	[XmlInclude(typeof(GetFriendsMessage))]
+	[XmlInclude(typeof(GetIncomeFriendshipRequestsMessage))]
+	[XmlInclude(typeof(GetOutcomeFriendshipRequestsMessage))]
+	[XmlInclude(typeof(FriendshipRequestMessage))]
+	[XmlInclude(typeof(FriendActionMessage))]
+	[XmlInclude(typeof(LoginResponseMessage))]
+	[XmlInclude(typeof(RegisterResponseMessage))]
+	[XmlInclude(typeof(AllUsersMessage))]
+	[XmlInclude(typeof(FriendsMessage))]
+	[XmlInclude(typeof(IncomeFriendshipRequestsMessage))]
+	[XmlInclude(typeof(OutcomeFriendshipRequestsMessage))]
+	public abstract class Message
 	{
 	}
 
@@ -49,7 +53,7 @@ namespace MessageTypes
 	/// when try to login.
 	/// </summary>
 	[Serializable]
-	public class LoginRequestMessage : RequestMessage
+	public class LoginRequestMessage : Message
 	{
 		public string login { get; set; }
 		public string password { get; set; }
@@ -60,7 +64,7 @@ namespace MessageTypes
 	/// when log out.
 	/// </summary>
 	[Serializable]
-	public class LogoutRequestMessage : RequestMessage
+	public class LogoutRequestMessage : Message
 	{
 	}
 
@@ -69,7 +73,7 @@ namespace MessageTypes
 	/// when try to register.
 	/// </summary>
 	[Serializable]
-	public class RegisterRequestMessage : RequestMessage
+	public class RegisterRequestMessage : Message
 	{
 		public string login { get; set; }
 		public string password { get; set; }
@@ -80,7 +84,7 @@ namespace MessageTypes
 	/// to get array of all users.
 	/// </summary>
 	[Serializable]
-	public class GetAllUsersRequestMessage : RequestMessage
+	public class GetAllUsersMessage : Message
 	{
 	}
 
@@ -89,7 +93,7 @@ namespace MessageTypes
 	/// to get array of friends.
 	/// </summary>
 	[Serializable]
-	public class GetFriendsRequestMessage : RequestMessage
+	public class GetFriendsMessage : Message
 	{
 	}
 
@@ -98,7 +102,7 @@ namespace MessageTypes
 	/// to get income friendship requests.
 	/// </summary>
 	[Serializable]
-	public class GetIncomeFriendshipReqsRequestMessage : RequestMessage
+	public class GetIncomeFriendshipRequestsMessage : Message
 	{
 	}
 
@@ -107,7 +111,7 @@ namespace MessageTypes
 	/// to get outcome friendship requests.
 	/// </summary>
 	[Serializable]
-	public class GetOutcomeFriendshipReqsRequestMessage : RequestMessage
+	public class GetOutcomeFriendshipRequestsMessage : Message
 	{
 	}
 
@@ -115,7 +119,7 @@ namespace MessageTypes
 	/// Message with friendship request.
 	/// </summary>
 	[Serializable]
-	public class FriendshipReqRequestMessage : RequestMessage
+	public class FriendshipRequestMessage : Message
 	{
 		public string login_of_needed_user;
 	}
@@ -124,28 +128,10 @@ namespace MessageTypes
 	/// Message with action.
 	/// </summary>
 	[Serializable]
-	public class FriendActionRequestMessage : RequestMessage
+	public class FriendActionMessage : Message
 	{
 		public string friends_login;
 		public ActionsWithFriend action;
-	}
-
-	#endregion
-
-	#region Response messages
-
-	/// <summary>
-	/// Basic class for response messages.
-	/// </summary>
-	[Serializable]
-	[XmlInclude(typeof(LoginResponseMessage))]
-	[XmlInclude(typeof(RegisterResponseMessage))]
-	[XmlInclude(typeof(GetAllUsersResponseMessage))]
-	[XmlInclude(typeof(GetFriendsResponseMessage))]
-	[XmlInclude(typeof(GetIncomeFriendshipReqsResponseMessage))]
-	[XmlInclude(typeof(GetOutcomeFriendshipReqsResponseMessage))]
-	public abstract class ResponseMessage
-	{
 	}
 
 	/// <summary>
@@ -153,7 +139,7 @@ namespace MessageTypes
 	/// after login attempt.
 	/// </summary>
 	[Serializable]
-	public class LoginResponseMessage : ResponseMessage
+	public class LoginResponseMessage : Message
 	{
 		public LoginRegisterResponse response { get; set; }
 	}
@@ -163,7 +149,7 @@ namespace MessageTypes
 	/// after register attempt.
 	/// </summary>
 	[Serializable]
-	public class RegisterResponseMessage : ResponseMessage
+	public class RegisterResponseMessage : Message
 	{
 		public LoginRegisterResponse response { get; set; }
 	}
@@ -172,7 +158,7 @@ namespace MessageTypes
 	/// Message with all user's logins.
 	/// </summary>
 	[Serializable]
-	public class GetAllUsersResponseMessage : ResponseMessage
+	public class AllUsersMessage : Message
 	{
 		public string[] users;
 	}
@@ -181,7 +167,7 @@ namespace MessageTypes
 	/// Message with friend's logins.
 	/// </summary>
 	[Serializable]
-	public class GetFriendsResponseMessage : ResponseMessage
+	public class FriendsMessage : Message
 	{
 		public string[] friends;
 	}
@@ -190,7 +176,7 @@ namespace MessageTypes
 	/// Message with income friendship requests.
 	/// </summary>
 	[Serializable]
-	public class GetIncomeFriendshipReqsResponseMessage : ResponseMessage
+	public class IncomeFriendshipRequestsMessage : Message
 	{
 		public string[] logins;
 	}
@@ -199,10 +185,8 @@ namespace MessageTypes
 	/// Message with outcome friendship requests.
 	/// </summary>
 	[Serializable]
-	public class GetOutcomeFriendshipReqsResponseMessage : ResponseMessage
+	public class OutcomeFriendshipRequestsMessage : Message
 	{
 		public string[] logins;
 	}
-
-	#endregion
 }

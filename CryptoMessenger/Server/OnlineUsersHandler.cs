@@ -129,7 +129,7 @@ namespace Server
 				while (true)
 				{
 					// user's incoming message
-					RequestMessage message = ClientConnection.ReceiveMessage(user.client, user.sslStream);
+					Message message = ClientConnection.ReceiveMessage(user.client, user.sslStream);
 
 					// process message
 					if (message is LogoutRequestMessage)
@@ -137,29 +137,29 @@ namespace Server
 						Logout(user);
 						break;
 					}
-					else if (message is GetAllUsersRequestMessage)
+					else if (message is GetAllUsersMessage)
 					{
 						SendAllUsers(user);
 					}
-					else if (message is GetFriendsRequestMessage)
+					else if (message is GetFriendsMessage)
 					{
 						SendFriends(user);
 					}
-					else if (message is GetIncomeFriendshipReqsRequestMessage)
+					else if (message is GetIncomeFriendshipRequestsMessage)
 					{
 						SendIncomeFriendshipRequests(user);
 					}
-					else if (message is GetOutcomeFriendshipReqsRequestMessage)
+					else if (message is GetOutcomeFriendshipRequestsMessage)
 					{
 						SendOutcomeFriendshipRequests(user);
 					}
-					else if (message is FriendshipReqRequestMessage)
+					else if (message is FriendshipRequestMessage)
 					{
-						SetFriendshipRequest(user, ((FriendshipReqRequestMessage)message).login_of_needed_user);
+						SetFriendshipRequest(user, ((FriendshipRequestMessage)message).login_of_needed_user);
 					}
-					else if (message is FriendActionRequestMessage)
+					else if (message is FriendActionMessage)
 					{
-						FriendActionRequestMessage msg = (FriendActionRequestMessage)message;
+						FriendActionMessage msg = (FriendActionMessage)message;
 
 						switch (msg.action)
 						{
@@ -220,7 +220,7 @@ namespace Server
 				!friends.Contains(x) &
 				x != user.login).ToArray();
 
-			GetAllUsersResponseMessage response = new GetAllUsersResponseMessage
+			AllUsersMessage response = new AllUsersMessage
 			{
 				users = users
 			};
@@ -233,7 +233,7 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void SendFriends(OnlineUser user)
 		{
-			GetFriendsResponseMessage response = new GetFriendsResponseMessage
+			FriendsMessage response = new FriendsMessage
 			{
 				friends = DBoperations.GetFriends(user.id)
 			};
@@ -246,7 +246,7 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void SendIncomeFriendshipRequests(OnlineUser user)
 		{
-			GetIncomeFriendshipReqsResponseMessage response = new GetIncomeFriendshipReqsResponseMessage
+			IncomeFriendshipRequestsMessage response = new IncomeFriendshipRequestsMessage
 			{
 				logins = DBoperations.GetIncomeFriendshipRequests(user.id)
 			};
@@ -259,7 +259,7 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void SendOutcomeFriendshipRequests(OnlineUser user)
 		{
-			GetOutcomeFriendshipReqsResponseMessage response = new GetOutcomeFriendshipReqsResponseMessage
+			OutcomeFriendshipRequestsMessage response = new OutcomeFriendshipRequestsMessage
 			{
 				logins = DBoperations.GetOutcomeFriendshipRequests(user.id)
 			};
