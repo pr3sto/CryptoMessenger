@@ -89,8 +89,8 @@ namespace CryptoMessenger.GUI
 			cancelFriendshipRequestButton.Font = loginForm.NeueFont15;
 			acceptFriendshipButton.Font = loginForm.NeueFont15;
 			rejectFriendshipButton.Font = loginForm.NeueFont15;
-			message.Font = loginForm.NeueFont15;
-			sendButton.Font = loginForm.NeueFont15;
+			replyTextfield.Font = loginForm.NeueFont15;
+			sendReplyButton.Font = loginForm.NeueFont15;
 			activeTalkLabel.Font = loginForm.NeueFont15;
 
 			// load interface
@@ -108,7 +108,7 @@ namespace CryptoMessenger.GUI
 			this.friendsLabel.Click += new System.EventHandler(this.UpdateUserPanel);
 			this.friendshipRequestsLabel.Click += new System.EventHandler(this.UpdateUserPanel);
 
-			ActiveControl = sendButton;
+			ActiveControl = sendReplyButton;
 
 			Text = login;
 			appNameLabel.Text = login;
@@ -287,33 +287,33 @@ namespace CryptoMessenger.GUI
 		// resize button and textbox when split control change size
 		private void splitContainer_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			sendButton.Height = splitContainer.Panel2.Height - 2;
-			message.Height = splitContainer.Panel2.Height - 10;
+			sendReplyButton.Height = splitContainer.Panel2.Height - 2;
+			replyTextfield.Height = splitContainer.Panel2.Height - 10;
 		}
 
 		// resize textbox to fit content
-		private void message_TextChanged(object sender, EventArgs e)
+		private void replyTextfield_TextChanged(object sender, EventArgs e)
 		{
-			Size size = TextRenderer.MeasureText(message.Text, message.Font);
+			Size size = TextRenderer.MeasureText(replyTextfield.Text, replyTextfield.Font);
 			size.Width += 10;
 
-			if (size.Width > message.Width)
+			if (size.Width > replyTextfield.Width)
 			{
 				int remainder;
-				int quotient = Math.DivRem(size.Width, message.Width, out remainder);
+				int quotient = Math.DivRem(size.Width, replyTextfield.Width, out remainder);
 				int k = remainder == 0 ? quotient : quotient + 1;
 				int height = size.Height * k;
 
-				int x = (message.Height - height) / size.Height;
+				int x = (replyTextfield.Height - height) / size.Height;
 
-				if (message.Height < height | (message.Height > height & x <= 1))
+				if (replyTextfield.Height < height | (replyTextfield.Height > height & x <= 1))
 				{
 					int new_spl_dist = splitContainer.Height - height - 25;
 
 					if (new_spl_dist > splitContainer.Panel1MinSize)
 					{
 						splitContainer.SplitterDistance = new_spl_dist;
-						message.Height = height;
+						replyTextfield.Height = height;
 					}
 				}
 			}
@@ -337,6 +337,26 @@ namespace CryptoMessenger.GUI
 
 		#endregion
 
+		#region Switch between income and outcome requests
+
+		private void incomeRequestsListBox_Enter(object sender, EventArgs e)
+		{
+			outcomeFriendshipRequestsListBox.ClearSelected();
+			cancelFriendshipRequestButton.Visible = false;
+			acceptFriendshipButton.Visible = true;
+			rejectFriendshipButton.Visible = true;
+		}
+
+		private void outcomeRequestsListBox_Enter(object sender, EventArgs e)
+		{
+			incomeFriendshipRequestsListBox.ClearSelected();
+			acceptFriendshipButton.Visible = false;
+			rejectFriendshipButton.Visible = false;
+			cancelFriendshipRequestButton.Visible = true;
+		}
+
+		#endregion
+
 		#region Switch friends / all / requests
 
 		// show friendship requests
@@ -349,6 +369,7 @@ namespace CryptoMessenger.GUI
 			searchLabel.Font = loginForm.NeueFont10;
 
 			ResizeContactLabels();
+			DisableSendReplies();
 
 			selectedPanel = UsersPanels.REQUESTS;
 		}
@@ -377,6 +398,7 @@ namespace CryptoMessenger.GUI
 			searchLabel.Font = loginForm.NeueFont15;
 
 			ResizeContactLabels();
+			DisableSendReplies();
 
 			selectedPanel = UsersPanels.SEARCH;
 		}	
@@ -466,27 +488,7 @@ namespace CryptoMessenger.GUI
 
 		#endregion
 
-		#region Switch between income and outcome requests
-
-		private void incomeRequestsListBox_Enter(object sender, EventArgs e)
-		{
-			outcomeFriendshipRequestsListBox.ClearSelected();
-			cancelFriendshipRequestButton.Visible = false;
-			acceptFriendshipButton.Visible = true;
-			rejectFriendshipButton.Visible = true;
-		}
-
-		private void outcomeRequestsListBox_Enter(object sender, EventArgs e)
-		{
-			incomeFriendshipRequestsListBox.ClearSelected();
-			acceptFriendshipButton.Visible = false;
-			rejectFriendshipButton.Visible = false;
-			cancelFriendshipRequestButton.Visible = true;
-		}
-
-		#endregion
-
-		#region Disable buttons when listbox not selected
+		#region Listboxes selected item changed
 
 		private async void AllUsersListBoxSelectedChanged(object sender, EventArgs e)
 		{
@@ -516,11 +518,13 @@ namespace CryptoMessenger.GUI
 			{
 				removeFriendButton.Enabled = false;
 				removeFriendButton.Text = "CRYPTO MESSENGER";
+				DisableSendReplies();
 			}
 			else
 			{
 				removeFriendButton.Enabled = true;
 				removeFriendButton.Text = "УДАЛИТЬ ИЗ ДРУЗЕЙ";
+				EnabledSendReplies();
 			}
 		}
 
@@ -546,24 +550,57 @@ namespace CryptoMessenger.GUI
 
 		#endregion
 
-		#region Message placeholder
+		#region Enable/Disable send replyes
+
+		private void EnabledSendReplies()
+		{
+			activeTalkLabel.Text = friendsListBox.SelectedItem.ToString();
+
+			sendReplyButton.Enabled = true;
+			replyTextfield.Enabled = true;
+		}
+
+		private void DisableSendReplies()
+		{
+			replyTextfield.Text = "";
+			replyTextfield_Leave(replyTextfield, EventArgs.Empty);
+
+			activeTalkLabel.Text = "ДИАЛОГ";
+
+			sendReplyButton.Enabled = false;
+			replyTextfield.Enabled = false;
+		}
+
+		#endregion
+
+		#region Reply placeholder
+
+		private bool IsPlaceholderWrited = true;
+
+		private bool CanSendReply = false;
 
 		// add placeholder
-		private void message_Leave(object sender, EventArgs e)
+		private void replyTextfield_Leave(object sender, EventArgs e)
 		{
-			if (message.Text.Equals(""))
+			if ("".Equals(replyTextfield.Text))
 			{
-				message.Text = "ВВЕДИТЕ СООБЩЕНИЕ...";
-				message.ForeColor = SystemColors.InactiveCaption;
+				replyTextfield.ForeColor = SystemColors.InactiveCaption;
+				replyTextfield.Text = "ВВЕДИТЕ СООБЩЕНИЕ...";
+
+				IsPlaceholderWrited = true;
+				CanSendReply = false;
 			}
 		}
 		// remove placeholder
-		private void message_Enter(object sender, EventArgs e)
+		private void replyTextfield_Enter(object sender, EventArgs e)
 		{
-			if (message.Text.Equals("ВВЕДИТЕ СООБЩЕНИЕ..."))
+			if (IsPlaceholderWrited)
 			{
-				message.Text = "";
-				message.ForeColor = Color.Black;
+				replyTextfield.ForeColor = Color.Black;
+				replyTextfield.Text = "";
+
+				IsPlaceholderWrited = false;
+				CanSendReply = true;
 			}
 		}
 
@@ -652,8 +689,8 @@ namespace CryptoMessenger.GUI
 			this.splitContainer = new CryptoMessenger.GUI.MySplitContainer();
 			this.activeTalkLabelPanel = new System.Windows.Forms.Panel();
 			this.activeTalkLabel = new System.Windows.Forms.Label();
-			this.message = new System.Windows.Forms.TextBox();
-			this.sendButton = new CryptoMessenger.GUI.MyButton();
+			this.replyTextfield = new System.Windows.Forms.TextBox();
+			this.sendReplyButton = new CryptoMessenger.GUI.MyButton();
 			this.topPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.iconBox)).BeginInit();
 			this.usersPanel.SuspendLayout();
@@ -1085,8 +1122,8 @@ namespace CryptoMessenger.GUI
 			// 
 			// splitContainer.Panel2
 			// 
-			this.splitContainer.Panel2.Controls.Add(this.message);
-			this.splitContainer.Panel2.Controls.Add(this.sendButton);
+			this.splitContainer.Panel2.Controls.Add(this.replyTextfield);
+			this.splitContainer.Panel2.Controls.Add(this.sendReplyButton);
 			this.splitContainer.Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer_Panel2_Paint);
 			this.splitContainer.Panel2MinSize = 60;
 			this.splitContainer.Size = new System.Drawing.Size(470, 445);
@@ -1120,42 +1157,44 @@ namespace CryptoMessenger.GUI
 			this.activeTalkLabel.Text = "ДИАЛОГ";
 			this.activeTalkLabel.SizeChanged += new System.EventHandler(this.activeTalkTitle_SizeChanged);
 			// 
-			// message
+			// replyTextfield
 			// 
-			this.message.BackColor = System.Drawing.Color.White;
-			this.message.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.message.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.message.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.message.Location = new System.Drawing.Point(10, 5);
-			this.message.Multiline = true;
-			this.message.Name = "message";
-			this.message.Size = new System.Drawing.Size(392, 50);
-			this.message.TabIndex = 0;
-			this.message.TabStop = false;
-			this.message.Text = "ВВЕДИТЕ СООБЩЕНИЕ...";
-			this.message.TextChanged += new System.EventHandler(this.message_TextChanged);
-			this.message.Enter += new System.EventHandler(this.message_Enter);
-			this.message.Leave += new System.EventHandler(this.message_Leave);
+			this.replyTextfield.BackColor = System.Drawing.Color.White;
+			this.replyTextfield.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.replyTextfield.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.replyTextfield.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.replyTextfield.Location = new System.Drawing.Point(10, 5);
+			this.replyTextfield.Multiline = true;
+			this.replyTextfield.Name = "message";
+			this.replyTextfield.Size = new System.Drawing.Size(392, 50);
+			this.replyTextfield.TabIndex = 0;
+			this.replyTextfield.TabStop = false;
+			this.replyTextfield.Enabled = false;
+			this.replyTextfield.Text = "ВВЕДИТЕ СООБЩЕНИЕ...";
+			this.replyTextfield.TextChanged += new System.EventHandler(this.replyTextfield_TextChanged);
+			this.replyTextfield.Enter += new System.EventHandler(this.replyTextfield_Enter);
+			this.replyTextfield.Leave += new System.EventHandler(this.replyTextfield_Leave);
 			// 
-			// sendButton
+			// sendReplyButton
 			// 
-			this.sendButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(10)))), ((int)(((byte)(90)))));
-			this.sendButton.BackgroundImage = global::CryptoMessenger.Properties.Resources.send;
-			this.sendButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.sendButton.Cursor = System.Windows.Forms.Cursors.Default;
-			this.sendButton.FlatAppearance.BorderSize = 0;
-			this.sendButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
-			this.sendButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
-			this.sendButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.sendButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.sendButton.ForeColor = System.Drawing.Color.White;
-			this.sendButton.Location = new System.Drawing.Point(412, 1);
-			this.sendButton.Name = "sendButton";
-			this.sendButton.Size = new System.Drawing.Size(58, 58);
-			this.sendButton.TabIndex = 0;
-			this.sendButton.TabStop = false;
-			this.sendButton.UseVisualStyleBackColor = true;
-			this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
+			this.sendReplyButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(10)))), ((int)(((byte)(90)))));
+			this.sendReplyButton.BackgroundImage = global::CryptoMessenger.Properties.Resources.send;
+			this.sendReplyButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.sendReplyButton.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.sendReplyButton.FlatAppearance.BorderSize = 0;
+			this.sendReplyButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
+			this.sendReplyButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
+			this.sendReplyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.sendReplyButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.sendReplyButton.ForeColor = System.Drawing.Color.White;
+			this.sendReplyButton.Location = new System.Drawing.Point(412, 1);
+			this.sendReplyButton.Name = "sendButton";
+			this.sendReplyButton.Size = new System.Drawing.Size(58, 58);
+			this.sendReplyButton.TabIndex = 0;
+			this.sendReplyButton.TabStop = false;
+			this.sendReplyButton.Enabled = false;
+			this.sendReplyButton.UseVisualStyleBackColor = true;
+			this.sendReplyButton.Click += new System.EventHandler(this.sendReplyButton_Click);
 			// 
 			// MainForm
 			// 
@@ -1204,8 +1243,8 @@ namespace CryptoMessenger.GUI
         private MyButton minimizeButton;
         private MyButton closeButton;
         private Panel usersPanel; 
-        private TextBox message;
-        private MyButton sendButton;
+        private TextBox replyTextfield;
+        private MyButton sendReplyButton;
         private Label activeTalkLabel;
         private Panel activeTalkLabelPanel;
         private Panel mainFormPanel;

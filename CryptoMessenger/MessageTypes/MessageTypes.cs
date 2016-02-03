@@ -44,6 +44,7 @@ namespace MessageTypes
 	[XmlInclude(typeof(FriendsMessage))]
 	[XmlInclude(typeof(IncomeFriendshipRequestsMessage))]
 	[XmlInclude(typeof(OutcomeFriendshipRequestsMessage))]
+	[XmlInclude(typeof(ReplyMessage))]
 	public abstract class Message
 	{
 	}
@@ -188,5 +189,15 @@ namespace MessageTypes
 	public class OutcomeFriendshipRequestsMessage : Message
 	{
 		public string[] logins;
+	}
+
+	/// <summary>
+	/// Message with conversation reply text.
+	/// </summary>
+	[Serializable]
+	public class ReplyMessage : Message
+	{
+		public string receiver;
+		public string text;
 	}
 }

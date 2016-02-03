@@ -168,14 +168,16 @@ namespace CryptoMessenger.GUI
 			}
 		}
 
-		// send message
+		// send reply
 		private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar == Convert.ToChar(Keys.Return) & ModifierKeys != Keys.Shift & message.Focused)
-				sendButton.PerformClick();
+			if (e.KeyChar == Convert.ToChar(Keys.Return) & ModifierKeys != Keys.Shift & replyTextfield.Focused)
+				sendReplyButton.PerformClick();
 		}
-		private void sendButton_Click(object sender, EventArgs e)
+		private void sendReplyButton_Click(object sender, EventArgs e)
 		{
+			if (CanSendReply)
+				client.SendReply(activeTalkLabel.Text, replyTextfield.Text);
 		}
 
 		// logout when form closing

@@ -177,6 +177,10 @@ namespace Server
 								break;
 						}
 					}
+					else if (message is ReplyMessage)
+					{
+						HandleReply(user, ((ReplyMessage)message).receiver, ((ReplyMessage)message).text);
+					}
 				}
 			}
 			catch
@@ -191,7 +195,7 @@ namespace Server
 			}
 		}
 
-		#region Actions on recieved message
+		#region Actions on received message
 
 		/// <summary>
 		/// Logout user.
@@ -354,7 +358,7 @@ namespace Server
 		}
 
 		/// <summary>
-		/// 
+		/// Remove user from friends.
 		/// </summary>
 		/// <param name="user">user.</param>
 		/// <param name="friends_login">friend's login.</param>
@@ -370,6 +374,23 @@ namespace Server
 				// send new friends list to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
 				if (friend != null) SendFriends(friend);
+			}
+		}
+
+		/// <summary>
+		/// Handle new reply in conversation.
+		/// </summary>
+		/// <param name="user">user.</param>
+		/// <param name="receiver">receiver of reply.</param>
+		/// <param name="text">text of reply.</param>
+		private void HandleReply(OnlineUser user, string receiver, string text)
+		{
+			int receivers_id = DBoperations.GetUserId(receiver);
+			if (receivers_id == 0) return;
+
+			if (DBoperations.AddNewReply(user.id, receivers_id, text))
+			{
+
 			}
 		}
 

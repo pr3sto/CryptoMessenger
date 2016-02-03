@@ -199,7 +199,7 @@ namespace Server.Database
 				{
 					return false;
 				}
-				else 
+				else
 				{
 					// accept friendship request
 					if (data.Any() && !data.First().accepted)
@@ -261,7 +261,7 @@ namespace Server.Database
 
 						if (user_login.Any())
 							logins.Add(user_login.First());
-					}					
+					}
 				}
 
 				return logins.ToArray();
@@ -287,7 +287,7 @@ namespace Server.Database
 				List<string> logins = new List<string>();
 
 				if (data.Any())
-				{	
+				{
 					foreach (int uid in data)
 					{
 						var user_login =
@@ -297,7 +297,7 @@ namespace Server.Database
 
 						if (user_login.Any())
 							logins.Add(user_login.First());
-					}						
+					}
 				}
 
 				return logins.ToArray();
@@ -362,6 +362,78 @@ namespace Server.Database
 				{
 					DBcontext.Friends.DeleteOnSubmit(friendship);
 				}
+
+				try
+				{
+					DBcontext.SubmitChanges();
+					return true;
+				}
+				catch
+				{
+					// TODO logger
+					return false;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Add new reply (conversation) to database.
+		/// </summary>
+		/// <param name="sender_id">sender's id.</param>
+		/// <param name="receiver_id">receiver's id.</param>
+		/// <param name="text">text of reply.</param>
+		/// <returns>true, if operations success.</returns>
+		public static bool AddNewReply(int sender_id, int receiver_id, string text)
+		{
+			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			{
+				var data = from conversation in DBcontext.Conversations
+					where (conversation.user_one == sender_id &
+					conversation.user_two == receiver_id) |
+					(conversation.user_one == receiver_id &
+					conversation.user_two == sender_id)
+					select conversation.conversation_id;
+
+				// conversation_id
+				int c_id;
+
+				// conversations exist
+				if (data.Any())
+				{
+					c_id = data.First();
+				}
+				// conversation dont exist
+				else
+				{
+					// new conversation
+					Conversation conv = new Conversation
+					{
+						user_one = sender_id,
+						user_two = receiver_id
+					};
+					DBcontext.Conversations.InsertOnSubmit(conv);
+
+					try
+					{
+						DBcontext.SubmitChanges();
+						c_id = conv.conversation_id;
+					}
+					catch
+					{
+						// TODO logger
+						return false;
+					}
+				}
+
+				// new reply
+				ConversationReply reply = new ConversationReply
+				{
+					reply = text,
+					conversation_id = c_id,
+					user_id = sender_id,
+					time = DateTime.Now
+				};
+				DBcontext.Conversation_replies.InsertOnSubmit(reply);
 
 				try
 				{

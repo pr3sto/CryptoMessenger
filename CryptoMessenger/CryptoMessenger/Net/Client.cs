@@ -185,7 +185,7 @@ namespace CryptoMessenger.Net
 
 		/// <summary>
 		/// Get array of all users from server;
-		/// listener should recieve response message.
+		/// listener should receive response message.
 		/// </summary>
 		public void GetAllUsers()
 		{
@@ -194,7 +194,7 @@ namespace CryptoMessenger.Net
 
 		/// <summary>
 		/// Get array of friends from server;
-		/// listener should recieve response message.
+		/// listener should receive response message.
 		/// </summary>
 		public void GetFriends()
 		{
@@ -203,7 +203,7 @@ namespace CryptoMessenger.Net
 
 		/// <summary>
 		/// Get array of income friendship requests from server;
-		/// listener should recieve response message.
+		/// listener should receive response message.
 		/// </summary>
 		public void GetIncomeFriendshipRequests()
 		{
@@ -212,7 +212,7 @@ namespace CryptoMessenger.Net
 
 		/// <summary>
 		/// Get array of outcome friendship requests from server;
-		/// listener should recieve response message.
+		/// listener should receive response message.
 		/// </summary>
 		public void GetOutcomeFriendshipRequests()
 		{
@@ -277,6 +277,20 @@ namespace CryptoMessenger.Net
 			{
 				friends_login = login,
 				action = ActionsWithFriend.REMOVE_FROM_FRIENDS
+			});
+		}
+
+		/// <summary>
+		/// Send conversation reply to server.
+		/// </summary>
+		/// <param name="receiver">receiver's login.</param>
+		/// <param name="text">text of reply.</param>
+		public void SendReply(string receiver, string text)
+		{
+			SendMessage(new ReplyMessage
+			{
+				receiver = receiver,
+				text = text
 			});
 		}
 
