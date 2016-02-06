@@ -153,11 +153,11 @@ namespace Server
 				string.IsNullOrEmpty(message.password) ||
 				message.login.Length > 30)
 			{
-				response = new LoginResponseMessage { response = LoginRegisterResponse.ERROR };
+				response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.ERROR };
 			}
 			else if (usersHandler.GetOnlineUser(message.login) != null)
 			{
-				response = new LoginResponseMessage { response = LoginRegisterResponse.ALREADY_LOGIN };
+				response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.ALREADY_LOGIN };
 			}
 			else
 			{
@@ -169,11 +169,11 @@ namespace Server
 					OnlineUser user = new OnlineUser(id, message.login, client, sslStream);
 					usersHandler.AddUser(user);
 					isLoggedIn = true;
-					response = new LoginResponseMessage { response = LoginRegisterResponse.SUCCESS };
+					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
 				}
 				else
 				{
-					response = new LoginResponseMessage { response = LoginRegisterResponse.FAIL };
+					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.FAIL };
 				}
 			}
 
@@ -207,14 +207,14 @@ namespace Server
 				string.IsNullOrEmpty(message.password) ||
 				message.login.Length > 30)
 			{
-				response = new RegisterResponseMessage { response = LoginRegisterResponse.ERROR };
+				response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.ERROR };
 			}
 			else
 			{
 				if (DBoperations.Register(message.login, message.password))
-					response = new RegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
+					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
 				else
-					response = new RegisterResponseMessage { response = LoginRegisterResponse.FAIL };
+					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.FAIL };
 			}
 
 			// response to client

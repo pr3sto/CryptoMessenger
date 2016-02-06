@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 
 using CryptoMessenger.Net;
+using CryptoMessenger.Stuff;
 
 namespace CryptoMessenger.GUI
 {
@@ -28,6 +29,13 @@ namespace CryptoMessenger.GUI
 		public string[] cache_income_reqs = null;
 		public string[] cache_outcome_reqs = null;
 
+		// conversations of user
+		public Conversations conversations = new Conversations();
+
+		// can i send reply or not
+		private bool CanSendReply = false;
+
+
 		public MainForm(LoginForm parent, Client client, string login)
         {
             InitializeComponent();
@@ -52,7 +60,14 @@ namespace CryptoMessenger.GUI
 			selectedPanel = UsersPanels.FRIENDS;
         }
 
-		// update listboxes
+		// logout when form closing
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			client.Logout();
+		}
+
+		#region Update users panels
+
 		private void UpdateUserPanel(object sender, EventArgs e)
 		{
 			Label label = (Label)sender;
@@ -102,6 +117,10 @@ namespace CryptoMessenger.GUI
 					UpdateOutcomeFriendshipRequests(cache_outcome_reqs);
 			}
 		}
+
+		#endregion
+
+		#region Users panels buttons
 
 		// send request for friendship
 		private void addFriendButton_Click(object sender, EventArgs e)
@@ -168,6 +187,19 @@ namespace CryptoMessenger.GUI
 			}
 		}
 
+		#endregion
+
+		#region Conversation actions
+
+		// get conversation from server if we dont have it
+		private void GetConversation(string interlocutor)
+		{
+			if (!conversations.Contains(interlocutor))
+			{
+				client.GetConversation(interlocutor);
+			}
+		}
+
 		// send reply
 		private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
 		{
@@ -180,10 +212,6 @@ namespace CryptoMessenger.GUI
 				client.SendReply(activeTalkLabel.Text, replyTextfield.Text);
 		}
 
-		// logout when form closing
-		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			client.Logout();
-		}
+		#endregion
 	}
 }

@@ -41,7 +41,7 @@ namespace Server.Security
 		/// <param name="certificate">client's certificate.</param>
 		/// <param name="chain">certificate build chain.</param>
 		/// <param name="sslPolicyErrors">ssl errors.</param>
-		/// <returns>true, if client has been validated.</returns>
+		/// <returns>true if client has been validated; otherwise, false.</returns>
 		public static bool ClientValidationCallback(object sender,
 			X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
 		{
@@ -78,7 +78,7 @@ namespace Server.Security
 			{
 				// get certificate from cert.pfx
 				byte[] embeddedCert;
-				Assembly thisAssembly = Assembly.GetAssembly(typeof(SslStuff));
+				var thisAssembly = Assembly.GetAssembly(typeof(SslStuff));
 				using (Stream certStream = thisAssembly.GetManifestResourceStream("Server.Certificate.cert.pfx"))
 				{
 					embeddedCert = new byte[certStream.Length];

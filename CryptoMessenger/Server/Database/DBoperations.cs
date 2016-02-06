@@ -16,7 +16,7 @@ namespace Server.Database
 		/// <returns>user's id.</returns>
 		public static int GetUserId(string login)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				var user_id =
 					from user in DBcontext.Users
@@ -31,15 +31,36 @@ namespace Server.Database
 		}
 
 		/// <summary>
+		/// Get login of user by his id.
+		/// </summary>
+		/// <param name="id">user's id.</param>
+		/// <returns>user's login.</returns>
+		public static string GetUserLogin(int id)
+		{
+			using (var DBcontext = new LinqToSqlDataContext())
+			{
+				var user_login =
+					from user in DBcontext.Users
+					where user.user_id == id
+					select user.login;
+
+				if (user_login.Any())
+					return user_login.First();
+				else
+					return null;
+			}
+		}
+
+		/// <summary>
 		/// Do login.
 		/// </summary>
 		/// <param name="login">user's login.</param>
 		/// <param name="password">user's password.</param>
 		/// <param name="id">client's id in db.</param>
-		/// <returns>true, if operation had success.</returns>
+		/// <returns>true if operation had success; otherwise, false.</returns>
 		public static bool Login(string login, string password, out int id)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// get user
 				var user =
@@ -76,10 +97,10 @@ namespace Server.Database
 		/// </summary>
 		/// <param name="login">user's login.</param>
 		/// <param name="password">user's password.</param>
-		/// <returns>true, if operation had success.</returns>
+		/// <returns>true if operation had success; otherwise, false.</returns>
 		public static bool Register(string login, string password)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				var user =
 					from users in DBcontext.Users
@@ -122,7 +143,7 @@ namespace Server.Database
 		/// <returns>array with all users.</returns>
 		public static string[] GetAllUsers()
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				var users =
 					from user in DBcontext.Users
@@ -142,7 +163,7 @@ namespace Server.Database
 		/// <returns>array with friends.</returns>
 		public static string[] GetFriends(int id)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// select friends
 				var data =
@@ -181,10 +202,10 @@ namespace Server.Database
 		/// <param name="accepted">is friendship request accepted.</param>
 		/// <param name="user_one_id">user one id.</param>
 		/// <param name="user_two_id">user two id.</param>
-		/// <returns>true, if operations success.</returns>
+		/// <returns>true if operations success; otherwise, false.</returns>
 		public static bool SetFriendship(bool accepted, int user_one_id, int user_two_id)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				var data =
 					from friendship in DBcontext.Friends
@@ -239,7 +260,7 @@ namespace Server.Database
 		/// <returns>array of income friendship requests.</returns>
 		public static string[] GetIncomeFriendshipRequests(int id)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// get friendsip requests
 				var data =
@@ -275,7 +296,7 @@ namespace Server.Database
 		/// <returns>array of outcome friendship requests.</returns>
 		public static string[] GetOutcomeFriendshipRequests(int id)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// get friendsip requests
 				var data =
@@ -309,10 +330,10 @@ namespace Server.Database
 		/// </summary>
 		/// <param name="user_one_id">user one id.</param>
 		/// <param name="user_two_id">user two id.</param>
-		/// <returns>true, if operations success.</returns>
+		/// <returns>true if operations success; otherwise, false.</returns>
 		public static bool RemoveFriendshipRequest(int user_one_id, int user_two_id)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				var data =
 					from friendship in DBcontext.Friends
@@ -343,10 +364,10 @@ namespace Server.Database
 		/// </summary>
 		/// <param name="user_one_id">user one id.</param>
 		/// <param name="user_two_id">user two id.</param>
-		/// <returns>true, if operations success.</returns>
+		/// <returns>true if operations success; otherwise, false.</returns>
 		public static bool RemoveFriend(int user_one_id, int user_two_id)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				var data =
 					from friendship in DBcontext.Friends
@@ -382,10 +403,11 @@ namespace Server.Database
 		/// <param name="sender_id">sender's id.</param>
 		/// <param name="receiver_id">receiver's id.</param>
 		/// <param name="text">text of reply.</param>
-		/// <returns>true, if operations success.</returns>
-		public static bool AddNewReply(int sender_id, int receiver_id, string text)
+		/// <param name="time">time.</param>
+		/// <returns>true if operations success; otherwise, false.</returns>
+		public static bool AddNewReply(int sender_id, int receiver_id, string text, DateTime time)
 		{
-			using (LinqToSqlDataContext DBcontext = new LinqToSqlDataContext())
+			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				var data = from conversation in DBcontext.Conversations
 					where (conversation.user_one == sender_id &
@@ -397,7 +419,7 @@ namespace Server.Database
 				// conversation_id
 				int c_id;
 
-				// conversations exist
+				// conversation exist
 				if (data.Any())
 				{
 					c_id = data.First();
@@ -431,7 +453,7 @@ namespace Server.Database
 					reply = text,
 					conversation_id = c_id,
 					user_id = sender_id,
-					time = DateTime.Now
+					time = time
 				};
 				DBcontext.Conversation_replies.InsertOnSubmit(reply);
 
@@ -445,6 +467,42 @@ namespace Server.Database
 					// TODO logger
 					return false;
 				}
+			}
+		}
+
+		/// <summary>
+		/// Get array of conversation replies.
+		/// </summary>
+		/// <param name="user_one_id">user one id.</param>
+		/// <param name="user_two_id">user two id.</param>
+		/// <returns>array of conversation replies.</returns>
+		public static ConversationReply[] GetConversation(int user_one_id, int user_two_id)
+		{
+			using (var DBcontext = new LinqToSqlDataContext())
+			{
+				// conversation id
+				var c_id = from conversation in DBcontext.Conversations
+					where (conversation.user_one == user_one_id &
+					conversation.user_two == user_two_id) |
+					(conversation.user_one == user_two_id &
+					conversation.user_two == user_one_id)
+					select conversation.conversation_id;
+
+				// conversation exist
+				if (c_id.Any())
+				{
+					var replies = from reply in DBcontext.Conversation_replies
+						where reply.conversation_id == c_id.First()
+						select reply;
+
+					if (replies.Any())
+					{
+						return replies.ToArray();
+					}
+				}
+				
+				// no conversation or no replies
+				return null;
 			}
 		}
 	}

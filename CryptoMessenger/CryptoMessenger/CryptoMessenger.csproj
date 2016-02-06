@@ -102,6 +102,7 @@
     <Compile Include="GUI\Dropshadow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Stuff\Conversations.cs" />
     <Compile Include="Stuff\FontFactory.cs" />
     <Compile Include="GUI\LoginForm.cs">
       <SubType>Form</SubType>
@@ -193,9 +194,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MessageTypes\MessageTypes.csproj">
-      <Project>{0f6c4d75-a3cf-4c46-a1c8-e2903181660e}</Project>
-      <Name>MessageTypes</Name>
+    <ProjectReference Include="..\CommunicationTypes\CommunicationTypes.csproj">
+      <Project>{d6a2e00e-f7ed-41e9-ba39-8a90816a9840}</Project>
+      <Name>CommunicationTypes</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

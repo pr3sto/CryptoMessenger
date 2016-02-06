@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoMessenger", "CryptoMe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{CDDF981C-897E-40F4-A597-9EC433DB7449}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageTypes", "MessageTypes\MessageTypes.csproj", "{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunicationTypes", "CommunicationTypes\CommunicationTypes.csproj", "{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +33,14 @@ Global
 		{CDDF981C-897E-40F4-A597-9EC433DB7449}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDDF981C-897E-40F4-A597-9EC433DB7449}.Release|x64.ActiveCfg = Release|Any CPU
 		{CDDF981C-897E-40F4-A597-9EC433DB7449}.Release|x64.Build.0 = Release|Any CPU
-		{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}.Debug|x64.Build.0 = Debug|Any CPU
-		{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}.Release|x64.ActiveCfg = Release|Any CPU
-		{0F6C4D75-A3CF-4C46-A1C8-E2903181660E}.Release|x64.Build.0 = Release|Any CPU
+		{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}.Debug|x64.Build.0 = Debug|Any CPU
+		{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}.Release|x64.ActiveCfg = Release|Any CPU
+		{D6A2E00E-F7ED-41E9-BA39-8A90816A9840}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

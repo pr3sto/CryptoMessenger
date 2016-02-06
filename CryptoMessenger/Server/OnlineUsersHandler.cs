@@ -75,12 +75,8 @@ namespace Server
 	/// </summary>
 	class OnlineUsersHandler : IDisposable
 	{ 
-		// list of online users
 		public List<OnlineUser> onlineUsers;
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
 		public OnlineUsersHandler()
 		{
 			onlineUsers = new List<OnlineUser>();
@@ -132,12 +128,7 @@ namespace Server
 					Message message = ClientConnection.ReceiveMessage(user.client, user.sslStream);
 
 					// process message
-					if (message is LogoutRequestMessage)
-					{
-						Logout(user);
-						break;
-					}
-					else if (message is GetAllUsersMessage)
+					if (message is GetAllUsersMessage)
 					{
 						SendAllUsers(user);
 					}
@@ -177,9 +168,18 @@ namespace Server
 								break;
 						}
 					}
+					else if (message is GetConversationMessage)
+					{
+						SendConversation(user, ((GetConversationMessage)message).interlocutor);
+					}
 					else if (message is ReplyMessage)
 					{
-						HandleReply(user, ((ReplyMessage)message).receiver, ((ReplyMessage)message).text);
+						HandleReply(user, ((ReplyMessage)message).interlocutor, ((ReplyMessage)message).reply.text);
+					}
+					else if (message is LogoutRequestMessage)
+					{
+						Logout(user);
+						break;
 					}
 				}
 			}
@@ -381,17 +381,77 @@ namespace Server
 		/// Handle new reply in conversation.
 		/// </summary>
 		/// <param name="user">user.</param>
-		/// <param name="receiver">receiver of reply.</param>
+		/// <param name="interlocutor">interlocutor.</param>
 		/// <param name="text">text of reply.</param>
-		private void HandleReply(OnlineUser user, string receiver, string text)
+		private void HandleReply(OnlineUser user, string interlocutor, string text)
 		{
-			int receivers_id = DBoperations.GetUserId(receiver);
-			if (receivers_id == 0) return;
+			int interlocutors_id = DBoperations.GetUserId(interlocutor);
+			if (interlocutors_id == 0) return;
 
-			if (DBoperations.AddNewReply(user.id, receivers_id, text))
+			// time of reply
+			DateTime time = DateTime.Now;
+
+			if (DBoperations.AddNewReply(user.id, interlocutors_id, text, time))
 			{
+				// reply
+				var reply = new ConversationTypes.ConversationReply
+				{
+					author = user.login,
+					time = time,
+					text = text
+				};
 
+				// send reply to user one
+				ClientConnection.SendMessage(user.sslStream, new ReplyMessage
+				{
+					interlocutor = interlocutor,
+					reply = reply
+				});
+				// send reply to user two if online
+				OnlineUser friend = GetOnlineUser(interlocutor);
+				if (friend != null) ClientConnection.SendMessage(friend.sslStream, new ReplyMessage
+				{
+					interlocutor = user.login,
+					reply = reply
+				});
 			}
+		}
+
+		/// <summary>
+		/// Send conversation to user.
+		/// </summary>
+		/// <param name="user">user.</param>
+		/// <param name="interlocutor">interlocutor of user in conversation.</param>
+		private void SendConversation(OnlineUser user, string interlocutor)
+		{
+			int interlocutors_id = DBoperations.GetUserId(interlocutor);
+			if (interlocutors_id == 0) return;
+
+			// get replies from db
+			ConversationReply[] replies = DBoperations.GetConversation(user.id, interlocutors_id);
+
+			var conversation = new ConversationTypes.Conversation
+			{
+				interlocutor = interlocutor,
+				replies = new List<ConversationTypes.ConversationReply>()
+			};
+
+			if (replies != null)
+			{
+				foreach (var r in replies)
+					conversation.replies.Add(new ConversationTypes.ConversationReply
+					{
+						author = DBoperations.GetUserLogin(r.user_id),
+						time = r.time,
+						text = r.reply
+					});
+			}
+
+			// send
+			ClientConnection.SendMessage(user.sslStream, new ConversationMessage
+			{
+				conversation = conversation
+			});
 		}
 
 		#endregion

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Xml.Serialization;
 
+using ConversationTypes;
+
 namespace MessageTypes
 {
 	/// <summary>
@@ -38,12 +40,13 @@ namespace MessageTypes
 	[XmlInclude(typeof(GetOutcomeFriendshipRequestsMessage))]
 	[XmlInclude(typeof(FriendshipRequestMessage))]
 	[XmlInclude(typeof(FriendActionMessage))]
-	[XmlInclude(typeof(LoginResponseMessage))]
-	[XmlInclude(typeof(RegisterResponseMessage))]
+	[XmlInclude(typeof(LoginRegisterResponseMessage))]
 	[XmlInclude(typeof(AllUsersMessage))]
 	[XmlInclude(typeof(FriendsMessage))]
 	[XmlInclude(typeof(IncomeFriendshipRequestsMessage))]
 	[XmlInclude(typeof(OutcomeFriendshipRequestsMessage))]
+	[XmlInclude(typeof(GetConversationMessage))]
+	[XmlInclude(typeof(ConversationMessage))]
 	[XmlInclude(typeof(ReplyMessage))]
 	public abstract class Message
 	{
@@ -62,15 +65,6 @@ namespace MessageTypes
 
 	/// <summary>
 	/// Message, that client send to server 
-	/// when log out.
-	/// </summary>
-	[Serializable]
-	public class LogoutRequestMessage : Message
-	{
-	}
-
-	/// <summary>
-	/// Message, that client send to server 
 	/// when try to register.
 	/// </summary>
 	[Serializable]
@@ -78,6 +72,25 @@ namespace MessageTypes
 	{
 		public string login { get; set; }
 		public string password { get; set; }
+	}
+
+	/// <summary>
+	/// Message, that server send to client
+	/// after login/register attempt.
+	/// </summary>
+	[Serializable]
+	public class LoginRegisterResponseMessage : Message
+	{
+		public LoginRegisterResponse response { get; set; }
+	}
+
+	/// <summary>
+	/// Message, that client send to server 
+	/// when log out.
+	/// </summary>
+	[Serializable]
+	public class LogoutRequestMessage : Message
+	{
 	}
 
 	/// <summary>
@@ -90,12 +103,30 @@ namespace MessageTypes
 	}
 
 	/// <summary>
+	/// Message with all user's logins.
+	/// </summary>
+	[Serializable]
+	public class AllUsersMessage : Message
+	{
+		public string[] users { get; set; }
+	}
+
+	/// <summary>
 	/// Message, that client send to server 
 	/// to get array of friends.
 	/// </summary>
 	[Serializable]
 	public class GetFriendsMessage : Message
 	{
+	}
+
+	/// <summary>
+	/// Message with friend's logins.
+	/// </summary>
+	[Serializable]
+	public class FriendsMessage : Message
+	{
+		public string[] friends { get; set; }
 	}
 
 	/// <summary>
@@ -108,6 +139,15 @@ namespace MessageTypes
 	}
 
 	/// <summary>
+	/// Message with income friendship requests.
+	/// </summary>
+	[Serializable]
+	public class IncomeFriendshipRequestsMessage : Message
+	{
+		public string[] logins { get; set; }
+	}
+
+	/// <summary>
 	/// Message, that client send to server 
 	/// to get outcome friendship requests.
 	/// </summary>
@@ -117,12 +157,40 @@ namespace MessageTypes
 	}
 
 	/// <summary>
+	/// Message with outcome friendship requests.
+	/// </summary>
+	[Serializable]
+	public class OutcomeFriendshipRequestsMessage : Message
+	{
+		public string[] logins { get; set; }
+	}
+
+	/// <summary>
+	/// Message, that client send to server 
+	/// to get conversation with interlocutor.
+	/// </summary>
+	[Serializable]
+	public class GetConversationMessage : Message
+	{
+		public string interlocutor { get; set; }
+	}
+
+	/// <summary>
+	/// Message with convrsation.
+	/// </summary>
+	[Serializable]
+	public class ConversationMessage : Message
+	{
+		public Conversation conversation { get; set; }
+	}
+
+	/// <summary>
 	/// Message with friendship request.
 	/// </summary>
 	[Serializable]
 	public class FriendshipRequestMessage : Message
 	{
-		public string login_of_needed_user;
+		public string login_of_needed_user { get; set; }
 	}
 
 	/// <summary>
@@ -131,73 +199,17 @@ namespace MessageTypes
 	[Serializable]
 	public class FriendActionMessage : Message
 	{
-		public string friends_login;
-		public ActionsWithFriend action;
-	}
+		public string friends_login { get; set; }
+		public ActionsWithFriend action { get; set; }
+	}	
 
 	/// <summary>
-	/// Message, that server send to client
-	/// after login attempt.
-	/// </summary>
-	[Serializable]
-	public class LoginResponseMessage : Message
-	{
-		public LoginRegisterResponse response { get; set; }
-	}
-
-	/// <summary>
-	/// Message, that server send to client
-	/// after register attempt.
-	/// </summary>
-	[Serializable]
-	public class RegisterResponseMessage : Message
-	{
-		public LoginRegisterResponse response { get; set; }
-	}
-
-	/// <summary>
-	/// Message with all user's logins.
-	/// </summary>
-	[Serializable]
-	public class AllUsersMessage : Message
-	{
-		public string[] users;
-	}
-
-	/// <summary>
-	/// Message with friend's logins.
-	/// </summary>
-	[Serializable]
-	public class FriendsMessage : Message
-	{
-		public string[] friends;
-	}
-
-	/// <summary>
-	/// Message with income friendship requests.
-	/// </summary>
-	[Serializable]
-	public class IncomeFriendshipRequestsMessage : Message
-	{
-		public string[] logins;
-	}
-
-	/// <summary>
-	/// Message with outcome friendship requests.
-	/// </summary>
-	[Serializable]
-	public class OutcomeFriendshipRequestsMessage : Message
-	{
-		public string[] logins;
-	}
-
-	/// <summary>
-	/// Message with conversation reply text.
+	/// Message with conversation reply.
 	/// </summary>
 	[Serializable]
 	public class ReplyMessage : Message
 	{
-		public string receiver;
-		public string text;
+		public string interlocutor;
+		public ConversationReply reply { get; set; }
 	}
 }

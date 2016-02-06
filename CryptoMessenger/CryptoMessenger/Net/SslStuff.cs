@@ -41,7 +41,7 @@ namespace CryptoMessenger.Net
 		/// <param name="certificate">server's certificate.</param>
 		/// <param name="chain">certificate build chain.</param>
 		/// <param name="sslPolicyErrors">ssl errors.</param>
-		/// <returns>true, if server has been validated.</returns>
+		/// <returns>true if server has been validated; otherwise, false.</returns>
 		public static bool ServerValidationCallback(object sender, 
 			X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
 		{
@@ -74,19 +74,19 @@ namespace CryptoMessenger.Net
 		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
 		public static void ClientSideHandshake(SslStream sslStream, string targetHost)
 		{
-			X509CertificateCollection ccertificateCollection = new X509CertificateCollection();
+			var ccertificateCollection = new X509CertificateCollection();
 
 			try
 			{
 				// get certificate from cert.pfx
 				byte[] embeddedCert;
-				Assembly thisAssembly = Assembly.GetAssembly(typeof(Client));
+				var thisAssembly = Assembly.GetAssembly(typeof(Client));
 				using (Stream certStream = thisAssembly.GetManifestResourceStream("CryptoMessenger.Certificate.cert.pfx"))
 				{
 					embeddedCert = new byte[certStream.Length];
 					certStream.Read(embeddedCert, 0, (int)certStream.Length);
 				}
-				X509Certificate2 certificate = new X509Certificate2(embeddedCert, "", X509KeyStorageFlags.MachineKeySet);
+				var certificate = new X509Certificate2(embeddedCert, "", X509KeyStorageFlags.MachineKeySet);
 				ccertificateCollection.Add(certificate);
 			}
 			catch

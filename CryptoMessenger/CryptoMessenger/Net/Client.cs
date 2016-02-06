@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 
 using CryptoMessenger.GUI;
 using MessageTypes;
+using ConversationTypes;
 
 namespace CryptoMessenger.Net
 {
@@ -45,6 +46,7 @@ namespace CryptoMessenger.Net
 		private TcpClient client;
 		// ssl stream with server
 		private SslStream sslStream;
+		
 		// form to update
 		private MainForm form;
 
@@ -101,6 +103,14 @@ namespace CryptoMessenger.Net
 						form.cache_outcome_reqs = ((OutcomeFriendshipRequestsMessage)message).logins;
 						form.UpdateOutcomeFriendshipRequests(form.cache_outcome_reqs);
 					}
+					else if (message is ConversationMessage)
+					{
+						form.conversations.AddConversation(((ConversationMessage)message).conversation);
+					}
+					else if (message is ReplyMessage)
+					{
+						form.conversations.AddReply(((ReplyMessage)message).interlocutor, ((ReplyMessage)message).reply);
+					}
 				}
 			}
 			catch (ServerConnectionException)
@@ -122,7 +132,7 @@ namespace CryptoMessenger.Net
 		{
 			await Connect();
 
-			LoginRequestMessage message = new LoginRequestMessage
+			var message = new LoginRequestMessage
 			{
 				login = _login,
 				password = _password
@@ -130,7 +140,7 @@ namespace CryptoMessenger.Net
 
 			SendMessage(message);
 			// async wait for server's response
-			LoginResponseMessage serverResp = (LoginResponseMessage)await ReceiveMessage();
+			var serverResp = (LoginRegisterResponseMessage)await ReceiveMessage();
 
 			// don't disconnect if login success
 			if (!LoginRegisterResponse.SUCCESS.Equals(serverResp.response))
@@ -168,7 +178,7 @@ namespace CryptoMessenger.Net
 		{
 			await Connect();
 
-			RegisterRequestMessage message = new RegisterRequestMessage
+			var message = new RegisterRequestMessage
 			{
 				login = _login,
 				password = _password
@@ -176,7 +186,7 @@ namespace CryptoMessenger.Net
 
 			SendMessage(message);
 			// async wait for server's response
-			RegisterResponseMessage serverResp = (RegisterResponseMessage)await ReceiveMessage();
+			var serverResp = (LoginRegisterResponseMessage)await ReceiveMessage();
 			
 			Disconnect();
 
@@ -289,8 +299,24 @@ namespace CryptoMessenger.Net
 		{
 			SendMessage(new ReplyMessage
 			{
-				receiver = receiver,
-				text = text
+				interlocutor = receiver,
+				reply = new ConversationReply
+				{
+					text = text
+				}
+			});
+		}
+
+		/// <summary>
+		/// Get conversation with interlocutor from server;
+		/// listener should receive response message.
+		/// </summary>
+		/// <param name="interlocutor">interlocutor.</param>
+		public void GetConversation(string interlocutor)
+		{
+			SendMessage(new GetConversationMessage
+			{
+				interlocutor = interlocutor
 			});
 		}
 
@@ -361,7 +387,7 @@ namespace CryptoMessenger.Net
 		{
 			try
 			{
-				XmlSerializer requestSerializer = new XmlSerializer(typeof(Message));
+				var requestSerializer = new XmlSerializer(typeof(Message));
 				requestSerializer.Serialize(sslStream, message);
 			}
 			catch
@@ -381,11 +407,11 @@ namespace CryptoMessenger.Net
 
 				try
 				{
-					XmlSerializer responseSerializer = new XmlSerializer(typeof(Message));
+					var responseSerializer = new XmlSerializer(typeof(Message));
 
 					byte[] buffer = new byte[client.ReceiveBufferSize];
 					int length = sslStream.Read(buffer, 0, buffer.Length);
-					MemoryStream ms = new MemoryStream(buffer, 0, length);
+					var ms = new MemoryStream(buffer, 0, length);
 
 					return (Message)responseSerializer.Deserialize(ms);
 				}

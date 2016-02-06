@@ -21,7 +21,7 @@ namespace Server
 		{
 			try
 			{
-				XmlSerializer responseSerializer = new XmlSerializer(typeof(Message));
+				var responseSerializer = new XmlSerializer(typeof(Message));
 				responseSerializer.Serialize(sslStream, message);
 			}
 			catch
@@ -38,11 +38,11 @@ namespace Server
 		/// <returns>client's message.</returns>
 		public static Message ReceiveMessage(TcpClient client, SslStream sslStream)
 		{
-			XmlSerializer requestSerializer = new XmlSerializer(typeof(Message));
+			var requestSerializer = new XmlSerializer(typeof(Message));
 
 			byte[] buffer = new byte[client.ReceiveBufferSize];
 			int length = sslStream.Read(buffer, 0, buffer.Length);
-			MemoryStream ms = new MemoryStream(buffer, 0, length);
+			var ms = new MemoryStream(buffer, 0, length);
 
 			return (Message)requestSerializer.Deserialize(ms);
 		}

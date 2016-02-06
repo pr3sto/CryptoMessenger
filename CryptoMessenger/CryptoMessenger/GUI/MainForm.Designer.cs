@@ -525,6 +525,8 @@ namespace CryptoMessenger.GUI
 				removeFriendButton.Enabled = true;
 				removeFriendButton.Text = "УДАЛИТЬ ИЗ ДРУЗЕЙ";
 				EnabledSendReplies();
+
+				GetConversation(activeTalkLabel.Text);
 			}
 		}
 
@@ -576,8 +578,6 @@ namespace CryptoMessenger.GUI
 		#region Reply placeholder
 
 		private bool IsPlaceholderWrited = true;
-
-		private bool CanSendReply = false;
 
 		// add placeholder
 		private void replyTextfield_Leave(object sender, EventArgs e)
