@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using CryptoMessenger.GUI;
 using MessageTypes;
 using ConversationTypes;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CryptoMessenger.Net
 {
@@ -75,48 +76,55 @@ namespace CryptoMessenger.Net
 		public async void Listen(MainForm _form)
 		{
 			form = _form;
-			try
+
+			Message message;
+
+			while (true)
 			{
-				while (true)
+
+				try
 				{
 					// wait for message
-					Message message = await ReceiveMessage();
-
-					// handle message
-					if (message is AllUsersMessage)
-					{
-						string[] users = ((AllUsersMessage)message).users;
-						form.UpdateAllUsersList(users);
-					}
-					else if (message is FriendsMessage)
-					{
-						form.cache_friends = ((FriendsMessage)message).friends;
-						form.UpdateFriendsList(form.cache_friends);
-					}
-					else if (message is IncomeFriendshipRequestsMessage)
-					{
-						form.cache_income_reqs = ((IncomeFriendshipRequestsMessage)message).logins;
-						form.UpdateIncomeFriendshipRequests(form.cache_income_reqs);
-					}
-					else if (message is OutcomeFriendshipRequestsMessage)
-					{
-						form.cache_outcome_reqs = ((OutcomeFriendshipRequestsMessage)message).logins;
-						form.UpdateOutcomeFriendshipRequests(form.cache_outcome_reqs);
-					}
-					else if (message is ConversationMessage)
-					{
-						form.conversations.AddConversation(((ConversationMessage)message).conversation);
-					}
-					else if (message is ReplyMessage)
-					{
-						form.conversations.AddReply(((ReplyMessage)message).interlocutor, ((ReplyMessage)message).reply);
-					}
+					message = await ReceiveMessage();
 				}
-			}
-			catch (ServerConnectionException)
-			{
-				// disconnect from server
-				// TODO do something -__-
+				catch (ServerConnectionException)
+				{
+					// disconnect from server
+					// TODO do something -__-
+					return;
+				}
+
+				// handle message
+				if (message is AllUsersMessage)
+				{
+					string[] users = ((AllUsersMessage)message).users;
+					form.UpdateAllUsersList(users);
+				}
+				else if (message is FriendsMessage)
+				{
+					form.cache_friends = ((FriendsMessage)message).friends;
+					form.UpdateFriendsList(form.cache_friends);
+				}
+				else if (message is IncomeFriendshipRequestsMessage)
+				{
+					form.cache_income_reqs = ((IncomeFriendshipRequestsMessage)message).logins;
+					form.UpdateIncomeFriendshipRequests(form.cache_income_reqs);
+				}
+				else if (message is OutcomeFriendshipRequestsMessage)
+				{
+					form.cache_outcome_reqs = ((OutcomeFriendshipRequestsMessage)message).logins;
+					form.UpdateOutcomeFriendshipRequests(form.cache_outcome_reqs);
+				}
+				else if (message is ConversationMessage)
+				{
+					form.conversations.AddConversation(((ConversationMessage)message).conversation);
+					form.ShowConversation(((ConversationMessage)message).conversation.interlocutor);
+				}
+				else if (message is ReplyMessage)
+				{
+					form.conversations.AddReply(((ReplyMessage)message).interlocutor, ((ReplyMessage)message).reply);
+					form.ShowConversation(((ReplyMessage)message).interlocutor);
+				}
 			}
 		}
 
@@ -387,8 +395,19 @@ namespace CryptoMessenger.Net
 		{
 			try
 			{
-				var requestSerializer = new XmlSerializer(typeof(Message));
-				requestSerializer.Serialize(sslStream, message);
+				using (var stream = new MemoryStream())
+				{
+					var requestSerializer = new XmlSerializer(typeof(Message));
+					requestSerializer.Serialize(stream, message);
+
+					// number of 1024b chunks
+					int count = (int)stream.Length / 1024 + 1;
+
+					// send count
+					sslStream.Write(BitConverter.GetBytes(count));
+					//send message
+					requestSerializer.Serialize(sslStream, message);
+				}
 			}
 			catch
 			{
@@ -407,13 +426,26 @@ namespace CryptoMessenger.Net
 
 				try
 				{
-					var responseSerializer = new XmlSerializer(typeof(Message));
+					var requestSerializer = new XmlSerializer(typeof(Message));
 
-					byte[] buffer = new byte[client.ReceiveBufferSize];
+					byte[] buffer = new byte[1000000];
 					int length = sslStream.Read(buffer, 0, buffer.Length);
-					var ms = new MemoryStream(buffer, 0, length);
 
-					return (Message)responseSerializer.Deserialize(ms);
+					// number of 1024b chunks
+					Array.Resize(ref buffer, length);
+					int count = BitConverter.ToInt32(buffer, 0);
+
+					if (count == 2) count = 4;
+
+					// read data
+					buffer = new byte[1000000];
+					length = 0;
+					for (int i = 0; i < count; i++)
+						length += sslStream.Read(buffer, i * 1024, 1024);
+
+					// deserialize message
+					var ms = new MemoryStream(buffer, 0, length);
+					return (Message)requestSerializer.Deserialize(ms);
 				}
 				catch
 				{

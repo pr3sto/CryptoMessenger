@@ -42,6 +42,19 @@ namespace CryptoMessenger.Stuff
 		}
 
 		/// <summary>
+		/// Get conversation with interlocutor.
+		/// </summary>
+		/// <param name="interlocutor">interlocutor.</param>
+		/// <returns>conversation.</returns>
+		public Conversation GetConversation(string interlocutor)
+		{
+			if (Contains(interlocutor))
+				return conversations.Find(x => x.interlocutor == interlocutor);
+			else
+				return null;
+		}
+
+		/// <summary>
 		/// Add reply to conversation with interlocutor.
 		/// </summary>
 		/// <param name="interlocutor">interlocutor.</param>

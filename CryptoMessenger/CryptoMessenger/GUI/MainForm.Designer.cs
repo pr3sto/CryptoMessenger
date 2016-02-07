@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Drawing;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using ConversationTypes;
+using TheArtOfDev.HtmlRenderer.WinForms;
+
 namespace CryptoMessenger.GUI
 {
-    partial class MainForm
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class MainForm
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
 			if (disposing)
 			{
 				if (components != null)
@@ -26,7 +30,7 @@ namespace CryptoMessenger.GUI
 					shadow.Dispose();
 			}
 			base.Dispose(disposing);
-        }
+		}
 
 		/// <summary>
 		/// Parameters for minimizing form.
@@ -183,7 +187,7 @@ namespace CryptoMessenger.GUI
 		#endregion
 
 		#region Move form 
-		
+
 		private bool moveForm;
 		private int deltaX;
 		private int deltaY;
@@ -401,8 +405,8 @@ namespace CryptoMessenger.GUI
 			DisableSendReplies();
 
 			selectedPanel = UsersPanels.SEARCH;
-		}	
-		
+		}
+
 		// resize labels
 		private void ResizeContactLabels()
 		{
@@ -526,7 +530,7 @@ namespace CryptoMessenger.GUI
 				removeFriendButton.Text = "УДАЛИТЬ ИЗ ДРУЗЕЙ";
 				EnabledSendReplies();
 
-				GetConversation(activeTalkLabel.Text);
+				GetOrShowConversation(activeTalkLabel.Text);
 			}
 		}
 
@@ -601,6 +605,30 @@ namespace CryptoMessenger.GUI
 
 				IsPlaceholderWrited = false;
 				CanSendReply = true;
+			}
+		}
+
+		#endregion
+
+		#region Show conversation
+
+		public void ShowConversation(string interlocutor)
+		{
+			if (activeTalkLabel.Text.Equals(interlocutor))
+			{
+				Conversation conversation = conversations.GetConversation(interlocutor);
+
+				if (conversation != null)
+				{
+					conversationHtmlPanel.Text = "";
+
+					foreach (var reply in conversation.replies)
+					{
+						conversationHtmlPanel.Text += "<html><b>" + reply.author +
+							"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + reply.time +
+							"</b><br>" + reply.text + "</html>";
+					}
+				}
 			}
 		}
 
@@ -687,6 +715,7 @@ namespace CryptoMessenger.GUI
 			this.loadingLabel = new System.Windows.Forms.Label();
 			this.mainFormPanel = new System.Windows.Forms.Panel();
 			this.splitContainer = new CryptoMessenger.GUI.MySplitContainer();
+			this.conversationHtmlPanel = new HtmlPanel();
 			this.activeTalkLabelPanel = new System.Windows.Forms.Panel();
 			this.activeTalkLabel = new System.Windows.Forms.Label();
 			this.replyTextfield = new System.Windows.Forms.TextBox();
@@ -812,8 +841,8 @@ namespace CryptoMessenger.GUI
 			// 
 			this.allUsersListBox.BackColor = System.Drawing.SystemColors.Window;
 			this.allUsersListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.allUsersListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
 			this.allUsersListBox.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.allUsersListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
 			this.allUsersListBox.FormattingEnabled = true;
 			this.allUsersListBox.Location = new System.Drawing.Point(0, 0);
 			this.allUsersListBox.Name = "allUsersListBox";
@@ -828,6 +857,7 @@ namespace CryptoMessenger.GUI
 			// 
 			this.addFriendButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.MainFirstColor;
 			this.addFriendButton.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.addFriendButton.Enabled = false;
 			this.addFriendButton.FlatAppearance.BorderSize = 0;
 			this.addFriendButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
 			this.addFriendButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
@@ -838,9 +868,8 @@ namespace CryptoMessenger.GUI
 			this.addFriendButton.Name = "addFriendButton";
 			this.addFriendButton.Size = new System.Drawing.Size(198, 30);
 			this.addFriendButton.TabIndex = 0;
-			this.addFriendButton.Text = "CRYPTO MESSENGER";
 			this.addFriendButton.TabStop = false;
-			this.addFriendButton.Enabled = false;
+			this.addFriendButton.Text = "CRYPTO MESSENGER";
 			this.addFriendButton.UseVisualStyleBackColor = true;
 			this.addFriendButton.Click += new System.EventHandler(this.addFriendButton_Click);
 			// 
@@ -856,8 +885,8 @@ namespace CryptoMessenger.GUI
 			// friendsListBox
 			// 
 			this.friendsListBox.BackColor = System.Drawing.SystemColors.Window;
-			this.friendsListBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.friendsListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.friendsListBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.friendsListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
 			this.friendsListBox.FormattingEnabled = true;
 			this.friendsListBox.Location = new System.Drawing.Point(0, 0);
@@ -873,6 +902,7 @@ namespace CryptoMessenger.GUI
 			// 
 			this.removeFriendButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.MainFirstColor;
 			this.removeFriendButton.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.removeFriendButton.Enabled = false;
 			this.removeFriendButton.FlatAppearance.BorderSize = 0;
 			this.removeFriendButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
 			this.removeFriendButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
@@ -886,7 +916,6 @@ namespace CryptoMessenger.GUI
 			this.removeFriendButton.TabStop = false;
 			this.removeFriendButton.Text = "CRYPTO MESSENGER";
 			this.removeFriendButton.UseVisualStyleBackColor = true;
-			this.removeFriendButton.Enabled = false;
 			this.removeFriendButton.Click += new System.EventHandler(this.removeFriendButton_Click);
 			// 
 			// friendshipRequestsPanel
@@ -907,8 +936,8 @@ namespace CryptoMessenger.GUI
 			// outcomeFriendshipRequestsListBox
 			// 
 			this.outcomeFriendshipRequestsListBox.BackColor = System.Drawing.SystemColors.Window;
-			this.outcomeFriendshipRequestsListBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.outcomeFriendshipRequestsListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.outcomeFriendshipRequestsListBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.outcomeFriendshipRequestsListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
 			this.outcomeFriendshipRequestsListBox.FormattingEnabled = true;
 			this.outcomeFriendshipRequestsListBox.Location = new System.Drawing.Point(0, 216);
@@ -918,14 +947,14 @@ namespace CryptoMessenger.GUI
 			this.outcomeFriendshipRequestsListBox.TabStop = false;
 			this.outcomeFriendshipRequestsListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_DrawItem);
 			this.outcomeFriendshipRequestsListBox.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.listBox_MeasureItem);
-			this.outcomeFriendshipRequestsListBox.Enter += new System.EventHandler(this.outcomeRequestsListBox_Enter);
 			this.outcomeFriendshipRequestsListBox.SelectedIndexChanged += new System.EventHandler(this.OutcomeRequestsListBoxesSelectedChanged);
+			this.outcomeFriendshipRequestsListBox.Enter += new System.EventHandler(this.outcomeRequestsListBox_Enter);
 			// 
 			// incomeFriendshipRequestsListBox
 			// 
 			this.incomeFriendshipRequestsListBox.BackColor = System.Drawing.SystemColors.Window;
-			this.incomeFriendshipRequestsListBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.incomeFriendshipRequestsListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.incomeFriendshipRequestsListBox.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.incomeFriendshipRequestsListBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
 			this.incomeFriendshipRequestsListBox.FormattingEnabled = true;
 			this.incomeFriendshipRequestsListBox.Location = new System.Drawing.Point(0, 26);
@@ -941,6 +970,7 @@ namespace CryptoMessenger.GUI
 			// 
 			this.cancelFriendshipRequestButton.BackColor = global::CryptoMessenger.Properties.Settings.Default.MainFirstColor;
 			this.cancelFriendshipRequestButton.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.cancelFriendshipRequestButton.Enabled = false;
 			this.cancelFriendshipRequestButton.FlatAppearance.BorderSize = 0;
 			this.cancelFriendshipRequestButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
 			this.cancelFriendshipRequestButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
@@ -954,7 +984,6 @@ namespace CryptoMessenger.GUI
 			this.cancelFriendshipRequestButton.TabStop = false;
 			this.cancelFriendshipRequestButton.Text = "CRYPTO MESSENGER";
 			this.cancelFriendshipRequestButton.UseVisualStyleBackColor = true;
-			this.cancelFriendshipRequestButton.Enabled = false;
 			this.cancelFriendshipRequestButton.Click += new System.EventHandler(this.cancelFriendshipRequestButton_Click);
 			// 
 			// acceptFriendshipButton
@@ -975,7 +1004,6 @@ namespace CryptoMessenger.GUI
 			this.acceptFriendshipButton.Text = "ПРИНЯТЬ";
 			this.acceptFriendshipButton.UseVisualStyleBackColor = true;
 			this.acceptFriendshipButton.Visible = false;
-			this.acceptFriendshipButton.Enabled = true;
 			this.acceptFriendshipButton.Click += new System.EventHandler(this.acceptFriendshipButton_Click);
 			// 
 			// rejectFriendshipButton
@@ -996,7 +1024,6 @@ namespace CryptoMessenger.GUI
 			this.rejectFriendshipButton.Text = "ОТКЛОНИТЬ";
 			this.rejectFriendshipButton.UseVisualStyleBackColor = true;
 			this.rejectFriendshipButton.Visible = false;
-			this.rejectFriendshipButton.Enabled = true;
 			this.rejectFriendshipButton.Click += new System.EventHandler(this.rejectFriendshipButton_Click);
 			// 
 			// outcomeFriendshipRequestsLabel
@@ -1116,6 +1143,7 @@ namespace CryptoMessenger.GUI
 			// 
 			// splitContainer.Panel1
 			// 
+			this.splitContainer.Panel1.Controls.Add(this.conversationHtmlPanel);
 			this.splitContainer.Panel1.Controls.Add(this.activeTalkLabelPanel);
 			this.splitContainer.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer_Panel1_Paint);
 			this.splitContainer.Panel1MinSize = 150;
@@ -1133,6 +1161,16 @@ namespace CryptoMessenger.GUI
 			this.splitContainer.TabStop = false;
 			this.splitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_SplitterMoved);
 			this.splitContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer_Paint);
+			// 
+			// conversationHtmlPanel
+			// 
+			this.conversationHtmlPanel.AutoScroll = true;
+			this.conversationHtmlPanel.AutoScrollMinSize = new System.Drawing.Size(450, 0);
+			this.conversationHtmlPanel.BackColor = System.Drawing.SystemColors.Window;
+			this.conversationHtmlPanel.Location = new System.Drawing.Point(10, 35);
+			this.conversationHtmlPanel.Name = "conversationHtmlPanel";
+			this.conversationHtmlPanel.Size = new System.Drawing.Size(450, 330);
+			this.conversationHtmlPanel.TabIndex = 0;
 			// 
 			// activeTalkLabelPanel
 			// 
@@ -1161,15 +1199,15 @@ namespace CryptoMessenger.GUI
 			// 
 			this.replyTextfield.BackColor = System.Drawing.Color.White;
 			this.replyTextfield.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.replyTextfield.Enabled = false;
 			this.replyTextfield.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.replyTextfield.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.replyTextfield.Location = new System.Drawing.Point(10, 5);
 			this.replyTextfield.Multiline = true;
-			this.replyTextfield.Name = "message";
+			this.replyTextfield.Name = "replyTextfield";
 			this.replyTextfield.Size = new System.Drawing.Size(392, 50);
 			this.replyTextfield.TabIndex = 0;
 			this.replyTextfield.TabStop = false;
-			this.replyTextfield.Enabled = false;
 			this.replyTextfield.Text = "ВВЕДИТЕ СООБЩЕНИЕ...";
 			this.replyTextfield.TextChanged += new System.EventHandler(this.replyTextfield_TextChanged);
 			this.replyTextfield.Enter += new System.EventHandler(this.replyTextfield_Enter);
@@ -1181,6 +1219,7 @@ namespace CryptoMessenger.GUI
 			this.sendReplyButton.BackgroundImage = global::CryptoMessenger.Properties.Resources.send;
 			this.sendReplyButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.sendReplyButton.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.sendReplyButton.Enabled = false;
 			this.sendReplyButton.FlatAppearance.BorderSize = 0;
 			this.sendReplyButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(0)))), ((int)(((byte)(75)))));
 			this.sendReplyButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(25)))), ((int)(((byte)(105)))));
@@ -1188,11 +1227,10 @@ namespace CryptoMessenger.GUI
 			this.sendReplyButton.Font = new System.Drawing.Font("Roboto Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.sendReplyButton.ForeColor = System.Drawing.Color.White;
 			this.sendReplyButton.Location = new System.Drawing.Point(412, 1);
-			this.sendReplyButton.Name = "sendButton";
+			this.sendReplyButton.Name = "sendReplyButton";
 			this.sendReplyButton.Size = new System.Drawing.Size(58, 58);
 			this.sendReplyButton.TabIndex = 0;
 			this.sendReplyButton.TabStop = false;
-			this.sendReplyButton.Enabled = false;
 			this.sendReplyButton.UseVisualStyleBackColor = true;
 			this.sendReplyButton.Click += new System.EventHandler(this.sendReplyButton_Click);
 			// 
@@ -1269,5 +1307,6 @@ namespace CryptoMessenger.GUI
 		private MyButton cancelFriendshipRequestButton;
 		private MyButton acceptFriendshipButton;
 		private MyButton rejectFriendshipButton;
+		private HtmlPanel conversationHtmlPanel;
 	}
 }

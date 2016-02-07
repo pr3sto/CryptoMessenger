@@ -25,9 +25,9 @@ namespace CryptoMessenger.GUI
 		// 'cache' 
 		// We dont ask server for it if we have it in cache;
 		// server sends it to us if something changes.
-		public string[] cache_friends = null;
-		public string[] cache_income_reqs = null;
-		public string[] cache_outcome_reqs = null;
+		public string[] cache_friends { get; set; } = null;
+		public string[] cache_income_reqs { get; set; } = null;
+		public string[] cache_outcome_reqs { get; set; } = null;
 
 		// conversations of user
 		public Conversations conversations = new Conversations();
@@ -192,12 +192,12 @@ namespace CryptoMessenger.GUI
 		#region Conversation actions
 
 		// get conversation from server if we dont have it
-		private void GetConversation(string interlocutor)
+		private void GetOrShowConversation(string interlocutor)
 		{
 			if (!conversations.Contains(interlocutor))
-			{
 				client.GetConversation(interlocutor);
-			}
+			else
+				ShowConversation(interlocutor);
 		}
 
 		// send reply
