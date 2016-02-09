@@ -6,8 +6,10 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-using MessageTypes;
 using Server.Database;
+
+using MessageProtocol.MessageTypes;
+using MessageProtocol.Client;
 
 namespace Server
 {
@@ -50,7 +52,7 @@ namespace Server
 		{
 			if (disposed) return;
 
-			Console.WriteLine(" - client disconnected. ip {0}",
+			Console.WriteLine("{0}: Client disconnected. ip {1}", DateTime.Now,
 				((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
 			try
@@ -71,11 +73,11 @@ namespace Server
 	}
 
 	/// <summary>
-	/// Class for handle online user.
+	/// Class for handle online users.
 	/// </summary>
 	class OnlineUsersHandler : IDisposable
 	{ 
-		public List<OnlineUser> onlineUsers;
+		private List<OnlineUser> onlineUsers;
 
 		public OnlineUsersHandler()
 		{
@@ -92,9 +94,9 @@ namespace Server
 		}
 
 		/// <summary>
-		/// Add user to list of online users and start to listen him.
+		/// Add user to list of online users and start to listen to him.
 		/// </summary>
-		/// <param name="user"></param>
+		/// <param name="user">user.</param>
 		public void AddUser(OnlineUser user)
 		{
 			if (user != null)
@@ -120,85 +122,93 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void UserListener(OnlineUser user)
 		{
-			try
+			while (true)
 			{
-				while (true)
-				{
+				Message message;
+
+				try
+				{ 
 					// user's incoming message
-					Message message = ClientConnection.ReceiveMessage(user.client, user.sslStream);
-
-					// process message
-					if (message is GetAllUsersMessage)
-					{
-						SendAllUsers(user);
-					}
-					else if (message is GetFriendsMessage)
-					{
-						SendFriends(user);
-					}
-					else if (message is GetIncomeFriendshipRequestsMessage)
-					{
-						SendIncomeFriendshipRequests(user);
-					}
-					else if (message is GetOutcomeFriendshipRequestsMessage)
-					{
-						SendOutcomeFriendshipRequests(user);
-					}
-					else if (message is FriendshipRequestMessage)
-					{
-						SetFriendshipRequest(user, ((FriendshipRequestMessage)message).login_of_needed_user);
-					}
-					else if (message is FriendActionMessage)
-					{
-						FriendActionMessage msg = (FriendActionMessage)message;
-
-						switch (msg.action)
-						{
-							case ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST:
-								CancelFriendshipRequest(user, msg.friends_login);
-								break;
-							case ActionsWithFriend.ACCEPT_FRIENDSHIP:
-								AcceptFriendshipRequest(user, msg.friends_login);
-								break;
-							case ActionsWithFriend.REJECT_FRIENDSHIP:
-								RejectFriendshipRequest(user, msg.friends_login);
-								break;
-							case ActionsWithFriend.REMOVE_FROM_FRIENDS:
-								RemoveFriend(user, msg.friends_login);
-								break;
-						}
-					}
-					else if (message is GetConversationMessage)
-					{
-						SendConversation(user, ((GetConversationMessage)message).interlocutor);
-					}
-					else if (message is ReplyMessage)
-					{
-						HandleReply(user, ((ReplyMessage)message).interlocutor, ((ReplyMessage)message).reply.text);
-					}
-					else if (message is LogoutRequestMessage)
-					{
-						Logout(user);
-						break;
-					}
+					message = MpClient.ReceiveMessage(user.sslStream);
 				}
-			}
-			catch
-			{
-				// client disconnected in a bad way
-				if (onlineUsers.Contains(user))
+				catch (ConnectionInterruptedException)
 				{
-					onlineUsers.Remove(user);
-					user.Dispose();
+					if (onlineUsers.Contains(user))
+					{
+						onlineUsers.Remove(user);
+						user.Dispose();
+					}
+
+					// TODO logger
+					break;
 				}
-				// or server has been stopped
+				catch
+				{
+					// TODO logger
+					break;
+				}
+
+				// process message
+				if (message is GetAllUsersMessage)
+				{
+					SendAllUsers(user);
+				}
+				else if (message is GetFriendsMessage)
+				{
+					SendFriends(user);
+				}
+				else if (message is GetIncomeFriendshipRequestsMessage)
+				{
+					SendIncomeFriendshipRequests(user);
+				}
+				else if (message is GetOutcomeFriendshipRequestsMessage)
+				{
+					SendOutcomeFriendshipRequests(user);
+				}
+				else if (message is GetConversationMessage)
+				{
+					SendConversation(user, ((GetConversationMessage)message).interlocutor);
+				}
+				else if (message is FriendshipRequestMessage)
+				{
+					SetFriendshipRequest(user, ((FriendshipRequestMessage)message).login_of_needed_user);
+				}
+				else if (message is FriendActionMessage)
+				{
+					FriendActionMessage msg = (FriendActionMessage)message;
+
+					switch (msg.action)
+					{
+						case ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST:
+							CancelFriendshipRequest(user, msg.friends_login);
+							break;
+						case ActionsWithFriend.ACCEPT_FRIENDSHIP:
+							AcceptFriendshipRequest(user, msg.friends_login);
+							break;
+						case ActionsWithFriend.REJECT_FRIENDSHIP:
+							RejectFriendshipRequest(user, msg.friends_login);
+							break;
+						case ActionsWithFriend.REMOVE_FROM_FRIENDS:
+							RemoveFriend(user, msg.friends_login);
+							break;
+					}
+				}
+				else if (message is ReplyMessage)
+				{
+					HandleReply(user, ((ReplyMessage)message).interlocutor, ((ReplyMessage)message).reply_text);
+				}
+				else if (message is LogoutRequestMessage)
+				{
+					Logout(user);
+					break;
+				}
 			}
 		}
 
 		#region Actions on received message
 
 		/// <summary>
-		/// Logout user.
+		/// Log out user.
 		/// </summary>
 		/// <param name="user">user.</param>
 		private void Logout(OnlineUser user)
@@ -224,11 +234,17 @@ namespace Server
 				!friends.Contains(x) &
 				x != user.login).ToArray();
 
-			AllUsersMessage response = new AllUsersMessage
+			try
 			{
-				users = users
-			};
-			ClientConnection.SendMessage(user.sslStream, response);
+				MpClient.SendMessage(user.sslStream, new AllUsersMessage
+				{
+					users = users
+				});
+			}
+			catch
+			{
+				// TODO logger
+			}
 		}
 
 		/// <summary>
@@ -237,11 +253,17 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void SendFriends(OnlineUser user)
 		{
-			FriendsMessage response = new FriendsMessage
+			try
 			{
-				friends = DBoperations.GetFriends(user.id)
-			};
-			ClientConnection.SendMessage(user.sslStream, response);
+				MpClient.SendMessage(user.sslStream, new FriendsMessage
+				{
+					friends = DBoperations.GetFriends(user.id)
+				});
+			}
+			catch
+			{
+				// TODO logger
+			}
 		}
 
 		/// <summary>
@@ -250,11 +272,17 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void SendIncomeFriendshipRequests(OnlineUser user)
 		{
-			IncomeFriendshipRequestsMessage response = new IncomeFriendshipRequestsMessage
+			try
 			{
-				logins = DBoperations.GetIncomeFriendshipRequests(user.id)
-			};
-			ClientConnection.SendMessage(user.sslStream, response);
+				MpClient.SendMessage(user.sslStream, new IncomeFriendshipRequestsMessage
+				{
+					logins = DBoperations.GetIncomeFriendshipRequests(user.id)
+				});
+			}
+			catch
+			{
+				// TODO logger
+			}
 		}
 
 		/// <summary>
@@ -263,11 +291,51 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void SendOutcomeFriendshipRequests(OnlineUser user)
 		{
-			OutcomeFriendshipRequestsMessage response = new OutcomeFriendshipRequestsMessage
+			try
 			{
-				logins = DBoperations.GetOutcomeFriendshipRequests(user.id)
-			};
-			ClientConnection.SendMessage(user.sslStream, response);
+				MpClient.SendMessage(user.sslStream, new OutcomeFriendshipRequestsMessage
+				{
+					logins = DBoperations.GetOutcomeFriendshipRequests(user.id)
+				});
+			}
+			catch
+			{
+				// TODO logger
+			}
+		}
+
+		/// <summary>
+		/// Send conversation to user.
+		/// </summary>
+		/// <param name="user">user.</param>
+		/// <param name="interlocutor">interlocutor of user in conversation.</param>
+		private void SendConversation(OnlineUser user, string interlocutor)
+		{
+			int interlocutors_id = DBoperations.GetUserId(interlocutor);
+			if (interlocutors_id == 0) return;
+
+			// get replies from db
+			ConversationReply[] replies = DBoperations.GetConversation(user.id, interlocutors_id);
+
+			
+			if (replies != null)
+			{
+				try
+				{
+					foreach (var r in replies)
+						MpClient.SendMessage(user.sslStream, new ReplyMessage
+						{
+							interlocutor = interlocutor,
+							reply_author = DBoperations.GetUserLogin(r.user_id),
+							reply_time = r.time,
+							reply_text = r.reply
+						});
+				}
+				catch
+				{
+					// TODO logger
+				}
+			}
 		}
 
 		/// <summary>
@@ -283,10 +351,10 @@ namespace Server
 			// set friendship request
 			if (DBoperations.SetFriendship(false, user.id, friends_id))
 			{
-				// send new lists to user one
+				// send new data to user one
 				SendAllUsers(user);
 				SendOutcomeFriendshipRequests(user);
-				// send new lists to user two if online
+				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
 				if (friend != null) SendIncomeFriendshipRequests(friend);
 			}
@@ -304,9 +372,9 @@ namespace Server
 
 			if (DBoperations.RemoveFriendshipRequest(user.id, friends_id))
 			{
-				// send new lists to user one
+				// send new data to user one
 				SendOutcomeFriendshipRequests(user);
-				// send new lists to user two if online
+				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
 				if (friend != null) SendIncomeFriendshipRequests(friend);
 			}
@@ -324,10 +392,10 @@ namespace Server
 
 			if (DBoperations.SetFriendship(true, friends_id, user.id))
 			{
-				// send new lists to user one
+				// send new data to user one
 				SendIncomeFriendshipRequests(user);
 				SendFriends(user);
-				// send new lists to user two if online
+				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
 				if (friend != null)
 				{
@@ -349,9 +417,9 @@ namespace Server
 
 			if (DBoperations.RemoveFriendshipRequest(friends_id, user.id))
 			{
-				// send new lists to user one
+				// send new data to user one
 				SendIncomeFriendshipRequests(user);
-				// send new lists to user two if online
+				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
 				if (friend != null) SendOutcomeFriendshipRequests(friend);
 			}
@@ -369,9 +437,9 @@ namespace Server
 
 			if (DBoperations.RemoveFriend(user.id, friends_id))
 			{
-				// send new friends list to user one
+				// send new data to user one
 				SendFriends(user);
-				// send new friends list to user two if online
+				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friends_login);
 				if (friend != null) SendFriends(friend);
 			}
@@ -393,65 +461,42 @@ namespace Server
 
 			if (DBoperations.AddNewReply(user.id, interlocutors_id, text, time))
 			{
-				// reply
-				var reply = new ConversationTypes.ConversationReply
+				try
 				{
-					author = user.login,
-					time = time,
-					text = text
-				};
+					// send reply to user one
+					MpClient.SendMessage(user.sslStream, new ReplyMessage
+					{
+						interlocutor = interlocutor,
+						reply_author = user.login,
+						reply_time = time,
+						reply_text = text
+					});
+				}
+				catch
+				{
+					// TODO logger
+				}
 
-				// send reply to user one
-				ClientConnection.SendMessage(user.sslStream, new ReplyMessage
-				{
-					interlocutor = interlocutor,
-					reply = reply
-				});
 				// send reply to user two if online
 				OnlineUser friend = GetOnlineUser(interlocutor);
-				if (friend != null) ClientConnection.SendMessage(friend.sslStream, new ReplyMessage
+				if (friend != null)
 				{
-					interlocutor = user.login,
-					reply = reply
-				});
-			}
-		}
-
-		/// <summary>
-		/// Send conversation to user.
-		/// </summary>
-		/// <param name="user">user.</param>
-		/// <param name="interlocutor">interlocutor of user in conversation.</param>
-		private void SendConversation(OnlineUser user, string interlocutor)
-		{
-			int interlocutors_id = DBoperations.GetUserId(interlocutor);
-			if (interlocutors_id == 0) return;
-
-			// get replies from db
-			ConversationReply[] replies = DBoperations.GetConversation(user.id, interlocutors_id);
-
-			var conversation = new ConversationTypes.Conversation
-			{
-				interlocutor = interlocutor,
-				replies = new List<ConversationTypes.ConversationReply>()
-			};
-
-			if (replies != null)
-			{
-				foreach (var r in replies)
-					conversation.replies.Add(new ConversationTypes.ConversationReply
+					try
 					{
-						author = DBoperations.GetUserLogin(r.user_id),
-						time = r.time,
-						text = r.reply
-					});
+						MpClient.SendMessage(friend.sslStream, new ReplyMessage
+						{
+							interlocutor = user.login,
+							reply_author = user.login,
+							reply_time = time,
+							reply_text = text
+						});
+					}
+					catch
+					{
+						// TODO logger
+					}
+				}
 			}
-
-			// send
-			ClientConnection.SendMessage(user.sslStream, new ConversationMessage
-			{
-				conversation = conversation
-			});
 		}
 
 		#endregion

@@ -7,7 +7,7 @@ namespace Server
 		/// <summary>
 		/// The main entry point for the server application.
 		/// </summary>
-		static void Main(string[] args)
+		static void Main()
 		{
 			Console.Title = "Server";
 
@@ -28,17 +28,11 @@ namespace Server
 				string command = Console.ReadLine();
 
 				if ("start".Equals(command))
-				{
 					server.Start();
-				}
 				else if ("stop".Equals(command))
-				{
 					server.Stop();
-				}
 				else if ("exit".Equals(command))
-				{
 					return;
-				}
 			}
 		}
 	}

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 using Server.Security;
 using Server.Database;
-using MessageTypes;
+
+using MessageProtocol.MessageTypes;
+using MessageProtocol.Client;
 
 namespace Server
 {
@@ -20,7 +22,7 @@ namespace Server
 		private int port;
 		// tcp listener
 		private TcpListener listener;
-		// active tasks
+		// active tasks of handling connections
 		private List<Task> activeTasks;
 		// is server started listening to clients
 		private bool isStarted;
@@ -50,7 +52,7 @@ namespace Server
 			listener.Start();
 			isStarted = true;
 
-			Console.WriteLine("Server is now listening.");
+			Console.WriteLine("{0}: Server is now listening.", DateTime.Now);
 
 			while (true)
 			{
@@ -63,11 +65,6 @@ namespace Server
 					// remove completed tasks
 					activeTasks.RemoveAll(x => x.IsCompleted == true);
 				}
-				catch (ObjectDisposedException)
-				{
-					// TODO logger
-					break;
-				}
 				catch (SocketException)
 				{
 					// TODO logger
@@ -76,12 +73,17 @@ namespace Server
 					listener = TcpListener.Create(port);
 					listener.Start();
 				}
+				catch
+				{
+					// TODO logger
+					break;
+				}
 			}
 
 			// wait for finishing process clients
 			Task.WaitAll(activeTasks.ToArray());
 
-			Console.WriteLine("Server is now stopped listening.");
+			Console.WriteLine("{0}: Server is now stopped listening.", DateTime.Now);
 			isStarted = false;
 		}
 
@@ -103,7 +105,7 @@ namespace Server
 		/// <param name="client">Connected client.</param>
 		private async Task HandleClient(TcpClient client)
 		{
-			Console.WriteLine(" - client connected. ip {0}",
+			Console.WriteLine("{0}: Client connected. ip {1}", DateTime.Now,
 				((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
 			await Task.Run(() =>
@@ -120,7 +122,7 @@ namespace Server
 					SslStuff.ServerSideHandshake(sslStream);
 
 					// recieve client's message
-					Message message = ClientConnection.ReceiveMessage(client, sslStream);
+					Message message = MpClient.ReceiveMessage(sslStream);
 
 					// login / register
 					if (message != null)
@@ -130,6 +132,10 @@ namespace Server
 						else if (message is RegisterRequestMessage)
 							RegisterClient(client, sslStream, (RegisterRequestMessage)message);
 					}
+				}
+				catch (ServerCertificateException)
+				{
+					// TODO logger
 				}
 				catch
 				{
@@ -161,10 +167,11 @@ namespace Server
 			}
 			else
 			{
-				int id;
-
+				int id; // client's id in db
 				if (DBoperations.Login(message.login, message.password, out id))
 				{
+					Console.WriteLine("{0}: Client login: {1}", DateTime.Now, message.login);
+
 					// user is online
 					OnlineUser user = new OnlineUser(id, message.login, client, sslStream);
 					usersHandler.AddUser(user);
@@ -177,18 +184,35 @@ namespace Server
 				}
 			}
 
-			// response to client
-			ClientConnection.SendMessage(sslStream, response);
+			try
+			{
+				// response to client
+				MpClient.SendMessage(sslStream, response);
+			}
+			catch (ConnectionInterruptedException)
+			{
+				// TODO logger
+			}
 
 			// close connection with client if client not logged in
 			if (!isLoggedIn)
 			{
-				Console.WriteLine(" - client disconnected. ip {0}",
+				Console.WriteLine("{0}: Client disconnected. ip {1}", DateTime.Now,
 					((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
-				client.Client.Shutdown(SocketShutdown.Both);
-				sslStream.Dispose();
-				client.Close();
+				try
+				{
+					client.Client.Shutdown(SocketShutdown.Both);
+				}
+				catch
+				{
+					// TODO logger
+				}
+				finally
+				{
+					sslStream.Dispose();
+					client.Close();
+				}
 			}
 
 		}
@@ -212,21 +236,44 @@ namespace Server
 			else
 			{
 				if (DBoperations.Register(message.login, message.password))
+				{
+					Console.WriteLine("{0}: New client: {1}", DateTime.Now, message.login);
+
 					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
+				}
 				else
+				{
 					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.FAIL };
+				}
 			}
 
-			// response to client
-			ClientConnection.SendMessage(sslStream, response);
-
+			try
+			{
+				// response to client
+				MpClient.SendMessage(sslStream, response);
+			}
+			catch (ConnectionInterruptedException)
+			{
+				// TODO logger
+			}
+			
 			// close connection
-			Console.WriteLine(" - client disconnected. ip {0}",
-				((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+			Console.WriteLine("{0}: Client disconnected. ip {1}", DateTime.Now,
+					((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
 
-			client.Client.Shutdown(SocketShutdown.Both);
-			sslStream.Dispose();
-			client.Close();
+			try
+			{
+				client.Client.Shutdown(SocketShutdown.Both);
+			}
+			catch
+			{
+				// TODO logger
+			}
+			finally
+			{
+				sslStream.Dispose();
+				client.Close();
+			}
 		}
 	}
 }

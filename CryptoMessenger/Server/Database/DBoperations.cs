@@ -65,7 +65,7 @@ namespace Server.Database
 				// get user
 				var user =
 					from users in DBcontext.Users
-					where users.login.Equals(login)
+					where users.login == login
 					select users;
 
 				if (user.Any())
@@ -109,7 +109,7 @@ namespace Server.Database
 
 				if (user.Any())
 				{
-					// login already exist
+					// account already exist
 					return false;
 				}
 				else
@@ -125,7 +125,6 @@ namespace Server.Database
 					try
 					{
 						DBcontext.SubmitChanges();
-						Console.WriteLine(" - new user: {0}", login);
 						return true;
 					}
 					catch
@@ -182,13 +181,10 @@ namespace Server.Database
 					{
 						int friend_id = f.friend_one == id ? f.friend_two : f.friend_one;
 
-						var friend_login =
-							from user in DBcontext.Users
-							where user.user_id == friend_id
-							select user.login;
-
-						if (friend_login.Any())
-							friends.Add(friend_login.First());
+						string friend_login = GetUserLogin(friend_id);
+							
+						if (!string.IsNullOrEmpty(friend_login))
+							friends.Add(friend_login);
 					}
 				}
 
@@ -275,13 +271,10 @@ namespace Server.Database
 				{
 					foreach (int uid in data)
 					{
-						var user_login =
-							from user in DBcontext.Users
-							where user.user_id == uid
-							select user.login;
+						string user_login = GetUserLogin(uid);
 
-						if (user_login.Any())
-							logins.Add(user_login.First());
+						if (!string.IsNullOrEmpty(user_login))
+							logins.Add(user_login);
 					}
 				}
 
@@ -311,13 +304,10 @@ namespace Server.Database
 				{
 					foreach (int uid in data)
 					{
-						var user_login =
-							from user in DBcontext.Users
-							where user.user_id == uid
-							select user.login;
+						string user_login = GetUserLogin(uid);
 
-						if (user_login.Any())
-							logins.Add(user_login.First());
+						if (!string.IsNullOrEmpty(user_login))
+							logins.Add(user_login);
 					}
 				}
 
@@ -496,9 +486,7 @@ namespace Server.Database
 						select reply;
 
 					if (replies.Any())
-					{
 						return replies.ToArray();
-					}
 				}
 				
 				// no conversation or no replies

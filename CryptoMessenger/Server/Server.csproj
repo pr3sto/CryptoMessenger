@@ -62,7 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientConnection.cs" />
     <Compile Include="Database\DBoperations.cs" />
     <Compile Include="Database\LinqToSql.cs">
       <DependentUpon>LinqToSql.dbml</DependentUpon>
@@ -126,9 +125,9 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommunicationTypes\CommunicationTypes.csproj">
-      <Project>{d6a2e00e-f7ed-41e9-ba39-8a90816a9840}</Project>
-      <Name>CommunicationTypes</Name>
+    <ProjectReference Include="..\MessageProtocol\MessageProtocol.csproj">
+      <Project>{1dd39eec-8a7d-4bd9-bb0f-84de13795a73}</Project>
+      <Name>MessageProtocol</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
