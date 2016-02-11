@@ -1,10 +1,60 @@
-﻿using System.Linq;
+﻿using System;
 using System.Collections.Generic;
-
-using ConversationTypes;
 
 namespace CryptoMessenger.Stuff
 {
+	/// <summary>
+	/// Reply in conversation.
+	/// </summary>
+	public class ConversationReply
+	{
+		public string author { get; private set; }
+		public DateTime time { get; private set; }
+		public string text { get; private set; }
+
+		public ConversationReply(string author , DateTime time, string text)
+		{
+			this.author = author;
+			this.time = time;
+			this.text = text;
+		}		
+	}
+
+	/// <summary>
+	/// Represent conversation between two users.
+	/// </summary>
+	public class Conversation
+	{
+		private List<ConversationReply> replies;
+
+		public string interlocutor { get; private set; }
+
+		public Conversation(string interlocutor)
+		{
+			this.interlocutor = interlocutor;
+			replies = new List<ConversationReply>();
+		}
+
+		/// <summary>
+		/// Add reply in conversation.
+		/// </summary>
+		/// <param name="reply">reply.</param>
+		public void AddReply(ConversationReply reply)
+		{
+			if (reply != null)
+				replies.Add(reply);
+		}
+
+		/// <summary>
+		/// Copies elements of the replies list to new array.
+		/// </summary>
+		/// <returns>array.</returns>
+		public ConversationReply[] GetArrayOfReplies()
+		{
+			return replies.ToArray();
+		}
+	}
+
 	/// <summary>
 	/// All conversations of user.
 	/// </summary>
@@ -38,7 +88,8 @@ namespace CryptoMessenger.Stuff
 		/// <param name="c">conversation.</param>
 		public void AddConversation(Conversation c)
 		{
-			conversations.Add(c);
+			if (c != null)
+				conversations.Add(c);
 		}
 
 		/// <summary>
@@ -48,10 +99,7 @@ namespace CryptoMessenger.Stuff
 		/// <returns>conversation.</returns>
 		public Conversation GetConversation(string interlocutor)
 		{
-			if (Contains(interlocutor))
-				return conversations.Find(x => x.interlocutor == interlocutor);
-			else
-				return null;
+			return conversations.Find(x => x.interlocutor == interlocutor);
 		}
 
 		/// <summary>
@@ -62,7 +110,7 @@ namespace CryptoMessenger.Stuff
 		public void AddReply(string interlocutor, ConversationReply reply)
 		{
 			Conversation c = conversations.Find(x => x.interlocutor == interlocutor);
-			if (c != null) c.replies.Add(reply);
+			if (c != null) c.AddReply(reply);
 		}
 	}
 }

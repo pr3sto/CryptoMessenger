@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Drawing;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using ConversationTypes;
 using TheArtOfDev.HtmlRenderer.WinForms;
 
 namespace CryptoMessenger.GUI
@@ -426,72 +424,6 @@ namespace CryptoMessenger.GUI
 
 		#endregion
 
-		#region Update listboxes
-
-		// update all users list box
-		public void UpdateAllUsersList(string[] users)
-		{
-			if (UsersPanels.SEARCH.Equals(selectedPanel))
-			{
-				allUsersListBox.Items.Clear();
-				if (users != null) allUsersListBox.Items.AddRange(users);
-				allUsersListBox.Update();
-
-				AllUsersListBoxSelectedChanged(null, EventArgs.Empty);
-
-				loadingLabel.Visible = false;
-				allUsersPanel.Visible = true;
-			}
-		}
-
-		// update friends list box
-		public void UpdateFriendsList(string[] friends)
-		{
-			if (UsersPanels.FRIENDS.Equals(selectedPanel))
-			{
-				friendsListBox.Items.Clear();
-				if (friends != null) friendsListBox.Items.AddRange(friends);
-				friendsListBox.Update();
-
-				FriendsListBoxSelectedChanged(null, EventArgs.Empty);
-
-				loadingLabel.Visible = false;
-				friendsPanel.Visible = true;
-			}
-		}
-
-		// update income friendship requests list box
-		public void UpdateIncomeFriendshipRequests(string[] income)
-		{
-			if (UsersPanels.REQUESTS.Equals(selectedPanel))
-			{
-				incomeFriendshipRequestsListBox.Items.Clear();
-				if (income != null) incomeFriendshipRequestsListBox.Items.AddRange(income);
-				incomeFriendshipRequestsListBox.Update();
-
-				loadingLabel.Visible = false;
-				friendshipRequestsPanel.Visible = true;
-			}
-		}
-
-		// update outcome friendship requests list box
-		public void UpdateOutcomeFriendshipRequests(string[] outcome)
-		{
-			if (UsersPanels.REQUESTS.Equals(selectedPanel))
-			{
-				outcomeFriendshipRequestsListBox.Items.Clear();
-				if (outcome != null) outcomeFriendshipRequestsListBox.Items.AddRange(outcome);
-				outcomeFriendshipRequestsListBox.Update();
-
-				OutcomeRequestsListBoxesSelectedChanged(null, EventArgs.Empty);
-
-				loadingLabel.Visible = false;
-				friendshipRequestsPanel.Visible = true;
-			}
-		}
-
-		#endregion
-
 		#region Listboxes selected item changed
 
 		private async void AllUsersListBoxSelectedChanged(object sender, EventArgs e)
@@ -605,30 +537,6 @@ namespace CryptoMessenger.GUI
 
 				IsPlaceholderWrited = false;
 				CanSendReply = true;
-			}
-		}
-
-		#endregion
-
-		#region Show conversation
-
-		public void ShowConversation(string interlocutor)
-		{
-			if (activeTalkLabel.Text.Equals(interlocutor))
-			{
-				Conversation conversation = conversations.GetConversation(interlocutor);
-
-				if (conversation != null)
-				{
-					conversationHtmlPanel.Text = "";
-
-					foreach (var reply in conversation.replies)
-					{
-						conversationHtmlPanel.Text += "<html><b>" + reply.author +
-							"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + reply.time +
-							"</b><br>" + reply.text + "</html>";
-					}
-				}
 			}
 		}
 

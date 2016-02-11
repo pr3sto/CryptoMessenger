@@ -7,7 +7,7 @@ namespace CryptoMessenger.Stuff
 	/// <summary>
 	/// Contains methods to create fonts.
 	/// </summary>
-	class FontFactory
+	static class SimpleFontFactory
 	{
 		internal class NativeMethods
 		{

@@ -105,7 +105,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Net\SslStuff.cs" />
     <Compile Include="Net\Client.cs" />
     <Compile Include="GUI\Dropshadow.cs">
       <SubType>Form</SubType>
@@ -203,9 +202,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommunicationTypes\CommunicationTypes.csproj">
-      <Project>{d6a2e00e-f7ed-41e9-ba39-8a90816a9840}</Project>
-      <Name>CommunicationTypes</Name>
+    <ProjectReference Include="..\MessageProtocol\MessageProtocol.csproj">
+      <Project>{1dd39eec-8a7d-4bd9-bb0f-84de13795a73}</Project>
+      <Name>MessageProtocol</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

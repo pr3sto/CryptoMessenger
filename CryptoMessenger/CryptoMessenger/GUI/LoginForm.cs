@@ -5,7 +5,9 @@ using System.Windows.Forms;
 
 using CryptoMessenger.Stuff;
 using CryptoMessenger.Net;
-using MessageTypes;
+
+using MessageProtocol;
+using MessageProtocol.MessageTypes;
 
 namespace CryptoMessenger.GUI
 {
@@ -22,8 +24,8 @@ namespace CryptoMessenger.GUI
 
 		// fonts
 		private PrivateFontCollection fonts = new PrivateFontCollection();
-		public Font NeueFont15;
-		public Font NeueFont10;
+		public Font NeueFont15 { get; private set; }
+		public Font NeueFont10 { get; private set; }
 
 		// Violates rule: MovePInvokesToNativeMethodsClass
 		internal class NativeMethods
@@ -40,8 +42,8 @@ namespace CryptoMessenger.GUI
             InitializeComponent();
 
 			// create fonts
-			NeueFont15 = FontFactory.CreateFont(fonts, Properties.Resources.Neue, 15.5F);
-			NeueFont10 = FontFactory.CreateFont(fonts, Properties.Resources.Neue, 10.0F);
+			NeueFont15 = SimpleFontFactory.CreateFont(fonts, Properties.Resources.Neue, 15.5F);
+			NeueFont10 = SimpleFontFactory.CreateFont(fonts, Properties.Resources.Neue, 10.0F);
 
 			// create shadow, set shadow params
 			shadow = new Dropshadow(this)
@@ -80,7 +82,7 @@ namespace CryptoMessenger.GUI
 				{
 					response = await client.Login(userNameTextBox.Text, userPasswordTextBox.Text);
 				}
-				catch (ServerConnectionException)
+				catch (ConnectionInterruptedException)
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
@@ -88,7 +90,7 @@ namespace CryptoMessenger.GUI
 					EnableInterface();
 					return;
 				}
-				catch (ClientCertificateException)
+				catch (CertificateException)
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
@@ -155,7 +157,7 @@ namespace CryptoMessenger.GUI
 				{
 					response = await client.Register(userNameTextBox.Text, userPasswordTextBox.Text);
 				}
-				catch (ServerConnectionException)
+				catch (ConnectionInterruptedException)
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
@@ -163,7 +165,7 @@ namespace CryptoMessenger.GUI
 					EnableInterface();
 					return;
 				}
-				catch (ClientCertificateException)
+				catch (CertificateException)
 				{
 					notificationLabel.ForeColor = Properties.Settings.Default.AlertColor;
 					notificationLabel.Text = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;

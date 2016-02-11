@@ -1,59 +1,35 @@
-﻿using System;
-using System.IO;
-using System.Net.Security;
-using System.Net.Sockets;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.Serialization;
+using System.Security.Cryptography.X509Certificates;
 
+using CryptoMessenger.Stuff;
 using CryptoMessenger.GUI;
-using MessageTypes;
-using ConversationTypes;
-using System.Runtime.Serialization.Formatters.Binary;
+
+using MessageProtocol;
+using MessageProtocol.MessageTypes;
 
 namespace CryptoMessenger.Net
 {
-	/// <summary>
-	/// Connection problems.
-	/// </summary>
-	[Serializable]
-	public class ServerConnectionException : Exception
-	{
-		public ServerConnectionException()
-		{
-		}
-
-		public ServerConnectionException(string message)
-			: base(message)
-		{
-		}
-
-		public ServerConnectionException(string message, Exception inner)
-			: base(message, inner)
-		{
-		}
-	}
-
 	/// <summary>
 	/// Client side code.
 	/// </summary>
 	public class Client
 	{
+		// is we logged in
+		private bool _isLoggedIn = false;
+		// is we now log out
+		private bool _isLogOut = false;
+
 		// server's port 
 		private int port;
 		// servers ip addres
 		private string ip;
 		// client
-		private TcpClient client;
-		// ssl stream with server
-		private SslStream sslStream;
-		
-		// form to update
-		private MainForm form;
+		private MpClient client;
 
-		/// <summary>
-		/// Initialize Client.
-		/// </summary>
+		// form 
+		MainForm form;
+
 		public Client()
 		{
 			// get data from connection.cfg
@@ -64,114 +40,63 @@ namespace CryptoMessenger.Net
 
 			ip = "";
 			foreach (var i in _ip) ip = i.Value;
-
+	
 			port = 0;
 			foreach (var i in _port) port = int.Parse(i.Value);
-		}
 
-		/// <summary>
-		/// Listen for messages from server.
-		/// </summary>
-		/// <param name="_form">form to update when message come.</param>
-		public async void Listen(MainForm _form)
-		{
-			form = _form;
-
-			Message message;
-
-			while (true)
-			{
-
-				try
-				{
-					// wait for message
-					message = await ReceiveMessage();
-				}
-				catch (ServerConnectionException)
-				{
-					// disconnect from server
-					// TODO do something -__-
-					return;
-				}
-
-				// handle message
-				if (message is AllUsersMessage)
-				{
-					string[] users = ((AllUsersMessage)message).users;
-					form.UpdateAllUsersList(users);
-				}
-				else if (message is FriendsMessage)
-				{
-					form.cache_friends = ((FriendsMessage)message).friends;
-					form.UpdateFriendsList(form.cache_friends);
-				}
-				else if (message is IncomeFriendshipRequestsMessage)
-				{
-					form.cache_income_reqs = ((IncomeFriendshipRequestsMessage)message).logins;
-					form.UpdateIncomeFriendshipRequests(form.cache_income_reqs);
-				}
-				else if (message is OutcomeFriendshipRequestsMessage)
-				{
-					form.cache_outcome_reqs = ((OutcomeFriendshipRequestsMessage)message).logins;
-					form.UpdateOutcomeFriendshipRequests(form.cache_outcome_reqs);
-				}
-				else if (message is ConversationMessage)
-				{
-					form.conversations.AddConversation(((ConversationMessage)message).conversation);
-					form.ShowConversation(((ConversationMessage)message).conversation.interlocutor);
-				}
-				else if (message is ReplyMessage)
-				{
-					form.conversations.AddReply(((ReplyMessage)message).interlocutor, ((ReplyMessage)message).reply);
-					form.ShowConversation(((ReplyMessage)message).interlocutor);
-				}
-			}
+			//client
+			client = new MpClient();
 		}
 
 		/// <summary>
 		/// Try to login into user account.
 		/// </summary>
-		/// <param name="_login">users login.</param>
-		/// <param name="_password">users password.</param>
+		/// <param name="login">users login.</param>
+		/// <param name="password">users password.</param>
 		/// <returns>server's response.</returns>
-		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
-		public async Task<LoginRegisterResponse> Login(string _login, string _password)
+		/// <exception cref="ConnectionInterruptedException"></exception>
+		/// <exception cref="CertificateException"></exception>
+		public async Task<LoginRegisterResponse> Login(string login, string password)
 		{
-			await Connect();
+			if (_isLoggedIn) return LoginRegisterResponse.ERROR;
 
-			var message = new LoginRequestMessage
-			{
-				login = _login,
-				password = _password
-			};
+			// certificate
+			X509Certificate2 cert = SslTools.CreateCertificate(typeof(Client), "CryptoMessenger.Certificate.cert.pfx");
 
-			SendMessage(message);
-			// async wait for server's response
-			var serverResp = (LoginRegisterResponseMessage)await ReceiveMessage();
+			await client.ConnectAsync(ip, port, cert);
 
-			// don't disconnect if login success
-			if (!LoginRegisterResponse.SUCCESS.Equals(serverResp.response))
-				Disconnect();
+			LoginRegisterResponseMessage serverResp;
 
-			return serverResp.response;
-		}
-
-		/// <summary>
-		/// Logout from server.
-		/// </summary>
-		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		public void Logout()
-		{
-			SendMessage(new LogoutRequestMessage());
 			try
 			{
-				Disconnect();
+				// send login request
+				client.SendMessage(new LoginRequestMessage
+				{
+					login = login,
+					password = password
+				});
+
+				// async wait for server's response
+				serverResp = (LoginRegisterResponseMessage)await client.ReceiveMessageAsync();
 			}
-			catch
+			catch (ConnectionInterruptedException)
 			{
-				// dont mind because we close application
+				client.Close();
+				throw;
 			}
+
+			// dont disconnect if login success
+			if (LoginRegisterResponse.SUCCESS.Equals(serverResp.response))
+			{
+				_isLoggedIn = true;
+				_isLogOut = false;
+			}
+			else
+			{
+				client.Close();
+			}
+
+			return serverResp.response;
 		}
 
 		/// <summary>
@@ -180,25 +105,132 @@ namespace CryptoMessenger.Net
 		/// <param name="_login">users login.</param>
 		/// <param name="_password">users password.</param>
 		/// <returns>server's response.</returns>
-		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
+		/// <exception cref="ConnectionInterruptedException"></exception>
+		/// <exception cref="CertificateException"></exception>
 		public async Task<LoginRegisterResponse> Register(string _login, string _password)
 		{
-			await Connect();
+			if (_isLoggedIn) return LoginRegisterResponse.ERROR;
 
-			var message = new RegisterRequestMessage
+			// certificate
+			X509Certificate2 cert = SslTools.CreateCertificate(typeof(Client), "CryptoMessenger.Certificate.cert.pfx");
+
+			await client.ConnectAsync(ip, port, cert);
+
+			LoginRegisterResponseMessage serverResp;
+
+			try
 			{
-				login = _login,
-				password = _password
-			};
+				// send register request
+				client.SendMessage(new RegisterRequestMessage
+				{
+					login = _login,
+					password = _password
+				});
 
-			SendMessage(message);
-			// async wait for server's response
-			var serverResp = (LoginRegisterResponseMessage)await ReceiveMessage();
-			
-			Disconnect();
+				// async wait for server's response
+				serverResp = (LoginRegisterResponseMessage)await client.ReceiveMessageAsync();
+			}
+			catch (ConnectionInterruptedException)
+			{
+				throw;
+			}
+			finally
+			{
+				client.Close();
+			}
 
 			return serverResp.response;
+		}
+
+		/// <summary>
+		/// Logout from server.
+		/// </summary>
+		public void Logout()
+		{
+			if (!_isLoggedIn) return;
+			_isLoggedIn = false;
+			_isLogOut = true;
+
+			try
+			{
+				client.SendMessage(new LogoutRequestMessage());
+			}
+			catch (ConnectionInterruptedException)
+			{
+				// dont mind because we exit
+			}
+			finally
+			{
+				try
+				{
+					client.Close();
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// dont mind because we exit
+				}
+			}
+		}
+
+		/// <summary>
+		/// Listen for messages from server.
+		/// </summary>
+		/// <param name="form">form to update when message come.</param>
+		public async void Listen(MainForm form)
+		{
+			if (!_isLoggedIn) return;
+
+			this.form = form;
+
+			// message from server
+			Message message;
+
+			while (true)
+			{
+
+				try
+				{
+					// wait for message
+					message = await client.ReceiveMessageAsync();
+				}
+				catch (ConnectionInterruptedException)
+				{
+					if (!_isLogOut)
+						form.CloseEmergency();
+
+					return;
+				}
+
+				// handle message
+				if (message is AllUsersMessage)
+				{
+					form.UpdateAllUsersList(((AllUsersMessage)message).users);
+				}
+				else if (message is FriendsMessage)
+				{
+					form.UpdateFriendsList(((FriendsMessage)message).friends);
+				}
+				else if (message is IncomeFriendshipRequestsMessage)
+				{
+					form.UpdateIncomeFriendshipRequests(((IncomeFriendshipRequestsMessage)message).logins);
+				}
+				else if (message is OutcomeFriendshipRequestsMessage)
+				{
+					form.UpdateOutcomeFriendshipRequests(((OutcomeFriendshipRequestsMessage)message).logins);
+				}
+				else if (message is ReplyMessage)
+				{
+					form.UpdateConversations(
+						((ReplyMessage)message).interlocutor, 
+						new ConversationReply
+						(
+							((ReplyMessage)message).reply_author,
+							((ReplyMessage)message).reply_time,
+							((ReplyMessage)message).reply_text
+						)
+					);
+				}
+			}
 		}
 
 		/// <summary>
@@ -207,7 +239,25 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public void GetAllUsers()
 		{
-			SendMessage(new GetAllUsersMessage());
+			if (!_isLoggedIn) return;
+
+			try
+			{
+				client.SendMessage(new GetAllUsersMessage());
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new GetAllUsersMessage());
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -216,7 +266,25 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public void GetFriends()
 		{
-			SendMessage(new GetFriendsMessage());
+			if (!_isLoggedIn) return;
+
+			try
+			{
+				client.SendMessage(new GetFriendsMessage());
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new GetFriendsMessage());
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -225,7 +293,25 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public void GetIncomeFriendshipRequests()
 		{
-			SendMessage(new GetIncomeFriendshipRequestsMessage());
+			if (!_isLoggedIn) return;
+
+			try
+			{
+				client.SendMessage(new GetIncomeFriendshipRequestsMessage());
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new GetIncomeFriendshipRequestsMessage());
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -234,7 +320,25 @@ namespace CryptoMessenger.Net
 		/// </summary>
 		public void GetOutcomeFriendshipRequests()
 		{
-			SendMessage(new GetOutcomeFriendshipRequestsMessage());
+			if (!_isLoggedIn) return;
+
+			try
+			{
+				client.SendMessage(new GetOutcomeFriendshipRequestsMessage());
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new GetOutcomeFriendshipRequestsMessage());
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -243,7 +347,31 @@ namespace CryptoMessenger.Net
 		/// <param name="login">login of needed user.</param>
 		public void SendFriendshipRequest(string login)
 		{
-			SendMessage(new FriendshipRequestMessage { login_of_needed_user = login });
+			if (!_isLoggedIn) return;
+
+			try
+			{
+				client.SendMessage(new FriendshipRequestMessage
+				{
+					login_of_needed_user = login
+				});
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new FriendshipRequestMessage
+					{
+						login_of_needed_user = login
+					});
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -252,11 +380,33 @@ namespace CryptoMessenger.Net
 		/// <param name="login">needed friend login.</param>
 		public void CancelFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionMessage
+			if (!_isLoggedIn) return;
+
+			try
 			{
-				friends_login = login,
-				action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
-			});
+				client.SendMessage(new FriendActionMessage
+				{
+					friends_login = login,
+					action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
+				});
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new FriendActionMessage
+					{
+						friends_login = login,
+						action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
+					});
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 		
 		/// <summary>
@@ -265,11 +415,33 @@ namespace CryptoMessenger.Net
 		/// <param name="login">accepted friend login.</param>
 		public void AcceptFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionMessage
+			if (!_isLoggedIn) return;
+
+			try
 			{
-				friends_login = login,
-				action = ActionsWithFriend.ACCEPT_FRIENDSHIP
-			});
+				client.SendMessage(new FriendActionMessage
+				{
+					friends_login = login,
+					action = ActionsWithFriend.ACCEPT_FRIENDSHIP
+				});
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new FriendActionMessage
+					{
+						friends_login = login,
+						action = ActionsWithFriend.ACCEPT_FRIENDSHIP
+					});
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -278,11 +450,33 @@ namespace CryptoMessenger.Net
 		/// <param name="login">rejected user login.</param>
 		public void RejectFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionMessage
+			if (!_isLoggedIn) return;
+
+			try
 			{
-				friends_login = login,
-				action = ActionsWithFriend.REJECT_FRIENDSHIP
-			});
+				client.SendMessage(new FriendActionMessage
+				{
+					friends_login = login,
+					action = ActionsWithFriend.REJECT_FRIENDSHIP
+				});
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new FriendActionMessage
+					{
+						friends_login = login,
+						action = ActionsWithFriend.REJECT_FRIENDSHIP
+					});
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -291,11 +485,33 @@ namespace CryptoMessenger.Net
 		/// <param name="login">friend's login.</param>
 		public void RemoveFriend(string login)
 		{
-			SendMessage(new FriendActionMessage
+			if (!_isLoggedIn) return;
+
+			try
 			{
-				friends_login = login,
-				action = ActionsWithFriend.REMOVE_FROM_FRIENDS
-			});
+				client.SendMessage(new FriendActionMessage
+				{
+					friends_login = login,
+					action = ActionsWithFriend.REMOVE_FROM_FRIENDS
+				});
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new FriendActionMessage
+					{
+						friends_login = login,
+						action = ActionsWithFriend.REMOVE_FROM_FRIENDS
+					});
+				}
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -305,14 +521,33 @@ namespace CryptoMessenger.Net
 		/// <param name="text">text of reply.</param>
 		public void SendReply(string receiver, string text)
 		{
-			SendMessage(new ReplyMessage
+			if (!_isLoggedIn) return;
+
+			try
 			{
-				interlocutor = receiver,
-				reply = new ConversationReply
+				client.SendMessage(new ReplyMessage
 				{
-					text = text
+					interlocutor = receiver,
+					reply_text = text
+				});
+			}
+			catch (ConnectionInterruptedException)
+			{
+				try
+				{
+					// try again
+					client.SendMessage(new ReplyMessage
+					{
+						interlocutor = receiver,
+						reply_text = text
+					});
 				}
-			});
+				catch (ConnectionInterruptedException)
+				{
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
+				}
+			}
 		}
 
 		/// <summary>
@@ -322,139 +557,31 @@ namespace CryptoMessenger.Net
 		/// <param name="interlocutor">interlocutor.</param>
 		public void GetConversation(string interlocutor)
 		{
-			SendMessage(new GetConversationMessage
-			{
-				interlocutor = interlocutor
-			});
-		}
+			if (!_isLoggedIn) return;
 
-		#region Communication with server
-
-		/// <summary>
-		/// Connect to server.
-		/// </summary>
-		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		/// <exception cref="ClientCertificateException">can't get local certificate.</exception>
-		private async Task Connect()
-		{
 			try
 			{
-				client = new TcpClient();
-				
-				await Task.Run(()=>
+				client.SendMessage(new GetConversationMessage
 				{
-					// timeout for waiting connection
-					if (!client.ConnectAsync(ip, port).Wait(5000))
-						throw new TimeoutException();
+					interlocutor = interlocutor
 				});
-
-				sslStream = new SslStream(client.GetStream(), true,
-					SslStuff.ServerValidationCallback,
-					SslStuff.ClientCertificateSelectionCallback,
-					EncryptionPolicy.RequireEncryption);
-
-				// handshake
-				SslStuff.ClientSideHandshake(sslStream, ip);
 			}
-			catch (ClientCertificateException)
+			catch (ConnectionInterruptedException)
 			{
-				throw;
-			}
-			catch
-			{
-				throw new ServerConnectionException();
-			}
-		}
-
-		/// <summary>
-		/// Disconnect from server.
-		/// </summary>
-		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		private void Disconnect()
-		{
-			try
-			{
-				client.Client.Shutdown(SocketShutdown.Both);
-			}
-			catch
-			{
-				throw new ServerConnectionException();
-			}
-			finally
-			{
-				sslStream.Dispose();
-				client.Close();
-			}
-		}
-
-		/// <summary>
-		/// Send message to server.
-		/// </summary>
-		/// <param name="message">user's message.</param>
-		private void SendMessage(Message message)
-		{
-			try
-			{
-				using (var stream = new MemoryStream())
-				{
-					var requestSerializer = new XmlSerializer(typeof(Message));
-					requestSerializer.Serialize(stream, message);
-
-					// number of 1024b chunks
-					int count = (int)stream.Length / 1024 + 1;
-
-					// send count
-					sslStream.Write(BitConverter.GetBytes(count));
-					//send message
-					requestSerializer.Serialize(sslStream, message);
-				}
-			}
-			catch
-			{
-			}
-		}
-
-		/// <summary>
-		/// Reseive response from server.
-		/// </summary>
-		/// <returns>server's response.</returns>
-		/// <exception cref="ServerConnectionException">connection problems.</exception>
-		private async Task<Message> ReceiveMessage()
-		{
-			// asynchronous communicate with server
-			return await Task.Run(() => {
-
 				try
 				{
-					var requestSerializer = new XmlSerializer(typeof(Message));
-
-					byte[] buffer = new byte[1000000];
-					int length = sslStream.Read(buffer, 0, buffer.Length);
-
-					// number of 1024b chunks
-					Array.Resize(ref buffer, length);
-					int count = BitConverter.ToInt32(buffer, 0);
-
-					if (count == 2) count = 4;
-
-					// read data
-					buffer = new byte[1000000];
-					length = 0;
-					for (int i = 0; i < count; i++)
-						length += sslStream.Read(buffer, i * 1024, 1024);
-
-					// deserialize message
-					var ms = new MemoryStream(buffer, 0, length);
-					return (Message)requestSerializer.Deserialize(ms);
+					// try again
+					client.SendMessage(new GetConversationMessage
+					{
+						interlocutor = interlocutor
+					});
 				}
-				catch
+				catch (ConnectionInterruptedException)
 				{
-					throw new ServerConnectionException();
+					// fail two times -> something wrong with connection
+					form.CloseEmergency();
 				}
-
-			});
+			}
 		}
-
-		#endregion
 	}
 }
