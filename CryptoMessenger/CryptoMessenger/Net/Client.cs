@@ -63,7 +63,7 @@ namespace CryptoMessenger.Net
 			// certificate
 			X509Certificate2 cert = SslTools.CreateCertificate(typeof(Client), "CryptoMessenger.Certificate.cert.pfx");
 
-			await client.ConnectAsync(ip, port, cert);
+			await client.ConnectWithTimeoutAsync(ip, port, cert, 5000);
 
 			LoginRegisterResponseMessage serverResp;
 
@@ -114,7 +114,7 @@ namespace CryptoMessenger.Net
 			// certificate
 			X509Certificate2 cert = SslTools.CreateCertificate(typeof(Client), "CryptoMessenger.Certificate.cert.pfx");
 
-			await client.ConnectAsync(ip, port, cert);
+			await client.ConnectWithTimeoutAsync(ip, port, cert, 5000);
 
 			LoginRegisterResponseMessage serverResp;
 

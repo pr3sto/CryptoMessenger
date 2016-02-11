@@ -54,6 +54,7 @@ namespace MessageProtocol
 		/// </summary>
 		/// <param name="host">host.</param>
 		/// <param name="port">port.</param>
+		/// <param name="certificate">certificate.</param>
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		public async Task ConnectAsync(string host, int port, X509Certificate2 certificate)
 		{
@@ -62,6 +63,47 @@ namespace MessageProtocol
 				// connect via tcp
 				tcpClient = new TcpClient();
 				await tcpClient.ConnectAsync(host, port);
+
+				await Task.Run(() =>
+				{
+					// create ssl stream
+					sslStream = new SslStream(tcpClient.GetStream(), true,
+						Ssl.ServerValidationCallback,
+						Ssl.ClientCertificateSelectionCallback,
+						EncryptionPolicy.RequireEncryption);
+
+					// handshake
+					Ssl.ClientSideHandshake(certificate, sslStream, host);
+				});
+			}
+			catch
+			{
+				throw new ConnectionInterruptedException();
+			}
+		}
+
+		/// <summary>
+		/// Connects the client to a remote host using the specified 
+		/// IP address and port number as an asynchronous operation.
+		/// </summary>
+		/// <param name="host">host.</param>
+		/// <param name="port">port.</param>
+		/// <param name="certificate">certificate.</param>
+		/// <param name="milisecondsTimeout">wait for connection during this period of time.</param>
+		/// <exception cref="ConnectionInterruptedException"></exception>
+		public async Task ConnectWithTimeoutAsync(string host, int port, X509Certificate2 certificate, int milisecondsTimeout)
+		{
+			try
+			{
+				// connect via tcp
+				tcpClient = new TcpClient();
+
+				await Task.Run(() =>
+				{
+					// timeout for waiting connection
+					if (!tcpClient.ConnectAsync(host, port).Wait(milisecondsTimeout))
+						throw new TimeoutException();
+				});
 
 				await Task.Run(() =>
 				{
