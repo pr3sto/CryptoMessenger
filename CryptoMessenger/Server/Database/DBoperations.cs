@@ -7,7 +7,7 @@ namespace Server.Database
 	/// <summary>
 	/// Operations with database.
 	/// </summary>
-	class DBoperations
+	static class DBoperations
 	{
 		/// <summary>
 		/// Get id of user by his login.
@@ -102,6 +102,7 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
+				// get user
 				var user =
 					from users in DBcontext.Users
 					where users.login == login
@@ -144,6 +145,7 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
+				// get all users
 				var users =
 					from user in DBcontext.Users
 					select user;
@@ -164,7 +166,7 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
-				// select friends
+				// get friends
 				var data =
 					from friendship in DBcontext.Friends
 					where (friendship.friend_one == id |
@@ -180,7 +182,6 @@ namespace Server.Database
 					foreach (Friendship f in data)
 					{
 						int friend_id = f.friend_one == id ? f.friend_two : f.friend_one;
-
 						string friend_login = GetUserLogin(friend_id);
 							
 						if (!string.IsNullOrEmpty(friend_login))
@@ -203,6 +204,7 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
+				// get friendship records
 				var data =
 					from friendship in DBcontext.Friends
 					where (friendship.friend_one == user_one_id &
@@ -265,6 +267,7 @@ namespace Server.Database
 					friendship.accepted == false
 					select friendship.friend_one;
 
+				// list of logins
 				List<string> logins = new List<string>();
 
 				if (data.Any())
@@ -300,6 +303,7 @@ namespace Server.Database
 
 				List<string> logins = new List<string>();
 
+				// list of logins
 				if (data.Any())
 				{
 					foreach (int uid in data)
@@ -325,10 +329,12 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
+				// get friendsip requests
 				var data =
 					from friendship in DBcontext.Friends
 					where friendship.friend_one == user_one_id &
-					friendship.friend_two == user_two_id
+					friendship.friend_two == user_two_id &
+					friendship.accepted == false
 					select friendship;
 
 				foreach (var friendship in data)
@@ -359,6 +365,7 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
+				// get friendship records
 				var data =
 					from friendship in DBcontext.Friends
 					where (friendship.friend_one == user_one_id &
@@ -399,6 +406,7 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
+				// get conversation id
 				var data = from conversation in DBcontext.Conversations
 					where (conversation.user_one == sender_id &
 					conversation.user_two == receiver_id) |
@@ -470,7 +478,7 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
-				// conversation id
+				// get conversation id
 				var c_id = from conversation in DBcontext.Conversations
 					where (conversation.user_one == user_one_id &
 					conversation.user_two == user_two_id) |

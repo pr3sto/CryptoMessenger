@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using System.Security.Cryptography.X509Certificates;
 
-using Server.Security;
 using Server.Database;
 
+using MessageProtocol;
 using MessageProtocol.MessageTypes;
-using MessageProtocol.Client;
 
 namespace Server
 {
@@ -20,25 +19,35 @@ namespace Server
 	{
 		// port number
 		private int port;
-		// tcp listener
-		private TcpListener listener;
+		// message protocol listener
+		private MpListener listener;
 		// active tasks of handling connections
 		private List<Task> activeTasks;
 		// is server started listening to clients
 		private bool isStarted;
 
+		// server's certificate
+		X509Certificate2 certificate;
+
 		// handler of online users
 		private OnlineUsersHandler usersHandler;
 
-		/// <summary>
-		/// Initialize server, that listen to clients.
-		/// </summary>
+
 		public Server(int port)
 		{
 			this.port = port;
 			activeTasks = new List<Task>();
 			usersHandler = new OnlineUsersHandler();
 			isStarted = false;
+
+			try
+			{
+				certificate = SslTools.CreateCertificate(typeof(Server), "Server.Certificate.cert.pfx");
+			}
+			catch (CertificateException)
+			{
+				// TODO logger
+			}
 		}
 
 		/// <summary>
@@ -47,8 +56,9 @@ namespace Server
 		public async void Start()
 		{
 			if (isStarted) return;
+			if (certificate == null) return;
 
-			listener = TcpListener.Create(port);
+			listener = new MpListener(port, certificate);
 			listener.Start();
 			isStarted = true;
 
@@ -58,22 +68,26 @@ namespace Server
 			{
 				try
 				{
-					var client = await listener.AcceptTcpClientAsync();
+					MpClient client = await listener.AcceptMpClientAsync();
 					Task t = HandleClient(client);
 					activeTasks.Add(t);
 
 					// remove completed tasks
 					activeTasks.RemoveAll(x => x.IsCompleted == true);
 				}
+				catch (ConnectionInterruptedException)
+				{
+					continue;
+				}
 				catch (SocketException)
 				{
 					// TODO logger
 					listener.Stop();
 					listener = null;
-					listener = TcpListener.Create(port);
+					listener = new MpListener(port, certificate);
 					listener.Start();
 				}
-				catch
+				catch (ObjectDisposedException)
 				{
 					// TODO logger
 					break;
@@ -103,41 +117,28 @@ namespace Server
 		/// Handle client.
 		/// </summary>
 		/// <param name="client">Connected client.</param>
-		private async Task HandleClient(TcpClient client)
+		private async Task HandleClient(MpClient client)
 		{
 			Console.WriteLine("{0}: Client connected. ip {1}", DateTime.Now,
-				((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+				((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString());
 
 			await Task.Run(() =>
 			{
 				try
 				{
-					// create ssl stream with client
-					SslStream sslStream = new SslStream(client.GetStream(), true,
-						SslStuff.ClientValidationCallback,
-						SslStuff.ServerCertificateSelectionCallback,
-						EncryptionPolicy.RequireEncryption);
-					
-					// handshake
-					SslStuff.ServerSideHandshake(sslStream);
-
 					// recieve client's message
-					Message message = MpClient.ReceiveMessage(sslStream);
+					Message message = client.ReceiveMessage();
 
 					// login / register
 					if (message != null)
 					{
 						if (message is LoginRequestMessage)
-							LoginClient(client, sslStream, (LoginRequestMessage)message);
+							LoginClient(client, (LoginRequestMessage)message);
 						else if (message is RegisterRequestMessage)
-							RegisterClient(client, sslStream, (RegisterRequestMessage)message);
+							RegisterClient(client, (RegisterRequestMessage)message);
 					}
 				}
-				catch (ServerCertificateException)
-				{
-					// TODO logger
-				}
-				catch
+				catch (ConnectionInterruptedException)
 				{
 					// TODO logger
 				}
@@ -147,10 +148,9 @@ namespace Server
 		/// <summary>
 		/// Try to login client. Send response about result.
 		/// </summary>
-		/// <param name="client">tcp client.</param>
-		/// <param name="sslStream">connected client's ssl stream.</param>
+		/// <param name="client">client.</param>
 		/// <param name="message">client's message.</param>
-		private void LoginClient(TcpClient client, SslStream sslStream, LoginRequestMessage message)
+		private void LoginClient(MpClient client, LoginRequestMessage message)
 		{
 			bool isLoggedIn = false;
 			Message response;
@@ -173,7 +173,7 @@ namespace Server
 					Console.WriteLine("{0}: Client login: {1}", DateTime.Now, message.login);
 
 					// user is online
-					OnlineUser user = new OnlineUser(id, message.login, client, sslStream);
+					OnlineUser user = new OnlineUser(id, message.login, client);
 					usersHandler.AddUser(user);
 					isLoggedIn = true;
 					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
@@ -187,7 +187,7 @@ namespace Server
 			try
 			{
 				// response to client
-				MpClient.SendMessage(sslStream, response);
+				client.SendMessage(response);
 			}
 			catch (ConnectionInterruptedException)
 			{
@@ -198,32 +198,25 @@ namespace Server
 			if (!isLoggedIn)
 			{
 				Console.WriteLine("{0}: Client disconnected. ip {1}", DateTime.Now,
-					((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+					((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString());
 
 				try
 				{
-					client.Client.Shutdown(SocketShutdown.Both);
+					client.Close();
 				}
 				catch
 				{
 					// TODO logger
 				}
-				finally
-				{
-					sslStream.Dispose();
-					client.Close();
-				}
 			}
-
 		}
 
 		/// <summary>
 		/// Try to register client. Send response about result.
 		/// </summary>
-		/// <param name="client">tcp client.</param>
-		/// <param name="sslStream">connected client's ssl stream.</param>
+		/// <param name="client">client.</param>
 		/// <param name="message">client's message.</param>
-		private void RegisterClient(TcpClient client, SslStream sslStream, RegisterRequestMessage message)
+		private void RegisterClient(MpClient client, RegisterRequestMessage message)
 		{
 			Message response;
 
@@ -250,7 +243,7 @@ namespace Server
 			try
 			{
 				// response to client
-				MpClient.SendMessage(sslStream, response);
+				client.SendMessage(response);
 			}
 			catch (ConnectionInterruptedException)
 			{
@@ -259,20 +252,15 @@ namespace Server
 			
 			// close connection
 			Console.WriteLine("{0}: Client disconnected. ip {1}", DateTime.Now,
-					((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+					((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString());
 
 			try
 			{
-				client.Client.Shutdown(SocketShutdown.Both);
+				client.Close();
 			}
 			catch
 			{
 				// TODO logger
-			}
-			finally
-			{
-				sslStream.Dispose();
-				client.Close();
 			}
 		}
 	}

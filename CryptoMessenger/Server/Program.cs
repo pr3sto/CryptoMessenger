@@ -10,8 +10,7 @@ namespace Server
 		static void Main()
 		{
 			Console.Title = "Server";
-
-			// server
+			
 			Server server = new Server(443);
 
 			// commands

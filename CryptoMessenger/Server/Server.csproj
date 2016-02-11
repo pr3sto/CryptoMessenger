@@ -79,7 +79,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Security\PasswordHash.cs" />
-    <Compile Include="Security\SslStuff.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="OnlineUsersHandler.cs" />
   </ItemGroup>
