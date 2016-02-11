@@ -900,7 +900,7 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_time", DbType="SmallDateTime NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_time", DbType="DateTime2 NOT NULL")]
 		public System.DateTime time
 		{
 			get

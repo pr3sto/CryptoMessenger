@@ -37,7 +37,7 @@
       <Column Name="reply" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="conversation_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="time" Type="System.DateTime" DbType="SmallDateTime NOT NULL" CanBeNull="false" />
+      <Column Name="time" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Association Name="Conversations_Conversation_replies" Member="Conversations" ThisKey="conversation_id" OtherKey="conversation_id" Type="Conversations" IsForeignKey="true" />
       <Association Name="Users_Conversation_replies" Member="Users" ThisKey="user_id" OtherKey="user_id" Type="Users" IsForeignKey="true" />
     </Type>
