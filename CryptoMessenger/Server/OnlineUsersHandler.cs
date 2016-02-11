@@ -101,7 +101,7 @@ namespace Server
 		/// <returns>user, if he online; otherwise - null.</returns>
 		public OnlineUser GetOnlineUser(string login)
 		{
-			return onlineUsers.Find(x => x.login == login);
+			return onlineUsers.Find(x => x.login.Equals(login));
 		}
 
 		/// <summary>

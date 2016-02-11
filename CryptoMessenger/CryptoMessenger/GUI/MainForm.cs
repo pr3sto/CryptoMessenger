@@ -272,7 +272,7 @@ namespace CryptoMessenger.GUI
 		// show all replies with interlocutor
 		public void ShowConversation(string interlocutor)
 		{
-			if (activeTalkLabel.Text.Equals(interlocutor))
+			if (!string.IsNullOrEmpty(interlocutor) && interlocutor.Equals(activeTalkLabel.Text))
 			{
 				Conversation conversation = conversations.GetConversation(interlocutor);
 

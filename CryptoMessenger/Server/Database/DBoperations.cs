@@ -20,7 +20,7 @@ namespace Server.Database
 			{
 				var user_id =
 					from user in DBcontext.Users
-					where user.login == login
+					where user.login.Equals(login)
 					select user.user_id;
 
 				if (user_id.Any())
@@ -41,7 +41,7 @@ namespace Server.Database
 			{
 				var user_login =
 					from user in DBcontext.Users
-					where user.user_id == id
+					where user.user_id.Equals(id)
 					select user.login;
 
 				if (user_login.Any())
@@ -65,7 +65,7 @@ namespace Server.Database
 				// get user
 				var user =
 					from users in DBcontext.Users
-					where users.login == login
+					where users.login.Equals(login)
 					select users;
 
 				if (user.Any())
@@ -105,7 +105,7 @@ namespace Server.Database
 				// get user
 				var user =
 					from users in DBcontext.Users
-					where users.login == login
+					where users.login.Equals(login)
 					select users;
 
 				if (user.Any())
@@ -169,9 +169,9 @@ namespace Server.Database
 				// get friends
 				var data =
 					from friendship in DBcontext.Friends
-					where (friendship.friend_one == id |
-					friendship.friend_two == id) &
-					friendship.accepted == true
+					where (friendship.friend_one.Equals(id) |
+					friendship.friend_two.Equals(id)) &
+					friendship.accepted
 					select friendship;
 
 				// list of friend's logins
@@ -181,7 +181,7 @@ namespace Server.Database
 				{
 					foreach (Friendship f in data)
 					{
-						int friend_id = f.friend_one == id ? f.friend_two : f.friend_one;
+						int friend_id = f.friend_one.Equals(id) ? f.friend_two : f.friend_one;
 						string friend_login = GetUserLogin(friend_id);
 							
 						if (!string.IsNullOrEmpty(friend_login))
@@ -207,10 +207,10 @@ namespace Server.Database
 				// get friendship records
 				var data =
 					from friendship in DBcontext.Friends
-					where (friendship.friend_one == user_one_id &
-					friendship.friend_two == user_two_id) |
-					(friendship.friend_two == user_one_id &
-					friendship.friend_one == user_two_id)
+					where (friendship.friend_one.Equals(user_one_id) &
+					friendship.friend_two.Equals(user_two_id)) |
+					(friendship.friend_two.Equals(user_one_id) &
+					friendship.friend_one.Equals(user_two_id))
 					select friendship;
 
 				// already friends
@@ -263,8 +263,8 @@ namespace Server.Database
 				// get friendsip requests
 				var data =
 					from friendship in DBcontext.Friends
-					where friendship.friend_two == id &
-					friendship.accepted == false
+					where friendship.friend_two.Equals(id) &
+					!friendship.accepted
 					select friendship.friend_one;
 
 				// list of logins
@@ -297,8 +297,8 @@ namespace Server.Database
 				// get friendsip requests
 				var data =
 					from friendship in DBcontext.Friends
-					where friendship.friend_one == id &
-					friendship.accepted == false
+					where friendship.friend_one.Equals(id) &
+					!friendship.accepted
 					select friendship.friend_two;
 
 				List<string> logins = new List<string>();
@@ -332,9 +332,9 @@ namespace Server.Database
 				// get friendsip requests
 				var data =
 					from friendship in DBcontext.Friends
-					where friendship.friend_one == user_one_id &
-					friendship.friend_two == user_two_id &
-					friendship.accepted == false
+					where friendship.friend_one.Equals(user_one_id) &
+					friendship.friend_two.Equals(user_two_id) &
+					!friendship.accepted
 					select friendship;
 
 				foreach (var friendship in data)
@@ -368,12 +368,12 @@ namespace Server.Database
 				// get friendship records
 				var data =
 					from friendship in DBcontext.Friends
-					where (friendship.friend_one == user_one_id &
-					friendship.friend_two == user_two_id &
-					friendship.accepted == true) |
-					(friendship.friend_one == user_two_id &
-					friendship.friend_two == user_one_id &
-					friendship.accepted == true)
+					where (friendship.friend_one.Equals(user_one_id) &
+					friendship.friend_two.Equals(user_two_id) &
+					friendship.accepted) |
+					(friendship.friend_one.Equals(user_two_id) &
+					friendship.friend_two.Equals(user_one_id) &
+					friendship.accepted)
 					select friendship;
 
 				foreach (var friendship in data)
@@ -408,10 +408,10 @@ namespace Server.Database
 			{
 				// get conversation id
 				var data = from conversation in DBcontext.Conversations
-					where (conversation.user_one == sender_id &
-					conversation.user_two == receiver_id) |
-					(conversation.user_one == receiver_id &
-					conversation.user_two == sender_id)
+					where (conversation.user_one.Equals(sender_id) &
+					conversation.user_two.Equals(receiver_id)) |
+					(conversation.user_one.Equals(receiver_id) &
+					conversation.user_two.Equals(sender_id))
 					select conversation.conversation_id;
 
 				// conversation_id
@@ -480,17 +480,17 @@ namespace Server.Database
 			{
 				// get conversation id
 				var c_id = from conversation in DBcontext.Conversations
-					where (conversation.user_one == user_one_id &
-					conversation.user_two == user_two_id) |
-					(conversation.user_one == user_two_id &
-					conversation.user_two == user_one_id)
+					where (conversation.user_one.Equals(user_one_id) &
+					conversation.user_two.Equals(user_two_id)) |
+					(conversation.user_one.Equals(user_two_id) &
+					conversation.user_two.Equals(user_one_id))
 					select conversation.conversation_id;
 
 				// conversation exist
 				if (c_id.Any())
 				{
 					var replies = from reply in DBcontext.Conversation_replies
-						where reply.conversation_id == c_id.First()
+						where reply.conversation_id.Equals(c_id.First())
 						select reply;
 
 					if (replies.Any())

@@ -74,7 +74,7 @@ namespace CryptoMessenger.Stuff
 		/// <returns>true if contains; otherwise, false.</returns>
 		public bool Contains(string interlocutor)
 		{
-			var data = conversations.Find(x => x.interlocutor == interlocutor);
+			var data = conversations.Find(x => x.interlocutor.Equals(interlocutor));
 
 			if (data != null)
 				return true;
@@ -99,7 +99,7 @@ namespace CryptoMessenger.Stuff
 		/// <returns>conversation.</returns>
 		public Conversation GetConversation(string interlocutor)
 		{
-			return conversations.Find(x => x.interlocutor == interlocutor);
+			return conversations.Find(x => x.interlocutor.Equals(interlocutor));
 		}
 
 		/// <summary>
@@ -109,7 +109,7 @@ namespace CryptoMessenger.Stuff
 		/// <param name="reply">reply.</param>
 		public void AddReply(string interlocutor, ConversationReply reply)
 		{
-			Conversation c = conversations.Find(x => x.interlocutor == interlocutor);
+			Conversation c = conversations.Find(x => x.interlocutor.Equals(interlocutor));
 			if (c != null) c.AddReply(reply);
 		}
 	}

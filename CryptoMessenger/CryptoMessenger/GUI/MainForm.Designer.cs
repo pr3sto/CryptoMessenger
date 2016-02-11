@@ -518,7 +518,7 @@ namespace CryptoMessenger.GUI
 		// add placeholder
 		private void replyTextfield_Leave(object sender, EventArgs e)
 		{
-			if ("".Equals(replyTextfield.Text))
+			if (string.IsNullOrEmpty(replyTextfield.Text))
 			{
 				replyTextfield.ForeColor = SystemColors.InactiveCaption;
 				replyTextfield.Text = "ВВЕДИТЕ СООБЩЕНИЕ...";
