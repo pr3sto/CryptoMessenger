@@ -1,36 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CryptoMessenger.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
   <Profiles />
-  <Settings>
-    <Setting Name="AlertColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">Red</Value>
-    </Setting>
-    <Setting Name="BackgroundWhiteColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">255, 252, 248</Value>
-    </Setting>
-    <Setting Name="LoginFirstColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">75, 210, 175</Value>
-    </Setting>
-    <Setting Name="LoginSecondColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">105, 225, 190</Value>
-    </Setting>
-    <Setting Name="LoginThirdColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">60, 200, 160</Value>
-    </Setting>
-    <Setting Name="MainFirstColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">220, 10, 90</Value>
-    </Setting>
-    <Setting Name="MainSecondColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">250, 25, 105</Value>
-    </Setting>
-    <Setting Name="MainThirdColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">205, 0, 75</Value>
-    </Setting>
-    <Setting Name="PanelBorderColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">215, 215, 215</Value>
-    </Setting>
-    <Setting Name="SuccessColor" Type="System.Drawing.Color" Scope="Application">
-      <Value Profile="(Default)">Lime</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>

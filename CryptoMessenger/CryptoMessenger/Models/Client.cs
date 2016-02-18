@@ -2,13 +2,10 @@
 using System.Xml.Linq;
 using System.Security.Cryptography.X509Certificates;
 
-using CryptoMessenger.Stuff;
-using CryptoMessenger.GUI;
-
 using MessageProtocol;
 using MessageProtocol.MessageTypes;
 
-namespace CryptoMessenger.Net
+namespace CryptoMessenger.Models
 {
 	/// <summary>
 	/// Client side code.
@@ -26,9 +23,6 @@ namespace CryptoMessenger.Net
 		private string ip;
 		// client
 		private MpClient client;
-
-		// form 
-		MainForm form;
 
 		public Client()
 		{
@@ -175,13 +169,11 @@ namespace CryptoMessenger.Net
 		/// <summary>
 		/// Listen for messages from server.
 		/// </summary>
-		/// <param name="form">form to update when message come.</param>
-		public async void Listen(MainForm form)
+		/// <param name="//form">//form to update when message come.</param>
+		public async void Listen()
 		{
 			if (!_isLoggedIn) return;
-
-			this.form = form;
-
+			
 			// message from server
 			Message message;
 
@@ -195,8 +187,8 @@ namespace CryptoMessenger.Net
 				}
 				catch (ConnectionInterruptedException)
 				{
-					if (!_isLogOut)
-						form.CloseEmergency();
+					//if (!_isLogOut)
+						//form.CloseEmergency();
 
 					return;
 				}
@@ -204,31 +196,31 @@ namespace CryptoMessenger.Net
 				// handle message
 				if (message is AllUsersMessage)
 				{
-					form.UpdateAllUsersList(((AllUsersMessage)message).users);
+					//form.UpdateAllUsersList(((AllUsersMessage)message).users);
 				}
 				else if (message is FriendsMessage)
 				{
-					form.UpdateFriendsList(((FriendsMessage)message).friends);
+					//form.UpdateFriendsList(((FriendsMessage)message).friends);
 				}
 				else if (message is IncomeFriendshipRequestsMessage)
 				{
-					form.UpdateIncomeFriendshipRequests(((IncomeFriendshipRequestsMessage)message).logins);
+					//form.UpdateIncomeFriendshipRequests(((IncomeFriendshipRequestsMessage)message).logins);
 				}
 				else if (message is OutcomeFriendshipRequestsMessage)
 				{
-					form.UpdateOutcomeFriendshipRequests(((OutcomeFriendshipRequestsMessage)message).logins);
+					//form.UpdateOutcomeFriendshipRequests(((OutcomeFriendshipRequestsMessage)message).logins);
 				}
 				else if (message is ReplyMessage)
 				{
-					form.UpdateConversations(
-						((ReplyMessage)message).interlocutor, 
-						new ConversationReply
-						(
-							((ReplyMessage)message).reply_author,
-							((ReplyMessage)message).reply_time,
-							((ReplyMessage)message).reply_text
-						)
-					);
+					//form.UpdateConversations(
+					//	((ReplyMessage)message).interlocutor, 
+					//	new ConversationReply
+					//	(
+					//		((ReplyMessage)message).reply_author,
+					//		((ReplyMessage)message).reply_time,
+					//		((ReplyMessage)message).reply_text
+					//	)
+					//);
 				}
 			}
 		}
@@ -255,7 +247,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -282,7 +274,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -309,7 +301,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -336,7 +328,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -369,7 +361,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -404,7 +396,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -439,7 +431,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -474,7 +466,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -509,7 +501,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -545,7 +537,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}
@@ -579,7 +571,7 @@ namespace CryptoMessenger.Net
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					form.CloseEmergency();
+					//form.CloseEmergency();
 				}
 			}
 		}

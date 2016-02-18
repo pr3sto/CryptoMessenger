@@ -1,0 +1,198 @@
+﻿<ResourceDictionary 
+    x:Class="CryptoMessenger.Views.Styles.WindowStyle"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
+    >
+
+    <!-- brushes -->
+    <SolidColorBrush x:Key="WindowContentBackground1Brush" Color="Gray"/>
+    <SolidColorBrush x:Key="WindowContentBackground2Brush" Color="Gray"/>
+    <SolidColorBrush x:Key="WindowContentBackground3Brush" Color="Gray"/>
+    <SolidColorBrush x:Key="WindowBorderBrush" Color="Black" />
+    <Color x:Key="BorderShadowColor" A="255" R="255" G="255" B="255"/>
+
+    <!-- button style -->
+    <Style x:Key="TitleBarButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Gainsboro"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid MaxHeight="30" MaxWidth="30">
+                        <Border Background="Transparent"/>
+                        <ContentPresenter />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource WindowBorderBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- window style -->
+    <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="AllowsTransparency" Value="true"/>
+        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="ResizeMode" Value="CanMinimize"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Grid Margin="5">
+                        <!-- window border -->
+                        <Border
+                            x:Name="WindowBorder"
+                            Background="{DynamicResource WindowContentBackground1Brush}"
+                            BorderBrush="{DynamicResource WindowBorderBrush}"
+                            BorderThickness="1"
+                            Padding="0"
+                            >
+                            <Border.Effect>
+                                <DropShadowEffect
+                                    Color="{DynamicResource BorderShadowColor}"
+                                    BlurRadius="5"
+                                    ShadowDepth="0"
+                                    />
+                            </Border.Effect>
+                        </Border>
+                        <!-- middle background shape -->
+                        <Grid
+                            VerticalAlignment="Top"
+                            Margin="1"
+                            Height="150"
+                            Width="{TemplateBinding Width}"
+                            >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Path 
+                                Grid.Column="3"
+                                Grid.ColumnSpan="4"
+                                Stretch="Fill"
+                                Fill="{DynamicResource WindowContentBackground3Brush}"
+                                Data="M1,1 H500 V150 L1,1"
+                                />
+                        </Grid>
+                        <!-- top background shape -->
+                        <Grid
+                            VerticalAlignment="Top"
+                            Margin="1"
+                            Height="50"
+                            Width="{TemplateBinding Width}"
+                            >
+                            <Path 
+                                Stretch="Fill"
+                                Fill="{DynamicResource WindowContentBackground2Brush}"
+                                Data="M0,0 H1 V2 L0,1 L0,0"
+                                />
+                        </Grid>
+                        <!-- window top panel -->
+                        <DockPanel   
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            >
+                            <Border
+                                DockPanel.Dock="Top"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
+                                >
+                                <Grid Height="30">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+                                    <!-- icon -->
+                                    <Image
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                        RenderOptions.EdgeMode="Aliased"
+                                        Width="25" Height="25"
+                                        Source="/CryptoMessenger;component/Resources/envelope.png"
+                                        />
+                                    <!-- title -->
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        TextOptions.TextRenderingMode="ClearType"
+                                        TextOptions.TextFormattingMode="Display"
+                                        FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
+                                        FontSize="14"
+                                        Foreground="White"
+                                        Text="{TemplateBinding Title}"
+                                        />
+                                    <!-- minimize button -->
+                                    <Button
+                                        Grid.Column="2"
+                                        VerticalAlignment="Top"
+                                        Width="30"
+                                        Height="30"
+                                        Style="{StaticResource TitleBarButtonStyle}"
+                                        Click="MinimizeButton_Click"
+                                        >
+                                        <Grid MaxHeight="30" MaxWidth="30">
+                                            <Path
+                                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                StrokeThickness="2"
+                                                Stretch="None"
+                                                RenderOptions.EdgeMode="Aliased"
+                                                Data="M11,19 H21"
+                                                />
+                                        </Grid>
+                                    </Button>
+                                    <!-- close button -->
+                                    <Button
+                                        Grid.Column="3"
+                                        VerticalAlignment="Top"
+                                        Width="30"
+                                        Height="30"
+                                        Style="{StaticResource TitleBarButtonStyle}"
+                                        Click="CloseButton_Click"
+                                        >
+                                        <Grid MaxHeight="30" MaxWidth="30">
+                                            <Path
+                                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                                StrokeThickness="1"
+                                                Stretch="None"
+                                                RenderOptions.EdgeMode="Aliased"
+                                                Data="M11,11 L20,20 M12,11 L21,20 M11,20 L20,11 M12,20 L21,11"
+                                                />
+                                        </Grid>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                            <ContentPresenter />
+                        </DockPanel>
+                    </Grid>
+                    <!-- window lost focus -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsActive" Value="False">
+                            <Setter TargetName="WindowBorder" Property="Effect" Value="{x:Null}"/>
+                            <Setter Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
+    

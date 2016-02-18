@@ -22,7 +22,7 @@ namespace CryptoMessenger.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace CryptoMessenger.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CryptoMessenger.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace CryptoMessenger.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,58 +61,11 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ВХОД В ДАННЫЙ АККАУНТ УЖЕ ВЫПОЛНЕН .
-        /// </summary>
-        internal static string ALREADY_LOGIN_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("ALREADY_LOGIN_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CRYPTO MESSENGER.
-        /// </summary>
-        internal static string APP_NAME {
-            get {
-                return ResourceManager.GetString("APP_NAME", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to НЕ УДАЕТСЯ НАЙТИ СЕРТИФИКАТ ПРИЛОЖЕНИЯ.
-        /// </summary>
-        internal static string CERTIFICATE_ERROR_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("CERTIFICATE_ERROR_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap close_button_hover {
+        public static System.Drawing.Bitmap envelope {
             get {
-                object obj = ResourceManager.GetObject("close_button_hover", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap close_button_normal {
-            get {
-                object obj = ResourceManager.GetObject("close_button_normal", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap close_button_pressed {
-            get {
-                object obj = ResourceManager.GetObject("close_button_pressed", resourceCulture);
+                object obj = ResourceManager.GetObject("envelope", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -120,7 +73,7 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon icon {
+        public static System.Drawing.Icon icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -130,26 +83,7 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icon1 {
-            get {
-                object obj = ResourceManager.GetObject("icon1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to НЕКОРРЕКТНЫЕ ДАННЫЕ.
-        /// </summary>
-        internal static string INCORRECT_DATA_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("INCORRECT_DATA_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap login {
+        public static System.Drawing.Bitmap login {
             get {
                 object obj = ResourceManager.GetObject("login", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -157,179 +91,22 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ВХОД.
-        /// </summary>
-        internal static string LOGIN_BUTTON_TEXT {
-            get {
-                return ResourceManager.GetString("LOGIN_BUTTON_TEXT", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to НЕВЕРНАЯ КОМБИНАЦИЯ ЛОГИНА И ПАРОЛЯ.
-        /// </summary>
-        internal static string LOGIN_ERROR_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("LOGIN_ERROR_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ВХОД....
-        /// </summary>
-        internal static string LOGIN_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("LOGIN_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap minimize_button_hover {
-            get {
-                object obj = ResourceManager.GetObject("minimize_button_hover", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap minimize_button_normal {
-            get {
-                object obj = ResourceManager.GetObject("minimize_button_normal", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap minimize_button_pressed {
-            get {
-                object obj = ResourceManager.GetObject("minimize_button_pressed", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Neue {
+        public static byte[] RainTungsten {
             get {
-                object obj = ResourceManager.GetObject("Neue", resourceCulture);
+                object obj = ResourceManager.GetObject("RainTungsten", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to СКРЫВАТЬ ПАРОЛЬ.
-        /// </summary>
-        internal static string PASSWORD_CHECKBOX_TEXT {
-            get {
-                return ResourceManager.GetString("PASSWORD_CHECKBOX_TEXT", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap register {
+        public static System.Drawing.Bitmap register {
             get {
                 object obj = ResourceManager.GetObject("register", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to РЕГИСТРАЦИЯ.
-        /// </summary>
-        internal static string REGISTRATION_BUTTON_TEXT {
-            get {
-                return ResourceManager.GetString("REGISTRATION_BUTTON_TEXT", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to АККАУНТ С ДАННЫМ ЛОГИНОМ УЖЕ ЗАРЕГИСТРИРОВАН.
-        /// </summary>
-        internal static string REGISTRATION_ERROR_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("REGISTRATION_ERROR_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to РЕГИСТРАЦИЯ....
-        /// </summary>
-        internal static string REGISTRATION_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("REGISTRATION_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ВЫ УСПЕШНО ЗАРЕГИСТРИРОВАЛИСЬ.
-        /// </summary>
-        internal static string REGISTRATION_SUCCESS_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("REGISTRATION_SUCCESS_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap send {
-            get {
-                object obj = ResourceManager.GetObject("send", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to НЕ УДАЕТСЯ ПОДКЛЮЧИТЬСЯ К СЕРВЕРУ.
-        /// </summary>
-        internal static string SERVER_CONNECTION_ERROR_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("SERVER_CONNECTION_ERROR_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ДОБРО ПОЖАЛОВАТЬ.
-        /// </summary>
-        internal static string STANDART_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("STANDART_NOTIFICATION", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to НЕИЗВЕСТНАЯ ОШИБКА. ПОВТОРИТЕ ДЕЙСТВИЕ ПОЗЖЕ.
-        /// </summary>
-        internal static string UNKNOWN_ERROR {
-            get {
-                return ResourceManager.GetString("UNKNOWN_ERROR", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ЛОГИН.
-        /// </summary>
-        internal static string USERNAME_TEXTFIELD_PLACEHOLDER {
-            get {
-                return ResourceManager.GetString("USERNAME_TEXTFIELD_PLACEHOLDER", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ПАРОЛЬ.
-        /// </summary>
-        internal static string USERPASSWORD_TEXTFIELD_PLACEHOLDER {
-            get {
-                return ResourceManager.GetString("USERPASSWORD_TEXTFIELD_PLACEHOLDER", resourceCulture);
             }
         }
     }

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoMessenger", "CryptoMessenger\CryptoMessenger.csproj", "{B1B88CF1-EAFE-4EB8-B185-D8764666952E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{CDDF981C-897E-40F4-A597-9EC433DB7449}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageProtocol", "MessageProtocol\MessageProtocol.csproj", "{1DD39EEC-8A7D-4BD9-BB0F-84DE13795A73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoMessenger", "CryptoMessenger\CryptoMessenger.csproj", "{41DE055A-66CB-4261-882B-792E302A9EA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +17,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B1B88CF1-EAFE-4EB8-B185-D8764666952E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1B88CF1-EAFE-4EB8-B185-D8764666952E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1B88CF1-EAFE-4EB8-B185-D8764666952E}.Debug|x64.ActiveCfg = Debug|x64
-		{B1B88CF1-EAFE-4EB8-B185-D8764666952E}.Debug|x64.Build.0 = Debug|x64
-		{B1B88CF1-EAFE-4EB8-B185-D8764666952E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1B88CF1-EAFE-4EB8-B185-D8764666952E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1B88CF1-EAFE-4EB8-B185-D8764666952E}.Release|x64.ActiveCfg = Release|x64
-		{B1B88CF1-EAFE-4EB8-B185-D8764666952E}.Release|x64.Build.0 = Release|x64
 		{CDDF981C-897E-40F4-A597-9EC433DB7449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDDF981C-897E-40F4-A597-9EC433DB7449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDDF981C-897E-40F4-A597-9EC433DB7449}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -41,6 +33,14 @@ Global
 		{1DD39EEC-8A7D-4BD9-BB0F-84DE13795A73}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1DD39EEC-8A7D-4BD9-BB0F-84DE13795A73}.Release|x64.ActiveCfg = Release|Any CPU
 		{1DD39EEC-8A7D-4BD9-BB0F-84DE13795A73}.Release|x64.Build.0 = Release|Any CPU
+		{41DE055A-66CB-4261-882B-792E302A9EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41DE055A-66CB-4261-882B-792E302A9EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41DE055A-66CB-4261-882B-792E302A9EA0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{41DE055A-66CB-4261-882B-792E302A9EA0}.Debug|x64.Build.0 = Debug|Any CPU
+		{41DE055A-66CB-4261-882B-792E302A9EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41DE055A-66CB-4261-882B-792E302A9EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41DE055A-66CB-4261-882B-792E302A9EA0}.Release|x64.ActiveCfg = Release|Any CPU
+		{41DE055A-66CB-4261-882B-792E302A9EA0}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,130 @@
+﻿<Window x:Class="CryptoMessenger.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CryptoMessenger"
+        mc:Ignorable="d"
+        
+        Style="{StaticResource WindowStyle}"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Height="400" Width="500"
+        Title="CRYPTO MESSENGER" 
+        Icon="/CryptoMessenger;component/Resources/icon.ico"
+        >
+    <Grid Height="358">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55" />
+            <RowDefinition Height="39"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="39"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition />
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            TextOptions.TextRenderingMode="ClearType"
+            TextOptions.TextFormattingMode="Display"
+            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
+            FontSize="14"
+            Foreground="White"
+            Text="ДОБРО ПОЖАЛОВАТЬ"
+            >
+        </TextBlock>
+        <TextBox
+            Grid.Row="1"
+            Style="{StaticResource TextBoxStyle}"
+            Tag="ЛОГИН"
+            Width="200"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Background="White"
+            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
+            FontSize="21"
+            MaxLength="30"
+            TabIndex="1"
+            IsTabStop="False"
+            KeyboardNavigation.TabNavigation="Local"
+            />
+        <TextBox
+            Grid.Row="3"
+            Style="{StaticResource TextBoxStyle}"
+            Tag="ПАРОЛЬ"
+            Width="200"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Background="White"
+            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
+            FontSize="21"
+            MaxLength="30"
+            TabIndex="2"
+            IsTabStop="False"
+            KeyboardNavigation.TabNavigation="Local"
+            />
+        <CheckBox
+            Grid.Row="4"
+            Style="{StaticResource CheckBoxStyle}"
+            Margin="141,0"
+            VerticalAlignment="Center"
+            Cursor="Hand"
+            TextOptions.TextRenderingMode="ClearType"
+            TextOptions.TextFormattingMode="Display"
+            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
+            FontSize="14"
+            Foreground="White"
+            TabIndex="3"
+            IsTabStop="True"
+            Content="СКРЫВАТЬ ПАРОЛЬ"
+            >
+        </CheckBox>
+        <Button
+            Grid.Row="6"
+            Style="{StaticResource ButtonStyle}"
+            Cursor="Hand"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Center"
+            Height="50"
+            Width="200"
+            TabIndex="0"
+            IsTabStop="False"
+            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
+            FontSize="21"
+            Foreground="White"
+            HorizontalContentAlignment="Right"
+            VerticalContentAlignment="Center"
+            Content="ВХОД"
+            >
+            <Button.Background>
+                <ImageBrush ImageSource="/CryptoMessenger;component/Resources/login.png"/>
+            </Button.Background>
+        </Button>
+        <Button
+            Grid.Row="8"
+            Style="{StaticResource ButtonStyle}"
+            Cursor="Hand"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Center"
+            Height="50"
+            Width="200"
+            TabIndex="0"
+            IsTabStop="False"
+            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
+            FontSize="21"
+            Foreground="White"
+            HorizontalContentAlignment="Right"
+            VerticalContentAlignment="Center"
+            Content="РЕГИСТРАЦИЯ"
+            >
+            <Button.Background>
+                <ImageBrush ImageSource="/CryptoMessenger;component/Resources/register.png"/>
+            </Button.Background>
+        </Button>
+    </Grid>
+</Window>

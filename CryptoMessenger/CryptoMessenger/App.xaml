@@ -1,0 +1,16 @@
+﻿<Application x:Class="CryptoMessenger.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CryptoMessenger"
+             Startup="OnStartup">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views/Styles/WindowStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/TextBoxStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/ButtonStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/CheckBoxStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
