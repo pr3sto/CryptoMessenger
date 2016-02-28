@@ -13,7 +13,7 @@ namespace CryptoMessenger
 		private void OnStartup(object sender, StartupEventArgs e)
 		{ 
 			LoginWindow view = new LoginWindow();
-			MainViewModel viewModel = new MainViewModel();
+			LoginWindowViewModel viewModel = new LoginWindowViewModel();
 			view.DataContext = viewModel;
 			view.Show();
 		}

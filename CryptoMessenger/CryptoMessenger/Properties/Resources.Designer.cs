@@ -61,6 +61,33 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ВХОД В ДАННЫЙ АККАУНТ УЖЕ ВЫПОЛНЕН .
+        /// </summary>
+        public static string ALREADY_LOGIN_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("ALREADY_LOGIN_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CRYPTO MESSENGER.
+        /// </summary>
+        public static string APP_NAME {
+            get {
+                return ResourceManager.GetString("APP_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to НЕ УДАЕТСЯ НАЙТИ СЕРТИФИКАТ ПРИЛОЖЕНИЯ.
+        /// </summary>
+        public static string CERTIFICATE_ERROR_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("CERTIFICATE_ERROR_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap envelope {
@@ -81,12 +108,57 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to НЕКОРРЕКТНЫЕ ДАННЫЕ.
+        /// </summary>
+        public static string INCORRECT_DATA_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("INCORRECT_DATA_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap login {
             get {
                 object obj = ResourceManager.GetObject("login", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ВХОД.
+        /// </summary>
+        public static string LOGIN_BUTTON_TEXT {
+            get {
+                return ResourceManager.GetString("LOGIN_BUTTON_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to НЕВЕРНАЯ КОМБИНАЦИЯ ЛОГИНА И ПАРОЛЯ.
+        /// </summary>
+        public static string LOGIN_ERROR_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("LOGIN_ERROR_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ВХОД....
+        /// </summary>
+        public static string LOGIN_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("LOGIN_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to СКРЫВАТЬ ПАРОЛЬ.
+        /// </summary>
+        public static string PASSWORD_CHECKBOX_TEXT {
+            get {
+                return ResourceManager.GetString("PASSWORD_CHECKBOX_TEXT", resourceCulture);
             }
         }
         
@@ -107,6 +179,87 @@ namespace CryptoMessenger.Properties {
             get {
                 object obj = ResourceManager.GetObject("register", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to РЕГИСТРАЦИЯ.
+        /// </summary>
+        public static string REGISTRATION_BUTTON_TEXT {
+            get {
+                return ResourceManager.GetString("REGISTRATION_BUTTON_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to АККАУНТ С ДАННЫМ ЛОГИНОМ УЖЕ ЗАРЕГИСТРИРОВАН.
+        /// </summary>
+        public static string REGISTRATION_ERROR_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("REGISTRATION_ERROR_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to РЕГИСТРАЦИЯ....
+        /// </summary>
+        public static string REGISTRATION_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("REGISTRATION_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ВЫ УСПЕШНО ЗАРЕГИСТРИРОВАЛИСЬ.
+        /// </summary>
+        public static string REGISTRATION_SUCCESS_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("REGISTRATION_SUCCESS_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to НЕ УДАЕТСЯ ПОДКЛЮЧИТЬСЯ К СЕРВЕРУ.
+        /// </summary>
+        public static string SERVER_CONNECTION_ERROR_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("SERVER_CONNECTION_ERROR_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ДОБРО ПОЖАЛОВАТЬ.
+        /// </summary>
+        public static string STANDART_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("STANDART_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to НЕИЗВЕСТНАЯ ОШИБКА. ПОВТОРИТЕ ДЕЙСТВИЕ ПОЗЖЕ.
+        /// </summary>
+        public static string UNKNOWN_ERROR {
+            get {
+                return ResourceManager.GetString("UNKNOWN_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ЛОГИН.
+        /// </summary>
+        public static string USERNAME_TEXTFIELD_PLACEHOLDER {
+            get {
+                return ResourceManager.GetString("USERNAME_TEXTFIELD_PLACEHOLDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ПАРОЛЬ.
+        /// </summary>
+        public static string USERPASSWORD_TEXTFIELD_PLACEHOLDER {
+            get {
+                return ResourceManager.GetString("USERPASSWORD_TEXTFIELD_PLACEHOLDER", resourceCulture);
             }
         }
     }

@@ -133,4 +133,55 @@
   <data name="register" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\register.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="APP_NAME" xml:space="preserve">
+    <value>CRYPTO MESSENGER</value>
+  </data>
+  <data name="INCORRECT_DATA_NOTIFICATION" xml:space="preserve">
+    <value>НЕКОРРЕКТНЫЕ ДАННЫЕ</value>
+  </data>
+  <data name="LOGIN_BUTTON_TEXT" xml:space="preserve">
+    <value>ВХОД</value>
+  </data>
+  <data name="LOGIN_ERROR_NOTIFICATION" xml:space="preserve">
+    <value>НЕВЕРНАЯ КОМБИНАЦИЯ ЛОГИНА И ПАРОЛЯ</value>
+  </data>
+  <data name="LOGIN_NOTIFICATION" xml:space="preserve">
+    <value>ВХОД...</value>
+  </data>
+  <data name="PASSWORD_CHECKBOX_TEXT" xml:space="preserve">
+    <value>СКРЫВАТЬ ПАРОЛЬ</value>
+  </data>
+  <data name="REGISTRATION_BUTTON_TEXT" xml:space="preserve">
+    <value>РЕГИСТРАЦИЯ</value>
+  </data>
+  <data name="REGISTRATION_ERROR_NOTIFICATION" xml:space="preserve">
+    <value>АККАУНТ С ДАННЫМ ЛОГИНОМ УЖЕ ЗАРЕГИСТРИРОВАН</value>
+  </data>
+  <data name="REGISTRATION_NOTIFICATION" xml:space="preserve">
+    <value>РЕГИСТРАЦИЯ...</value>
+  </data>
+  <data name="REGISTRATION_SUCCESS_NOTIFICATION" xml:space="preserve">
+    <value>ВЫ УСПЕШНО ЗАРЕГИСТРИРОВАЛИСЬ</value>
+  </data>
+  <data name="SERVER_CONNECTION_ERROR_NOTIFICATION" xml:space="preserve">
+    <value>НЕ УДАЕТСЯ ПОДКЛЮЧИТЬСЯ К СЕРВЕРУ</value>
+  </data>
+  <data name="STANDART_NOTIFICATION" xml:space="preserve">
+    <value>ДОБРО ПОЖАЛОВАТЬ</value>
+  </data>
+  <data name="USERNAME_TEXTFIELD_PLACEHOLDER" xml:space="preserve">
+    <value>ЛОГИН</value>
+  </data>
+  <data name="USERPASSWORD_TEXTFIELD_PLACEHOLDER" xml:space="preserve">
+    <value>ПАРОЛЬ</value>
+  </data>
+  <data name="CERTIFICATE_ERROR_NOTIFICATION" xml:space="preserve">
+    <value>НЕ УДАЕТСЯ НАЙТИ СЕРТИФИКАТ ПРИЛОЖЕНИЯ</value>
+  </data>
+  <data name="UNKNOWN_ERROR" xml:space="preserve">
+    <value>НЕИЗВЕСТНАЯ ОШИБКА. ПОВТОРИТЕ ДЕЙСТВИЕ ПОЗЖЕ</value>
+  </data>
+  <data name="ALREADY_LOGIN_NOTIFICATION" xml:space="preserve">
+    <value>ВХОД В ДАННЫЙ АККАУНТ УЖЕ ВЫПОЛНЕН </value>
+  </data>
 </root>
