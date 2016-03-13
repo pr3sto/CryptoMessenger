@@ -18,7 +18,7 @@
                             x:Name="BackgroundRect"
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch" 
-                            Fill="{Binding Path=ButtonBackgroundNormalBrush, Source={x:Static props:Settings.Default}}"
+                            Fill="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                             />
                         <!-- background image -->
                         <Rectangle 
@@ -43,23 +43,25 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="BackgroundRect" Property="Fill" 
-                                    Value="{Binding Path=ButtonBackgroundHoverBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{Binding Path=MainSecondLightBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="BackgroundRect" Property="Fill" 
-                                    Value="{Binding Path=ButtonBackgroundNormalBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                                     />
                             <Setter TargetName="buttonBackground" Property="Fill" 
-                                    Value="{Binding Path=ButtonForegroundPressedBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                     />
                             <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
-                                    Value="{Binding Path=ButtonForegroundPressedBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="buttonBackground" Property="Fill" Value="LightGray"/>
-                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" Value="LightGray"/>
+                            <Setter TargetName="buttonBackground" Property="Fill" 
+                                    Value="{Binding Path=MainThirdBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
+                                    Value="{Binding Path=MainThirdBrush, Source={x:Static props:Settings.Default}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

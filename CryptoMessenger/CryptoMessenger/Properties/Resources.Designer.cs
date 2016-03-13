@@ -98,6 +98,15 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ДРУЗЬЯ.
+        /// </summary>
+        public static string FRIENDSS_TEXTBLOCK_TEXT {
+            get {
+                return ResourceManager.GetString("FRIENDSS_TEXTBLOCK_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon icon {
@@ -215,6 +224,24 @@ namespace CryptoMessenger.Properties {
         public static string REGISTRATION_SUCCESS_NOTIFICATION {
             get {
                 return ResourceManager.GetString("REGISTRATION_SUCCESS_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ЗАЯВКИ.
+        /// </summary>
+        public static string REQUESTS_TEXTBLOCK_TEXT {
+            get {
+                return ResourceManager.GetString("REQUESTS_TEXTBLOCK_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ПОИСК.
+        /// </summary>
+        public static string SEARCH_TEXTBLOCK_TEXT {
+            get {
+                return ResourceManager.GetString("SEARCH_TEXTBLOCK_TEXT", resourceCulture);
             }
         }
         

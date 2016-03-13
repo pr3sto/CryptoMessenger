@@ -10,7 +10,7 @@
     <Style x:Key="TitleBarButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Focusable" Value="false"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="Gainsboro"/>
+        <Setter Property="Foreground" Value="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -20,10 +20,10 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Foreground" Value="{Binding Path=WindowBorderBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -44,14 +44,14 @@
                         <!-- window border -->
                         <Border
                             x:Name="WindowBorder"
-                            Background="{Binding Path=WindowContentBackground1Brush, Source={x:Static props:Settings.Default}}"
-                            BorderBrush="{Binding Path=WindowBorderBrush, Source={x:Static props:Settings.Default}}"
+                            Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                            BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                             BorderThickness="1"
                             Padding="0"
                             >
                             <Border.Effect>
                                 <DropShadowEffect
-                                    Color="{Binding Path=BorderShadowColor, Source={x:Static props:Settings.Default}}"
+                                    Color="{Binding Path=SpecialColor, Source={x:Static props:Settings.Default}}"
                                     BlurRadius="5"
                                     ShadowDepth="0"
                                     />
@@ -77,7 +77,7 @@
                                 Grid.Column="3"
                                 Grid.ColumnSpan="4"
                                 Stretch="Fill"
-                                Fill="{Binding Path=WindowContentBackground3Brush, Source={x:Static props:Settings.Default}}"
+                                Fill="{Binding Path=MainThirdBrush, Source={x:Static props:Settings.Default}}"
                                 Data="M1,1 H500 V150 L1,1"
                                 />
                         </Grid>
@@ -90,7 +90,7 @@
                             >
                             <Path 
                                 Stretch="Fill"
-                                Fill="{Binding Path=WindowContentBackground2Brush, Source={x:Static props:Settings.Default}}"
+                                Fill="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                                 Data="M0,0 H1 V2 L0,1 L0,0"
                                 />
                         </Grid>
@@ -131,7 +131,7 @@
                                         TextOptions.TextFormattingMode="Display"
                                         FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
                                         FontSize="17"
-                                        Foreground="White"
+                                        Foreground="{TemplateBinding Foreground}"
                                         Text="{TemplateBinding Title}"
                                         />
                                     <!-- minimize button -->

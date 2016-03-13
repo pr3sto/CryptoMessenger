@@ -2,50 +2,35 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CryptoMessenger.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="WindowContentBackground1Brush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
+    <Setting Name="MainFirstBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FF4C4743</Value>
     </Setting>
-    <Setting Name="WindowContentBackground2Brush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
+    <Setting Name="MainSecondBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FF818181</Value>
     </Setting>
-    <Setting Name="WindowContentBackground3Brush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
+    <Setting Name="MainThirdBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FFF4F0E4</Value>
     </Setting>
-    <Setting Name="WindowBorderBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
+    <Setting Name="SpecialBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FF7E1B7C</Value>
     </Setting>
-    <Setting Name="BorderShadowColor" Type="System.Windows.Media.Color" Scope="Application">
+    <Setting Name="SpecialColor" Type="System.Windows.Media.Color" Scope="Application">
       <Value Profile="(Default)">#FF7E1B7C</Value>
     </Setting>
-    <Setting Name="TextBoxBorderBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF818181</Value>
-    </Setting>
-    <Setting Name="FocusedTextBoxBorderBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF7E1B7C</Value>
-    </Setting>
-    <Setting Name="SelectionBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF646464</Value>
-    </Setting>
-    <Setting Name="ButtonBackgroundNormalBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF818181</Value>
-    </Setting>
-    <Setting Name="ButtonBackgroundHoverBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
+    <Setting Name="MainSecondLightBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FF959590</Value>
     </Setting>
-    <Setting Name="ButtonForegroundPressedBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF7E1B7C</Value>
-    </Setting>
-    <Setting Name="CheckBoxBorderBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF818181</Value>
-    </Setting>
-    <Setting Name="CheckBoxCheckBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF7E1B7C</Value>
-    </Setting>
-    <Setting Name="AlertColor" Type="System.Windows.Media.Color" Scope="Application">
+    <Setting Name="AlertBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FFFF0000</Value>
     </Setting>
-    <Setting Name="SuccessColor" Type="System.Windows.Media.Color" Scope="Application">
+    <Setting Name="SuccessBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FF00FF00</Value>
+    </Setting>
+    <Setting Name="SecondaryFirstBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
+      <Value Profile="(Default)">#FFFFFFFF</Value>
+    </Setting>
+    <Setting Name="SecondarySecondBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
+      <Value Profile="(Default)">#FFDCDCDC</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -11,11 +11,16 @@ namespace CryptoMessenger
 	{
 		// load view on startup
 		private void OnStartup(object sender, StartupEventArgs e)
-		{ 
+		{
 			LoginWindow view = new LoginWindow();
 			LoginWindowViewModel viewModel = new LoginWindowViewModel();
 			view.DataContext = viewModel;
 			view.Show();
+
+			//MainWindow view = new MainWindow();
+			//MainWindowViewModel viewModel = new MainWindowViewModel(null, "ololsha");
+			//view.DataContext = viewModel;
+			//view.Show();
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace CryptoMessenger.Views.Extensions
 		}
 
 
-		// for passwordbox placeholder
+		// for placeholders
 
 		public static readonly DependencyProperty IsMonitoringProperty =
 			DependencyProperty.RegisterAttached("IsMonitoring", typeof(bool), typeof(Extensions), new UIPropertyMetadata(false, OnIsMonitoringChanged));
@@ -47,6 +47,8 @@ namespace CryptoMessenger.Views.Extensions
 			obj.SetValue(IsMonitoringProperty, value);
 		}
 
+		// passwordbox placeholder
+
 		public static readonly DependencyProperty PasswordLengthProperty =
 			DependencyProperty.RegisterAttached("PasswordLength", typeof(int), typeof(Extensions), new UIPropertyMetadata(0));
 		public static int GetPasswordLength(DependencyObject obj)
@@ -58,20 +60,52 @@ namespace CryptoMessenger.Views.Extensions
 			obj.SetValue(PasswordLengthProperty, value);
 		}		
 
+		// textbox placeholder
+
+		public static readonly DependencyProperty TextLengthProperty =
+			DependencyProperty.RegisterAttached("TextLength", typeof(int), typeof(Extensions), new UIPropertyMetadata(0));
+		public static int GetTextLength(DependencyObject obj)
+		{
+			return (int)obj.GetValue(TextLengthProperty);
+		}
+		public static void SetTextLength(DependencyObject obj, int value)
+		{
+			obj.SetValue(TextLengthProperty, value);
+		}
+
 		private static void OnIsMonitoringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			var pb = d as PasswordBox;
-			if (pb == null)
+			if (d is PasswordBox)
 			{
-				return;
+				var pb = d as PasswordBox;
+				if (pb == null)
+				{
+					return;
+				}
+				if ((bool)e.NewValue)
+				{
+					pb.PasswordChanged += PasswordChanged;
+				}
+				else
+				{
+					pb.PasswordChanged -= PasswordChanged;
+				}
 			}
-			if ((bool)e.NewValue)
+			else if (d is TextBox)
 			{
-				pb.PasswordChanged += PasswordChanged;
-			}
-			else
-			{
-				pb.PasswordChanged -= PasswordChanged;
+				var tb = d as TextBox;
+				if (tb == null)
+				{
+					return;
+				}
+				if ((bool)e.NewValue)
+				{
+					tb.TextChanged += TextChanged;
+				}
+				else
+				{
+					tb.TextChanged -= TextChanged;
+				}
 			}
 		}
 
@@ -83,6 +117,16 @@ namespace CryptoMessenger.Views.Extensions
 				return;
 			}
 			SetPasswordLength(pb, pb.Password.Length);
+		}
+
+		static void TextChanged(object sender, RoutedEventArgs e)
+		{
+			var tb = sender as TextBox;
+			if (tb == null)
+			{
+				return;
+			}
+			SetTextLength(tb, tb.Text.Length);
 		}
 	}
 }

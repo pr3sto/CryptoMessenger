@@ -26,135 +26,90 @@ namespace CryptoMessenger.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF4C4743")]
-        public global::System.Windows.Media.SolidColorBrush WindowContentBackground1Brush {
+        public global::System.Windows.Media.SolidColorBrush MainFirstBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["WindowContentBackground1Brush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["MainFirstBrush"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF818181")]
-        public global::System.Windows.Media.SolidColorBrush WindowContentBackground2Brush {
+        public global::System.Windows.Media.SolidColorBrush MainSecondBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["WindowContentBackground2Brush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["MainSecondBrush"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFF4F0E4")]
-        public global::System.Windows.Media.SolidColorBrush WindowContentBackground3Brush {
+        public global::System.Windows.Media.SolidColorBrush MainThirdBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["WindowContentBackground3Brush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["MainThirdBrush"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF7E1B7C")]
-        public global::System.Windows.Media.SolidColorBrush WindowBorderBrush {
+        public global::System.Windows.Media.SolidColorBrush SpecialBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["WindowBorderBrush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["SpecialBrush"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF7E1B7C")]
-        public global::System.Windows.Media.Color BorderShadowColor {
+        public global::System.Windows.Media.Color SpecialColor {
             get {
-                return ((global::System.Windows.Media.Color)(this["BorderShadowColor"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF818181")]
-        public global::System.Windows.Media.SolidColorBrush TextBoxBorderBrush {
-            get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["TextBoxBorderBrush"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF7E1B7C")]
-        public global::System.Windows.Media.SolidColorBrush FocusedTextBoxBorderBrush {
-            get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["FocusedTextBoxBorderBrush"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF646464")]
-        public global::System.Windows.Media.SolidColorBrush SelectionBrush {
-            get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["SelectionBrush"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF818181")]
-        public global::System.Windows.Media.SolidColorBrush ButtonBackgroundNormalBrush {
-            get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["ButtonBackgroundNormalBrush"]));
+                return ((global::System.Windows.Media.Color)(this["SpecialColor"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF959590")]
-        public global::System.Windows.Media.SolidColorBrush ButtonBackgroundHoverBrush {
+        public global::System.Windows.Media.SolidColorBrush MainSecondLightBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["ButtonBackgroundHoverBrush"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF7E1B7C")]
-        public global::System.Windows.Media.SolidColorBrush ButtonForegroundPressedBrush {
-            get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["ButtonForegroundPressedBrush"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF818181")]
-        public global::System.Windows.Media.SolidColorBrush CheckBoxBorderBrush {
-            get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["CheckBoxBorderBrush"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF7E1B7C")]
-        public global::System.Windows.Media.SolidColorBrush CheckBoxCheckBrush {
-            get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["CheckBoxCheckBrush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["MainSecondLightBrush"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFFF0000")]
-        public global::System.Windows.Media.Color AlertColor {
+        public global::System.Windows.Media.SolidColorBrush AlertBrush {
             get {
-                return ((global::System.Windows.Media.Color)(this["AlertColor"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["AlertBrush"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF00FF00")]
-        public global::System.Windows.Media.Color SuccessColor {
+        public global::System.Windows.Media.SolidColorBrush SuccessBrush {
             get {
-                return ((global::System.Windows.Media.Color)(this["SuccessColor"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["SuccessBrush"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFFFF")]
+        public global::System.Windows.Media.SolidColorBrush SecondaryFirstBrush {
+            get {
+                return ((global::System.Windows.Media.SolidColorBrush)(this["SecondaryFirstBrush"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFDCDCDC")]
+        public global::System.Windows.Media.SolidColorBrush SecondarySecondBrush {
+            get {
+                return ((global::System.Windows.Media.SolidColorBrush)(this["SecondarySecondBrush"]));
             }
         }
     }

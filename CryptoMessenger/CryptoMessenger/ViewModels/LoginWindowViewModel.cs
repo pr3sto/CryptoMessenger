@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows.Controls;
 
 using CryptoMessenger.Commands;
 using CryptoMessenger.Models;
+using CryptoMessenger.Views;
 
 using MessageProtocol.MessageTypes;
 using MessageProtocol;
@@ -22,13 +24,26 @@ namespace CryptoMessenger.ViewModels
         {
 			client = new Client();
 
-			NotificationBrush = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+			WindowVisibility = Visibility.Visible;
+			NotificationBrush = Properties.Settings.Default.SecondaryFirstBrush;
 			Notification = Properties.Resources.STANDART_NOTIFICATION;
 			
 			IsInterfaceEnabled = true;
 		}
 
 		#region Properties
+
+		// window visibility
+		private Visibility _visibility;
+		public Visibility WindowVisibility
+		{
+			get { return _visibility; }
+			set
+			{
+				_visibility = value;
+				OnPropertyChanged("WindowVisibility");
+			}
+		}
 
 		// cursor
 		private Cursor _windowCursor;
@@ -177,7 +192,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (ConnectionInterruptedException)
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 
@@ -187,7 +202,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (CertificateException)
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 
@@ -198,23 +213,25 @@ namespace CryptoMessenger.ViewModels
 
 				if (LoginRegisterResponse.SUCCESS.Equals(response))
 				{
-					//Hide();
+					WindowVisibility = Visibility.Hidden;
 
-					//mainForm = new MainForm(this, client, userNameTextBox.Text);
-					//mainForm.ShowDialog();
-					//mainForm.Close();
-
+					// open main window
+					MainWindow view = new MainWindow();
+					MainWindowViewModel viewModel = new MainWindowViewModel(client, Login);
+					view.DataContext = viewModel;
+					view.ShowDialog();
+					view.Close();
+					
 					// free memory
-					//mainForm = null;
 					GC.Collect(); // ouch...
 					GC.WaitForPendingFinalizers();
 
 					Notification = Properties.Resources.STANDART_NOTIFICATION;
-					//Show();
+					WindowVisibility = Visibility.Visible;
 				}
 				else if (LoginRegisterResponse.FAIL.Equals(response))
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.LOGIN_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginIncorrect = true;
@@ -222,13 +239,13 @@ namespace CryptoMessenger.ViewModels
 				}
 				else if (LoginRegisterResponse.ERROR.Equals(response))
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.UNKNOWN_ERROR;
 					_isColorsChanged = true;
 				}
 				else if (LoginRegisterResponse.ALREADY_LOGIN.Equals(response))
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.ALREADY_LOGIN_NOTIFICATION;
 					_isColorsChanged = true;
 				}
@@ -273,7 +290,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (ConnectionInterruptedException)
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 
@@ -283,7 +300,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (CertificateException)
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 
@@ -294,7 +311,7 @@ namespace CryptoMessenger.ViewModels
 
 				if (LoginRegisterResponse.SUCCESS.Equals(response))
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.SuccessColor);
+					NotificationBrush = Properties.Settings.Default.SuccessBrush;
 					Notification = Properties.Resources.REGISTRATION_SUCCESS_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginCorrect = true;
@@ -302,7 +319,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				else if (LoginRegisterResponse.FAIL.Equals(response))
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.REGISTRATION_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginIncorrect = true;
@@ -310,7 +327,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				else if (LoginRegisterResponse.ERROR.Equals(response))
 				{
-					NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.UNKNOWN_ERROR;
 					_isColorsChanged = true;
 				}
@@ -342,7 +359,7 @@ namespace CryptoMessenger.ViewModels
 		{
 			if (_isColorsChanged)
 			{
-				NotificationBrush = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+				NotificationBrush = Properties.Settings.Default.SecondaryFirstBrush;
 				Notification = Properties.Resources.STANDART_NOTIFICATION;
 				_isColorsChanged = false;
 
@@ -361,7 +378,7 @@ namespace CryptoMessenger.ViewModels
 
 			if (string.IsNullOrEmpty(Login))
 			{
-				NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+				NotificationBrush = Properties.Settings.Default.AlertBrush;
 				Notification = Properties.Resources.INCORRECT_DATA_NOTIFICATION;
 				_isColorsChanged = true;
 				IsLoginIncorrect = true;
@@ -370,7 +387,7 @@ namespace CryptoMessenger.ViewModels
 			}
 			if (string.IsNullOrEmpty(Password))
 			{
-				NotificationBrush = new SolidColorBrush(Properties.Settings.Default.AlertColor);
+				NotificationBrush = Properties.Settings.Default.AlertBrush;
 				Notification = Properties.Resources.INCORRECT_DATA_NOTIFICATION;
 				_isColorsChanged = true;
 				IsPasswordIncorrect = true;

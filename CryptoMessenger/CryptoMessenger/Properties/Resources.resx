@@ -184,4 +184,13 @@
   <data name="ALREADY_LOGIN_NOTIFICATION" xml:space="preserve">
     <value>ВХОД В ДАННЫЙ АККАУНТ УЖЕ ВЫПОЛНЕН </value>
   </data>
+  <data name="FRIENDSS_TEXTBLOCK_TEXT" xml:space="preserve">
+    <value>ДРУЗЬЯ</value>
+  </data>
+  <data name="REQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
+    <value>ЗАЯВКИ</value>
+  </data>
+  <data name="SEARCH_TEXTBLOCK_TEXT" xml:space="preserve">
+    <value>ПОИСК</value>
+  </data>
 </root>
