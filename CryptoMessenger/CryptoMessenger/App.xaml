@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="Views/Styles/TextBoxStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/PasswordBoxStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ButtonStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/TextBlockStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

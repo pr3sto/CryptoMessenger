@@ -23,9 +23,9 @@
         <Grid.RowDefinitions>
             <RowDefinition  />
             <RowDefinition Height="50"/>
-            <RowDefinition Height="31"/>
+            <RowDefinition Height="33"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="31"/>
+            <RowDefinition Height="33"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
@@ -54,19 +54,24 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Width="315"
-            Background="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"
+            Height="33"
+            Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
             FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
             FontSize="17"
             MaxLength="30"
-            Text="{Binding Path=Login, Mode=TwoWay}"
+            Text="{Binding Path=Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Tag="{Binding Source={x:Static props:Resources.USERNAME_TEXTFIELD_PLACEHOLDER}}"
             TabIndex="1"
-            IsTabStop="False"
+            IsTabStop="True"
             KeyboardNavigation.TabNavigation="Local"
             IsEnabled="{Binding IsInterfaceEnabled}"
             extensions:Extensions.IsDataIncorrect="{Binding IsLoginIncorrect}"
             extensions:Extensions.IsDataCorrect="{Binding IsLoginCorrect}"
             >
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding LoginCommand}"
+                            CommandParameter="{Binding ElementName=password}"/>
+            </TextBox.InputBindings>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="GotFocus">
                     <i:InvokeCommandAction Command="{Binding TextBoxGotFocusCommand}"/>
@@ -80,7 +85,8 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Width="315"
-            Background="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"
+            Height="33"
+            Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
             FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
             FontSize="17"
             MaxLength="30"
@@ -92,6 +98,10 @@
             extensions:Extensions.IsDataIncorrect="{Binding IsPasswordIncorrect}"
             extensions:Extensions.IsDataCorrect="{Binding IsPasswordCorrect}"
             >
+            <PasswordBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding LoginCommand}"
+                            CommandParameter="{Binding ElementName=password}"/>
+            </PasswordBox.InputBindings>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="GotFocus">
                     <i:InvokeCommandAction Command="{Binding TextBoxGotFocusCommand}"/>

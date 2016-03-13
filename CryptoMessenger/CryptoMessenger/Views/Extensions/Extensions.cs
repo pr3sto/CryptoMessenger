@@ -34,8 +34,7 @@ namespace CryptoMessenger.Views.Extensions
 		}
 
 
-		// for placeholders
-
+		// for monitoring length of content
 		public static readonly DependencyProperty IsMonitoringProperty =
 			DependencyProperty.RegisterAttached("IsMonitoring", typeof(bool), typeof(Extensions), new UIPropertyMetadata(false, OnIsMonitoringChanged));
 		public static bool GetIsMonitoring(DependencyObject obj)
@@ -47,8 +46,7 @@ namespace CryptoMessenger.Views.Extensions
 			obj.SetValue(IsMonitoringProperty, value);
 		}
 
-		// passwordbox placeholder
-
+		// passwordbox content length monitor
 		public static readonly DependencyProperty PasswordLengthProperty =
 			DependencyProperty.RegisterAttached("PasswordLength", typeof(int), typeof(Extensions), new UIPropertyMetadata(0));
 		public static int GetPasswordLength(DependencyObject obj)
@@ -58,10 +56,9 @@ namespace CryptoMessenger.Views.Extensions
 		public static void SetPasswordLength(DependencyObject obj, int value)
 		{
 			obj.SetValue(PasswordLengthProperty, value);
-		}		
+		}
 
-		// textbox placeholder
-
+		// textbox content length monitor
 		public static readonly DependencyProperty TextLengthProperty =
 			DependencyProperty.RegisterAttached("TextLength", typeof(int), typeof(Extensions), new UIPropertyMetadata(0));
 		public static int GetTextLength(DependencyObject obj)
@@ -127,6 +124,19 @@ namespace CryptoMessenger.Views.Extensions
 				return;
 			}
 			SetTextLength(tb, tb.Text.Length);
+		}
+
+
+		// textblock selected property
+		public static readonly DependencyProperty TextBoxSelectedProperty =
+			DependencyProperty.RegisterAttached("TextBoxSelected", typeof(bool), typeof(Extensions), new PropertyMetadata(false));
+		public static void SetTextBoxSelected(UIElement element, bool value)
+		{
+			element.SetValue(TextBoxSelectedProperty, value);
+		}
+		public static bool GetTextBoxSelected(UIElement element)
+		{
+			return (bool)element.GetValue(TextBoxSelectedProperty);
 		}
 	}
 }
