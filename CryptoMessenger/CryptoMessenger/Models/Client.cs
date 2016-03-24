@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Security.Cryptography.X509Certificates;
 
@@ -10,7 +11,7 @@ namespace CryptoMessenger.Models
 	/// <summary>
 	/// Client side code.
 	/// </summary>
-	public class Client
+	public class Client : INotifyPropertyChanged
 	{
 		// is we logged in
 		private bool _isLoggedIn = false;
@@ -23,6 +24,73 @@ namespace CryptoMessenger.Models
 		private string ip;
 		// client
 		private MpClient client;
+
+
+		// data that comes from server
+
+		private string[] _friendsList;
+		/// <summary>
+		/// Array of friends.
+		/// </summary>
+		public string[] FriendsList
+		{
+			get { return _friendsList; }
+			private set
+			{
+				_friendsList = value;
+				RaisePropertyChanged(nameof(FriendsList));
+			}
+		}
+		private string[] _searchUsersList;
+		/// <summary>
+		/// Array of all users.
+		/// </summary>
+		public string[] SearchUsersList
+		{
+			get { return _searchUsersList; }
+			private set
+			{
+				_searchUsersList = value;
+				RaisePropertyChanged(nameof(SearchUsersList));
+			}
+		}
+		private string[] _incomeRequestsList;
+		/// <summary>
+		/// Array of income requests.
+		/// </summary>
+		public string[] IncomeRequestsList
+		{
+			get { return _incomeRequestsList; }
+			private set
+			{
+				_incomeRequestsList = value;
+				RaisePropertyChanged(nameof(IncomeRequestsList));
+			}
+		}
+		private string[] _outcomeRequestsList;
+		/// <summary>
+		/// Array of outcome requests.
+		/// </summary>
+		public string[] OutcomeRequestsList
+		{
+			get { return _outcomeRequestsList; }
+			private set
+			{
+				_outcomeRequestsList = value;
+				RaisePropertyChanged(nameof(OutcomeRequestsList));
+			}
+		}
+
+		/// <summary>
+		/// Notify about data from server comes.
+		/// </summary>
+		public event PropertyChangedEventHandler PropertyChanged;
+		private void RaisePropertyChanged(string propertyName)
+		{
+			if (PropertyChanged != null)
+				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+		}
+
 
 		public Client()
 		{
@@ -37,6 +105,11 @@ namespace CryptoMessenger.Models
 	
 			port = 0;
 			foreach (var i in _port) port = int.Parse(i.Value);
+
+			FriendsList = null;
+			SearchUsersList = null;
+			IncomeRequestsList = null;
+			OutcomeRequestsList = null;
 
 			//client
 			client = new MpClient();
@@ -179,7 +252,6 @@ namespace CryptoMessenger.Models
 
 			while (true)
 			{
-
 				try
 				{
 					// wait for message
@@ -196,19 +268,19 @@ namespace CryptoMessenger.Models
 				// handle message
 				if (message is AllUsersMessage)
 				{
-					//form.UpdateAllUsersList(((AllUsersMessage)message).users);
+					SearchUsersList = ((AllUsersMessage)message).users;
 				}
 				else if (message is FriendsMessage)
 				{
-					//form.UpdateFriendsList(((FriendsMessage)message).friends);
+					FriendsList = ((FriendsMessage)message).friends;
 				}
 				else if (message is IncomeFriendshipRequestsMessage)
 				{
-					//form.UpdateIncomeFriendshipRequests(((IncomeFriendshipRequestsMessage)message).logins);
+					IncomeRequestsList = ((IncomeFriendshipRequestsMessage)message).logins;
 				}
 				else if (message is OutcomeFriendshipRequestsMessage)
 				{
-					//form.UpdateOutcomeFriendshipRequests(((OutcomeFriendshipRequestsMessage)message).logins);
+					OutcomeRequestsList = ((OutcomeFriendshipRequestsMessage)message).logins;
 				}
 				else if (message is ReplyMessage)
 				{
@@ -260,6 +332,13 @@ namespace CryptoMessenger.Models
 		{
 			if (!_isLoggedIn) return;
 
+			// dont ask server if we have
+			if (FriendsList != null)
+			{
+				RaisePropertyChanged(nameof(FriendsList));
+				return;
+			}
+
 			try
 			{
 				client.SendMessage(new GetFriendsMessage());
@@ -287,6 +366,13 @@ namespace CryptoMessenger.Models
 		{
 			if (!_isLoggedIn) return;
 
+			// dont ask server if we have
+			if (IncomeRequestsList != null)
+			{
+				RaisePropertyChanged(nameof(IncomeRequestsList));
+				return;
+			}
+
 			try
 			{
 				client.SendMessage(new GetIncomeFriendshipRequestsMessage());
@@ -313,6 +399,13 @@ namespace CryptoMessenger.Models
 		public void GetOutcomeFriendshipRequests()
 		{
 			if (!_isLoggedIn) return;
+
+			// dont ask server if we have
+			if (OutcomeRequestsList != null)
+			{
+				RaisePropertyChanged(nameof(OutcomeRequestsList));
+				return;
+			}
 
 			try
 			{
