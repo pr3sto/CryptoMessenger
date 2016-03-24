@@ -41,7 +41,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_visibility = value;
-				OnPropertyChanged("WindowVisibility");
+				OnPropertyChanged(nameof(WindowVisibility));
 			}
 		}
 
@@ -53,7 +53,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_windowCursor = value;
-				OnPropertyChanged("WindowCursor");
+				OnPropertyChanged(nameof(WindowCursor));
 			}
 		}
 
@@ -65,7 +65,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_notification = value;
-				OnPropertyChanged("Notification");
+				OnPropertyChanged(nameof(Notification));
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_notificationBrush = value;
-				OnPropertyChanged("NotificationBrush");
+				OnPropertyChanged(nameof(NotificationBrush));
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_login = value;
-				OnPropertyChanged("Login");
+				OnPropertyChanged(nameof(Login));
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_isLoginIncorrect = value;
-				OnPropertyChanged("IsLoginIncorrect");
+				OnPropertyChanged(nameof(IsLoginIncorrect));
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_isLoginCorrect = value;
-				OnPropertyChanged("IsLoginCorrect");
+				OnPropertyChanged(nameof(IsLoginCorrect));
 			}
 		}
 
@@ -125,7 +125,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_isPasswordIncorrect = value;
-				OnPropertyChanged("IsPasswordIncorrect");
+				OnPropertyChanged(nameof(IsPasswordIncorrect));
 			}
 		}
 
@@ -137,7 +137,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_isPasswordCorrect = value;
-				OnPropertyChanged("IsPasswordCorrect");
+				OnPropertyChanged(nameof(IsPasswordCorrect));
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_isInterfaceEnabled = value;
-				OnPropertyChanged("IsInterfaceEnabled");
+				OnPropertyChanged(nameof(IsInterfaceEnabled));
 			}
 		}
 
