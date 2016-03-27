@@ -61,7 +61,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ВХОД В ДАННЫЙ АККАУНТ УЖЕ ВЫПОЛНЕН .
+        ///   Looks up a localized string similar to Вход в данный аккаунт уже выполнен.
         /// </summary>
         public static string ALREADY_LOGIN_NOTIFICATION {
             get {
@@ -79,7 +79,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to НЕ УДАЕТСЯ НАЙТИ СЕРТИФИКАТ ПРИЛОЖЕНИЯ.
+        ///   Looks up a localized string similar to Не удается найти сертификат приложения. Переустановка может исправить проблему.
         /// </summary>
         public static string CERTIFICATE_ERROR_NOTIFICATION {
             get {
@@ -117,7 +117,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to НЕКОРРЕКТНЫЕ ДАННЫЕ.
+        ///   Looks up a localized string similar to Некорректные данные.
         /// </summary>
         public static string INCORRECT_DATA_NOTIFICATION {
             get {
@@ -145,7 +145,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to НЕВЕРНАЯ КОМБИНАЦИЯ ЛОГИНА И ПАРОЛЯ.
+        ///   Looks up a localized string similar to Неверная комбинация логина и пароля.
         /// </summary>
         public static string LOGIN_ERROR_NOTIFICATION {
             get {
@@ -154,7 +154,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ВХОД....
+        ///   Looks up a localized string similar to Вход. Пожалуйста, подождите....
         /// </summary>
         public static string LOGIN_NOTIFICATION {
             get {
@@ -201,7 +201,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to АККАУНТ С ДАННЫМ ЛОГИНОМ УЖЕ ЗАРЕГИСТРИРОВАН.
+        ///   Looks up a localized string similar to Аккаунт с данным логином уже зарегистрирован.
         /// </summary>
         public static string REGISTRATION_ERROR_NOTIFICATION {
             get {
@@ -210,7 +210,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to РЕГИСТРАЦИЯ....
+        ///   Looks up a localized string similar to Регистрация. Пожалуйста, подождите....
         /// </summary>
         public static string REGISTRATION_NOTIFICATION {
             get {
@@ -219,7 +219,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ВЫ УСПЕШНО ЗАРЕГИСТРИРОВАЛИСЬ.
+        ///   Looks up a localized string similar to Вы успешно зарегистрировались.
         /// </summary>
         public static string REGISTRATION_SUCCESS_NOTIFICATION {
             get {
@@ -246,7 +246,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to НЕ УДАЕТСЯ ПОДКЛЮЧИТЬСЯ К СЕРВЕРУ.
+        ///   Looks up a localized string similar to Не удается подключиться к серверу.
         /// </summary>
         public static string SERVER_CONNECTION_ERROR_NOTIFICATION {
             get {
@@ -255,7 +255,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ДОБРО ПОЖАЛОВАТЬ.
+        ///   Looks up a localized string similar to Добро пожаловать.
         /// </summary>
         public static string STANDART_NOTIFICATION {
             get {
@@ -264,7 +264,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to НЕИЗВЕСТНАЯ ОШИБКА. ПОВТОРИТЕ ДЕЙСТВИЕ ПОЗЖЕ.
+        ///   Looks up a localized string similar to Неизвестная ошибка. Повторите действие позже.
         /// </summary>
         public static string UNKNOWN_ERROR {
             get {

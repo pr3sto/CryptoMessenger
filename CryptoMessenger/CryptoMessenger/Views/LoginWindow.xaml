@@ -8,18 +8,25 @@
         xmlns:local="clr-namespace:CryptoMessenger"
         xmlns:props="clr-namespace:CryptoMessenger.Properties"    
         xmlns:extensions="clr-namespace:CryptoMessenger.Views.Extensions"
+        xmlns:converters="clr-namespace:CryptoMessenger.Views.Converters"
         
         Style="{StaticResource WindowStyle}"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        Cursor="{Binding WindowCursor}"
-        Visibility="{Binding WindowVisibility, Mode=TwoWay}"
         Height="400" Width="500"
+        Visibility="{Binding Path=IsWindowVisible, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
         Foreground="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"
+        FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
         Title="{Binding Source={x:Static props:Resources.APP_NAME}}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"
         >
-    <Grid Height="358">
+
+    <Window.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBoolean" />
+    </Window.Resources>
+
+    <!-- window content -->
+    <Grid Height="358" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition  />
             <RowDefinition Height="50"/>
@@ -30,24 +37,76 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Image
-            VerticalAlignment="Bottom"
-            Grid.Row="0"
-            Height="100"
-            Source="/CryptoMessenger;component/Resources/icon.ico"
-            />
+
+        <!-- logo -->
+        <Grid Grid.Row="0">
+            <Image
+                Margin="2,2,2,2"
+                VerticalAlignment="Bottom"
+                Height="100"
+                Source="/CryptoMessenger;component/Resources/icon.ico"
+                />
+            <!-- loading indicator -->
+            <Path
+                Stretch="None" 
+                Fill="Transparent" 
+                Stroke="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
+                StrokeThickness="2" 
+                Data="M 245,120 A 50,50 1 1 1 245.0001,120"
+                />
+            <Path 
+                Stretch="None" 
+                Fill="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" 
+                Stroke="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" 
+                StrokeThickness="2" 
+                Data="M 0,0 A 2,2 2 1 1 0.0001,0"
+                Visibility="{Binding Path=IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                >
+                <!-- animation -->
+                <Path.Style>
+                    <Style TargetType="Path">
+                        <Style.Triggers>
+                            <Trigger Property="IsVisible" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard x:Name="Storyboard">
+                                        <Storyboard>
+                                            <MatrixAnimationUsingPath
+                                                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                                                Duration="0:0:2"
+                                                RepeatBehavior="Forever"
+                                                DoesRotateWithTangent="True"
+                                                >
+                                                <MatrixAnimationUsingPath.PathGeometry>
+                                                    <PathGeometry Figures="M 245,118 A 48,48 1 1 1 245.0001,118" />
+                                                </MatrixAnimationUsingPath.PathGeometry>
+                                            </MatrixAnimationUsingPath>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="Storyboard"/>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Path.Style>
+            </Path>
+        </Grid>
+
+        <!-- notification label -->
         <TextBlock
             Grid.Row="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             TextOptions.TextRenderingMode="ClearType"
             TextOptions.TextFormattingMode="Display"
-            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
             FontSize="17"
-            Foreground="{Binding NotificationBrush}"
+            Foreground="White"
             Text="{Binding Notification}"
-            >
-        </TextBlock>
+            />
+
+        <!-- login -->
         <TextBox
             Grid.Row="2"
             Style="{StaticResource TextBoxStyle}"
@@ -55,16 +114,14 @@
             VerticalAlignment="Top"
             Width="315"
             Height="33"
-            Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
-            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
+            Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}" 
             FontSize="17"
             MaxLength="30"
             Text="{Binding Path=Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Tag="{Binding Source={x:Static props:Resources.USERNAME_TEXTFIELD_PLACEHOLDER}}"
             TabIndex="1"
             IsTabStop="True"
-            KeyboardNavigation.TabNavigation="Local"
-            IsEnabled="{Binding IsInterfaceEnabled}"
+            IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBoolean}}"
             extensions:Extensions.IsDataIncorrect="{Binding IsLoginIncorrect}"
             extensions:Extensions.IsDataCorrect="{Binding IsLoginCorrect}"
             >
@@ -78,6 +135,8 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TextBox>
+
+        <!-- password -->
         <PasswordBox
             x:Name="password"
             Grid.Row="4"
@@ -87,14 +146,12 @@
             Width="315"
             Height="33"
             Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
-            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
             FontSize="17"
             MaxLength="30"
             Tag="{Binding Source={x:Static props:Resources.USERPASSWORD_TEXTFIELD_PLACEHOLDER}}"
             TabIndex="2"
             IsTabStop="True"
-            KeyboardNavigation.TabNavigation="Local"
-            IsEnabled="{Binding IsInterfaceEnabled}"
+            IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBoolean}}"
             extensions:Extensions.IsDataIncorrect="{Binding IsPasswordIncorrect}"
             extensions:Extensions.IsDataCorrect="{Binding IsPasswordCorrect}"
             >
@@ -108,6 +165,8 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </PasswordBox>
+
+        <!-- login button -->
         <Button
             Grid.Row="6"
             Style="{StaticResource ButtonStyle}"
@@ -116,7 +175,6 @@
             Margin="87,0,0,0"
             HorizontalAlignment="Left"
             Height="40" Width="147"
-            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
             FontSize="17"
             Foreground="White"
             HorizontalContentAlignment="Right"
@@ -126,12 +184,14 @@
             IsTabStop="False"
             Command="{Binding LoginCommand}"
             CommandParameter="{Binding ElementName=password}"
-            IsEnabled="{Binding IsInterfaceEnabled}" Grid.RowSpan="2"
+            IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBoolean}}"
             >
             <Button.Background>
                 <ImageBrush ImageSource="/CryptoMessenger;component/Resources/login.png"/>
             </Button.Background>
         </Button>
+
+        <!-- registration button -->
         <Button
             Grid.Row="6"
             Margin="0,0,87,0"
@@ -140,7 +200,6 @@
             VerticalAlignment="Top"
             HorizontalAlignment="Right"
             Height="40" Width="147"
-            FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
             FontSize="17"
             Foreground="White"
             HorizontalContentAlignment="Right"
@@ -150,11 +209,22 @@
             IsTabStop="False"
             Command="{Binding RegisterCommand}"
             CommandParameter="{Binding ElementName=password}"
-            IsEnabled="{Binding IsInterfaceEnabled}"
+            IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBoolean}}"
             >
             <Button.Background>
                 <ImageBrush ImageSource="/CryptoMessenger;component/Resources/register.png"/>
             </Button.Background>
         </Button>
+
+        <!-- wait cursor while loading -->
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                        <Setter Property="Cursor" Value="Wait" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
     </Grid>
 </Window>

@@ -137,16 +137,16 @@
     <value>CRYPTO MESSENGER</value>
   </data>
   <data name="INCORRECT_DATA_NOTIFICATION" xml:space="preserve">
-    <value>НЕКОРРЕКТНЫЕ ДАННЫЕ</value>
+    <value>Некорректные данные</value>
   </data>
   <data name="LOGIN_BUTTON_TEXT" xml:space="preserve">
     <value>ВХОД</value>
   </data>
   <data name="LOGIN_ERROR_NOTIFICATION" xml:space="preserve">
-    <value>НЕВЕРНАЯ КОМБИНАЦИЯ ЛОГИНА И ПАРОЛЯ</value>
+    <value>Неверная комбинация логина и пароля</value>
   </data>
   <data name="LOGIN_NOTIFICATION" xml:space="preserve">
-    <value>ВХОД...</value>
+    <value>Вход. Пожалуйста, подождите...</value>
   </data>
   <data name="PASSWORD_CHECKBOX_TEXT" xml:space="preserve">
     <value>СКРЫВАТЬ ПАРОЛЬ</value>
@@ -155,19 +155,19 @@
     <value>РЕГИСТРАЦИЯ</value>
   </data>
   <data name="REGISTRATION_ERROR_NOTIFICATION" xml:space="preserve">
-    <value>АККАУНТ С ДАННЫМ ЛОГИНОМ УЖЕ ЗАРЕГИСТРИРОВАН</value>
+    <value>Аккаунт с данным логином уже зарегистрирован</value>
   </data>
   <data name="REGISTRATION_NOTIFICATION" xml:space="preserve">
-    <value>РЕГИСТРАЦИЯ...</value>
+    <value>Регистрация. Пожалуйста, подождите...</value>
   </data>
   <data name="REGISTRATION_SUCCESS_NOTIFICATION" xml:space="preserve">
-    <value>ВЫ УСПЕШНО ЗАРЕГИСТРИРОВАЛИСЬ</value>
+    <value>Вы успешно зарегистрировались</value>
   </data>
   <data name="SERVER_CONNECTION_ERROR_NOTIFICATION" xml:space="preserve">
-    <value>НЕ УДАЕТСЯ ПОДКЛЮЧИТЬСЯ К СЕРВЕРУ</value>
+    <value>Не удается подключиться к серверу</value>
   </data>
   <data name="STANDART_NOTIFICATION" xml:space="preserve">
-    <value>ДОБРО ПОЖАЛОВАТЬ</value>
+    <value>Добро пожаловать</value>
   </data>
   <data name="USERNAME_TEXTFIELD_PLACEHOLDER" xml:space="preserve">
     <value>ЛОГИН</value>
@@ -176,13 +176,13 @@
     <value>ПАРОЛЬ</value>
   </data>
   <data name="CERTIFICATE_ERROR_NOTIFICATION" xml:space="preserve">
-    <value>НЕ УДАЕТСЯ НАЙТИ СЕРТИФИКАТ ПРИЛОЖЕНИЯ</value>
+    <value>Не удается найти сертификат приложения. Переустановка может исправить проблему</value>
   </data>
   <data name="UNKNOWN_ERROR" xml:space="preserve">
-    <value>НЕИЗВЕСТНАЯ ОШИБКА. ПОВТОРИТЕ ДЕЙСТВИЕ ПОЗЖЕ</value>
+    <value>Неизвестная ошибка. Повторите действие позже</value>
   </data>
   <data name="ALREADY_LOGIN_NOTIFICATION" xml:space="preserve">
-    <value>ВХОД В ДАННЫЙ АККАУНТ УЖЕ ВЫПОЛНЕН </value>
+    <value>Вход в данный аккаунт уже выполнен</value>
   </data>
   <data name="FRIENDSS_TEXTBLOCK_TEXT" xml:space="preserve">
     <value>ДРУЗЬЯ</value>

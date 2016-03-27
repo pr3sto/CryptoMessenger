@@ -24,8 +24,6 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         RenderOptions.EdgeMode="Aliased"
                         BorderThickness="2"
-                        Padding="0"
-                        ClipToBounds="True"
                         >
                         <Grid Margin="5">
                             <!-- text -->
@@ -41,15 +39,13 @@
                                 TextOptions.TextFormattingMode="Display"
                                 />
                             <!-- placeholder -->
-                            <TextBox 
+                            <TextBlock
                                 x:Name="placeholder"
                                 Text="{TemplateBinding Tag}" 
                                 Background="Transparent" 
                                 Panel.ZIndex="1"
-                                BorderThickness="0"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
-                                IsTabStop="False"
                                 Foreground="Transparent"
                                 />
                         </Grid>

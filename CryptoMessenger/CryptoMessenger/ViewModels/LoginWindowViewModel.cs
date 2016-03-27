@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows.Controls;
 
@@ -24,36 +22,34 @@ namespace CryptoMessenger.ViewModels
         {
 			client = new Client();
 
-			WindowVisibility = Visibility.Visible;
-			NotificationBrush = Properties.Settings.Default.SecondaryFirstBrush;
+			IsWindowVisible = true;
 			Notification = Properties.Resources.STANDART_NOTIFICATION;
-			
-			IsInterfaceEnabled = true;
+			IsLoading = false;
 		}
 
 		#region Properties
 
-		// window visibility
-		private Visibility _visibility;
-		public Visibility WindowVisibility
+		// is something loading visibility
+		private bool _isLoading;
+		public bool IsLoading
 		{
-			get { return _visibility; }
+			get { return _isLoading; }
 			set
 			{
-				_visibility = value;
-				OnPropertyChanged(nameof(WindowVisibility));
+				_isLoading = value;
+				OnPropertyChanged(nameof(IsLoading));
 			}
 		}
 
-		// cursor
-		private Cursor _windowCursor;
-		public Cursor WindowCursor
+		// window visibility
+		private bool _isWindowVisible;
+		public bool IsWindowVisible
 		{
-			get { return _windowCursor; }
+			get { return _isWindowVisible; }
 			set
 			{
-				_windowCursor = value;
-				OnPropertyChanged(nameof(WindowCursor));
+				_isWindowVisible = value;
+				OnPropertyChanged(nameof(IsWindowVisible));
 			}
 		}
 
@@ -66,18 +62,6 @@ namespace CryptoMessenger.ViewModels
 			{
 				_notification = value;
 				OnPropertyChanged(nameof(Notification));
-			}
-		}
-
-		// notification textblock brush
-		private SolidColorBrush _notificationBrush;
-		public SolidColorBrush NotificationBrush
-		{
-			get { return _notificationBrush; }
-			set
-			{
-				_notificationBrush = value;
-				OnPropertyChanged(nameof(NotificationBrush));
 			}
 		}
 
@@ -141,18 +125,6 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
-		// is interface enabled
-		private bool _isInterfaceEnabled;
-		public bool IsInterfaceEnabled
-		{
-			get { return _isInterfaceEnabled; }
-			set
-			{
-				_isInterfaceEnabled = value;
-				OnPropertyChanged(nameof(IsInterfaceEnabled));
-			}
-		}
-
 		#endregion
 
 		#region Commands
@@ -179,8 +151,7 @@ namespace CryptoMessenger.ViewModels
 
 			if (IsUserDataCorrect(Password))
 			{
-				IsInterfaceEnabled = false;
-				WindowCursor = Cursors.Wait;
+				IsLoading = true;
 				
 				Notification = Properties.Resources.LOGIN_NOTIFICATION;
 
@@ -192,28 +163,24 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (ConnectionInterruptedException)
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
-
-					IsInterfaceEnabled = true;
-					WindowCursor = null;
+					
+					IsLoading = false;
 					return;
 				}
 				catch (CertificateException)
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 
-					IsInterfaceEnabled = true;
-					WindowCursor = null;
+					IsLoading = false;
 					return;
 				}
 
 				if (LoginRegisterResponse.SUCCESS.Equals(response))
 				{
-					WindowVisibility = Visibility.Hidden;
+					IsWindowVisible = false;
 
 					// open main window
 					MainWindow view = new MainWindow();
@@ -227,11 +194,10 @@ namespace CryptoMessenger.ViewModels
 					GC.WaitForPendingFinalizers();
 
 					Notification = Properties.Resources.STANDART_NOTIFICATION;
-					WindowVisibility = Visibility.Visible;
+					IsWindowVisible = true;
 				}
 				else if (LoginRegisterResponse.FAIL.Equals(response))
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.LOGIN_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginIncorrect = true;
@@ -239,19 +205,16 @@ namespace CryptoMessenger.ViewModels
 				}
 				else if (LoginRegisterResponse.ERROR.Equals(response))
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.UNKNOWN_ERROR;
 					_isColorsChanged = true;
 				}
 				else if (LoginRegisterResponse.ALREADY_LOGIN.Equals(response))
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.ALREADY_LOGIN_NOTIFICATION;
 					_isColorsChanged = true;
 				}
-
-				IsInterfaceEnabled = true;
-				WindowCursor = null;
+				
+				IsLoading = false;
 			}
 		}		
 
@@ -277,8 +240,7 @@ namespace CryptoMessenger.ViewModels
 
 			if (IsUserDataCorrect(Password))
 			{
-				IsInterfaceEnabled = false;
-				WindowCursor = Cursors.Wait;
+				IsLoading = true;
 				
 				Notification = Properties.Resources.REGISTRATION_NOTIFICATION;
 
@@ -290,28 +252,23 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (ConnectionInterruptedException)
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
-
-					IsInterfaceEnabled = true;
-					WindowCursor = null;
+					
+					IsLoading = false;
 					return;
 				}
 				catch (CertificateException)
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
-
-					IsInterfaceEnabled = true;
-					WindowCursor = null;
+					
+					IsLoading = false;
 					return;
 				}
 
 				if (LoginRegisterResponse.SUCCESS.Equals(response))
 				{
-					NotificationBrush = Properties.Settings.Default.SuccessBrush;
 					Notification = Properties.Resources.REGISTRATION_SUCCESS_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginCorrect = true;
@@ -319,7 +276,6 @@ namespace CryptoMessenger.ViewModels
 				}
 				else if (LoginRegisterResponse.FAIL.Equals(response))
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.REGISTRATION_ERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginIncorrect = true;
@@ -327,13 +283,11 @@ namespace CryptoMessenger.ViewModels
 				}
 				else if (LoginRegisterResponse.ERROR.Equals(response))
 				{
-					NotificationBrush = Properties.Settings.Default.AlertBrush;
 					Notification = Properties.Resources.UNKNOWN_ERROR;
 					_isColorsChanged = true;
 				}
-
-				IsInterfaceEnabled = true;
-				WindowCursor = null;
+				
+				IsLoading = false;
 			}
 		}
 
@@ -359,7 +313,6 @@ namespace CryptoMessenger.ViewModels
 		{
 			if (_isColorsChanged)
 			{
-				NotificationBrush = Properties.Settings.Default.SecondaryFirstBrush;
 				Notification = Properties.Resources.STANDART_NOTIFICATION;
 				_isColorsChanged = false;
 
@@ -378,7 +331,6 @@ namespace CryptoMessenger.ViewModels
 
 			if (string.IsNullOrEmpty(Login))
 			{
-				NotificationBrush = Properties.Settings.Default.AlertBrush;
 				Notification = Properties.Resources.INCORRECT_DATA_NOTIFICATION;
 				_isColorsChanged = true;
 				IsLoginIncorrect = true;
@@ -387,7 +339,6 @@ namespace CryptoMessenger.ViewModels
 			}
 			if (string.IsNullOrEmpty(Password))
 			{
-				NotificationBrush = Properties.Settings.Default.AlertBrush;
 				Notification = Properties.Resources.INCORRECT_DATA_NOTIFICATION;
 				_isColorsChanged = true;
 				IsPasswordIncorrect = true;

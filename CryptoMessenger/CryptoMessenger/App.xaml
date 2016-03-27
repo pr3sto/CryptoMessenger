@@ -2,6 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CryptoMessenger"
+             xmlns:usercontrols="clr-namespace:CryptoMessenger.Views.UserControls"
+             xmlns:viewmodels="clr-namespace:CryptoMessenger.ViewModels"
              Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
@@ -11,7 +13,19 @@
                 <ResourceDictionary Source="Views/Styles/PasswordBoxStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ButtonStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/TextBlockStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/ListBoxStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/ListBoxItemStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type viewmodels:FriendsPanelViewModel}">
+                <usercontrols:FriendsPanel />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:RequestsPanelViewModel}">
+                <usercontrols:RequestsPanel />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:SearchPanelViewModel}">
+                <usercontrols:SearchPanel />
+            </DataTemplate>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
