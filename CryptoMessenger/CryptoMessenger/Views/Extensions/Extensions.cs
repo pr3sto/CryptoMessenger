@@ -127,16 +127,16 @@ namespace CryptoMessenger.Views.Extensions
 		}
 
 
-		// textblock selected property
-		public static readonly DependencyProperty TextBoxSelectedProperty =
-			DependencyProperty.RegisterAttached("TextBoxSelected", typeof(bool), typeof(Extensions), new PropertyMetadata(false));
-		public static void SetTextBoxSelected(UIElement element, bool value)
+		// element selected property
+		public static readonly DependencyProperty ElementSelectedProperty =
+			DependencyProperty.RegisterAttached("ElementSelected", typeof(bool), typeof(Extensions), new PropertyMetadata(false));
+		public static void SetElementSelected(UIElement element, bool value)
 		{
-			element.SetValue(TextBoxSelectedProperty, value);
+			element.SetValue(ElementSelectedProperty, value);
 		}
-		public static bool GetTextBoxSelected(UIElement element)
+		public static bool GetElementSelected(UIElement element)
 		{
-			return (bool)element.GetValue(TextBoxSelectedProperty);
+			return (bool)element.GetValue(ElementSelectedProperty);
 		}
 	}
 }

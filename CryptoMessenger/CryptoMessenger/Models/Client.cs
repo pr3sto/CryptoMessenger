@@ -260,7 +260,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					//if (!_isLogOut)
-						//form.CloseEmergency();
+					//form.CloseEmergency();
 
 					return;
 				}

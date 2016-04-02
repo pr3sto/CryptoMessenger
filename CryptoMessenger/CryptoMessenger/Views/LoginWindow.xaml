@@ -8,7 +8,6 @@
         xmlns:local="clr-namespace:CryptoMessenger"
         xmlns:props="clr-namespace:CryptoMessenger.Properties"    
         xmlns:extensions="clr-namespace:CryptoMessenger.Views.Extensions"
-        xmlns:converters="clr-namespace:CryptoMessenger.Views.Converters"
         
         Style="{StaticResource WindowStyle}"
         ResizeMode="CanMinimize"
@@ -20,10 +19,6 @@
         Title="{Binding Source={x:Static props:Resources.APP_NAME}}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"
         >
-
-    <Window.Resources>
-        <converters:InverseBooleanConverter x:Key="InverseBoolean" />
-    </Window.Resources>
 
     <!-- window content -->
     <Grid Height="358" Background="Transparent">
@@ -39,32 +34,31 @@
         </Grid.RowDefinitions>
 
         <!-- logo -->
-        <Grid Grid.Row="0">
+        <Canvas Grid.Row="0">
             <Image
-                Margin="2,2,2,2"
-                VerticalAlignment="Bottom"
+                Canvas.Bottom="2"
+                Canvas.Left="195"
                 Height="100"
                 Source="/CryptoMessenger;component/Resources/icon.ico"
                 />
             <!-- loading indicator -->
-            <Path
-                Stretch="None" 
-                Fill="Transparent" 
+            <Ellipse
+                Canvas.Bottom="1"
+                Canvas.Left="194"
+                Width="102"
+                Height="102"
                 Stroke="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
-                StrokeThickness="2" 
-                Data="M 245,120 A 50,50 1 1 1 245.0001,120"
+                StrokeThickness="2"            
                 />
-            <Path 
-                Stretch="None" 
+            <Ellipse
+                Width="6"
+                Height="6"
                 Fill="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" 
-                Stroke="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" 
-                StrokeThickness="2" 
-                Data="M 0,0 A 2,2 2 1 1 0.0001,0"
-                Visibility="{Binding Path=IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Visibility="{Binding Path=IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"            
                 >
                 <!-- animation -->
-                <Path.Style>
-                    <Style TargetType="Path">
+                <Ellipse.Style>
+                    <Style TargetType="Ellipse">
                         <Style.Triggers>
                             <Trigger Property="IsVisible" Value="True">
                                 <Trigger.EnterActions>
@@ -72,12 +66,12 @@
                                         <Storyboard>
                                             <MatrixAnimationUsingPath
                                                 Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
-                                                Duration="0:0:2"
+                                                Duration="0:0:1.5"
                                                 RepeatBehavior="Forever"
                                                 DoesRotateWithTangent="True"
                                                 >
                                                 <MatrixAnimationUsingPath.PathGeometry>
-                                                    <PathGeometry Figures="M 245,118 A 48,48 1 1 1 245.0001,118" />
+                                                    <PathGeometry Figures="M 245,123 A 53,53 1 1 1 245.0001,123" />
                                                 </MatrixAnimationUsingPath.PathGeometry>
                                             </MatrixAnimationUsingPath>
                                         </Storyboard>
@@ -90,9 +84,9 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
-                </Path.Style>
-            </Path>
-        </Grid>
+                </Ellipse.Style>
+            </Ellipse>
+        </Canvas>
 
         <!-- notification label -->
         <TextBlock
@@ -112,7 +106,7 @@
             Style="{StaticResource TextBoxStyle}"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Width="315"
+            Width="314"
             Height="33"
             Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}" 
             FontSize="17"
@@ -143,7 +137,7 @@
             Style="{StaticResource PasswordBoxStyle}"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Width="315"
+            Width="314"
             Height="33"
             Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
             FontSize="17"

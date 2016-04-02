@@ -187,6 +187,8 @@ namespace CryptoMessenger.ViewModels
 					MainWindowViewModel viewModel = new MainWindowViewModel(client, Login);
 					view.DataContext = viewModel;
 					view.ShowDialog();
+					// close main window
+					client.Logout();
 					view.Close();
 					
 					// free memory

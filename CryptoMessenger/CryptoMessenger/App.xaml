@@ -4,18 +4,25 @@
              xmlns:local="clr-namespace:CryptoMessenger"
              xmlns:usercontrols="clr-namespace:CryptoMessenger.Views.UserControls"
              xmlns:viewmodels="clr-namespace:CryptoMessenger.ViewModels"
+             xmlns:converters="clr-namespace:CryptoMessenger.Views.Converters"
              Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>
+            
+            <!-- styles -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/Styles/WindowStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/TextBoxStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/PasswordBoxStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ButtonStyle.xaml" />
-                <ResourceDictionary Source="Views/Styles/TextBlockStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ListBoxStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ListBoxItemStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/ListBoxButtonStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/ScrollViewerStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/ToolTipStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- main window left panels -->
             <DataTemplate DataType="{x:Type viewmodels:FriendsPanelViewModel}">
                 <usercontrols:FriendsPanel />
             </DataTemplate>
@@ -25,7 +32,10 @@
             <DataTemplate DataType="{x:Type viewmodels:SearchPanelViewModel}">
                 <usercontrols:SearchPanel />
             </DataTemplate>
+            
+            <!-- converters -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:InverseBooleanConverter x:Key="InverseBoolean"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

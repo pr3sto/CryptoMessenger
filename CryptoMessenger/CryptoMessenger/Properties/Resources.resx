@@ -193,4 +193,40 @@
   <data name="SEARCH_TEXTBLOCK_TEXT" xml:space="preserve">
     <value>ПОИСК</value>
   </data>
+  <data name="INCOME_REQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
+    <value>Заявки вам:</value>
+  </data>
+  <data name="OUTCOME_REQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
+    <value>Ваши заявки:</value>
+  </data>
+  <data name="cross" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cross.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\plus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EMPTY_FRIENDS_LIST_PLACEHOLDER" xml:space="preserve">
+    <value>Друзей нет</value>
+  </data>
+  <data name="EMPTY_REQUESTS_LIST_PLACEHOLDER" xml:space="preserve">
+    <value>Заявок нет</value>
+  </data>
+  <data name="EMPTY_USERS_LIST_PLACEHOLDER" xml:space="preserve">
+    <value>Пользователей не найдено</value>
+  </data>
+  <data name="ACCEPTFRIENDSHIP_BUTTON_TOOLTIP" xml:space="preserve">
+    <value>Принять заявку</value>
+  </data>
+  <data name="ADDTOFRIENDS_BUTTON_TOOLTIP" xml:space="preserve">
+    <value>Добавить в друзья</value>
+  </data>
+  <data name="CANCELREQUEST_BUTTON_TOOLTIP" xml:space="preserve">
+    <value>Отменить заявку</value>
+  </data>
+  <data name="REJECTFRIENDSHIP_BUTTON_TOOLTIP" xml:space="preserve">
+    <value>Отклонить заявку</value>
+  </data>
+  <data name="REMOVE_BUTTON_TOOLTIP" xml:space="preserve">
+    <value>Удалить из друзей</value>
+  </data>
 </root>
