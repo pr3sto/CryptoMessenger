@@ -1,0 +1,104 @@
+﻿<UserControl 
+    x:Class="CryptoMessenger.Views.UserControls.SearchPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" 
+    xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
+    xmlns:props="clr-namespace:CryptoMessenger.Properties"    
+    d:DesignHeight="400" d:DesignWidth="230"
+    >
+    <Grid>
+        <!-- empty list notify -->
+        <TextBlock  
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            TextOptions.TextRenderingMode="ClearType"
+            TextOptions.TextFormattingMode="Display"
+            FontSize="26" 
+            Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+            Text="{Binding Source={x:Static props:Resources.EMPTY_USERS_LIST_PLACEHOLDER}}" >
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=usersListbox, Path=Items.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <!-- list of users -->
+        <ListBox
+            x:Name="usersListbox"
+            Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+            HorizontalContentAlignment="Stretch"
+            Style="{StaticResource ListBoxStyle}"
+            ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+            ItemsSource="{Binding UsersList}"
+            >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <!-- users's login -->
+                        <TextBlock
+                            x:Name="textBlock"
+                            Height="25"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            TextOptions.TextRenderingMode="ClearType"
+                            TextOptions.TextFormattingMode="Display"
+                            FontSize="17"
+                            Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                            Text="{Binding Path=Name}" 
+                            />
+                        <!-- add to friends button -->
+                        <Button 
+                            x:Name="button"
+                            Visibility="Collapsed"
+                            Style="{StaticResource ListBoxButtonStyle}"
+                            Cursor="Hand"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Height="25" Width="25"
+                            Foreground="White"
+                            Command="{Binding Path=AddToFriendsCommand}"
+                            ToolTip="{Binding Source={x:Static props:Resources.ADDTOFRIENDS_BUTTON_TOOLTIP}}"
+                            >
+                            <Button.Background>
+                                <ImageBrush ImageSource="/CryptoMessenger;component/Resources/plus.png"/>
+                            </Button.Background>
+                        </Button>
+                    </Grid>
+
+                    <DataTemplate.Triggers>
+                        <!-- on mouse hover -->
+                        <DataTrigger
+                            Binding="{Binding
+                                RelativeSource={RelativeSource Mode=FindAncestor,
+                                AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}"
+                            Value="True"
+                            >
+                            <Setter TargetName="textBlock" Property="Foreground" 
+                                    Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter TargetName="button" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <!-- on item select -->
+                        <DataTrigger
+                            Binding="{Binding
+                                RelativeSource={RelativeSource Mode=FindAncestor,
+                                AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
+                            Value="True"
+                            >
+                            <Setter TargetName="textBlock" Property="Foreground" 
+                                    Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

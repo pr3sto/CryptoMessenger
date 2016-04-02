@@ -1,0 +1,32 @@
+﻿<ResourceDictionary 
+    x:Class="CryptoMessenger.Views.Styles.ToolTipStyle"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
+    xmlns:props="clr-namespace:CryptoMessenger.Properties"
+    >
+
+    <!-- tooltip style -->
+    <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border
+                        RenderOptions.EdgeMode="Aliased"
+                        BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                        BorderThickness="1"
+                        Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                        >
+                        <ContentPresenter Margin="5,5,5,5"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
