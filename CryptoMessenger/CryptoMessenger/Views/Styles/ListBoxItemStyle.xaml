@@ -5,6 +5,7 @@
     xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
     >
 
+    <!-- listbox item style -->
     <Style x:Key="ListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />

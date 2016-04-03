@@ -21,10 +21,10 @@
             Text="{Binding Source={x:Static props:Resources.EMPTY_FRIENDS_LIST_PLACEHOLDER}}">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=friendsListbox, Path=Items.Count}" Value="0">
-                            <Setter Property="Visibility" Value="Visible" />
+                            <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

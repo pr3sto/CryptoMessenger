@@ -3,10 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
     xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
-    xmlns:props="clr-namespace:CryptoMessenger.Properties"    
-    mc:Ignorable="d" 
+    xmlns:props="clr-namespace:CryptoMessenger.Properties"     
     d:DesignHeight="400" d:DesignWidth="230"
     >
     <Grid>
@@ -37,13 +37,13 @@
             TextOptions.TextFormattingMode="Display"
             FontSize="26" 
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-            Text="{Binding Source={x:Static props:Resources.EMPTY_REQUESTS_LIST_PLACEHOLDER}}" >
+            Text="{Binding Source={x:Static props:Resources.EMPTY_REQUESTS_LIST_PLACEHOLDER}}">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=incomeListbox, Path=Items.Count}" Value="0">
-                            <Setter Property="Visibility" Value="Visible" />
+                            <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -167,13 +167,13 @@
             TextOptions.TextFormattingMode="Display"
             FontSize="26" 
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-            Text="{Binding Source={x:Static props:Resources.EMPTY_REQUESTS_LIST_PLACEHOLDER}}" >
+            Text="{Binding Source={x:Static props:Resources.EMPTY_REQUESTS_LIST_PLACEHOLDER}}">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=outcomeListbox, Path=Items.Count}" Value="0">
-                            <Setter Property="Visibility" Value="Visible" />
+                            <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

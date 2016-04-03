@@ -76,33 +76,23 @@ namespace CryptoMessenger.Views.Extensions
 			{
 				var pb = d as PasswordBox;
 				if (pb == null)
-				{
 					return;
-				}
+
 				if ((bool)e.NewValue)
-				{
 					pb.PasswordChanged += PasswordChanged;
-				}
 				else
-				{
 					pb.PasswordChanged -= PasswordChanged;
-				}
 			}
 			else if (d is TextBox)
 			{
 				var tb = d as TextBox;
 				if (tb == null)
-				{
 					return;
-				}
+
 				if ((bool)e.NewValue)
-				{
 					tb.TextChanged += TextChanged;
-				}
 				else
-				{
 					tb.TextChanged -= TextChanged;
-				}
 			}
 		}
 

@@ -13,6 +13,7 @@
         <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
         <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="Opacity" Value="0.8"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">

@@ -78,6 +78,7 @@
         </Style>
     </Window.Resources>
 
+    <!-- window content -->
     <Grid Height="508">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250">

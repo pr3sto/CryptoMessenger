@@ -23,7 +23,7 @@
     <!-- window content -->
     <Grid Height="358" Background="Transparent">
         <Grid.RowDefinitions>
-            <RowDefinition  />
+            <RowDefinition/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="33"/>
             <RowDefinition Height="20"/>
@@ -119,10 +119,12 @@
             extensions:Extensions.IsDataIncorrect="{Binding IsLoginIncorrect}"
             extensions:Extensions.IsDataCorrect="{Binding IsLoginCorrect}"
             >
+            <!-- login on enter click -->
             <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding LoginCommand}"
                             CommandParameter="{Binding ElementName=password}"/>
             </TextBox.InputBindings>
+            <!-- clear notifications on focus -->
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="GotFocus">
                     <i:InvokeCommandAction Command="{Binding TextBoxGotFocusCommand}"/>
@@ -149,10 +151,12 @@
             extensions:Extensions.IsDataIncorrect="{Binding IsPasswordIncorrect}"
             extensions:Extensions.IsDataCorrect="{Binding IsPasswordCorrect}"
             >
+            <!-- login on enter click -->
             <PasswordBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding LoginCommand}"
                             CommandParameter="{Binding ElementName=password}"/>
             </PasswordBox.InputBindings>
+            <!-- clear notifications on focus -->
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="GotFocus">
                     <i:InvokeCommandAction Command="{Binding TextBoxGotFocusCommand}"/>
@@ -174,7 +178,6 @@
             HorizontalContentAlignment="Right"
             VerticalContentAlignment="Center"
             Content="{Binding Source={x:Static props:Resources.LOGIN_BUTTON_TEXT}}"
-            TabIndex="0"
             IsTabStop="False"
             Command="{Binding LoginCommand}"
             CommandParameter="{Binding ElementName=password}"
@@ -199,7 +202,6 @@
             HorizontalContentAlignment="Right"
             VerticalContentAlignment="Center"
             Content="{Binding Source={x:Static props:Resources.REGISTRATION_BUTTON_TEXT}}"
-            TabIndex="0"
             IsTabStop="False"
             Command="{Binding RegisterCommand}"
             CommandParameter="{Binding ElementName=password}"

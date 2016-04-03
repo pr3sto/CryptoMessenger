@@ -11,9 +11,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBox}">
-                    <ScrollViewer
-                        Style="{DynamicResource ScrollViewerStyle}"
-                        >
+                    <ScrollViewer Style="{DynamicResource ScrollViewerStyle}">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>

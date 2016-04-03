@@ -18,13 +18,13 @@
             TextOptions.TextFormattingMode="Display"
             FontSize="26" 
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-            Text="{Binding Source={x:Static props:Resources.EMPTY_USERS_LIST_PLACEHOLDER}}" >
+            Text="{Binding Source={x:Static props:Resources.EMPTY_USERS_LIST_PLACEHOLDER}}">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=usersListbox, Path=Items.Count}" Value="0">
-                            <Setter Property="Visibility" Value="Visible" />
+                            <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
