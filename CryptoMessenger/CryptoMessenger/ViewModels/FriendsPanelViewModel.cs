@@ -62,7 +62,7 @@ namespace CryptoMessenger.ViewModels
 		// update FriendsList when property in client changed
 		private void FriendsListChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == nameof(client.FriendsList))
+			if (e.PropertyName == nameof(client.FriendsList) && client.FriendsList != null)
 			{
 				List<Friend> friends = new List<Friend>();
 				foreach (var s in client.FriendsList)

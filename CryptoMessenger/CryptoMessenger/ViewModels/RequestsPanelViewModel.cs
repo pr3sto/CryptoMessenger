@@ -116,7 +116,7 @@ namespace CryptoMessenger.ViewModels
 		// update requests lists when property in client changed
 		private void ReqsListChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == nameof(client.IncomeRequestsList))
+			if (e.PropertyName == nameof(client.IncomeRequestsList) && client.IncomeRequestsList != null)
 			{
 				List<IncomeRequest> reqs = new List<IncomeRequest>();
 				foreach (var s in client.IncomeRequestsList)
@@ -127,7 +127,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				IncomeReqsList = reqs.ToArray();
 			}
-			else if (e.PropertyName == nameof(client.OutcomeRequestsList))
+			else if (e.PropertyName == nameof(client.OutcomeRequestsList) && client.OutcomeRequestsList != null)
 			{
 				List<OutcomeRequest> reqs = new List<OutcomeRequest>();
 				foreach (var s in client.OutcomeRequestsList)

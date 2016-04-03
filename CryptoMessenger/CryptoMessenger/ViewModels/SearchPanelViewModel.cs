@@ -62,7 +62,7 @@ namespace CryptoMessenger.ViewModels
 		// update UsersList when property in client changed
 		private void UsersListChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == nameof(client.SearchUsersList))
+			if (e.PropertyName == nameof(client.SearchUsersList) && client.SearchUsersList != null)
 			{
 				List<User> users = new List<User>();
 				foreach (var s in client.SearchUsersList)

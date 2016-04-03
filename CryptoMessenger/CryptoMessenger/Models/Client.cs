@@ -215,8 +215,14 @@ namespace CryptoMessenger.Models
 		public void Logout()
 		{
 			if (!_isLoggedIn) return;
+
 			_isLoggedIn = false;
 			_isLogOut = true;
+
+			FriendsList = null;
+			SearchUsersList = null;
+			IncomeRequestsList = null;
+			OutcomeRequestsList = null;
 
 			try
 			{

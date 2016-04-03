@@ -55,6 +55,31 @@ namespace Server
 		/// </summary>
 		public async void Start()
 		{
+			DBoperations.Register("13", "13");
+			for (int i = 0; i < 10; i++)
+			{
+				string login = "user" + i.ToString();
+				DBoperations.Register(login, login);
+			}
+			for (int i = 10; i < 20; i++)
+			{
+				string login = "user" + i.ToString();
+				DBoperations.Register(login, login);
+				DBoperations.SetFriendship(false, DBoperations.GetUserId(login), DBoperations.GetUserId("13"));
+			}
+			for (int i = 20; i < 30; i++)
+			{
+				string login = "user" + i.ToString();
+				DBoperations.Register(login, login);
+				DBoperations.SetFriendship(false, DBoperations.GetUserId("13"), DBoperations.GetUserId(login));
+			}
+			for (int i = 30; i < 40; i++)
+			{
+				string login = "user" + i.ToString();
+				DBoperations.Register(login, login);
+				DBoperations.SetFriendship(true, DBoperations.GetUserId("13"), DBoperations.GetUserId(login));
+			}
+
 			if (isStarted) return;
 			if (certificate == null) return;
 

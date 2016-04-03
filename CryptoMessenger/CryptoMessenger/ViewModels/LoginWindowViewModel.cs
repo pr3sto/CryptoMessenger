@@ -189,8 +189,8 @@ namespace CryptoMessenger.ViewModels
 					view.ShowDialog();
 					// close main window
 					client.Logout();
-					view.Close();
-					
+					view.Close();	
+
 					// free memory
 					GC.Collect(); // ouch...
 					GC.WaitForPendingFinalizers();
