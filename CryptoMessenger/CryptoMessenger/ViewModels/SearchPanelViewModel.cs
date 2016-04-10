@@ -44,7 +44,7 @@ namespace CryptoMessenger.ViewModels
 	/// <summary>
 	/// View model for search panel (mvvm pattern).
 	/// </summary>
-	class SearchPanelViewModel : ViewModelBase, ILeftPanel
+	class SearchPanelViewModel : ViewModelBase, IMainWindowPanel
 	{
 		private Client client;
 

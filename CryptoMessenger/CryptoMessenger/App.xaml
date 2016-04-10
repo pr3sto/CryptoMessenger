@@ -18,11 +18,11 @@
                 <ResourceDictionary Source="Views/Styles/ListBoxStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ListBoxItemStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ListBoxButtonStyle.xaml" />
-                <ResourceDictionary Source="Views/Styles/ScrollViewerStyle.xaml" />
+                <ResourceDictionary Source="Views/Styles/ScrollBarStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ToolTipStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <!-- main window left panels -->
+            <!-- main window panels -->
             <DataTemplate DataType="{x:Type viewmodels:FriendsPanelViewModel}">
                 <usercontrols:FriendsPanel />
             </DataTemplate>
@@ -35,7 +35,12 @@
             
             <!-- converters -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <converters:InverseBooleanConverter x:Key="InverseBoolean"/>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:ValueConverterGroup  x:Key="InvertAndVisibilitate">
+                <converters:InverseBooleanConverter/>
+                <BooleanToVisibilityConverter/>
+            </converters:ValueConverterGroup>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

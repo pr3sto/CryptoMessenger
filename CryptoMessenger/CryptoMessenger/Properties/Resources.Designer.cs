@@ -236,6 +236,15 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Введите Ваше сообщение здесь....
+        /// </summary>
+        public static string MESSAGE_TEXTBOX_PLACEHOLDER {
+            get {
+                return ResourceManager.GetString("MESSAGE_TEXTBOX_PLACEHOLDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ваши заявки:.
         /// </summary>
         public static string OUTCOME_REQUESTS_TEXTBLOCK_TEXT {
@@ -352,6 +361,15 @@ namespace CryptoMessenger.Properties {
         public static string SEARCH_TEXTBLOCK_TEXT {
             get {
                 return ResourceManager.GetString("SEARCH_TEXTBLOCK_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Чтобы начать диалог, выберите друга из списка друзей слева.
+        /// </summary>
+        public static string SELECT_FRIEND_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("SELECT_FRIEND_NOTIFICATION", resourceCulture);
             }
         }
         

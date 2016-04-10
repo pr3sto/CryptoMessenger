@@ -23,7 +23,7 @@ namespace CryptoMessenger.ViewModels
 			FriendsButtonSelected = true;
 			SearchButtonSelected = false;
 
-			LeftPanel = new FriendsPanelViewModel(client);
+			MainWindowPanel = new FriendsPanelViewModel(client);
 		}
 
 		#region Properties
@@ -77,14 +77,14 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// left panel
-		private ILeftPanel _leftPanel;
-		public ILeftPanel LeftPanel
+		private IMainWindowPanel _mainWindowPanel;
+		public IMainWindowPanel MainWindowPanel
 		{
-			get { return _leftPanel; }
+			get { return _mainWindowPanel; }
 			set
 			{
-				_leftPanel = value;
-				OnPropertyChanged(nameof(LeftPanel));
+				_mainWindowPanel = value;
+				OnPropertyChanged(nameof(MainWindowPanel));
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace CryptoMessenger.ViewModels
 			FriendsButtonSelected = false;
 			SearchButtonSelected = false;
 
-			LeftPanel = new RequestsPanelViewModel(client);
+			MainWindowPanel = new RequestsPanelViewModel(client);
 		}
 
 		// requests textblock clicked
@@ -133,7 +133,7 @@ namespace CryptoMessenger.ViewModels
 			FriendsButtonSelected = true;
 			SearchButtonSelected = false;
 
-			LeftPanel = new FriendsPanelViewModel(client);
+			MainWindowPanel = new FriendsPanelViewModel(client);
 		}
 
 		// requests textblock clicked
@@ -155,7 +155,7 @@ namespace CryptoMessenger.ViewModels
 			FriendsButtonSelected = false;
 			SearchButtonSelected = true;
 
-			LeftPanel = new SearchPanelViewModel(client);
+			MainWindowPanel = new SearchPanelViewModel(client);
 		}
 
 		#endregion

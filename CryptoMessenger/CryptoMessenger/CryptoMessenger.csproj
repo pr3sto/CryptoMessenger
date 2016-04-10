@@ -73,7 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\CommandReference.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
-    <Compile Include="ILeftPanel.cs" />
+    <Compile Include="IMainWindowPanel.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -137,7 +137,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Styles\ScrollViewerStyle.xaml">
+    <Page Include="Views\Styles\ScrollBarStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

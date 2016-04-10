@@ -44,7 +44,7 @@ namespace CryptoMessenger.ViewModels
 	/// <summary>
 	/// View model for friends panel (mvvm pattern).
 	/// </summary>
-	class FriendsPanelViewModel : ViewModelBase, ILeftPanel
+	class FriendsPanelViewModel : ViewModelBase, IMainWindowPanel
 	{
 		private Client client;
 
@@ -54,6 +54,7 @@ namespace CryptoMessenger.ViewModels
 			client.PropertyChanged += FriendsListChanged;
 
 			FriendsList = null;
+			IsFriendSelectd = false;
 
 			// get friends when panel loads
 			client.GetFriends();
@@ -86,6 +87,31 @@ namespace CryptoMessenger.ViewModels
 			{
 				_friendsList = value;
 				OnPropertyChanged(nameof(FriendsList));
+			}
+		}
+
+		// selected friend
+		private string _selectedFriend;
+		public string SelectedFriend
+		{
+			get { return _selectedFriend; }
+			set
+			{
+				_selectedFriend = value;
+				OnPropertyChanged(nameof(SelectedFriend));
+				IsFriendSelectd = true;
+			}
+		}
+
+		// is dialg visible
+		private bool _isDialogVisible;
+		public bool IsFriendSelectd
+		{
+			get { return _isDialogVisible; }
+			set
+			{
+				_isDialogVisible = value;
+				OnPropertyChanged(nameof(IsFriendSelectd));
 			}
 		}
 

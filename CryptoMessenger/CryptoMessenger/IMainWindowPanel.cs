@@ -2,10 +2,10 @@
 {
 	/// <summary>
 	/// Interface for views and views models
-	/// for left panel on main window
+	/// for panel on main window
 	/// (to switch different panels)
 	/// </summary>
-	interface ILeftPanel
+	interface IMainWindowPanel
 	{
 	}
 }

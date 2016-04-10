@@ -7,11 +7,23 @@
     mc:Ignorable="d" 
     xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"    
-    d:DesignHeight="400" d:DesignWidth="230"
     >
-    <Grid>
+    <Grid Height="460">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250">
+            </ColumnDefinition>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
         <!-- empty list notify -->
         <TextBlock  
+            Grid.Row="2"
+            Grid.Column="0"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
             TextOptions.TextRenderingMode="ClearType"
@@ -33,6 +45,9 @@
         <!-- list of users -->
         <ListBox
             x:Name="usersListbox"
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="20,10,20,20"
             Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
             HorizontalContentAlignment="Stretch"
             Style="{StaticResource ListBoxStyle}"
@@ -100,5 +115,22 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <!-- select friend notify -->
+        <TextBlock  
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Width="200"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            TextOptions.TextRenderingMode="ClearType"
+            TextOptions.TextFormattingMode="Display"
+            FontSize="26" 
+            Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+            Text="{Binding Source={x:Static props:Resources.SELECT_FRIEND_NOTIFICATION}}"
+            />
     </Grid>
 </UserControl>

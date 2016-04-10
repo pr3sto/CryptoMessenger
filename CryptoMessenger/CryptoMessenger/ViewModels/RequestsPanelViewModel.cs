@@ -96,7 +96,7 @@ namespace CryptoMessenger.ViewModels
 	/// <summary>
 	/// View model for requests panel (mvvm pattern).
 	/// </summary>
-	class RequestsPanelViewModel : ViewModelBase, ILeftPanel
+	class RequestsPanelViewModel : ViewModelBase, IMainWindowPanel
 	{
 		private Client client;
 

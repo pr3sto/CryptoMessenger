@@ -6,7 +6,7 @@
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
     xmlns:extensions="clr-namespace:CryptoMessenger.Views.Extensions"
     >
-    
+
     <!-- textbox style -->
     <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="BorderThickness" Value="0"/>
@@ -21,8 +21,8 @@
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Border
                         x:Name="textBoxBorder"
-                        Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
+                        Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
                         RenderOptions.EdgeMode="Aliased"
                         BorderThickness="2"
                         >
@@ -32,7 +32,6 @@
                                 x:Name="PART_ContentHost"
                                 Margin="-1,-1,-1,-1"
                                 BorderThickness="0"
-                                VerticalAlignment="Center"
                                 Foreground="{TemplateBinding Foreground}"
                                 Background="Transparent" 
                                 Panel.ZIndex="2"

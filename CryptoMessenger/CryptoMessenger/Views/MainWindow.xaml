@@ -12,7 +12,7 @@
         Style="{StaticResource WindowStyle}"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        Height="550" Width="750"
+        Height="500" Width="750"
         Foreground="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"
         FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
         Title="{Binding WindowTitle}" 
@@ -79,7 +79,7 @@
     </Window.Resources>
 
     <!-- window content -->
-    <Grid Height="508">
+    <Grid Height="460">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250">
             </ColumnDefinition>
@@ -90,7 +90,7 @@
             <RowDefinition Height="10"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <!-- left panel buttons -->
         <Button
             Grid.Row="0"
@@ -171,12 +171,13 @@
                 />
         </Canvas>
 
-        <!-- left panel -->
+        <!-- panel -->
         <ContentControl 
-            Grid.Row="2"
             Grid.Column="0"
-            Margin="20,10,20,10"
-            Content="{Binding LeftPanel}" 
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="3"
+            Content="{Binding MainWindowPanel}" 
             />
     </Grid>
 </Window>

@@ -229,4 +229,10 @@
   <data name="REMOVE_BUTTON_TOOLTIP" xml:space="preserve">
     <value>Удалить из друзей</value>
   </data>
+  <data name="SELECT_FRIEND_NOTIFICATION" xml:space="preserve">
+    <value>Чтобы начать диалог, выберите друга из списка друзей слева</value>
+  </data>
+  <data name="MESSAGE_TEXTBOX_PLACEHOLDER" xml:space="preserve">
+    <value>Введите Ваше сообщение здесь...</value>
+  </data>
 </root>

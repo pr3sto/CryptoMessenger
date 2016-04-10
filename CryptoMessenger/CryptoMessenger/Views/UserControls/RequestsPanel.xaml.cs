@@ -5,7 +5,7 @@ namespace CryptoMessenger.Views.UserControls
 	/// <summary>
 	/// Interaction logic for RequestsPanel.xaml
 	/// </summary>
-	public partial class RequestsPanel : UserControl, ILeftPanel
+	public partial class RequestsPanel : UserControl, IMainWindowPanel
 	{
 		public RequestsPanel()
 		{
