@@ -36,6 +36,7 @@
             <!-- converters -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:StringEmptynessToBooleanConverter x:Key="StringEmptynessToBooleanConverter"/>
             <converters:ValueConverterGroup  x:Key="InvertAndVisibilitate">
                 <converters:InverseBooleanConverter/>
                 <BooleanToVisibilityConverter/>

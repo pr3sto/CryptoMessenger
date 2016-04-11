@@ -39,7 +39,7 @@
             <DoubleAnimation 
                 Storyboard.TargetName="dot"
                 Storyboard.TargetProperty="(Canvas.Left)" 
-                To="227" Duration="00:00:0.5"
+                To="237" Duration="00:00:0.5"
                 />
         </Storyboard>
 
@@ -134,7 +134,7 @@
             Grid.Column="0"
             Style="{StaticResource LeftPanelButtonStyle}"
             Cursor="Hand"
-            Margin="0,0,20,0"
+            Margin="0,0,10,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             FontSize="17"
@@ -157,7 +157,7 @@
             <Line
                 Stroke="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                 StrokeThickness="2"
-                X1="20" X2="230"
+                X1="20" X2="240"
                 Y1="5" Y2="5"
                 />
             <!-- indicator -->

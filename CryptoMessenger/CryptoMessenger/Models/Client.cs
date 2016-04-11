@@ -26,7 +26,41 @@ namespace CryptoMessenger.Models
 		private MpClient client;
 
 
+		private bool _isConnectionBreaks;
+		/// <summary>
+		/// Is connection with server breaks.
+		/// </summary>
+		public bool IsConnectionBreaks
+		{
+			get { return _isConnectionBreaks; }
+			private set
+			{
+				_isConnectionBreaks = value;
+				RaisePropertyChanged(nameof(IsConnectionBreaks));
+			}
+		}
+
+
 		// data that comes from server
+
+		/// <summary>
+		/// User conversations.
+		/// </summary>
+		public Conversations Conversations { get; private set; }
+
+		private string _newReplyWith;
+		/// <summary>
+		/// New reply message with this friend.
+		/// </summary>
+		public string NewReplyWith
+		{
+			get { return _newReplyWith; }
+			private set
+			{
+				_newReplyWith = value;
+				RaisePropertyChanged(nameof(NewReplyWith));
+			}
+		}
 
 		private string[] _friendsList;
 		/// <summary>
@@ -106,10 +140,14 @@ namespace CryptoMessenger.Models
 			port = 0;
 			foreach (var i in _port) port = int.Parse(i.Value);
 
+			IsConnectionBreaks = false;
+
 			FriendsList = null;
 			SearchUsersList = null;
 			IncomeRequestsList = null;
 			OutcomeRequestsList = null;
+
+			Conversations = new Conversations();
 
 			//client
 			client = new MpClient();
@@ -265,8 +303,8 @@ namespace CryptoMessenger.Models
 				}
 				catch (ConnectionInterruptedException)
 				{
-					//if (!_isLogOut)
-					//form.CloseEmergency();
+					if (!_isLogOut)
+						IsConnectionBreaks = true;
 
 					return;
 				}
@@ -278,7 +316,7 @@ namespace CryptoMessenger.Models
 				}
 				else if (message is FriendsMessage)
 				{
-					FriendsList = ((FriendsMessage)message).friends;
+					FriendsList = ((FriendsMessage)message).friends;					
 				}
 				else if (message is IncomeFriendshipRequestsMessage)
 				{
@@ -290,15 +328,16 @@ namespace CryptoMessenger.Models
 				}
 				else if (message is ReplyMessage)
 				{
-					//form.UpdateConversations(
-					//	((ReplyMessage)message).interlocutor, 
-					//	new ConversationReply
-					//	(
-					//		((ReplyMessage)message).reply_author,
-					//		((ReplyMessage)message).reply_time,
-					//		((ReplyMessage)message).reply_text
-					//	)
-					//);
+					Conversations.AddReply(
+						((ReplyMessage)message).interlocutor,
+						new ConversationReply
+						(
+							((ReplyMessage)message).reply_author,
+							((ReplyMessage)message).reply_time,
+							((ReplyMessage)message).reply_text
+						)
+					);
+					NewReplyWith = ((ReplyMessage)message).interlocutor;
 				}
 			}
 		}
@@ -325,7 +364,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -359,7 +398,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -393,7 +432,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -427,7 +466,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -460,7 +499,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -495,7 +534,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -530,7 +569,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -565,7 +604,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -600,7 +639,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -636,7 +675,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}
@@ -670,7 +709,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					//form.CloseEmergency();
+					IsConnectionBreaks = true;
 				}
 			}
 		}

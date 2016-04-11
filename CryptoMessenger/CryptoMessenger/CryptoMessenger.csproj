@@ -75,6 +75,7 @@
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="IMainWindowPanel.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\Conversations.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -175,6 +176,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\send.png" />
     <Resource Include="Resources\cross.png" />
     <Resource Include="Resources\plus.png" />
     <EmbeddedResource Include="Properties\Resources.resx">

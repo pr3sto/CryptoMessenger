@@ -47,7 +47,7 @@
             x:Name="usersListbox"
             Grid.Row="2"
             Grid.Column="0"
-            Margin="20,10,20,20"
+            Margin="20,10,10,20"
             Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
             HorizontalContentAlignment="Stretch"
             Style="{StaticResource ListBoxStyle}"

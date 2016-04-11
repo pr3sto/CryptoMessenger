@@ -10,8 +10,7 @@
     >
     <Grid Height="460">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250">
-            </ColumnDefinition>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -47,7 +46,7 @@
             x:Name="friendsListbox" 
             Grid.Row="2"
             Grid.Column="0"
-            Margin="20,10,20,20"
+            Margin="20,10,10,20"
             Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
             HorizontalContentAlignment="Stretch"
             Style="{StaticResource ListBoxStyle}"
@@ -68,7 +67,7 @@
                             TextOptions.TextFormattingMode="Display"
                             FontSize="17"
                             Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
-                            Text="{Binding Path=Name}" 
+                            Text="{Binding Name}"
                             />
                         <!-- remove from friends button -->
                         <Button 
@@ -140,18 +139,40 @@
             Grid.Column="1"
             Grid.Row="3"
             Style="{StaticResource TextBoxStyle}"
-            Margin="20,0,20,20"
             VerticalAlignment="Bottom"
+            HorizontalAlignment="Stretch"
             Height="100"
+            Margin="10,0,70,20"
             TextWrapping="Wrap"
             AcceptsReturn="True"
             VerticalScrollBarVisibility="Auto"
             TextOptions.TextRenderingMode="ClearType"
             TextOptions.TextFormattingMode="Display"
             FontSize="17"
+            Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged}"
             Tag="{Binding Source={x:Static props:Resources.MESSAGE_TEXTBOX_PLACEHOLDER}}"
             Visibility="{Binding IsFriendSelectd, Converter={StaticResource BooleanToVisibilityConverter}}"
             />
+        <!-- send message button -->
+        <Button
+            Grid.Column="1"
+            Grid.Row="3"
+            Style="{StaticResource ButtonStyle}"
+            Cursor="Hand"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right"
+            Margin="0,0,20,20"
+            Height="100" Width="50"
+            Foreground="White"
+            Command="{Binding Path=SendCommand}"
+            ToolTip="{Binding Source={x:Static props:Resources.SEND_BUTTON_TOOLTIP}}"
+            Visibility="{Binding IsFriendSelectd, Converter={StaticResource BooleanToVisibilityConverter}}"
+            IsEnabled="{Binding Path=MessageText, Converter={StaticResource StringEmptynessToBooleanConverter}}"
+            >
+            <Button.Background>
+                <ImageBrush ImageSource="/CryptoMessenger;component/Resources/send.png"/>
+            </Button.Background>
+        </Button>
 
     </Grid>
 </UserControl>

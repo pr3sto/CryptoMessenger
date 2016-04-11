@@ -374,6 +374,25 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap send {
+            get {
+                object obj = ResourceManager.GetObject("send", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Отправить сообщение.
+        /// </summary>
+        public static string SEND_BUTTON_TOOLTIP {
+            get {
+                return ResourceManager.GetString("SEND_BUTTON_TOOLTIP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Не удается подключиться к серверу.
         /// </summary>
         public static string SERVER_CONNECTION_ERROR_NOTIFICATION {

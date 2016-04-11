@@ -52,6 +52,7 @@ namespace CryptoMessenger.ViewModels
 		{
 			this.client = client;
 			client.PropertyChanged += FriendsListChanged;
+			client.PropertyChanged += NewMessage;
 
 			FriendsList = null;
 			IsFriendSelectd = false;
@@ -76,6 +77,14 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
+		// update conversations
+		private void NewMessage(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(client.NewReplyWith))
+			{
+			}
+		}
+
 		#region Properties
 
 		// friends list
@@ -90,9 +99,21 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
+		// message text
+		private string _messageText;
+		public string MessageText
+		{
+			get { return _messageText; }
+			set
+			{
+				_messageText = value;
+				OnPropertyChanged(nameof(MessageText));
+			}
+		}
+
 		// selected friend
-		private string _selectedFriend;
-		public string SelectedFriend
+		private Friend _selectedFriend;
+		public Friend SelectedFriend
 		{
 			get { return _selectedFriend; }
 			set
@@ -112,6 +133,32 @@ namespace CryptoMessenger.ViewModels
 			{
 				_isDialogVisible = value;
 				OnPropertyChanged(nameof(IsFriendSelectd));
+			}
+		}
+
+		#endregion
+
+		#region Commands
+
+		// send message
+		private DelegateCommand sendCommand;
+		public ICommand SendCommand
+		{
+			get
+			{
+				if (sendCommand == null)
+				{
+					sendCommand = new DelegateCommand(DoSend);
+				}
+				return sendCommand;
+			}
+		}
+		private void DoSend()
+		{
+			if (SelectedFriend != null)
+			{
+				client.SendReply(SelectedFriend.Name, MessageText);
+				MessageText = null;
 			}
 		}
 

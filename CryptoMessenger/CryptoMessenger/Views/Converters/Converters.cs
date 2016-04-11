@@ -24,6 +24,23 @@ namespace CryptoMessenger.Views.Converters
 	}
 
 	/// <summary>
+	/// Convert string emptyness to boolean.
+	/// </summary>
+	[ValueConversion(typeof(string), typeof(bool))]
+	public class StringEmptynessToBooleanConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return !string.IsNullOrEmpty((string)value);
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotSupportedException();
+		}
+	}
+
+	/// <summary>
 	/// Group converters to use like one.
 	/// </summary>
 	public class ValueConverterGroup : List<IValueConverter>, IValueConverter
