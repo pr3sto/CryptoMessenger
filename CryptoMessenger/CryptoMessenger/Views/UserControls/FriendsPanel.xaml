@@ -173,6 +173,77 @@
                 <ImageBrush ImageSource="/CryptoMessenger;component/Resources/send.png"/>
             </Button.Background>
         </Button>
+        
+        <!-- dialog panel -->
+        <Border 
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Margin="10,10,20,120"
+            RenderOptions.EdgeMode="Aliased"
+            BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
+            BorderThickness="2 2 2 0"
+            Visibility="{Binding IsFriendSelectd, Converter={StaticResource BooleanToVisibilityConverter}}"
+            >
+            <ListBox
+                Margin="5,5,5,5"
+                Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                HorizontalContentAlignment="Stretch"
+                Style="{StaticResource ListBoxStyle}"
+                ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                ItemsSource="{Binding RepliesList}"
+                >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
+                            BorderThickness="0 0 0 1"
+                            >
+                            <Grid Margin="0,0,0,20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <!-- login -->
+                                <TextBlock
+                                    Grid.Row="0"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    TextOptions.TextRenderingMode="ClearType"
+                                    TextOptions.TextFormattingMode="Display"
+                                    FontSize="17"
+                                    Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                                    Text="{Binding Author}"
+                                    />
+                                <!-- time -->
+                                <TextBlock
+                                    Grid.Row="0"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Right"
+                                    TextOptions.TextRenderingMode="ClearType"
+                                    TextOptions.TextFormattingMode="Display"
+                                    FontSize="17"
+                                    Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                                    Text="{Binding Path=Time, StringFormat='yyyy-MM-dd HH:mm:ss'}"
+                                    />
+                                <!-- message -->
+                                <TextBlock
+                                    Grid.Row="1"
+                                    VerticalAlignment="Bottom"
+                                    HorizontalAlignment="Left"
+                                    TextOptions.TextRenderingMode="ClearType"
+                                    TextOptions.TextFormattingMode="Display"
+                                    FontSize="17"
+                                    Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                                    Text="{Binding Text}"
+                                    />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
 
     </Grid>
 </UserControl>

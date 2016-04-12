@@ -8,15 +8,15 @@ namespace CryptoMessenger.Models
 	/// </summary>
 	public class ConversationReply
 	{
-		public string author { get; }
-		public DateTime time { get; }
-		public string text { get; }
+		public string Author { get; }
+		public DateTime Time { get; }
+		public string Text { get; }
 
 		public ConversationReply(string author, DateTime time, string text)
 		{
-			this.author = author;
-			this.time = time;
-			this.text = text;
+			this.Author = author;
+			this.Time = time;
+			this.Text = text;
 		}
 	}
 
@@ -42,6 +42,15 @@ namespace CryptoMessenger.Models
 		public void AddReply(ConversationReply reply)
 		{
 			if (reply != null) replies.Add(reply);
+		}
+
+		/// <summary>
+		/// Copies elements of the replies list to new array.
+		/// </summary>
+		/// <returns>array.</returns>
+		public ConversationReply[] ToArrayOfReplies()
+		{
+			return replies.ToArray();
 		}
 	}
 
@@ -97,7 +106,16 @@ namespace CryptoMessenger.Models
 		public void AddReply(string interlocutor, ConversationReply reply)
 		{
 			Conversation c = conversations.Find(x => x.interlocutor.Equals(interlocutor));
-			if (c != null) c.AddReply(reply);
+			if (c == null)
+			{
+				c = new Conversation(interlocutor);
+				c.AddReply(reply);
+				AddConversation(c);
+			}
+			else
+			{
+				c.AddReply(reply);
+			}
 		}
 	}
 }

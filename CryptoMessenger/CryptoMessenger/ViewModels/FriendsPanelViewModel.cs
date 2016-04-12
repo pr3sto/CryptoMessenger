@@ -55,6 +55,7 @@ namespace CryptoMessenger.ViewModels
 			client.PropertyChanged += NewMessage;
 
 			FriendsList = null;
+			RepliesList = null;
 			IsFriendSelectd = false;
 
 			// get friends when panel loads
@@ -82,6 +83,8 @@ namespace CryptoMessenger.ViewModels
 		{
 			if (e.PropertyName == nameof(client.NewReplyWith))
 			{
+				if (SelectedFriend.Name != null  && client.NewReplyWith == SelectedFriend.Name)
+					RepliesList = client.Conversations.GetConversation(SelectedFriend.Name)?.ToArrayOfReplies();
 			}
 		}
 
@@ -96,6 +99,18 @@ namespace CryptoMessenger.ViewModels
 			{
 				_friendsList = value;
 				OnPropertyChanged(nameof(FriendsList));
+			}
+		}
+
+		// replies list
+		private ConversationReply[] _repliesList;
+		public ConversationReply[] RepliesList
+		{
+			get { return _repliesList; }
+			set
+			{
+				_repliesList = value;
+				OnPropertyChanged(nameof(RepliesList));
 			}
 		}
 
@@ -119,8 +134,17 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_selectedFriend = value;
-				OnPropertyChanged(nameof(SelectedFriend));
 				IsFriendSelectd = true;
+
+				if (!client.Conversations.Contains(_selectedFriend.Name))
+				{
+					client.GetConversation(_selectedFriend.Name);
+					RepliesList = null;
+				}
+				else
+					RepliesList = client.Conversations.GetConversation(_selectedFriend.Name)?.ToArrayOfReplies();
+
+				OnPropertyChanged(nameof(SelectedFriend));
 			}
 		}
 
