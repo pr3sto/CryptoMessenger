@@ -36,8 +36,6 @@ namespace MessageProtocol
 	/// </summary>
 	public class MpClient
 	{
-		private readonly int ChunkSize = 1024;
-
 		/// <summary>
 		/// Gets the underlying tcp client.
 		/// </summary>
@@ -153,19 +151,19 @@ namespace MessageProtocol
 		{
 			try
 			{
-				int num_of_chunks = 0;
+				long num_of_bytes = 0;
 				var serializer = new XmlSerializer(typeof(Message));
 
 				// number of chunks
 				using (var stream = new MemoryStream())
 				{
 					serializer.Serialize(stream, message);
-					num_of_chunks = (int)stream.Length / ChunkSize + 1;
+					num_of_bytes = stream.Length;
 				}
 
-				// send number
-				sslStream.Write(BitConverter.GetBytes(num_of_chunks));
-				//send message
+				// send number of bytes in message
+				sslStream.Write(BitConverter.GetBytes(num_of_bytes));
+				// send message
 				serializer.Serialize(sslStream, message);
 			}
 			catch
@@ -184,22 +182,21 @@ namespace MessageProtocol
 		{
 			try
 			{
-				byte[] buffer = new byte[32];
-				int length = sslStream.Read(buffer, 0, buffer.Length);
+				byte[] buffer = new byte[8];
+				for (int i = 0; i < 8; i++)
+					buffer[i] = (byte)sslStream.ReadByte();
 
-				// number of chunks
-				Array.Resize(ref buffer, length);
-				int num_of_chunks = BitConverter.ToInt32(buffer, 0);
+				// number of bytes in message
+				long num_of_bytes = BitConverter.ToInt64(buffer, 0);
 
 				// read data
-				buffer = new byte[num_of_chunks * ChunkSize];
-				length = 0;
-				for (int i = 0; i < num_of_chunks; i++)
-					length += sslStream.Read(buffer, i * ChunkSize, ChunkSize);
+				buffer = new byte[num_of_bytes];
+				for (int i = 0; i < num_of_bytes; i++)
+					buffer[i] = (byte)sslStream.ReadByte();
 
 				// deserialize message
 				var serializer = new XmlSerializer(typeof(Message));
-				var ms = new MemoryStream(buffer, 0, length);
+				var ms = new MemoryStream(buffer, 0, buffer.Length);
 				return (Message)serializer.Deserialize(ms);
 			}
 			catch
