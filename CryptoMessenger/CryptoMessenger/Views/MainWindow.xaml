@@ -7,13 +7,12 @@
         mc:Ignorable="d"
         xmlns:local="clr-namespace:CryptoMessenger"
         xmlns:props="clr-namespace:CryptoMessenger.Properties"
-        xmlns:extensions="clr-namespace:CryptoMessenger.Views.Extensions"
+        xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
         
         Style="{StaticResource WindowStyle}"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         Height="500" Width="750"
-        Foreground="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"
         FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
         Title="{Binding WindowTitle}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"
@@ -119,7 +118,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="17"
-            Content="{Binding Source={x:Static props:Resources.FRIENDSS_TEXTBLOCK_TEXT}}"
+            Content="{Binding Source={x:Static props:Resources.FRIENDS_TEXTBLOCK_TEXT}}"
             extensions:Extensions.ElementSelected="{Binding FriendsButtonSelected}"
             Command="{Binding FriendsTextBlockClickedCommand}"
             >

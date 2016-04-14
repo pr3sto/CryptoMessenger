@@ -14,13 +14,14 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
-		public IncomeRequest(Client client)
+		public IncomeRequest(Client client, string name)
 		{
 			this.client = client;
+			Name = name;
 		}
 
 		// name of user that send this request
-		public string Name { get; set; }
+		public string Name { get; }
 
 		// accept request
 		private DelegateCommand acceptRequestCommand;
@@ -66,13 +67,14 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
-		public OutcomeRequest(Client client)
+		public OutcomeRequest(Client client, string name)
 		{
 			this.client = client;
+			Name = name;
 		}
 
 		// name of user
-		public string Name { get; set; }
+		public string Name { get; }
 
 		// cancel request
 		private DelegateCommand cancelRequestCommand;
@@ -119,23 +121,17 @@ namespace CryptoMessenger.ViewModels
 			if (e.PropertyName == nameof(client.IncomeRequestsList) && client.IncomeRequestsList != null)
 			{
 				List<IncomeRequest> reqs = new List<IncomeRequest>();
-				foreach (var s in client.IncomeRequestsList)
-				{
-					IncomeRequest r = new IncomeRequest(client);
-					r.Name = s;
-					reqs.Add(r);
-				}
+				foreach (var name in client.IncomeRequestsList)
+					reqs.Add(new IncomeRequest(client, name));
+
 				IncomeReqsList = reqs.ToArray();
 			}
 			else if (e.PropertyName == nameof(client.OutcomeRequestsList) && client.OutcomeRequestsList != null)
 			{
 				List<OutcomeRequest> reqs = new List<OutcomeRequest>();
-				foreach (var s in client.OutcomeRequestsList)
-				{
-					OutcomeRequest r = new OutcomeRequest(client);
-					r.Name = s;
-					reqs.Add(r);
-				}
+				foreach (var name in client.OutcomeRequestsList)
+					reqs.Add(new OutcomeRequest(client, name));
+
 				OutcomeReqsList = reqs.ToArray();
 			}
 		}

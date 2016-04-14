@@ -136,34 +136,31 @@
   <data name="APP_NAME" xml:space="preserve">
     <value>CRYPTO MESSENGER</value>
   </data>
-  <data name="INCORRECT_DATA_NOTIFICATION" xml:space="preserve">
+  <data name="INCORRECTDATA_NOTIFICATION" xml:space="preserve">
     <value>Некорректные данные</value>
   </data>
   <data name="LOGIN_BUTTON_TEXT" xml:space="preserve">
     <value>ВХОД</value>
   </data>
-  <data name="LOGIN_ERROR_NOTIFICATION" xml:space="preserve">
+  <data name="LOGINERROR_NOTIFICATION" xml:space="preserve">
     <value>Неверная комбинация логина и пароля</value>
   </data>
   <data name="LOGIN_NOTIFICATION" xml:space="preserve">
     <value>Вход. Пожалуйста, подождите...</value>
   </data>
-  <data name="PASSWORD_CHECKBOX_TEXT" xml:space="preserve">
-    <value>СКРЫВАТЬ ПАРОЛЬ</value>
-  </data>
   <data name="REGISTRATION_BUTTON_TEXT" xml:space="preserve">
     <value>РЕГИСТРАЦИЯ</value>
   </data>
-  <data name="REGISTRATION_ERROR_NOTIFICATION" xml:space="preserve">
+  <data name="REGISTRATIONERROR_NOTIFICATION" xml:space="preserve">
     <value>Аккаунт с данным логином уже зарегистрирован</value>
   </data>
   <data name="REGISTRATION_NOTIFICATION" xml:space="preserve">
     <value>Регистрация. Пожалуйста, подождите...</value>
   </data>
-  <data name="REGISTRATION_SUCCESS_NOTIFICATION" xml:space="preserve">
+  <data name="REGISTRATIONSUCCESS_NOTIFICATION" xml:space="preserve">
     <value>Вы успешно зарегистрировались</value>
   </data>
-  <data name="SERVER_CONNECTION_ERROR_NOTIFICATION" xml:space="preserve">
+  <data name="CONNECTIONERROR_NOTIFICATION" xml:space="preserve">
     <value>Не удается подключиться к серверу</value>
   </data>
   <data name="STANDART_NOTIFICATION" xml:space="preserve">
@@ -175,16 +172,16 @@
   <data name="USERPASSWORD_TEXTFIELD_PLACEHOLDER" xml:space="preserve">
     <value>ПАРОЛЬ</value>
   </data>
-  <data name="CERTIFICATE_ERROR_NOTIFICATION" xml:space="preserve">
+  <data name="CERTIFICATEERROR_NOTIFICATION" xml:space="preserve">
     <value>Не удается найти сертификат приложения. Переустановка может исправить проблему</value>
   </data>
-  <data name="UNKNOWN_ERROR" xml:space="preserve">
+  <data name="UNKNOWNERROR_NOTIFICATION" xml:space="preserve">
     <value>Неизвестная ошибка. Повторите действие позже</value>
   </data>
-  <data name="ALREADY_LOGIN_NOTIFICATION" xml:space="preserve">
+  <data name="ALREADYLOGIN_NOTIFICATION" xml:space="preserve">
     <value>Вход в данный аккаунт уже выполнен</value>
   </data>
-  <data name="FRIENDSS_TEXTBLOCK_TEXT" xml:space="preserve">
+  <data name="FRIENDS_TEXTBLOCK_TEXT" xml:space="preserve">
     <value>ДРУЗЬЯ</value>
   </data>
   <data name="REQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
@@ -193,10 +190,10 @@
   <data name="SEARCH_TEXTBLOCK_TEXT" xml:space="preserve">
     <value>ПОИСК</value>
   </data>
-  <data name="INCOME_REQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
+  <data name="INCOMEREQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
     <value>Заявки вам:</value>
   </data>
-  <data name="OUTCOME_REQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
+  <data name="OUTCOMEREQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
     <value>Ваши заявки:</value>
   </data>
   <data name="cross" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -205,13 +202,13 @@
   <data name="plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\plus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="EMPTY_FRIENDS_LIST_PLACEHOLDER" xml:space="preserve">
+  <data name="EMPTYFRIENDS_LISTBOX_PLACEHOLDER" xml:space="preserve">
     <value>Друзей нет</value>
   </data>
-  <data name="EMPTY_REQUESTS_LIST_PLACEHOLDER" xml:space="preserve">
+  <data name="EMPTYREQUESTS_LISTBOX_PLACEHOLDER" xml:space="preserve">
     <value>Заявок нет</value>
   </data>
-  <data name="EMPTY_USERS_LIST_PLACEHOLDER" xml:space="preserve">
+  <data name="EMPTYUSERS_LISTBOX_PLACEHOLDER" xml:space="preserve">
     <value>Пользователей не найдено</value>
   </data>
   <data name="ACCEPTFRIENDSHIP_BUTTON_TOOLTIP" xml:space="preserve">
@@ -226,16 +223,16 @@
   <data name="REJECTFRIENDSHIP_BUTTON_TOOLTIP" xml:space="preserve">
     <value>Отклонить заявку</value>
   </data>
-  <data name="REMOVE_BUTTON_TOOLTIP" xml:space="preserve">
+  <data name="REMOVEFRIEND_BUTTON_TOOLTIP" xml:space="preserve">
     <value>Удалить из друзей</value>
   </data>
-  <data name="SELECT_FRIEND_NOTIFICATION" xml:space="preserve">
+  <data name="SELECTFRIEND_NOTIFICATION" xml:space="preserve">
     <value>Чтобы начать диалог, выберите друга из списка друзей слева</value>
   </data>
   <data name="MESSAGE_TEXTBOX_PLACEHOLDER" xml:space="preserve">
     <value>Введите Ваше сообщение здесь...</value>
   </data>
-  <data name="SEND_BUTTON_TOOLTIP" xml:space="preserve">
+  <data name="SENDMESSAGE_BUTTON_TOOLTIP" xml:space="preserve">
     <value>Отправить сообщение</value>
   </data>
   <data name="send" type="System.Resources.ResXFileRef, System.Windows.Forms">

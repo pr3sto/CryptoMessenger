@@ -14,13 +14,14 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
-		public Friend(Client client)
+		public Friend(Client client, string name)
 		{
 			this.client = client;
+			Name = name;
 		}		
 
 		// friend's name.
-		public string Name { get; set; }
+		public string Name { get; }
 
 		// remove friend
 		private DelegateCommand removeFriendCommand;
@@ -52,11 +53,12 @@ namespace CryptoMessenger.ViewModels
 		{
 			this.client = client;
 			client.PropertyChanged += FriendsListChanged;
-			client.PropertyChanged += NewMessage;
+			client.ReplyComes += NewMessage;
 
 			FriendsList = null;
 			RepliesList = null;
-			IsFriendSelectd = false;
+
+			IsFriendSelected = false;
 
 			// get friends when panel loads
 			client.GetFriends();
@@ -68,24 +70,18 @@ namespace CryptoMessenger.ViewModels
 			if (e.PropertyName == nameof(client.FriendsList) && client.FriendsList != null)
 			{
 				List<Friend> friends = new List<Friend>();
-				foreach (var s in client.FriendsList)
-				{
-					Friend f = new Friend(client);
-					f.Name = s;
-					friends.Add(f);
-				}
+				foreach (var name in client.FriendsList)
+					friends.Add(new Friend(client, name));
+				
 				FriendsList = friends.ToArray();
 			}
 		}
 
 		// update conversations
-		private void NewMessage(object sender, PropertyChangedEventArgs e)
+		private void NewMessage(object sender, string login)
 		{
-			if (e.PropertyName == nameof(client.NewReplyWith))
-			{
-				if (SelectedFriend.Name != null  && client.NewReplyWith == SelectedFriend.Name)
-					RepliesList = client.Conversations.GetConversation(SelectedFriend.Name)?.ToArrayOfReplies();
-			}
+			if (SelectedFriend != null  && login == SelectedFriend.Name)
+				RepliesList = client.Conversations.GetConversation(SelectedFriend.Name)?.ToArrayOfReplies();
 		}
 
 		#region Properties
@@ -134,15 +130,18 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_selectedFriend = value;
-				IsFriendSelectd = true;
+				IsFriendSelected = (_selectedFriend != null);
 
-				if (!client.Conversations.Contains(_selectedFriend.Name))
+				if (_selectedFriend != null)
 				{
-					client.GetConversation(_selectedFriend.Name);
-					RepliesList = null;
+					if (!client.Conversations.Contains(_selectedFriend.Name))
+					{
+						client.GetConversation(_selectedFriend.Name);
+						RepliesList = null;
+					}
+					else
+						RepliesList = client.Conversations.GetConversation(_selectedFriend.Name)?.ToArrayOfReplies();
 				}
-				else
-					RepliesList = client.Conversations.GetConversation(_selectedFriend.Name)?.ToArrayOfReplies();
 
 				OnPropertyChanged(nameof(SelectedFriend));
 			}
@@ -150,13 +149,13 @@ namespace CryptoMessenger.ViewModels
 
 		// is dialg visible
 		private bool _isDialogVisible;
-		public bool IsFriendSelectd
+		public bool IsFriendSelected
 		{
 			get { return _isDialogVisible; }
 			set
 			{
 				_isDialogVisible = value;
-				OnPropertyChanged(nameof(IsFriendSelectd));
+				OnPropertyChanged(nameof(IsFriendSelected));
 			}
 		}
 

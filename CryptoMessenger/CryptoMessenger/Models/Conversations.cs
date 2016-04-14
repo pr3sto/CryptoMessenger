@@ -8,16 +8,9 @@ namespace CryptoMessenger.Models
 	/// </summary>
 	public class ConversationReply
 	{
-		public string Author { get; }
-		public DateTime Time { get; }
-		public string Text { get; }
-
-		public ConversationReply(string author, DateTime time, string text)
-		{
-			this.Author = author;
-			this.Time = time;
-			this.Text = text;
-		}
+		public string Author { get; set; }
+		public DateTime Time { get; set; }
+		public string Text { get; set; }
 	}
 
 	/// <summary>
@@ -70,7 +63,7 @@ namespace CryptoMessenger.Models
 		/// Determines whether conversation with interlocutor is in list.
 		/// </summary>
 		/// <param name="interlocutor">interlocutor.</param>
-		/// <returns>true if contains; otherwise, false.</returns>
+		/// <returns>true if contains; otherwise - false.</returns>
 		public bool Contains(string interlocutor)
 		{
 			var data = conversations.Find(x => x.interlocutor.Equals(interlocutor));
@@ -105,7 +98,7 @@ namespace CryptoMessenger.Models
 		/// <param name="reply">reply.</param>
 		public void AddReply(string interlocutor, ConversationReply reply)
 		{
-			Conversation c = conversations.Find(x => x.interlocutor.Equals(interlocutor));
+			Conversation c = GetConversation(interlocutor);
 			if (c == null)
 			{
 				c = new Conversation(interlocutor);

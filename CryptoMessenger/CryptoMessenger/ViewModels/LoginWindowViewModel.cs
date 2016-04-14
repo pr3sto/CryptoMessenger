@@ -24,6 +24,7 @@ namespace CryptoMessenger.ViewModels
 
 			IsWindowVisible = true;
 			Notification = Properties.Resources.STANDART_NOTIFICATION;
+
 			IsLoading = false;
 		}
 
@@ -163,7 +164,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (ConnectionInterruptedException)
 				{
-					Notification = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
+					Notification = Properties.Resources.CONNECTIONERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					
 					IsLoading = false;
@@ -171,7 +172,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (CertificateException)
 				{
-					Notification = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
+					Notification = Properties.Resources.CERTIFICATEERROR_NOTIFICATION;
 					_isColorsChanged = true;
 
 					IsLoading = false;
@@ -200,19 +201,19 @@ namespace CryptoMessenger.ViewModels
 				}
 				else if (LoginRegisterResponse.FAIL.Equals(response))
 				{
-					Notification = Properties.Resources.LOGIN_ERROR_NOTIFICATION;
+					Notification = Properties.Resources.LOGINERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginIncorrect = true;
 					IsPasswordIncorrect = true;
 				}
 				else if (LoginRegisterResponse.ERROR.Equals(response))
 				{
-					Notification = Properties.Resources.UNKNOWN_ERROR;
+					Notification = Properties.Resources.UNKNOWNERROR_NOTIFICATION;
 					_isColorsChanged = true;
 				}
 				else if (LoginRegisterResponse.ALREADY_LOGIN.Equals(response))
 				{
-					Notification = Properties.Resources.ALREADY_LOGIN_NOTIFICATION;
+					Notification = Properties.Resources.ALREADYLOGIN_NOTIFICATION;
 					_isColorsChanged = true;
 				}
 				
@@ -254,7 +255,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (ConnectionInterruptedException)
 				{
-					Notification = Properties.Resources.SERVER_CONNECTION_ERROR_NOTIFICATION;
+					Notification = Properties.Resources.CONNECTIONERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					
 					IsLoading = false;
@@ -262,7 +263,7 @@ namespace CryptoMessenger.ViewModels
 				}
 				catch (CertificateException)
 				{
-					Notification = Properties.Resources.CERTIFICATE_ERROR_NOTIFICATION;
+					Notification = Properties.Resources.CERTIFICATEERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					
 					IsLoading = false;
@@ -271,21 +272,21 @@ namespace CryptoMessenger.ViewModels
 
 				if (LoginRegisterResponse.SUCCESS.Equals(response))
 				{
-					Notification = Properties.Resources.REGISTRATION_SUCCESS_NOTIFICATION;
+					Notification = Properties.Resources.REGISTRATIONSUCCESS_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginCorrect = true;
 					IsPasswordCorrect = true;
 				}
 				else if (LoginRegisterResponse.FAIL.Equals(response))
 				{
-					Notification = Properties.Resources.REGISTRATION_ERROR_NOTIFICATION;
+					Notification = Properties.Resources.REGISTRATIONERROR_NOTIFICATION;
 					_isColorsChanged = true;
 					IsLoginIncorrect = true;
 					IsPasswordIncorrect = true;
 				}
 				else if (LoginRegisterResponse.ERROR.Equals(response))
 				{
-					Notification = Properties.Resources.UNKNOWN_ERROR;
+					Notification = Properties.Resources.UNKNOWNERROR_NOTIFICATION;
 					_isColorsChanged = true;
 				}
 				
@@ -333,7 +334,7 @@ namespace CryptoMessenger.ViewModels
 
 			if (string.IsNullOrEmpty(Login))
 			{
-				Notification = Properties.Resources.INCORRECT_DATA_NOTIFICATION;
+				Notification = Properties.Resources.INCORRECTDATA_NOTIFICATION;
 				_isColorsChanged = true;
 				IsLoginIncorrect = true;
 
@@ -341,7 +342,7 @@ namespace CryptoMessenger.ViewModels
 			}
 			if (string.IsNullOrEmpty(Password))
 			{
-				Notification = Properties.Resources.INCORRECT_DATA_NOTIFICATION;
+				Notification = Properties.Resources.INCORRECTDATA_NOTIFICATION;
 				_isColorsChanged = true;
 				IsPasswordIncorrect = true;
 

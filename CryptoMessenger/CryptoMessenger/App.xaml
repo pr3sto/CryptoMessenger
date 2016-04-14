@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:CryptoMessenger"
              xmlns:usercontrols="clr-namespace:CryptoMessenger.Views.UserControls"
              xmlns:viewmodels="clr-namespace:CryptoMessenger.ViewModels"
-             xmlns:converters="clr-namespace:CryptoMessenger.Views.Converters"
+             xmlns:converters="clr-namespace:CryptoMessenger.Converters"
              Startup="OnStartup">
     <Application.Resources>
         <ResourceDictionary>

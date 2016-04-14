@@ -6,8 +6,9 @@
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
     >
 
-    <!-- listbox button style -->
     <Style x:Key="ListBoxButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -34,11 +35,13 @@
                             />
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="buttonBackground" Property="Fill" 
                                     Value="{Binding Path=MainSecondLightBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
+                        <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="buttonBackground" Property="Fill" 
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
@@ -46,12 +49,6 @@
                             <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                     />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="buttonBackground" Property="Fill" 
-                                    Value="{Binding Path=MainThirdBrush, Source={x:Static props:Settings.Default}}"/>
-                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
-                                    Value="{Binding Path=MainThirdBrush, Source={x:Static props:Settings.Default}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

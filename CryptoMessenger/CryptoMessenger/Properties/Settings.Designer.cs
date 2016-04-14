@@ -43,15 +43,6 @@ namespace CryptoMessenger.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFF4F0E4")]
-        public global::System.Windows.Media.SolidColorBrush MainThirdBrush {
-            get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["MainThirdBrush"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFEF5252")]
         public global::System.Windows.Media.SolidColorBrush SpecialBrush {
             get {

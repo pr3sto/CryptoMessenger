@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace CryptoMessenger.Views.Extensions
+namespace CryptoMessenger.Extensions
 {
 	/// <summary>
 	/// Class for attached properties.
@@ -95,7 +95,6 @@ namespace CryptoMessenger.Views.Extensions
 					tb.TextChanged -= TextChanged;
 			}
 		}
-
 		static void PasswordChanged(object sender, RoutedEventArgs e)
 		{
 			var pb = sender as PasswordBox;
@@ -105,7 +104,6 @@ namespace CryptoMessenger.Views.Extensions
 			}
 			SetPasswordLength(pb, pb.Password.Length);
 		}
-
 		static void TextChanged(object sender, RoutedEventArgs e)
 		{
 			var tb = sender as TextBox;

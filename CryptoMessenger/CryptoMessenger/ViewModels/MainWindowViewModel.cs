@@ -76,7 +76,7 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
-		// left panel
+		// panel
 		private IMainWindowPanel _mainWindowPanel;
 		public IMainWindowPanel MainWindowPanel
 		{

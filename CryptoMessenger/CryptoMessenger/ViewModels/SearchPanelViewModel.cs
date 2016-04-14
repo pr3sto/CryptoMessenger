@@ -14,13 +14,14 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
-		public User(Client client)
+		public User(Client client, string name)
 		{
 			this.client = client;
+			Name = name;
 		}
 
 		// user's name.
-		public string Name { get; set; }
+		public string Name { get; }
 
 		// add to friends
 		private DelegateCommand addToFriendsCommand;
@@ -65,12 +66,9 @@ namespace CryptoMessenger.ViewModels
 			if (e.PropertyName == nameof(client.SearchUsersList) && client.SearchUsersList != null)
 			{
 				List<User> users = new List<User>();
-				foreach (var s in client.SearchUsersList)
-				{
-					User u = new User(client);
-					u.Name = s;
-					users.Add(u);
-				}
+				foreach (var name in client.SearchUsersList)
+					users.Add(new User(client, name));
+				
 				UsersList = users.ToArray();
 			}
 		}

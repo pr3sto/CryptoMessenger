@@ -8,8 +8,7 @@
 
     <!-- scrollbar thumb style -->
     <Style x:Key="ScrollBarThumbStyle" TargetType="{x:Type Thumb}">
-        <Setter Property="IsTabStop" Value="false"/>
-        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -20,11 +19,13 @@
                         Background="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                         />
                     <ControlTemplate.Triggers>
+                        <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background" 
                                     Value="{Binding Path=MainSecondLightBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
+                        <!-- mouse dragging -->
                         <Trigger Property="IsDragging" Value="True">
                             <Setter TargetName="border" Property="Background" 
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
@@ -38,6 +39,7 @@
 
     <!-- repeatbutton style -->
     <Style x:Key="RepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="IsTabStop" Value="false"/>
         <Setter Property="Focusable" Value="false"/>
         <Setter Property="Template">
@@ -99,6 +101,7 @@
     
     <!-- scrollbar style -->
     <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto"/>
@@ -106,7 +109,6 @@
                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}"/>
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
-                <Setter Property="Margin" Value="0,0,-2,0"/>
                 <Setter Property="Width" Value="10"/>
                 <Setter Property="Height" Value="Auto"/>
                 <Setter Property="Template" Value="{StaticResource VerticalScrollBar}"/>

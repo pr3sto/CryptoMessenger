@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace CryptoMessenger.Views.Converters
+namespace CryptoMessenger.Converters
 {
 	/// <summary>
 	/// Converter that inverse boolean.
@@ -48,7 +48,7 @@ namespace CryptoMessenger.Views.Converters
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			return this.Aggregate(value, (current, converter) => 
-			converter.Convert(current, targetType, parameter, culture));
+				converter.Convert(current, targetType, parameter, culture));
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

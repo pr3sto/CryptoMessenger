@@ -6,9 +6,11 @@
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
     >
     
-    <!-- button style -->
+    <!-- window buttons style -->
     <Style x:Key="TitleBarButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="Template">
@@ -19,9 +21,11 @@
                         <ContentPresenter />
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
                         </Trigger>
+                        <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Foreground" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
                         </Trigger>
@@ -36,6 +40,7 @@
         <Setter Property="AllowsTransparency" Value="true"/>
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -48,6 +53,7 @@
                             BorderThickness="1"
                             Padding="0"
                             >
+                            <!-- window shadow -->
                             <Border.Effect>
                                 <DropShadowEffect
                                     Color="{Binding Path=SpecialColor, Source={x:Static props:Settings.Default}}"
@@ -105,15 +111,13 @@
                                         Style="{StaticResource TitleBarButtonStyle}"
                                         Click="MinimizeButton_Click"
                                         >
-                                        <Grid>
-                                            <Path
-                                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                                StrokeThickness="2"
-                                                Stretch="None"
-                                                RenderOptions.EdgeMode="Aliased"
-                                                Data="M11,19 H21"
-                                                />
-                                        </Grid>
+                                        <Path
+                                            Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                            StrokeThickness="2"
+                                            Stretch="None"
+                                            RenderOptions.EdgeMode="Aliased"
+                                            Data="M11,19 H21"
+                                            />
                                     </Button>
                                     <!-- close button -->
                                     <Button
@@ -124,21 +128,22 @@
                                         Style="{StaticResource TitleBarButtonStyle}"
                                         Click="CloseButton_Click"
                                         >
-                                        <Grid>
-                                            <Path
-                                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                                StrokeThickness="1"
-                                                Stretch="None"
-                                                RenderOptions.EdgeMode="Aliased"
-                                                Data="M11,11 L20,20 M12,11 L21,20 M11,20 L20,11 M12,20 L21,11"
-                                                />
-                                        </Grid>
+                                        <Path
+                                            Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                            StrokeThickness="1"
+                                            Stretch="None"
+                                            RenderOptions.EdgeMode="Aliased"
+                                            Data="M11,11 L20,20 M12,11 L21,20 M11,20 L20,11 M12,20 L21,11"
+                                            />
                                     </Button>
                                 </Grid>
                             </Border>
+
                             <ContentPresenter />
+
                         </DockPanel>
                     </Grid>
+                    
                     <!-- window lost focus -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsActive" Value="False">
@@ -147,6 +152,7 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
+                
             </Setter.Value>
         </Setter>
     </Style>

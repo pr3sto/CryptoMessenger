@@ -13,9 +13,9 @@ namespace CryptoMessenger.Models
 	/// </summary>
 	public class Client : INotifyPropertyChanged
 	{
-		// is we logged in
+		// is client logged in
 		private bool _isLoggedIn = false;
-		// is we now log out
+		// is client now log out
 		private bool _isLogOut = false;
 
 		// server's port 
@@ -25,42 +25,28 @@ namespace CryptoMessenger.Models
 		// client
 		private MpClient client;
 
-
-		private bool _isConnectionBreaks;
 		/// <summary>
-		/// Is connection with server breaks.
+		/// Represent the method that handle connection breaks.
 		/// </summary>
-		public bool IsConnectionBreaks
+		/// <param name="sender">sender of this event.</param>
+		public delegate void ConnectionBreaksHandler(object sender);
+		/// <summary>
+		/// Notify about connection breaks.
+		/// </summary>
+		public event ConnectionBreaksHandler ConnectionBreaks;
+		private void RaiseConnectionBreaksEvent()
 		{
-			get { return _isConnectionBreaks; }
-			private set
-			{
-				_isConnectionBreaks = value;
-				RaisePropertyChanged(nameof(IsConnectionBreaks));
-			}
+			if (ConnectionBreaks != null)
+				ConnectionBreaks(this);
 		}
-
-
-		// data that comes from server
 
 		/// <summary>
 		/// User conversations.
 		/// </summary>
 		public Conversations Conversations { get; private set; }
 
-		private string _newReplyWith;
-		/// <summary>
-		/// New reply message with this friend.
-		/// </summary>
-		public string NewReplyWith
-		{
-			get { return _newReplyWith; }
-			private set
-			{
-				_newReplyWith = value;
-				RaisePropertyChanged(nameof(NewReplyWith));
-			}
-		}
+
+		#region Data that comes from server
 
 		private string[] _friendsList;
 		/// <summary>
@@ -125,6 +111,8 @@ namespace CryptoMessenger.Models
 				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+		#endregion
+
 
 		public Client()
 		{
@@ -140,8 +128,6 @@ namespace CryptoMessenger.Models
 			port = 0;
 			foreach (var i in _port) port = int.Parse(i.Value);
 
-			IsConnectionBreaks = false;
-
 			FriendsList = null;
 			SearchUsersList = null;
 			IncomeRequestsList = null;
@@ -149,7 +135,6 @@ namespace CryptoMessenger.Models
 
 			Conversations = new Conversations();
 
-			//client
 			client = new MpClient();
 		}
 
@@ -262,6 +247,8 @@ namespace CryptoMessenger.Models
 			IncomeRequestsList = null;
 			OutcomeRequestsList = null;
 
+			Conversations = new Conversations();
+
 			try
 			{
 				client.SendMessage(new LogoutRequestMessage());
@@ -281,6 +268,22 @@ namespace CryptoMessenger.Models
 					// dont mind because we exit
 				}
 			}
+		}
+
+		/// <summary>
+		/// Represent the method that handle inclome reply.
+		/// </summary>
+		/// <param name="sender">sender of this event.</param>
+		/// <param name="replySender">login of sender of reply.</param>
+		public delegate void ReplyHandler(object sender, string replySender);
+		/// <summary>
+		/// Notify about reply from server comes.
+		/// </summary>
+		public event ReplyHandler ReplyComes;
+		private void RaiseReplyComesEvent(string replySender)
+		{
+			if (ReplyComes != null)
+				ReplyComes(this, replySender);
 		}
 
 		/// <summary>
@@ -304,7 +307,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					if (!_isLogOut)
-						IsConnectionBreaks = true;
+						RaiseConnectionBreaksEvent();
 
 					return;
 				}
@@ -331,16 +334,18 @@ namespace CryptoMessenger.Models
 					Conversations.AddReply(
 						((ReplyMessage)message).interlocutor,
 						new ConversationReply
-						(
-							((ReplyMessage)message).reply_author,
-							((ReplyMessage)message).reply_time,
-							((ReplyMessage)message).reply_text
-						)
+						{
+							Author = ((ReplyMessage)message).reply_author,
+							Time = ((ReplyMessage)message).reply_time,
+							Text = ((ReplyMessage)message).reply_text
+						}
 					);
-					NewReplyWith = ((ReplyMessage)message).interlocutor;
+					ReplyComes(this, ((ReplyMessage)message).interlocutor);
 				}
 			}
 		}
+
+		#region Server requests
 
 		/// <summary>
 		/// Get array of all users from server;
@@ -364,7 +369,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -398,7 +403,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -432,7 +437,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -466,7 +471,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -499,7 +504,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -534,7 +539,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -569,7 +574,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -604,7 +609,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -639,7 +644,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -675,7 +680,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
@@ -709,9 +714,11 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					IsConnectionBreaks = true;
+					RaiseConnectionBreaksEvent();
 				}
 			}
 		}
+
+		#endregion
 	}
 }

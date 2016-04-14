@@ -3,10 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
+    xmlns:props="clr-namespace:CryptoMessenger.Properties"
     >
 
-    <!-- list box style -->
     <Style x:Key="ListBoxStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Background" Value="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
