@@ -6,6 +6,7 @@ namespace MessageProtocol.MessageTypes
 	/// <summary>
 	/// Server's response on login/registration request.
 	/// </summary>
+	[Serializable]
 	public enum LoginRegisterResponse
 	{
 		SUCCESS,
@@ -17,6 +18,7 @@ namespace MessageProtocol.MessageTypes
 	/// <summary>
 	/// Actions with frends and friendship requests.
 	/// </summary>
+	[Serializable]
 	public enum ActionsWithFriend
 	{
 		CANCEL_FRIENDSHIP_REQUEST,

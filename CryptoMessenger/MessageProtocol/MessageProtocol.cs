@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
@@ -37,7 +38,7 @@ namespace MessageProtocol
 	public class MpClient
 	{
 		/// <summary>
-		/// Gets the underlying tcp client.
+		/// Underlying tcp client.
 		/// </summary>
 		public TcpClient tcpClient { get; set; }
 
@@ -74,9 +75,13 @@ namespace MessageProtocol
 					Ssl.ClientSideHandshake(certificate, sslStream, host);
 				});
 			}
+			catch (CertificateException e)
+			{
+				throw new ConnectionInterruptedException("Connection failed. Reason: " + e.Message);
+			}
 			catch
 			{
-				throw new ConnectionInterruptedException();
+				throw new ConnectionInterruptedException("Connection failed.");
 			}
 		}
 
@@ -115,9 +120,17 @@ namespace MessageProtocol
 					Ssl.ClientSideHandshake(certificate, sslStream, host);
 				});
 			}
+			catch (TimeoutException)
+			{
+				throw new ConnectionInterruptedException("Connection failed. Reason: timeout.");
+			}
+			catch (CertificateException e)
+			{
+				throw new ConnectionInterruptedException("Connection failed. Reason: " + e.Message);
+			}
 			catch
 			{
-				throw new ConnectionInterruptedException();
+				throw new ConnectionInterruptedException("Connection failed.");
 			}
 		}
 
@@ -133,7 +146,7 @@ namespace MessageProtocol
 			}
 			catch
 			{
-				throw new ConnectionInterruptedException();
+				throw new ConnectionInterruptedException("Error closing socket.");
 			}
 			finally
 			{
@@ -151,24 +164,27 @@ namespace MessageProtocol
 		{
 			try
 			{
-				long num_of_bytes = 0;
-				var serializer = new XmlSerializer(typeof(Message));
-
-				// number of chunks
 				using (var stream = new MemoryStream())
 				{
-					serializer.Serialize(stream, message);
-					num_of_bytes = stream.Length;
-				}
+					// compress data
+					using (var deflateStream = new DeflateStream(stream, CompressionLevel.Optimal))
+					{
+						var serializer = new XmlSerializer(typeof(Message));
+						serializer.Serialize(deflateStream, message);
+					}
 
-				// send number of bytes in message
-				sslStream.Write(BitConverter.GetBytes(num_of_bytes));
-				// send message
-				serializer.Serialize(sslStream, message);
+					byte[] BinaryData = stream.ToArray();
+					byte[] DataLength = BitConverter.GetBytes(BinaryData.Length);
+
+					// send number of bytes in message
+					sslStream.Write(DataLength);
+					// send message
+					sslStream.Write(BinaryData);
+				}	
 			}
 			catch
 			{
-				throw new ConnectionInterruptedException();
+				throw new ConnectionInterruptedException("Error sending data.");
 			}
 			
 		}
@@ -182,12 +198,12 @@ namespace MessageProtocol
 		{
 			try
 			{
-				byte[] buffer = new byte[8];
-				for (int i = 0; i < 8; i++)
+				byte[] buffer = new byte[4];
+				for (int i = 0; i < 4; i++)
 					buffer[i] = (byte)sslStream.ReadByte();
 
 				// number of bytes in message
-				long num_of_bytes = BitConverter.ToInt64(buffer, 0);
+				int num_of_bytes = BitConverter.ToInt32(buffer, 0);
 
 				// read data
 				buffer = new byte[num_of_bytes];
@@ -195,13 +211,18 @@ namespace MessageProtocol
 					buffer[i] = (byte)sslStream.ReadByte();
 
 				// deserialize message
-				var serializer = new XmlSerializer(typeof(Message));
-				var ms = new MemoryStream(buffer, 0, buffer.Length);
-				return (Message)serializer.Deserialize(ms);
+				using (var stream = new MemoryStream(buffer))
+				{
+					using (var deflateStream = new DeflateStream(stream, CompressionMode.Decompress))
+					{
+						var serializer = new XmlSerializer(typeof(Message));
+						return (Message)serializer.Deserialize(deflateStream);
+					}
+				}
 			}
 			catch
 			{
-				throw new ConnectionInterruptedException();
+				throw new ConnectionInterruptedException("Error receiving data.");
 			}
 		}
 
@@ -257,7 +278,6 @@ namespace MessageProtocol
 		/// </summary>
 		/// <exception cref="SocketException"></exception>
 		/// <exception cref="ConnectionInterruptedException"></exception>
-		/// <exception cref="ObjectDisposedException"></exception>
 		public async Task<MpClient> AcceptMpClientAsync()
 		{
 			// accept tcp client
@@ -283,9 +303,13 @@ namespace MessageProtocol
 
 					return mpClient;
 				}
+				catch (CertificateException e)
+				{
+					throw new ConnectionInterruptedException("Connection failed. Reason: " + e.Message);
+				}
 				catch
 				{
-					throw new ConnectionInterruptedException();
+					throw new ConnectionInterruptedException("Connection failed.");
 				}
 			});
 		}

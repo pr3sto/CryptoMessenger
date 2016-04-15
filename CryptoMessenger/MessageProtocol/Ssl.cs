@@ -8,109 +8,6 @@ using System.Security.Cryptography.X509Certificates;
 namespace MessageProtocol
 {
 	/// <summary>
-	/// Things needed for organizing ssl stream 
-	/// between client and server.
-	/// </summary>
-	static class Ssl
-	{
-		#region Client
-
-		/// <summary>
-		/// Callback for the verification of the server certificate.
-		/// </summary>
-		/// <param name="sender">sender of this callback.</param>
-		/// <param name="certificate">server's certificate.</param>
-		/// <param name="chain">certificate build chain.</param>
-		/// <param name="sslPolicyErrors">ssl errors.</param>
-		/// <returns>true if server has been validated; otherwise, false.</returns>
-		public static bool ServerValidationCallback(object sender,
-			X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-		{
-			// TODO Add cert check
-			return true;
-		}
-
-
-		/// <summary>
-		/// Certificate selection callback.
-		/// </summary>
-		/// <param name="sender">sender of this callback.</param>
-		/// <param name="targetHost">server's ip address.</param>
-		/// <param name="localCertificates">local certificates clooection.</param>
-		/// <param name="remoteCertificate">server's certificate.</param>
-		/// <param name="acceptableIssuers">acceptable issuers for remote host.</param>
-		/// <returns>certificate.</returns>
-		public static X509Certificate ClientCertificateSelectionCallback(object sender,
-			string targetHost, X509CertificateCollection localCertificates,
-			X509Certificate remoteCertificate, string[] acceptableIssuers)
-		{
-			return localCertificates[0];
-		}
-
-		/// <summary>
-		/// Perform the client handshake.
-		/// </summary>
-		/// <param name="certificate">client's certificate.</param>
-		/// <param name="sslStream">ssl stream with server.</param>
-		/// <param name="targetHost">server's ip address.</param>
-		public static void ClientSideHandshake(X509Certificate2 certificate, SslStream sslStream, string targetHost)
-		{
-			var ccertificateCollection = new X509CertificateCollection();
-			ccertificateCollection.Add(certificate);
-
-			// 'handshake'
-			sslStream.AuthenticateAsClient(targetHost, ccertificateCollection, SslProtocols.Tls, true);
-		}
-
-		#endregion
-
-		#region Server
-
-		/// <summary>
-		/// Callback for the verification of the client certificate.
-		/// </summary>
-		/// <param name="sender">sender of this callback.</param>
-		/// <param name="certificate">client's certificate.</param>
-		/// <param name="chain">certificate build chain.</param>
-		/// <param name="sslPolicyErrors">ssl errors.</param>
-		/// <returns>true if client has been validated; otherwise, false.</returns>
-		public static bool ClientValidationCallback(object sender,
-			X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-		{
-			// TODO Add cert check
-			return true;
-		}
-
-		/// <summary>
-		/// Certificate selection callback.
-		/// </summary>
-		/// <param name="sender">sender of this callback.</param>
-		/// <param name="targetHost">server's ip address.</param>
-		/// <param name="localCertificates">local certificates clooection.</param>
-		/// <param name="remoteCertificate">client's certificate.</param>
-		/// <param name="acceptableIssuers">acceptable issuers for remote client.</param>
-		/// <returns>certificate.</returns>
-		public static X509Certificate ServerCertificateSelectionCallback(object sender,
-			string targetHost, X509CertificateCollection localCertificates,
-			X509Certificate remoteCertificate, string[] acceptableIssuers)
-		{
-			return localCertificates[0];
-		}
-
-		/// <summary>
-		/// Perform the server handshake.
-		/// </summary>
-		/// <param name="certificate">server's certificate.</param>
-		/// <param name="sslStream">ssl stream with client.</param>
-		public static void ServerSideHandshake(X509Certificate2 certificate, SslStream sslStream)
-		{
-			sslStream.AuthenticateAsServer(certificate, true, SslProtocols.Tls, true);
-		}
-
-		#endregion
-	}
-
-	/// <summary>
 	/// Problems with certificate.
 	/// </summary>
 	[Serializable]
@@ -131,6 +28,119 @@ namespace MessageProtocol
 		}
 	}
 
+
+	/// <summary>
+	/// Things needed for organizing ssl stream 
+	/// between client and server.
+	/// </summary>
+	static class Ssl
+	{
+		#region Client
+
+		/// <summary>
+		/// Callback for the verification of the server certificate.
+		/// </summary>
+		/// <param name="sender">sender of this callback.</param>
+		/// <param name="certificate">server's certificate.</param>
+		/// <param name="chain">certificate build chain.</param>
+		/// <param name="sslPolicyErrors">ssl errors.</param>
+		/// <returns>true if server has been validated; otherwise, false.</returns>
+		public static bool ServerValidationCallback(object sender,
+			X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+		{
+			// because certificate is self-signed
+			return true;
+		}
+
+
+		/// <summary>
+		/// Certificate selection callback.
+		/// </summary>
+		/// <param name="sender">sender of this callback.</param>
+		/// <param name="targetHost">server's ip address.</param>
+		/// <param name="localCertificates">local certificates collection.</param>
+		/// <param name="remoteCertificate">server's certificate.</param>
+		/// <param name="acceptableIssuers">acceptable issuers for remote host.</param>
+		/// <returns>certificate.</returns>
+		/// <exception cref="CertificateException"></exception>
+		public static X509Certificate ClientCertificateSelectionCallback(object sender,
+			string targetHost, X509CertificateCollection localCertificates,
+			X509Certificate remoteCertificate, string[] acceptableIssuers)
+		{
+			if (localCertificates.Count > 0)
+				return localCertificates[0];
+			else
+				throw new CertificateException("Certificate not found in local certificates collection.");
+		}
+
+		/// <summary>
+		/// Perform the client handshake.
+		/// </summary>
+		/// <param name="certificate">client's certificate.</param>
+		/// <param name="sslStream">ssl stream with server.</param>
+		/// <param name="targetHost">server's ip address.</param>
+		public static void ClientSideHandshake(X509Certificate2 certificate, SslStream sslStream, string targetHost)
+		{
+			var certificateCollection = new X509Certificate2Collection();
+			certificateCollection.Add(certificate);
+
+			// 'handshake'
+			sslStream.AuthenticateAsClient(targetHost, certificateCollection, SslProtocols.Tls, true);
+		}
+
+		#endregion
+
+		#region Server
+
+		/// <summary>
+		/// Callback for the verification of the client certificate.
+		/// </summary>
+		/// <param name="sender">sender of this callback.</param>
+		/// <param name="certificate">client's certificate.</param>
+		/// <param name="chain">certificate build chain.</param>
+		/// <param name="sslPolicyErrors">ssl errors.</param>
+		/// <returns>true if client has been validated; otherwise, false.</returns>
+		public static bool ClientValidationCallback(object sender,
+			X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+		{
+			// because certificate is self-signed
+			return true;
+		}
+
+		/// <summary>
+		/// Certificate selection callback.
+		/// </summary>
+		/// <param name="sender">sender of this callback.</param>
+		/// <param name="targetHost">server's ip address.</param>
+		/// <param name="localCertificates">local certificates collection.</param>
+		/// <param name="remoteCertificate">client's certificate.</param>
+		/// <param name="acceptableIssuers">acceptable issuers for remote client.</param>
+		/// <returns>certificate.</returns>
+		/// /// <exception cref="CertificateException"></exception>
+		public static X509Certificate ServerCertificateSelectionCallback(object sender,
+			string targetHost, X509CertificateCollection localCertificates,
+			X509Certificate remoteCertificate, string[] acceptableIssuers)
+		{
+			if (localCertificates.Count > 0)
+				return localCertificates[0];
+			else
+				throw new CertificateException("Certificate not found in local certificates collection.");
+		}
+
+		/// <summary>
+		/// Perform the server handshake.
+		/// </summary>
+		/// <param name="certificate">server's certificate.</param>
+		/// <param name="sslStream">ssl stream with client.</param>
+		public static void ServerSideHandshake(X509Certificate2 certificate, SslStream sslStream)
+		{
+			sslStream.AuthenticateAsServer(certificate, true, SslProtocols.Tls, true);
+		}
+
+		#endregion
+	}
+
+	
 	public static class SslTools
 	{
 		/// <summary>
@@ -157,7 +167,7 @@ namespace MessageProtocol
 			}
 			catch
 			{
-				throw new CertificateException();
+				throw new CertificateException("Can't create certificate from embeded resource.");
 			}
 		}
 	}
