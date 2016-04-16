@@ -17,6 +17,9 @@ namespace Server
 	/// </summary>
 	class Server
 	{
+		// logger
+		private static readonly log4net.ILog log = LogHelper.GetLogger();
+
 		// port number
 		private int port;
 		// message protocol listener
@@ -44,9 +47,10 @@ namespace Server
 			{
 				certificate = SslTools.CreateCertificate(typeof(Server), "Server.Certificate.cert.pfx");
 			}
-			catch (CertificateException)
+			catch (CertificateException e)
 			{
-				// TODO logger
+				log.Info("Can't create certificate. Server will not start.");
+				log.Error(e);
 			}
 		}
 
@@ -55,6 +59,8 @@ namespace Server
 		/// </summary>
 		public async void Start()
 		{
+			#region Test code
+
 			DBoperations.Register("13", "13");
 			for (int i = 0; i < 10; i++)
 			{
@@ -80,6 +86,8 @@ namespace Server
 				DBoperations.SetFriendship(true, DBoperations.GetUserId("13"), DBoperations.GetUserId(login));
 			}
 
+			#endregion
+
 			if (isStarted) return;
 			if (certificate == null) return;
 
@@ -87,7 +95,7 @@ namespace Server
 			listener.Start();
 			isStarted = true;
 
-			Console.WriteLine("{0}: Server is now listening.", DateTime.Now);
+			log.Info("Server is now listening.");
 
 			while (true)
 			{
@@ -100,13 +108,18 @@ namespace Server
 					// remove completed tasks
 					activeTasks.RemoveAll(x => x.IsCompleted == true);
 				}
-				catch (ConnectionInterruptedException)
+				catch (ConnectionInterruptedException e)
 				{
+					// connection with client broke
+					// nothing critical, just continue
+					log.Error(e);
 					continue;
 				}
-				catch (SocketException)
+				catch (SocketException e)
 				{
-					// TODO logger
+					log.Info("Socket exception. Trying to restart listening.");
+					log.Error(e);
+
 					listener.Stop();
 					listener = null;
 					listener = new MpListener(port, certificate);
@@ -114,7 +127,7 @@ namespace Server
 				}
 				catch (ObjectDisposedException)
 				{
-					// TODO logger
+					// the way we stop server
 					break;
 				}
 			}
@@ -122,7 +135,7 @@ namespace Server
 			// wait for finishing process clients
 			Task.WaitAll(activeTasks.ToArray());
 
-			Console.WriteLine("{0}: Server is now stopped listening.", DateTime.Now);
+			log.Info("Server is now stopped listening.");
 			isStarted = false;
 		}
 
@@ -144,8 +157,8 @@ namespace Server
 		/// <param name="client">Connected client.</param>
 		private async Task HandleClient(MpClient client)
 		{
-			Console.WriteLine("{0}: Client connected. ip {1}", DateTime.Now,
-				((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString());
+			log.Info(string.Format("Client connected. ip {0}",
+				((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
 
 			await Task.Run(() =>
 			{
@@ -163,9 +176,12 @@ namespace Server
 							RegisterClient(client, (RegisterRequestMessage)message);
 					}
 				}
-				catch (ConnectionInterruptedException)
+				catch (ConnectionInterruptedException e)
 				{
-					// TODO logger
+					log.Error(e);
+
+					log.Info(string.Format("Client disconnected. ip {0}",
+						((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
 				}
 			});
 		}
@@ -195,7 +211,7 @@ namespace Server
 				int id; // client's id in db
 				if (DBoperations.Login(message.login, message.password, out id))
 				{
-					Console.WriteLine("{0}: Client login: {1}", DateTime.Now, message.login);
+					log.Info(string.Format("Client login: {0}", message.login));
 
 					// user is online
 					OnlineUser user = new OnlineUser(id, message.login, client);
@@ -214,24 +230,24 @@ namespace Server
 				// response to client
 				client.SendMessage(response);
 			}
-			catch (ConnectionInterruptedException)
+			catch (ConnectionInterruptedException e)
 			{
-				// TODO logger
+				log.Error(e);
 			}
 
 			// close connection with client if client not logged in
 			if (!isLoggedIn)
 			{
-				Console.WriteLine("{0}: Client disconnected. ip {1}", DateTime.Now,
-					((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString());
+				log.Info(string.Format("Client disconnected. ip {0}",
+					((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
 
 				try
 				{
 					client.Close();
 				}
-				catch
+				catch (ConnectionInterruptedException e)
 				{
-					// TODO logger
+					log.Error(e);
 				}
 			}
 		}
@@ -255,7 +271,7 @@ namespace Server
 			{
 				if (DBoperations.Register(message.login, message.password))
 				{
-					Console.WriteLine("{0}: New client: {1}", DateTime.Now, message.login);
+					log.Info(string.Format("Client registered: {0}", message.login));
 
 					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
 				}
@@ -270,22 +286,22 @@ namespace Server
 				// response to client
 				client.SendMessage(response);
 			}
-			catch (ConnectionInterruptedException)
+			catch (ConnectionInterruptedException e)
 			{
-				// TODO logger
+				log.Error(e);
 			}
-			
+
 			// close connection
-			Console.WriteLine("{0}: Client disconnected. ip {1}", DateTime.Now,
-					((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString());
+			log.Info(string.Format("Client disconnected. ip {0}",
+					((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
 
 			try
 			{
 				client.Close();
 			}
-			catch
+			catch (ConnectionInterruptedException e)
 			{
-				// TODO logger
+				log.Error(e);
 			}
 		}
 	}

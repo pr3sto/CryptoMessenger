@@ -45,17 +45,16 @@ namespace Server
 		{
 			if (disposed) return;
 
-			Console.WriteLine("{0}: Client disconnected. ip {1}", DateTime.Now,
-				((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString());
-
 			try
 			{
-				client.Close();
-				disposed = true;
+				client.Close();	
 			}
 			catch
 			{
-				// TODO logger
+			}
+			finally
+			{
+				disposed = true;
 			}
 		}
 	}
@@ -64,7 +63,10 @@ namespace Server
 	/// Class for handle online users.
 	/// </summary>
 	class OnlineUsersHandler : IDisposable
-	{ 
+	{
+		// logger
+		private static readonly log4net.ILog log = LogHelper.GetLogger();
+
 		private List<OnlineUser> onlineUsers;
 
 		public OnlineUsersHandler()
@@ -79,6 +81,8 @@ namespace Server
 		{
 			onlineUsers.ForEach((x) => { x.Dispose(); });
 			onlineUsers.Clear();
+
+			log.Info("All clients disconnected.");
 		}
 
 		/// <summary>
@@ -124,6 +128,9 @@ namespace Server
 				{
 					if (onlineUsers.Contains(user))
 					{
+						log.Info(string.Format("Client disconnected. ip {0}",
+							((IPEndPoint)user.client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
+
 						onlineUsers.Remove(user);
 						user.Dispose();
 					}
@@ -187,9 +194,9 @@ namespace Server
 						break;
 					}
 				}
-				catch (ConnectionInterruptedException)
+				catch (ConnectionInterruptedException e)
 				{
-					// TODO logger
+					log.Error(string.Format("client '{0}' disconnected", user.login), e);
 				}
 			}
 		}
@@ -202,6 +209,9 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void Logout(OnlineUser user)
 		{
+			log.Info(string.Format("Client disconnected. ip {0}",
+				((IPEndPoint)user.client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
+
 			onlineUsers.Remove(user);
 			user.Dispose();
 		}

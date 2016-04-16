@@ -1,5 +1,8 @@
 ﻿using System;
 
+// logger config 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+
 namespace Server
 {
 	class Program
@@ -10,7 +13,7 @@ namespace Server
 		static void Main()
 		{
 			Console.Title = "Server";
-			
+
 			Server server = new Server(443);
 
 			// commands

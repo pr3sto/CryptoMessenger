@@ -9,6 +9,9 @@ namespace Server.Database
 	/// </summary>
 	static class DBoperations
 	{
+		// logger
+		private static readonly log4net.ILog log = LogHelper.GetLogger();
+
 		/// <summary>
 		/// Get id of user by his login.
 		/// </summary>
@@ -128,9 +131,9 @@ namespace Server.Database
 						DBcontext.SubmitChanges();
 						return true;
 					}
-					catch
+					catch (Exception e)
 					{
-						// TODO logger
+						log.Error(e);
 						return false;
 					}
 				}
@@ -242,9 +245,9 @@ namespace Server.Database
 						DBcontext.SubmitChanges();
 						return true;
 					}
-					catch
+					catch (Exception e)
 					{
-						// TODO logger
+						log.Error(e);
 						return false;
 					}
 				}
@@ -347,9 +350,9 @@ namespace Server.Database
 					DBcontext.SubmitChanges();
 					return true;
 				}
-				catch
+				catch (Exception e)
 				{
-					// TODO logger
+					log.Error(e);
 					return false;
 				}
 			}
@@ -386,9 +389,9 @@ namespace Server.Database
 					DBcontext.SubmitChanges();
 					return true;
 				}
-				catch
+				catch (Exception e)
 				{
-					// TODO logger
+					log.Error(e);
 					return false;
 				}
 			}
@@ -438,9 +441,9 @@ namespace Server.Database
 						DBcontext.SubmitChanges();
 						c_id = conv.conversation_id;
 					}
-					catch
+					catch (Exception e)
 					{
-						// TODO logger
+						log.Error(e);
 						return false;
 					}
 				}
@@ -460,9 +463,9 @@ namespace Server.Database
 					DBcontext.SubmitChanges();
 					return true;
 				}
-				catch
+				catch (Exception e)
 				{
-					// TODO logger
+					log.Error(e);
 					return false;
 				}
 			}
