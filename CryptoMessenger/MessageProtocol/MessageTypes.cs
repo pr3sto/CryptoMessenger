@@ -46,7 +46,8 @@ namespace MessageProtocol.MessageTypes
 	[XmlInclude(typeof(IncomeFriendshipRequestsMessage))]
 	[XmlInclude(typeof(OutcomeFriendshipRequestsMessage))]
 	[XmlInclude(typeof(GetConversationMessage))]
-	[XmlInclude(typeof(ReplyMessage))]
+	[XmlInclude(typeof(NewReplyMessage))]
+	[XmlInclude(typeof(OldReplyMessage))]
 	public abstract class Message
 	{
 	}
@@ -194,10 +195,23 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message with conversation reply.
+	/// Message with new conversation reply.
 	/// </summary>
 	[Serializable]
-	public class ReplyMessage : Message
+	public class NewReplyMessage : Message
+	{
+		public string interlocutor { get; set; }
+
+		public string reply_author { get; set; }
+		public DateTime reply_time { get; set; }
+		public string reply_text { get; set; }
+	}
+
+	/// <summary>
+	/// Message with old conversation reply.
+	/// </summary>
+	[Serializable]
+	public class OldReplyMessage : Message
 	{
 		public string interlocutor { get; set; }
 

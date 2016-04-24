@@ -28,7 +28,6 @@ namespace MessageProtocol
 		}
 	}
 
-
 	/// <summary>
 	/// Things needed for organizing ssl stream 
 	/// between client and server.
@@ -116,7 +115,7 @@ namespace MessageProtocol
 		/// <param name="remoteCertificate">client's certificate.</param>
 		/// <param name="acceptableIssuers">acceptable issuers for remote client.</param>
 		/// <returns>certificate.</returns>
-		/// /// <exception cref="CertificateException"></exception>
+		/// <exception cref="CertificateException"></exception>
 		public static X509Certificate ServerCertificateSelectionCallback(object sender,
 			string targetHost, X509CertificateCollection localCertificates,
 			X509Certificate remoteCertificate, string[] acceptableIssuers)
@@ -139,8 +138,10 @@ namespace MessageProtocol
 
 		#endregion
 	}
-
 	
+	/// <summary>
+	/// Helper class for ssl.
+	/// </summary>
 	public static class SslTools
 	{
 		/// <summary>
