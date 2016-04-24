@@ -15,10 +15,11 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <!-- requests grid -->
         <Grid
             Grid.Row="1"
             Grid.Column="0"

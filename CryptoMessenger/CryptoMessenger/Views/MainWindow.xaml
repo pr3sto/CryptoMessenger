@@ -8,6 +8,8 @@
         xmlns:local="clr-namespace:CryptoMessenger"
         xmlns:props="clr-namespace:CryptoMessenger.Properties"
         xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
+        xmlns:usercontrols="clr-namespace:CryptoMessenger.Views.UserControls"
+        xmlns:viewmodels="clr-namespace:CryptoMessenger.ViewModels"
         
         Style="{StaticResource WindowStyle}"
         ResizeMode="CanMinimize"
@@ -16,167 +18,114 @@
         FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
         Title="{Binding WindowTitle}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"
+        extensions:Extensions.ShowWarning="{Binding ShowWarning}"
         >
 
     <Window.Resources>
-        <!-- animation storyboards -->
-        <Storyboard x:Key="st_reqs">
-            <DoubleAnimation 
-                Storyboard.TargetName="dot"
-                Storyboard.TargetProperty="(Canvas.Left)" 
-                To="17" Duration="00:00:0.5"
-                />
-        </Storyboard>
-        <Storyboard x:Key="st_friends">
-            <DoubleAnimation 
-                Storyboard.TargetName="dot"
-                Storyboard.TargetProperty="(Canvas.Left)" 
-                To="122" Duration="00:00:0.5"
-                />
-        </Storyboard>
-        <Storyboard x:Key="st_search">
-            <DoubleAnimation 
-                Storyboard.TargetName="dot"
-                Storyboard.TargetProperty="(Canvas.Left)" 
-                To="237" Duration="00:00:0.5"
-                />
-        </Storyboard>
-
-        <!-- button style -->
-        <Style x:Key="LeftPanelButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <ContentPresenter 
-                            Margin="0,0,0,0"
-                            TextOptions.TextRenderingMode="ClearType"
-                            TextOptions.TextFormattingMode="Display"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            TextBlock.Foreground="{TemplateBinding Foreground}"
-                            Content="{TemplateBinding Content}" 
-                            />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <!-- mouse hover -->
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" 
-                        Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
-                </Trigger>
-                <!-- textblock selected -->
-                <Trigger Property="extensions:Extensions.ElementSelected" Value="True">
-                    <Setter Property="Foreground" 
-                        Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <!-- main panels -->
+        <DataTemplate DataType="{x:Type viewmodels:LoginPanelViewModel}">
+            <usercontrols:LoginPanel />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:MainPanelViewModel}">
+            <usercontrols:MainPanel />
+        </DataTemplate>
     </Window.Resources>
 
-    <!-- window content -->
     <Grid Height="460">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250">
-            </ColumnDefinition>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+        <Border>
+            <!-- content -->
+            <ContentControl Content="{Binding MainWindowPanel}"/>
+            <!-- blur when warning shows -->
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=warningPanel, Path=Visibility}" Value="Visible">
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <BlurEffect Radius="20" KernelType="Gaussian"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
 
-        <!-- left panel buttons -->
-        <Button
-            Grid.Row="0"
-            Grid.Column="0"
-            Style="{StaticResource LeftPanelButtonStyle}"
-            Cursor="Hand"
-            Margin="20,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontSize="17"
-            Content="{Binding Source={x:Static props:Resources.REQUESTS_TEXTBLOCK_TEXT}}"
-            extensions:Extensions.ElementSelected="{Binding RequestsButtonSelected}"
-            Command="{Binding RequestsTextBlockClickedCommand}"
+        <!-- warning panel -->
+        <Grid
+            x:Name="warningPanel"
+            Background="Transparent"
+            Visibility="{Binding Path=ShowWarning, Converter={StaticResource BooleanToVisibilityConverter}}"
             >
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.Click">
-                    <BeginStoryboard Storyboard="{StaticResource st_reqs}"/>
-                </EventTrigger>
-            </Button.Triggers>
-        </Button>
-        <Button
-            Grid.Row="0"
-            Grid.Column="0"
-            Style="{StaticResource LeftPanelButtonStyle}"
-            Cursor="Hand"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="17"
-            Content="{Binding Source={x:Static props:Resources.FRIENDS_TEXTBLOCK_TEXT}}"
-            extensions:Extensions.ElementSelected="{Binding FriendsButtonSelected}"
-            Command="{Binding FriendsTextBlockClickedCommand}"
-            >
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.Click">
-                    <BeginStoryboard Storyboard="{StaticResource st_friends}"/>
-                </EventTrigger>
-            </Button.Triggers>
-        </Button>
-        <Button
-            Grid.Row="0"
-            Grid.Column="0"
-            Style="{StaticResource LeftPanelButtonStyle}"
-            Cursor="Hand"
-            Margin="0,0,10,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            FontSize="17"
-            Content="{Binding Source={x:Static props:Resources.SEARCH_TEXTBLOCK_TEXT}}"
-            extensions:Extensions.ElementSelected="{Binding SearchButtonSelected}"
-            Command="{Binding SearchTextBlockClickedCommand}"
-            >
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.Click">
-                    <BeginStoryboard Storyboard="{StaticResource st_search}"/>
-                </EventTrigger>
-            </Button.Triggers>
-        </Button>
-
-        <!-- line -->
-        <Canvas 
-            Grid.Row="1"
-            Grid.Column="0"
-            >
-            <Line
-                Stroke="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
-                StrokeThickness="2"
-                X1="20" X2="240"
-                Y1="5" Y2="5"
+            <TextBlock
+                Margin="0,140,0,0"
+                Width="300"
+                TextWrapping="Wrap"
+                TextAlignment="Center"
+                TextOptions.TextRenderingMode="ClearType"
+                TextOptions.TextFormattingMode="Display"
+                HorizontalAlignment="Center"
+                FontSize="24"
+                Foreground="Red"
+                Text="{Binding Source={x:Static props:Resources.CONNECTIONBREAKS_NOTFICATION}}"
                 />
-            <!-- indicator -->
-            <Ellipse
-                x:Name="dot"
-                Width="6"
-                Height="6"
-                Fill="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" 
-                Canvas.Left="122"
-                Canvas.Top="2"
-                />
-        </Canvas>
-
-        <!-- panel -->
-        <ContentControl 
-            Grid.Column="0"
-            Grid.Row="0"
-            Grid.ColumnSpan="2"
-            Grid.RowSpan="3"
-            Content="{Binding MainWindowPanel}" 
-            />
+            <Button 
+                Cursor="Hand"
+                Margin="225,60,0,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Height="40" Width="140"
+                FontSize="17"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="{Binding Source={x:Static props:Resources.OK_BUTTON_TEXT}}"
+                Command="{Binding HideWarningCommand}"
+                >
+                <Button.Background>
+                    <ImageBrush/>
+                </Button.Background>
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                        <Style.Triggers>
+                            <!-- mouse pressed -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" 
+                                    Value="{Binding Path=AlertBrush, Source={x:Static props:Settings.Default}}"
+                                    />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button
+                Cursor="Hand"
+                Margin="0,60,225,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Height="40" Width="140"
+                FontSize="17"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Content="{Binding Source={x:Static props:Resources.EXIT_BUTTON_TEXT}}"
+                Command="{Binding ExitCommand}"
+                >
+                <Button.Background>
+                    <ImageBrush/>
+                </Button.Background>
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                        <Style.Triggers>
+                            <!-- mouse pressed -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" 
+                                    Value="{Binding Path=AlertBrush, Source={x:Static props:Settings.Default}}"
+                                    />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
     </Grid>
+
 </Window>

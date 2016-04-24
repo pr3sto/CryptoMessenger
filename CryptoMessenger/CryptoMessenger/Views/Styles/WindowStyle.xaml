@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
+    xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
     >
     
     <!-- window buttons style -->
@@ -27,7 +28,7 @@
                         </Trigger>
                         <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Foreground" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=BorderBrush, ElementName=WindowBorder}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -69,8 +70,8 @@
                             >
                             <Border
                                 DockPanel.Dock="Top"
-                                Background="Transparent"
                                 BorderThickness="0"
+                                Background="Transparent"
                                 MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
                                 >
                                 <Grid Height="30">
@@ -144,11 +145,27 @@
                         </DockPanel>
                     </Grid>
                     
-                    <!-- window lost focus -->
                     <ControlTemplate.Triggers>
+                        <!-- window lost focus -->
                         <Trigger Property="IsActive" Value="False">
                             <Setter TargetName="WindowBorder" Property="Effect" Value="{x:Null}"/>
                             <Setter Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                        <!-- show warning -->
+                        <Trigger Property="extensions:Extensions.ShowWarning" Value="True">
+                            <Setter TargetName="WindowBorder" 
+                                    Property="BorderBrush" 
+                                    Value="{Binding Path=AlertBrush, Source={x:Static props:Settings.Default}}"
+                                    />
+                            <Setter TargetName="WindowBorder" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        Color="{Binding Path=AlertColor, Source={x:Static props:Settings.Default}}"
+                                        BlurRadius="5"
+                                        ShadowDepth="0"
+                                    />
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -12,18 +12,32 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
-		public MainWindowViewModel(Client client, string login)
+		// window main panels
+		private LoginPanelViewModel loginPanelViewModel;
+		private MainPanelViewModel mainPanelViewModel;
+
+		public MainWindowViewModel()
 		{
-			this.client = client;
-			client.Listen();
+			client = new Client();
+			ShowWarning = false;
+			client.ConnectionBreaks += () => { ShowWarning = true; };
 
+			ShowLoginPanel();
+		}
+
+		private void ShowMainPanel(string login)
+		{
+			mainPanelViewModel = new MainPanelViewModel(client);
+			MainWindowPanel = mainPanelViewModel;
 			WindowTitle = login;
+		}
 
-			RequestsButtonSelected = false;
-			FriendsButtonSelected = true;
-			SearchButtonSelected = false;
-
-			MainWindowPanel = new FriendsPanelViewModel(client);
+		private void ShowLoginPanel()
+		{
+			loginPanelViewModel = new LoginPanelViewModel(client);
+			loginPanelViewModel.LoginSuccess += ShowMainPanel;
+			MainWindowPanel = loginPanelViewModel;
+			WindowTitle = Properties.Resources.APP_NAME;
 		}
 
 		#region Properties
@@ -40,45 +54,21 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
-		// requests button selected
-		private bool _requestsButtonSelected;
-		public bool RequestsButtonSelected
+		// warning 
+		private bool _showWarning;
+		public bool ShowWarning
 		{
-			get { return _requestsButtonSelected; }
+			get { return _showWarning; }
 			set
 			{
-				_requestsButtonSelected = value;
-				OnPropertyChanged(nameof(RequestsButtonSelected));
-			}
-		}
-
-		// friends button selected
-		private bool _friendsButtonSelected;
-		public bool FriendsButtonSelected
-		{
-			get { return _friendsButtonSelected; }
-			set
-			{
-				_friendsButtonSelected = value;
-				OnPropertyChanged(nameof(FriendsButtonSelected));
-			}
-		}
-
-		// search button selected
-		private bool _searchButtonSelected;
-		public bool SearchButtonSelected
-		{
-			get { return _searchButtonSelected; }
-			set
-			{
-				_searchButtonSelected = value;
-				OnPropertyChanged(nameof(SearchButtonSelected));
+				_showWarning = value;
+				OnPropertyChanged(nameof(ShowWarning));
 			}
 		}
 
 		// panel
-		private IMainWindowPanel _mainWindowPanel;
-		public IMainWindowPanel MainWindowPanel
+		private IWindowPanel _mainWindowPanel;
+		public IWindowPanel MainWindowPanel
 		{
 			get { return _mainWindowPanel; }
 			set
@@ -92,70 +82,37 @@ namespace CryptoMessenger.ViewModels
 
 		#region Commands
 
-		// requests textblock clicked
-		private DelegateCommand requestsTextBlockClickedCommand;
-		public ICommand RequestsTextBlockClickedCommand
+		// hide warning
+		private DelegateCommand hideWarningCommand;
+		public ICommand HideWarningCommand
 		{
 			get
 			{
-				if (requestsTextBlockClickedCommand == null)
+				if (hideWarningCommand == null)
 				{
-					requestsTextBlockClickedCommand = new DelegateCommand(SwitchToRequests);
+					hideWarningCommand = new DelegateCommand(() => { ShowWarning = false; });
 				}
-				return requestsTextBlockClickedCommand;
+				return hideWarningCommand;
 			}
 		}
-		private void SwitchToRequests()
-		{
-			RequestsButtonSelected = true;
-			FriendsButtonSelected = false;
-			SearchButtonSelected = false;
 
-			MainWindowPanel = new RequestsPanelViewModel(client);
-		}
-
-		// requests textblock clicked
-		private DelegateCommand friendsTextBlockClickedCommand;
-		public ICommand FriendsTextBlockClickedCommand
+		// exit
+		private DelegateCommand exitCommand;
+		public ICommand ExitCommand
 		{
 			get
 			{
-				if (friendsTextBlockClickedCommand == null)
+				if (exitCommand == null)
 				{
-					friendsTextBlockClickedCommand = new DelegateCommand(SwitchToFriends);
+					exitCommand = new DelegateCommand(() => 
+					{
+						client.Logout();
+						ShowWarning = false;
+						ShowLoginPanel();
+					});
 				}
-				return friendsTextBlockClickedCommand;
+				return exitCommand;
 			}
-		}
-		private void SwitchToFriends()
-		{
-			RequestsButtonSelected = false;
-			FriendsButtonSelected = true;
-			SearchButtonSelected = false;
-
-			MainWindowPanel = new FriendsPanelViewModel(client);
-		}
-
-		// requests textblock clicked
-		private DelegateCommand searchTextBlockClickedCommand;
-		public ICommand SearchTextBlockClickedCommand
-		{
-			get
-			{
-				if (searchTextBlockClickedCommand == null)
-				{
-					searchTextBlockClickedCommand = new DelegateCommand(SwitchToSearch);
-				}
-				return searchTextBlockClickedCommand;
-			}
-		}
-		private void SwitchToSearch()
-		{
-			RequestsButtonSelected = false;
-			FriendsButtonSelected = false;
-			SearchButtonSelected = true;
-
-			MainWindowPanel = new SearchPanelViewModel(client);
 		}
 
 		#endregion

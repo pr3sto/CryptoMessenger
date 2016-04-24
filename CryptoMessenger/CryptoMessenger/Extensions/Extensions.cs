@@ -8,6 +8,19 @@ namespace CryptoMessenger.Extensions
 	/// </summary>
 	public class Extensions
 	{
+		// ShowWarning property
+		public static readonly DependencyProperty ShowWarningProperty =
+			DependencyProperty.RegisterAttached("ShowWarning", typeof(bool), typeof(Extensions), new PropertyMetadata(false));
+		public static void SetShowWarning(UIElement element, bool value)
+		{
+			element.SetValue(ShowWarningProperty, value);
+		}
+		public static bool GetShowWarning(UIElement element)
+		{
+			return (bool)element.GetValue(ShowWarningProperty);
+		}
+
+
 		// IsDataIncorrect property
 		public static readonly DependencyProperty IsDataIncorrectProperty =
 			DependencyProperty.RegisterAttached("IsDataIncorrect", typeof(bool), typeof(Extensions), new PropertyMetadata(false));

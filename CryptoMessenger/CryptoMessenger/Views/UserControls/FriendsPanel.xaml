@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     mc:Ignorable="d" 
     xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
-    xmlns:props="clr-namespace:CryptoMessenger.Properties"    
+    xmlns:props="clr-namespace:CryptoMessenger.Properties" 
     >
     <Grid Height="460">
         <Grid.ColumnDefinitions>
@@ -14,10 +14,10 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <!-- empty list notify -->
         <TextBlock
             Grid.Row="1"
@@ -129,119 +129,195 @@
             TextWrapping="Wrap"
             TextAlignment="Center"
             Text="{Binding Source={x:Static props:Resources.SELECTFRIEND_NOTIFICATION}}"
-            Visibility="{Binding IsFriendSelected, Converter={StaticResource InvertAndVisibilitate}}"
+            Visibility="{Binding IsDialogVisible, Converter={StaticResource InvertAndVisibilitate}}"
             />
 
-        <!-- message textbox -->
-        <TextBox
-            Grid.Column="1"
-            Grid.Row="2"
-            Style="{StaticResource TextBoxStyle}"
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Stretch"
-            Height="100"
-            Margin="10,0,70,20"
-            TextWrapping="Wrap"
-            AcceptsReturn="True"
-            VerticalScrollBarVisibility="Auto"
-            TextOptions.TextRenderingMode="ClearType"
-            TextOptions.TextFormattingMode="Display"
-            FontSize="17"
-            Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged}"
-            Tag="{Binding Source={x:Static props:Resources.MESSAGE_TEXTBOX_PLACEHOLDER}}"
-            Visibility="{Binding IsFriendSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
-            />
-        <!-- send message button -->
-        <Button
-            Grid.Column="1"
-            Grid.Row="2"
-            Style="{StaticResource ButtonStyle}"
-            Cursor="Hand"
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Right"
-            Margin="0,0,20,20"
-            Height="100" Width="50"
-            Foreground="White"
-            Command="{Binding Path=SendCommand}"
-            ToolTip="{Binding Source={x:Static props:Resources.SENDMESSAGE_BUTTON_TOOLTIP}}"
-            Visibility="{Binding IsFriendSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
-            IsEnabled="{Binding Path=MessageText, Converter={StaticResource StringEmptynessToBooleanConverter}}"
-            >
-            <Button.Background>
-                <ImageBrush ImageSource="/CryptoMessenger;component/Resources/send.png"/>
-            </Button.Background>
-        </Button>
         
-        <!-- dialog panel -->
-        <Border 
+        <!-- dialog -->
+        <Grid
             Grid.Column="1"
             Grid.Row="0"
             Grid.RowSpan="2"
-            Margin="10,10,20,120"
-            RenderOptions.EdgeMode="Aliased"
-            BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
-            BorderThickness="2 2 2 0"
-            Visibility="{Binding IsFriendSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Visibility="{Binding IsDialogVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             >
-            <ListBox
-                Style="{StaticResource ListBoxStyle}"
-                ItemContainerStyle="{StaticResource ListBoxItemStyle}"
-                ItemsSource="{Binding RepliesList}"
-                Margin="5,5,5,5"
-                Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
-                HorizontalContentAlignment="Stretch"
+            <!-- dialog panel -->
+            <Border            
+                Margin="10,8,20,120"
+                RenderOptions.EdgeMode="Aliased"
+                BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
+                BorderThickness="2 2 2 0"
                 >
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
-                            BorderThickness="0 0 0 1"
-                            >
-                            <Grid Margin="0,0,0,20">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
+                <Grid>
+                    <!-- empty list notify -->
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        TextOptions.TextRenderingMode="ClearType"
+                        TextOptions.TextFormattingMode="Display"
+                        FontSize="26" 
+                        Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                        Text="{Binding Source={x:Static props:Resources.EMPTYDIALOG_LISTBOX_PLACEHOLDER}}"
+                        >
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=messagesListbox, Path=Items.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <!-- messages -->
+                    <ListBox
+                        x:Name="messagesListbox"
+                        Style="{StaticResource ListBoxStyle}"
+                        ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                        ItemsSource="{Binding RepliesList}"
+                        Margin="5,5,5,5"
+                        Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                        HorizontalContentAlignment="Stretch"
+                        ScrollViewer.CanContentScroll="False"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        >
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel VerticalAlignment="Bottom"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
+                                    BorderThickness="0 0 0 1"
+                                    >
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
 
-                                <!-- login -->
-                                <TextBlock
-                                    Grid.Row="0"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Left"
-                                    TextOptions.TextRenderingMode="ClearType"
-                                    TextOptions.TextFormattingMode="Display"
-                                    FontSize="17"
-                                    Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                    Text="{Binding Author}"
-                                    />
-                                <!-- time -->
-                                <TextBlock
-                                    Grid.Row="0"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Right"
-                                    TextOptions.TextRenderingMode="ClearType"
-                                    TextOptions.TextFormattingMode="Display"
-                                    FontSize="17"
-                                    Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                    Text="{Binding Path=Time, StringFormat='yyyy-MM-dd HH:mm:ss'}"
-                                    />
-                                <!-- message -->
-                                <TextBlock
-                                    Grid.Row="1"
-                                    VerticalAlignment="Bottom"
-                                    HorizontalAlignment="Left"
-                                    TextOptions.TextRenderingMode="ClearType"
-                                    TextOptions.TextFormattingMode="Display"
-                                    FontSize="17"
-                                    Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
-                                    Text="{Binding Text}"
-                                    />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Border>
+                                        <!-- login -->
+                                        <TextBox 
+                                            Grid.Row="0"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            VerticalAlignment="Top"
+                                            HorizontalAlignment="Left"
+                                            TextOptions.TextRenderingMode="ClearType"
+                                            TextOptions.TextFormattingMode="Display"
+                                            FontSize="17"
+                                            Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionOpacity="0.5"
+                                            Text="{Binding Path=Author, Mode=OneWay}"
+                                            TextWrapping="Wrap" 
+                                            IsReadOnly="True"
+                                            />
+                                        <!-- time -->
+                                        <TextBox
+                                            Grid.Row="0"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            VerticalAlignment="Top"
+                                            HorizontalAlignment="Right"
+                                            TextOptions.TextRenderingMode="ClearType"
+                                            TextOptions.TextFormattingMode="Display"
+                                            FontSize="17"
+                                            Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionOpacity="0.5"
+                                            Text="{Binding Path=Time, StringFormat='yyyy-MM-dd HH:mm', Mode=OneWay}"
+                                            TextWrapping="Wrap" 
+                                            IsReadOnly="True"
+                                            />
+                                        <!-- message -->
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            VerticalAlignment="Bottom"
+                                            HorizontalAlignment="Left"
+                                            TextOptions.TextRenderingMode="ClearType"
+                                            TextOptions.TextFormattingMode="Display"
+                                            FontSize="17"
+                                            Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionOpacity="0.5"
+                                            TextWrapping="Wrap"
+                                            TextAlignment="Left"
+                                            Text="{Binding Path=Text, Mode=OneWay}"
+                                            IsReadOnly="True"
+                                            />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- message textbox -->
+            <Border
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Stretch"
+                Height="100"
+                Margin="10,0,20,20"
+                Padding="0,0,5,0"
+                RenderOptions.EdgeMode="Aliased"
+                BorderThickness="2"
+                >
+                <Grid>
+                    <!-- message textbox -->
+                    <TextBox
+                        x:Name="msgTextbox"
+                        Style="{StaticResource TextBoxStyle}"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,40,0"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        VerticalScrollBarVisibility="Auto"
+                        TextOptions.TextRenderingMode="ClearType"
+                        TextOptions.TextFormattingMode="Display"
+                        FontSize="17"
+                        Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged}"
+                        Tag="{Binding Source={x:Static props:Resources.MESSAGE_TEXTBOX_PLACEHOLDER}}"
+                        />
+                    <!-- send message button -->
+                    <Button
+                        x:Name="sendButton"
+                        Style="{StaticResource ListBoxButtonStyle}"
+                        Cursor="Hand"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Right"
+                        Width="40"
+                        Foreground="White"
+                        Command="{Binding Path=SendCommand}"
+                        ToolTip="{Binding Source={x:Static props:Resources.SENDMESSAGE_BUTTON_TOOLTIP}}"
+                        IsEnabled="{Binding Path=MessageText, Converter={StaticResource StringEmptynessToBooleanConverter}}"
+                        >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/CryptoMessenger;component/Resources/send.png"/>
+                        </Button.Background>
+                    </Button>
+                </Grid>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="BorderBrush" Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsFocused, ElementName=msgTextbox}" Value="true">
+                                <Setter Property="BorderBrush" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsFocused, ElementName=sendButton}" Value="true">
+                                <Setter Property="BorderBrush" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+        </Grid>
 
     </Grid>
 </UserControl>

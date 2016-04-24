@@ -115,6 +115,15 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Соединение с сервером разорвано. Вы можете не выходить из приложения, чтобы иметь доступ к загруженным сообщениям.
+        /// </summary>
+        public static string CONNECTIONBREAKS_NOTFICATION {
+            get {
+                return ResourceManager.GetString("CONNECTIONBREAKS_NOTFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Не удается подключиться к серверу.
         /// </summary>
         public static string CONNECTIONERROR_NOTIFICATION {
@@ -130,6 +139,24 @@ namespace CryptoMessenger.Properties {
             get {
                 object obj = ResourceManager.GetObject("cross", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Введите логин и пароль.
+        /// </summary>
+        public static string EMPTYDATA_NOTIFICATION {
+            get {
+                return ResourceManager.GetString("EMPTYDATA_NOTIFICATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сообщений нет.
+        /// </summary>
+        public static string EMPTYDIALOG_LISTBOX_PLACEHOLDER {
+            get {
+                return ResourceManager.GetString("EMPTYDIALOG_LISTBOX_PLACEHOLDER", resourceCulture);
             }
         }
         
@@ -171,6 +198,15 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ВЫХОД ИЗ АККАУНТА.
+        /// </summary>
+        public static string EXIT_BUTTON_TEXT {
+            get {
+                return ResourceManager.GetString("EXIT_BUTTON_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ДРУЗЬЯ.
         /// </summary>
         public static string FRIENDS_TEXTBLOCK_TEXT {
@@ -199,7 +235,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Некорректные данные.
+        ///   Looks up a localized string similar to Логин и пароль должны состоять только из английских символов и цифр.
         /// </summary>
         public static string INCORRECTDATA_NOTIFICATION {
             get {
@@ -250,6 +286,15 @@ namespace CryptoMessenger.Properties {
         public static string MESSAGE_TEXTBOX_PLACEHOLDER {
             get {
                 return ResourceManager.GetString("MESSAGE_TEXTBOX_PLACEHOLDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ОК.
+        /// </summary>
+        public static string OK_BUTTON_TEXT {
+            get {
+                return ResourceManager.GetString("OK_BUTTON_TEXT", resourceCulture);
             }
         }
         

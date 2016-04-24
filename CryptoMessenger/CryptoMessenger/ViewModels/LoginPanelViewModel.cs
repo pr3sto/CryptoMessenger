@@ -4,7 +4,6 @@ using System.Windows.Controls;
 
 using CryptoMessenger.Commands;
 using CryptoMessenger.Models;
-using CryptoMessenger.Views;
 
 using MessageProtocol.MessageTypes;
 using MessageProtocol;
@@ -12,25 +11,27 @@ using MessageProtocol;
 namespace CryptoMessenger.ViewModels
 {
 	/// <summary>
-	/// View model for login window (mvvm pattern).
+	/// View model for login panel (mvvm pattern).
 	/// </summary>
-    class LoginWindowViewModel : ViewModelBase
-    {
+    class LoginPanelViewModel : ViewModelBase, IWindowPanel
+	{
 		private Client client;
 
-		public LoginWindowViewModel()
+		public LoginPanelViewModel(Client client)
         {
-			client = new Client();
-
-			IsWindowVisible = true;
+			this.client = client;
 			Notification = Properties.Resources.STANDART_NOTIFICATION;
-
 			IsLoading = false;
 		}
 
+		/// <summary>
+		/// Fire event when login success.
+		/// </summary>
+		public event Action<string> LoginSuccess;
+
 		#region Properties
 
-		// is something loading visibility
+		// is something loading 
 		private bool _isLoading;
 		public bool IsLoading
 		{
@@ -39,18 +40,6 @@ namespace CryptoMessenger.ViewModels
 			{
 				_isLoading = value;
 				OnPropertyChanged(nameof(IsLoading));
-			}
-		}
-
-		// window visibility
-		private bool _isWindowVisible;
-		public bool IsWindowVisible
-		{
-			get { return _isWindowVisible; }
-			set
-			{
-				_isWindowVisible = value;
-				OnPropertyChanged(nameof(IsWindowVisible));
 			}
 		}
 
@@ -181,23 +170,8 @@ namespace CryptoMessenger.ViewModels
 
 				if (LoginRegisterResponse.SUCCESS.Equals(response))
 				{
-					IsWindowVisible = false;
-
-					// open main window
-					MainWindow view = new MainWindow();
-					MainWindowViewModel viewModel = new MainWindowViewModel(client, Login);
-					view.DataContext = viewModel;
-					view.ShowDialog();
-					// close main window
-					client.Logout();
-					view.Close();	
-
-					// free memory
-					GC.Collect(); // ouch...
-					GC.WaitForPendingFinalizers();
-
+					LoginSuccess(Login);
 					Notification = Properties.Resources.STANDART_NOTIFICATION;
-					IsWindowVisible = true;
 				}
 				else if (LoginRegisterResponse.FAIL.Equals(response))
 				{
@@ -332,23 +306,48 @@ namespace CryptoMessenger.ViewModels
 		{
 			bool ret = true;
 
+
+			// empty login
 			if (string.IsNullOrEmpty(Login))
+			{
+				_isColorsChanged = true;
+				IsLoginIncorrect = true;
+				ret = false;
+			}
+			// empty password
+			if (string.IsNullOrEmpty(Password))
+			{
+				_isColorsChanged = true;
+				IsPasswordIncorrect = true;
+				ret = false;
+			}
+
+			if (ret == false)
+			{
+				Notification = Properties.Resources.EMPTYDATA_NOTIFICATION;
+				return ret;
+			}
+
+			// incorrect login
+			if (!string.IsNullOrEmpty(Login) &&
+				!System.Text.RegularExpressions.Regex.IsMatch(Login, @"^[a-zA-Z0-9]+$"))
 			{
 				Notification = Properties.Resources.INCORRECTDATA_NOTIFICATION;
 				_isColorsChanged = true;
 				IsLoginIncorrect = true;
-
 				ret = false;
 			}
-			if (string.IsNullOrEmpty(Password))
+
+			// incorrect password
+			if (!string.IsNullOrEmpty(Password) &&
+				!System.Text.RegularExpressions.Regex.IsMatch(Password, @"^[a-zA-Z0-9]+$"))
 			{
 				Notification = Properties.Resources.INCORRECTDATA_NOTIFICATION;
 				_isColorsChanged = true;
 				IsPasswordIncorrect = true;
-
 				ret = false;
 			}
-
+			
 			return ret;
 		}
 	}

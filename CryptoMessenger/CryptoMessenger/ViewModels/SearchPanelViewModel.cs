@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -31,21 +31,18 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (addToFriendsCommand == null)
 				{
-					addToFriendsCommand = new DelegateCommand(AddToFriends);
+					addToFriendsCommand = new DelegateCommand(() => 
+					{ client.SendFriendshipRequest(Name); });
 				}
 				return addToFriendsCommand;
 			}
-		}
-		private void AddToFriends()
-		{
-			client.SendFriendshipRequest(Name);
 		}
 	}
 
 	/// <summary>
 	/// View model for search panel (mvvm pattern).
 	/// </summary>
-	class SearchPanelViewModel : ViewModelBase, IMainWindowPanel
+	class SearchPanelViewModel : ViewModelBase, IWindowPanel
 	{
 		private Client client;
 
@@ -65,19 +62,17 @@ namespace CryptoMessenger.ViewModels
 		{
 			if (e.PropertyName == nameof(client.SearchUsersList) && client.SearchUsersList != null)
 			{
-				List<User> users = new List<User>();
+				UsersList = new ObservableCollection<User>();
 				foreach (var name in client.SearchUsersList)
-					users.Add(new User(client, name));
-				
-				UsersList = users.ToArray();
+					UsersList.Add(new User(client, name));
 			}
 		}
 
 		#region Properties
 
 		// users list
-		private User[] _usersList;
-		public User[] UsersList
+		private ObservableCollection<User> _usersList;
+		public ObservableCollection<User> UsersList
 		{
 			get { return _usersList; }
 			set

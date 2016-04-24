@@ -18,7 +18,7 @@ namespace CryptoMessenger.Models
 	/// </summary>
 	public class Conversation
 	{
-		private List<ConversationReply> replies;
+		public List<ConversationReply> replies { get; private set; }
 
 		public string interlocutor { get; }
 
@@ -38,12 +38,12 @@ namespace CryptoMessenger.Models
 		}
 
 		/// <summary>
-		/// Copies elements of the replies list to new array.
+		/// Insert reply to top of replies in conversation.
 		/// </summary>
-		/// <returns>array.</returns>
-		public ConversationReply[] ToArrayOfReplies()
+		/// <param name="reply">reply.</param>
+		public void InsertReplyToTop(ConversationReply reply)
 		{
-			return replies.ToArray();
+			if (reply != null) replies.Insert(0, reply);
 		}
 	}
 
@@ -108,6 +108,26 @@ namespace CryptoMessenger.Models
 			else
 			{
 				c.AddReply(reply);
+			}
+		}
+
+		/// <summary>
+		/// Insert reply to top of replies in conversation.
+		/// </summary>
+		/// <param name="interlocutor">interlocutor.</param>
+		/// <param name="reply">reply.</param>
+		public void InsertReplyToTop(string interlocutor, ConversationReply reply)
+		{
+			Conversation c = GetConversation(interlocutor);
+			if (c == null)
+			{
+				c = new Conversation(interlocutor);
+				c.InsertReplyToTop(reply);
+				AddConversation(c);
+			}
+			else
+			{
+				c.InsertReplyToTop(reply);
 			}
 		}
 	}

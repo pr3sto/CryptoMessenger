@@ -7,7 +7,6 @@
     >
 
     <Style x:Key="ListBoxStyle" TargetType="{x:Type ListBox}">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Background" Value="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">

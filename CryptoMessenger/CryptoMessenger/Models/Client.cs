@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -16,7 +17,7 @@ namespace CryptoMessenger.Models
 		// is client logged in
 		private bool _isLoggedIn = false;
 		// is client now log out
-		private bool _isLogOut = false;
+		private bool _isLogoutingNow = false;
 
 		// server's port 
 		private int port;
@@ -26,19 +27,9 @@ namespace CryptoMessenger.Models
 		private MpClient client;
 
 		/// <summary>
-		/// Represent the method that handle connection breaks.
-		/// </summary>
-		/// <param name="sender">sender of this event.</param>
-		public delegate void ConnectionBreaksHandler(object sender);
-		/// <summary>
 		/// Notify about connection breaks.
 		/// </summary>
-		public event ConnectionBreaksHandler ConnectionBreaks;
-		private void RaiseConnectionBreaksEvent()
-		{
-			if (ConnectionBreaks != null)
-				ConnectionBreaks(this);
-		}
+		public event Action ConnectionBreaks;
 
 		/// <summary>
 		/// User conversations.
@@ -107,8 +98,7 @@ namespace CryptoMessenger.Models
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void RaisePropertyChanged(string propertyName)
 		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		#endregion
@@ -132,10 +122,11 @@ namespace CryptoMessenger.Models
 			SearchUsersList = null;
 			IncomeRequestsList = null;
 			OutcomeRequestsList = null;
-
+			
+			client = new MpClient();
 			Conversations = new Conversations();
 
-			client = new MpClient();
+			this.ConnectionBreaks += () => { _isLoggedIn = false; };
 		}
 
 		/// <summary>
@@ -179,7 +170,6 @@ namespace CryptoMessenger.Models
 			if (LoginRegisterResponse.SUCCESS.Equals(serverResp.response))
 			{
 				_isLoggedIn = true;
-				_isLogOut = false;
 			}
 			else
 			{
@@ -240,7 +230,7 @@ namespace CryptoMessenger.Models
 			if (!_isLoggedIn) return;
 
 			_isLoggedIn = false;
-			_isLogOut = true;
+			_isLogoutingNow = true;
 
 			FriendsList = null;
 			SearchUsersList = null;
@@ -267,24 +257,25 @@ namespace CryptoMessenger.Models
 				{
 					// dont mind because we exit
 				}
+
+				_isLogoutingNow = false;
 			}
 		}
 
-		/// <summary>
-		/// Represent the method that handle inclome reply.
-		/// </summary>
-		/// <param name="sender">sender of this event.</param>
-		/// <param name="replySender">login of sender of reply.</param>
-		public delegate void ReplyHandler(object sender, string replySender);
+
 		/// <summary>
 		/// Notify about reply from server comes.
+		/// <param name="interlocutor">interlocutor.</param>
+		/// <param name="reply">new reply.</param>
 		/// </summary>
-		public event ReplyHandler ReplyComes;
-		private void RaiseReplyComesEvent(string replySender)
-		{
-			if (ReplyComes != null)
-				ReplyComes(this, replySender);
-		}
+		public event Action<string, ConversationReply> NewReplyComes;
+		/// <summary>
+		/// Notify about reply from server comes.
+		/// <param name="interlocutor">interlocutor.</param>
+		/// <param name="reply">new reply.</param>
+		/// </summary>
+		public event Action<string, ConversationReply> OldReplyComes;
+
 
 		/// <summary>
 		/// Listen for messages from server.
@@ -306,8 +297,8 @@ namespace CryptoMessenger.Models
 				}
 				catch (ConnectionInterruptedException)
 				{
-					if (!_isLogOut)
-						RaiseConnectionBreaksEvent();
+					if (!_isLogoutingNow)
+						ConnectionBreaks();
 
 					return;
 				}
@@ -329,18 +320,45 @@ namespace CryptoMessenger.Models
 				{
 					OutcomeRequestsList = ((OutcomeFriendshipRequestsMessage)message).logins;
 				}
-				else if (message is ReplyMessage)
+				else if (message is NewReplyMessage)
 				{
 					Conversations.AddReply(
-						((ReplyMessage)message).interlocutor,
+						((NewReplyMessage)message).interlocutor,
 						new ConversationReply
 						{
-							Author = ((ReplyMessage)message).reply_author,
-							Time = ((ReplyMessage)message).reply_time,
-							Text = ((ReplyMessage)message).reply_text
+							Author = ((NewReplyMessage)message).reply_author,
+							Time = ((NewReplyMessage)message).reply_time,
+							Text = ((NewReplyMessage)message).reply_text
 						}
 					);
-					ReplyComes(this, ((ReplyMessage)message).interlocutor);
+					NewReplyComes(
+						((NewReplyMessage)message).interlocutor,
+						new ConversationReply
+						{
+							Author = ((NewReplyMessage)message).reply_author,
+							Time = ((NewReplyMessage)message).reply_time,
+							Text = ((NewReplyMessage)message).reply_text
+						});
+				}
+				else if (message is OldReplyMessage)
+				{
+					Conversations.InsertReplyToTop(
+						((OldReplyMessage)message).interlocutor,
+						new ConversationReply
+						{
+							Author = ((OldReplyMessage)message).reply_author,
+							Time = ((OldReplyMessage)message).reply_time,
+							Text = ((OldReplyMessage)message).reply_text
+						}
+					);
+					OldReplyComes(
+						((OldReplyMessage)message).interlocutor,
+						new ConversationReply
+						{
+							Author = ((OldReplyMessage)message).reply_author,
+							Time = ((OldReplyMessage)message).reply_time,
+							Text = ((OldReplyMessage)message).reply_text
+						});
 				}
 			}
 		}
@@ -348,30 +366,39 @@ namespace CryptoMessenger.Models
 		#region Server requests
 
 		/// <summary>
-		/// Get array of all users from server;
-		/// listener should receive response message.
+		/// Sends message to server (and re-send if needs).
 		/// </summary>
-		public void GetAllUsers()
+		/// <param name="message">message to send.</param>
+		private void SendMessage(Message message)
 		{
 			if (!_isLoggedIn) return;
 
 			try
 			{
-				client.SendMessage(new GetAllUsersMessage());
+				client.SendMessage(message);
 			}
 			catch (ConnectionInterruptedException)
 			{
 				try
 				{
 					// try again
-					client.SendMessage(new GetAllUsersMessage());
+					client.SendMessage(message);
 				}
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
+					ConnectionBreaks();
 				}
 			}
+		}
+
+		/// <summary>
+		/// Get array of all users from server;
+		/// listener should receive response message.
+		/// </summary>
+		public void GetAllUsers()
+		{
+			SendMessage(new GetAllUsersMessage());
 		}
 
 		/// <summary>
@@ -380,8 +407,6 @@ namespace CryptoMessenger.Models
 		/// </summary>
 		public void GetFriends()
 		{
-			if (!_isLoggedIn) return;
-
 			// dont ask server if we have
 			if (FriendsList != null)
 			{
@@ -389,23 +414,7 @@ namespace CryptoMessenger.Models
 				return;
 			}
 
-			try
-			{
-				client.SendMessage(new GetFriendsMessage());
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new GetFriendsMessage());
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+			SendMessage(new GetFriendsMessage());
 		}
 
 		/// <summary>
@@ -414,8 +423,6 @@ namespace CryptoMessenger.Models
 		/// </summary>
 		public void GetIncomeFriendshipRequests()
 		{
-			if (!_isLoggedIn) return;
-
 			// dont ask server if we have
 			if (IncomeRequestsList != null)
 			{
@@ -423,23 +430,7 @@ namespace CryptoMessenger.Models
 				return;
 			}
 
-			try
-			{
-				client.SendMessage(new GetIncomeFriendshipRequestsMessage());
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new GetIncomeFriendshipRequestsMessage());
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+			SendMessage(new GetIncomeFriendshipRequestsMessage());
 		}
 
 		/// <summary>
@@ -448,8 +439,6 @@ namespace CryptoMessenger.Models
 		/// </summary>
 		public void GetOutcomeFriendshipRequests()
 		{
-			if (!_isLoggedIn) return;
-
 			// dont ask server if we have
 			if (OutcomeRequestsList != null)
 			{
@@ -457,23 +446,7 @@ namespace CryptoMessenger.Models
 				return;
 			}
 
-			try
-			{
-				client.SendMessage(new GetOutcomeFriendshipRequestsMessage());
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new GetOutcomeFriendshipRequestsMessage());
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+			SendMessage(new GetOutcomeFriendshipRequestsMessage());
 		}
 
 		/// <summary>
@@ -482,31 +455,10 @@ namespace CryptoMessenger.Models
 		/// <param name="login">login of needed user.</param>
 		public void SendFriendshipRequest(string login)
 		{
-			if (!_isLoggedIn) return;
-
-			try
+			SendMessage(new FriendshipRequestMessage
 			{
-				client.SendMessage(new FriendshipRequestMessage
-				{
-					login_of_needed_user = login
-				});
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new FriendshipRequestMessage
-					{
-						login_of_needed_user = login
-					});
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+				login_of_needed_user = login
+			});
 		}
 
 		/// <summary>
@@ -515,33 +467,11 @@ namespace CryptoMessenger.Models
 		/// <param name="login">needed friend login.</param>
 		public void CancelFriendshipRequest(string login)
 		{
-			if (!_isLoggedIn) return;
-
-			try
+			SendMessage(new FriendActionMessage
 			{
-				client.SendMessage(new FriendActionMessage
-				{
-					friends_login = login,
-					action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
-				});
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new FriendActionMessage
-					{
-						friends_login = login,
-						action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
-					});
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+				friends_login = login,
+				action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
+			});
 		}
 		
 		/// <summary>
@@ -550,33 +480,11 @@ namespace CryptoMessenger.Models
 		/// <param name="login">accepted friend login.</param>
 		public void AcceptFriendshipRequest(string login)
 		{
-			if (!_isLoggedIn) return;
-
-			try
+			SendMessage(new FriendActionMessage
 			{
-				client.SendMessage(new FriendActionMessage
-				{
-					friends_login = login,
-					action = ActionsWithFriend.ACCEPT_FRIENDSHIP
-				});
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new FriendActionMessage
-					{
-						friends_login = login,
-						action = ActionsWithFriend.ACCEPT_FRIENDSHIP
-					});
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+				friends_login = login,
+				action = ActionsWithFriend.ACCEPT_FRIENDSHIP
+			});
 		}
 
 		/// <summary>
@@ -585,33 +493,11 @@ namespace CryptoMessenger.Models
 		/// <param name="login">rejected user login.</param>
 		public void RejectFriendshipRequest(string login)
 		{
-			if (!_isLoggedIn) return;
-
-			try
+			SendMessage(new FriendActionMessage
 			{
-				client.SendMessage(new FriendActionMessage
-				{
-					friends_login = login,
-					action = ActionsWithFriend.REJECT_FRIENDSHIP
-				});
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new FriendActionMessage
-					{
-						friends_login = login,
-						action = ActionsWithFriend.REJECT_FRIENDSHIP
-					});
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+				friends_login = login,
+				action = ActionsWithFriend.REJECT_FRIENDSHIP
+			});
 		}
 
 		/// <summary>
@@ -620,33 +506,11 @@ namespace CryptoMessenger.Models
 		/// <param name="login">friend's login.</param>
 		public void RemoveFriend(string login)
 		{
-			if (!_isLoggedIn) return;
-
-			try
+			SendMessage(new FriendActionMessage
 			{
-				client.SendMessage(new FriendActionMessage
-				{
-					friends_login = login,
-					action = ActionsWithFriend.REMOVE_FROM_FRIENDS
-				});
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new FriendActionMessage
-					{
-						friends_login = login,
-						action = ActionsWithFriend.REMOVE_FROM_FRIENDS
-					});
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+				friends_login = login,
+				action = ActionsWithFriend.REMOVE_FROM_FRIENDS
+			});
 		}
 
 		/// <summary>
@@ -656,33 +520,11 @@ namespace CryptoMessenger.Models
 		/// <param name="text">text of reply.</param>
 		public void SendReply(string receiver, string text)
 		{
-			if (!_isLoggedIn) return;
-
-			try
+			SendMessage(new NewReplyMessage
 			{
-				client.SendMessage(new ReplyMessage
-				{
-					interlocutor = receiver,
-					reply_text = text
-				});
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new ReplyMessage
-					{
-						interlocutor = receiver,
-						reply_text = text
-					});
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+				interlocutor = receiver,
+				reply_text = text
+			});
 		}
 
 		/// <summary>
@@ -692,31 +534,10 @@ namespace CryptoMessenger.Models
 		/// <param name="interlocutor">interlocutor.</param>
 		public void GetConversation(string interlocutor)
 		{
-			if (!_isLoggedIn) return;
-
-			try
+			SendMessage(new GetConversationMessage
 			{
-				client.SendMessage(new GetConversationMessage
-				{
-					interlocutor = interlocutor
-				});
-			}
-			catch (ConnectionInterruptedException)
-			{
-				try
-				{
-					// try again
-					client.SendMessage(new GetConversationMessage
-					{
-						interlocutor = interlocutor
-					});
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// fail two times -> something wrong with connection
-					RaiseConnectionBreaksEvent();
-				}
-			}
+				interlocutor = interlocutor
+			});
 		}
 
 		#endregion

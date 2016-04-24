@@ -5,7 +5,7 @@ namespace CryptoMessenger.Views.UserControls
 	/// <summary>
 	/// Interaction logic for SearchPanel.xaml
 	/// </summary>
-	public partial class SearchPanel : UserControl, IMainWindowPanel
+	public partial class SearchPanel : UserControl, IWindowPanel
 	{
 		public SearchPanel()
 		{

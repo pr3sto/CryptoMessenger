@@ -2,13 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CryptoMessenger"
-             xmlns:usercontrols="clr-namespace:CryptoMessenger.Views.UserControls"
-             xmlns:viewmodels="clr-namespace:CryptoMessenger.ViewModels"
              xmlns:converters="clr-namespace:CryptoMessenger.Converters"
-             Startup="OnStartup">
+             Startup="OnStartup"
+             >
     <Application.Resources>
         <ResourceDictionary>
-            
             <!-- styles -->
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/Styles/WindowStyle.xaml" />
@@ -21,18 +19,6 @@
                 <ResourceDictionary Source="Views/Styles/ScrollBarStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/ToolTipStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
-            <!-- main window panels -->
-            <DataTemplate DataType="{x:Type viewmodels:FriendsPanelViewModel}">
-                <usercontrols:FriendsPanel />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:RequestsPanelViewModel}">
-                <usercontrols:RequestsPanel />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:SearchPanelViewModel}">
-                <usercontrols:SearchPanel />
-            </DataTemplate>
-            
             <!-- converters -->
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -41,7 +27,6 @@
                 <converters:InverseBooleanConverter/>
                 <BooleanToVisibilityConverter/>
             </converters:ValueConverterGroup>
-            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

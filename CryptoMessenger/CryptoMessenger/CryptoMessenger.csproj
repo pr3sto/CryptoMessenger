@@ -90,7 +90,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\CommandReference.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
-    <Compile Include="IMainWindowPanel.cs" />
+    <Compile Include="IWindowPanel.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Conversations.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -99,7 +99,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\FriendsPanelViewModel.cs" />
-    <Compile Include="ViewModels\LoginWindowViewModel.cs" />
+    <Compile Include="ViewModels\LoginPanelViewModel.cs" />
+    <Compile Include="ViewModels\MainPanelViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\RequestsPanelViewModel.cs" />
     <Compile Include="ViewModels\SearchPanelViewModel.cs" />
@@ -113,22 +114,20 @@
     <Compile Include="Views\UserControls\FriendsPanel.xaml.cs">
       <DependentUpon>FriendsPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\LoginPanel.xaml.cs">
+      <DependentUpon>LoginPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\MainPanel.xaml.cs">
+      <DependentUpon>MainPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\RequestsPanel.xaml.cs">
       <DependentUpon>RequestsPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\SearchPanel.xaml.cs">
       <DependentUpon>SearchPanel.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\LoginWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\LoginWindow.xaml.cs">
-      <DependentUpon>LoginWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\MainWindow.xaml">
@@ -172,6 +171,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\FriendsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\LoginPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\MainPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

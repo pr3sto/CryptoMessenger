@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -31,14 +31,11 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (acceptRequestCommand == null)
 				{
-					acceptRequestCommand = new DelegateCommand(AcceptRequest);
+					acceptRequestCommand = new DelegateCommand(() => 
+					{ client.AcceptFriendshipRequest(Name); });
 				}
 				return acceptRequestCommand;
 			}
-		}
-		private void AcceptRequest()
-		{
-			client.AcceptFriendshipRequest(Name);
 		}
 
 		// reject request
@@ -49,14 +46,11 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (rejectRequestCommand == null)
 				{
-					rejectRequestCommand = new DelegateCommand(RejectRequest);
+					rejectRequestCommand = new DelegateCommand(() => 
+					{ client.RejectFriendshipRequest(Name); });
 				}
 				return rejectRequestCommand;
 			}
-		}
-		private void RejectRequest()
-		{
-			client.RejectFriendshipRequest(Name);
 		}
 	}
 
@@ -84,21 +78,18 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (cancelRequestCommand == null)
 				{
-					cancelRequestCommand = new DelegateCommand(CancelRequest);
+					cancelRequestCommand = new DelegateCommand(() =>
+					{ client.CancelFriendshipRequest(Name); });
 				}
 				return cancelRequestCommand;
 			}
-		}
-		private void CancelRequest()
-		{
-			client.CancelFriendshipRequest(Name);
 		}
 	}
 
 	/// <summary>
 	/// View model for requests panel (mvvm pattern).
 	/// </summary>
-	class RequestsPanelViewModel : ViewModelBase, IMainWindowPanel
+	class RequestsPanelViewModel : ViewModelBase, IWindowPanel
 	{
 		private Client client;
 
@@ -120,27 +111,23 @@ namespace CryptoMessenger.ViewModels
 		{
 			if (e.PropertyName == nameof(client.IncomeRequestsList) && client.IncomeRequestsList != null)
 			{
-				List<IncomeRequest> reqs = new List<IncomeRequest>();
+				IncomeReqsList = new ObservableCollection<IncomeRequest>();
 				foreach (var name in client.IncomeRequestsList)
-					reqs.Add(new IncomeRequest(client, name));
-
-				IncomeReqsList = reqs.ToArray();
+					IncomeReqsList.Add(new IncomeRequest(client, name));
 			}
 			else if (e.PropertyName == nameof(client.OutcomeRequestsList) && client.OutcomeRequestsList != null)
 			{
-				List<OutcomeRequest> reqs = new List<OutcomeRequest>();
+				OutcomeReqsList = new ObservableCollection<OutcomeRequest>();
 				foreach (var name in client.OutcomeRequestsList)
-					reqs.Add(new OutcomeRequest(client, name));
-
-				OutcomeReqsList = reqs.ToArray();
+					OutcomeReqsList.Add(new OutcomeRequest(client, name));
 			}
 		}
 
 		#region Properties
 
 		// income requests list
-		private IncomeRequest[] _incomeReqsList;
-		public IncomeRequest[] IncomeReqsList
+		private ObservableCollection<IncomeRequest> _incomeReqsList;
+		public ObservableCollection<IncomeRequest> IncomeReqsList
 		{
 			get { return _incomeReqsList; }
 			set
@@ -151,8 +138,8 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// outcome requests list
-		private OutcomeRequest[] _outcomeReqsList;
-		public OutcomeRequest[] OutcomeReqsList
+		private ObservableCollection<OutcomeRequest> _outcomeReqsList;
+		public ObservableCollection<OutcomeRequest> OutcomeReqsList
 		{
 			get { return _outcomeReqsList; }
 			set

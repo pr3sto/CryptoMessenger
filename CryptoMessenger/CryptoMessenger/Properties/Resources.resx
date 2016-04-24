@@ -137,7 +137,7 @@
     <value>CRYPTO MESSENGER</value>
   </data>
   <data name="INCORRECTDATA_NOTIFICATION" xml:space="preserve">
-    <value>Некорректные данные</value>
+    <value>Логин и пароль должны состоять только из английских символов и цифр</value>
   </data>
   <data name="LOGIN_BUTTON_TEXT" xml:space="preserve">
     <value>ВХОД</value>
@@ -237,5 +237,20 @@
   </data>
   <data name="send" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\send.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EMPTYDIALOG_LISTBOX_PLACEHOLDER" xml:space="preserve">
+    <value>Сообщений нет</value>
+  </data>
+  <data name="EMPTYDATA_NOTIFICATION" xml:space="preserve">
+    <value>Введите логин и пароль</value>
+  </data>
+  <data name="CONNECTIONBREAKS_NOTFICATION" xml:space="preserve">
+    <value>Соединение с сервером разорвано. Вы можете не выходить из приложения, чтобы иметь доступ к загруженным сообщениям</value>
+  </data>
+  <data name="EXIT_BUTTON_TEXT" xml:space="preserve">
+    <value>ВЫХОД ИЗ АККАУНТА</value>
+  </data>
+  <data name="OK_BUTTON_TEXT" xml:space="preserve">
+    <value>ОК</value>
   </data>
 </root>

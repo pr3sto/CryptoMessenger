@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -31,21 +31,18 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (removeFriendCommand == null)
 				{
-					removeFriendCommand = new DelegateCommand(RemoveFriend);
+					removeFriendCommand = new DelegateCommand(() =>
+					{ client.RemoveFriend(Name); });
 				}
 				return removeFriendCommand;
 			}
-		}
-		private void RemoveFriend()
-		{
-			client.RemoveFriend(Name);
 		}
 	}
 
 	/// <summary>
 	/// View model for friends panel (mvvm pattern).
 	/// </summary>
-	class FriendsPanelViewModel : ViewModelBase, IMainWindowPanel
+	class FriendsPanelViewModel : ViewModelBase, IWindowPanel
 	{
 		private Client client;
 
@@ -53,12 +50,13 @@ namespace CryptoMessenger.ViewModels
 		{
 			this.client = client;
 			client.PropertyChanged += FriendsListChanged;
-			client.ReplyComes += NewMessage;
+			client.NewReplyComes += NewReply;
+			client.OldReplyComes += OldReply;
 
 			FriendsList = null;
-			RepliesList = null;
+			RepliesList = new ObservableCollection<ConversationReply>();
 
-			IsFriendSelected = false;
+			IsDialogVisible = false;
 
 			// get friends when panel loads
 			client.GetFriends();
@@ -69,26 +67,32 @@ namespace CryptoMessenger.ViewModels
 		{
 			if (e.PropertyName == nameof(client.FriendsList) && client.FriendsList != null)
 			{
-				List<Friend> friends = new List<Friend>();
+				FriendsList = new ObservableCollection<Friend>();
 				foreach (var name in client.FriendsList)
-					friends.Add(new Friend(client, name));
+					FriendsList.Add(new Friend(client, name));
 				
-				FriendsList = friends.ToArray();
 			}
 		}
 
 		// update conversations
-		private void NewMessage(object sender, string login)
+		private void NewReply(string interlocutor, ConversationReply reply)
 		{
-			if (SelectedFriend != null  && login == SelectedFriend.Name)
-				RepliesList = client.Conversations.GetConversation(SelectedFriend.Name)?.ToArrayOfReplies();
+			if (SelectedFriend != null && interlocutor == SelectedFriend.Name)
+				RepliesList.Add(reply);
+		}
+
+		// update conversations
+		private void OldReply(string interlocutor, ConversationReply reply)
+		{
+			if (SelectedFriend != null && interlocutor == SelectedFriend.Name)
+				RepliesList.Insert(0, reply);
 		}
 
 		#region Properties
 
 		// friends list
-		private Friend[] _friendsList;
-		public Friend[] FriendsList
+		private ObservableCollection<Friend> _friendsList;
+		public ObservableCollection<Friend> FriendsList
 		{
 			get { return _friendsList; }
 			set
@@ -99,8 +103,8 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// replies list
-		private ConversationReply[] _repliesList;
-		public ConversationReply[] RepliesList
+		private ObservableCollection<ConversationReply> _repliesList;
+		public ObservableCollection<ConversationReply> RepliesList
 		{
 			get { return _repliesList; }
 			set
@@ -130,17 +134,18 @@ namespace CryptoMessenger.ViewModels
 			set
 			{
 				_selectedFriend = value;
-				IsFriendSelected = (_selectedFriend != null);
+				IsDialogVisible = (_selectedFriend != null);
 
 				if (_selectedFriend != null)
 				{
 					if (!client.Conversations.Contains(_selectedFriend.Name))
 					{
 						client.GetConversation(_selectedFriend.Name);
-						RepliesList = null;
+						RepliesList = new ObservableCollection<ConversationReply>();
 					}
 					else
-						RepliesList = client.Conversations.GetConversation(_selectedFriend.Name)?.ToArrayOfReplies();
+						RepliesList = new ObservableCollection<ConversationReply>(
+							client.Conversations.GetConversation(_selectedFriend.Name)?.replies);
 				}
 
 				OnPropertyChanged(nameof(SelectedFriend));
@@ -149,13 +154,13 @@ namespace CryptoMessenger.ViewModels
 
 		// is dialg visible
 		private bool _isDialogVisible;
-		public bool IsFriendSelected
+		public bool IsDialogVisible
 		{
 			get { return _isDialogVisible; }
 			set
 			{
 				_isDialogVisible = value;
-				OnPropertyChanged(nameof(IsFriendSelected));
+				OnPropertyChanged(nameof(IsDialogVisible));
 			}
 		}
 
@@ -178,7 +183,7 @@ namespace CryptoMessenger.ViewModels
 		}
 		private void DoSend()
 		{
-			if (SelectedFriend != null)
+			if (SelectedFriend != null && !string.IsNullOrEmpty(MessageText))
 			{
 				client.SendReply(SelectedFriend.Name, MessageText);
 				MessageText = null;

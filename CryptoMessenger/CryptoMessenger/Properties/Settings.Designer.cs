@@ -43,19 +43,10 @@ namespace CryptoMessenger.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFEF5252")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFEC606")]
         public global::System.Windows.Media.SolidColorBrush SpecialBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["SpecialBrush"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFEF5252")]
-        public global::System.Windows.Media.Color SpecialColor {
-            get {
-                return ((global::System.Windows.Media.Color)(this["SpecialColor"]));
             }
         }
         
@@ -101,6 +92,24 @@ namespace CryptoMessenger.Properties {
         public global::System.Windows.Media.SolidColorBrush SecondarySecondBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["SecondarySecondBrush"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFEC606")]
+        public global::System.Windows.Media.Color SpecialColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["SpecialColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFF0000")]
+        public global::System.Windows.Media.Color AlertColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["AlertColor"]));
             }
         }
     }

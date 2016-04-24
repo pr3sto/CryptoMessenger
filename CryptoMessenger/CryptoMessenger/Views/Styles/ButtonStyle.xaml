@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
+    xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
     >
 
     <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
@@ -53,12 +54,9 @@
                             <Setter TargetName="BackgroundRect" Property="Fill" 
                                     Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                                     />
-                            <Setter TargetName="buttonBackground" Property="Fill" 
+                            <Setter Property="Foreground" 
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                    />
-                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
-                                    Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                    />
+                                    />                            
                         </Trigger>
                         <!-- button disabled -->
                         <Trigger Property="IsEnabled" Value="false">

@@ -3,11 +3,11 @@
 namespace CryptoMessenger.Views.UserControls
 {
 	/// <summary>
-	/// Interaction logic for FriendsPanel.xaml
+	/// Interaction logic for LoginPanel.xaml
 	/// </summary>
-	public partial class FriendsPanel : UserControl, IWindowPanel
+	public partial class LoginPanel : UserControl, IWindowPanel
 	{
-		public FriendsPanel()
+		public LoginPanel()
 		{
 			InitializeComponent();
 		}
