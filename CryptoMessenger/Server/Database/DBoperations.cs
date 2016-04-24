@@ -497,7 +497,7 @@ namespace Server.Database
 						select reply;
 
 					if (replies.Any())
-						return replies.ToArray();
+						return replies.AsEnumerable().Reverse().ToArray();
 				}
 				
 				// no conversation or no replies

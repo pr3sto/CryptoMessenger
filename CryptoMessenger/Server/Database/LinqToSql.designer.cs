@@ -30,18 +30,18 @@ namespace Server.Database
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertUsers(User instance);
-    partial void UpdateUsers(User instance);
-    partial void DeleteUsers(User instance);
-    partial void InsertFriends(Friendship instance);
-    partial void UpdateFriends(Friendship instance);
-    partial void DeleteFriends(Friendship instance);
-    partial void InsertConversations(Conversation instance);
-    partial void UpdateConversations(Conversation instance);
-    partial void DeleteConversations(Conversation instance);
-    partial void InsertConversation_replies(ConversationReply instance);
-    partial void UpdateConversation_replies(ConversationReply instance);
-    partial void DeleteConversation_replies(ConversationReply instance);
+    partial void InsertUser(User instance);
+    partial void UpdateUser(User instance);
+    partial void DeleteUser(User instance);
+    partial void InsertFriend(Friendship instance);
+    partial void UpdateFriend(Friendship instance);
+    partial void DeleteFriend(Friendship instance);
+    partial void InsertConversation(Conversation instance);
+    partial void UpdateConversation(Conversation instance);
+    partial void DeleteConversation(Conversation instance);
+    partial void InsertConversation_reply(ConversationReply instance);
+    partial void UpdateConversation_reply(ConversationReply instance);
+    partial void DeleteConversation_reply(ConversationReply instance);
     #endregion
 		
 		public LinqToSqlDataContext() : 
@@ -211,7 +211,7 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Friends", Storage="_Friends", ThisKey="user_id", OtherKey="friend_one")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Friend", Storage="_Friends", ThisKey="user_id", OtherKey="friend_one")]
 		public EntitySet<Friendship> Friends
 		{
 			get
@@ -224,7 +224,7 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Friends1", Storage="_Friends1", ThisKey="user_id", OtherKey="friend_two")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Friend1", Storage="_Friends1", ThisKey="user_id", OtherKey="friend_two")]
 		public EntitySet<Friendship> Friends1
 		{
 			get
@@ -237,7 +237,7 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversations", Storage="_Conversations", ThisKey="user_id", OtherKey="user_one")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Conversation", Storage="_Conversations", ThisKey="user_id", OtherKey="user_one")]
 		public EntitySet<Conversation> Conversations
 		{
 			get
@@ -250,7 +250,7 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversations1", Storage="_Conversations1", ThisKey="user_id", OtherKey="user_two")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Conversation1", Storage="_Conversations1", ThisKey="user_id", OtherKey="user_two")]
 		public EntitySet<Conversation> Conversations1
 		{
 			get
@@ -263,7 +263,7 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversation_replies", Storage="_Conversation_replies", ThisKey="user_id", OtherKey="user_id")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Conversation_reply", Storage="_Conversation_replies", ThisKey="user_id", OtherKey="user_id")]
 		public EntitySet<ConversationReply> Conversation_replies
 		{
 			get
@@ -299,61 +299,61 @@ namespace Server.Database
 		private void attach_Friends(Friendship entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users = this;
+			entity.User = this;
 		}
 		
 		private void detach_Friends(Friendship entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users = null;
+			entity.User = null;
 		}
 		
 		private void attach_Friends1(Friendship entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users1 = this;
+			entity.User1 = this;
 		}
 		
 		private void detach_Friends1(Friendship entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users1 = null;
+			entity.User1 = null;
 		}
 		
 		private void attach_Conversations(Conversation entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users = this;
+			entity.User = this;
 		}
 		
 		private void detach_Conversations(Conversation entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users = null;
+			entity.User = null;
 		}
 		
 		private void attach_Conversations1(Conversation entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users1 = this;
+			entity.User1 = this;
 		}
 		
 		private void detach_Conversations1(Conversation entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users1 = null;
+			entity.User1 = null;
 		}
 		
 		private void attach_Conversation_replies(ConversationReply entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users = this;
+			entity.User = this;
 		}
 		
 		private void detach_Conversation_replies(ConversationReply entity)
 		{
 			this.SendPropertyChanging();
-			entity.Users = null;
+			entity.User = null;
 		}
 	}
 	
@@ -369,9 +369,9 @@ namespace Server.Database
 		
 		private bool _accepted;
 		
-		private EntityRef<User> _Users;
+		private EntityRef<User> _User;
 		
-		private EntityRef<User> _Users1;
+		private EntityRef<User> _User1;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -387,8 +387,8 @@ namespace Server.Database
 		
 		public Friendship()
 		{
-			this._Users = default(EntityRef<User>);
-			this._Users1 = default(EntityRef<User>);
+			this._User = default(EntityRef<User>);
+			this._User1 = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -403,7 +403,7 @@ namespace Server.Database
 			{
 				if ((this._friend_one != value))
 				{
-					if (this._Users.HasLoadedOrAssignedValue)
+					if (this._User.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -427,7 +427,7 @@ namespace Server.Database
 			{
 				if ((this._friend_two != value))
 				{
-					if (this._Users1.HasLoadedOrAssignedValue)
+					if (this._User1.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -460,26 +460,26 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Friends", Storage="_Users", ThisKey="friend_one", OtherKey="user_id", IsForeignKey=true)]
-		public User Users
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Friend", Storage="_User", ThisKey="friend_one", OtherKey="user_id", IsForeignKey=true)]
+		public User User
 		{
 			get
 			{
-				return this._Users.Entity;
+				return this._User.Entity;
 			}
 			set
 			{
-				User previousValue = this._Users.Entity;
+				User previousValue = this._User.Entity;
 				if (((previousValue != value) 
-							|| (this._Users.HasLoadedOrAssignedValue == false)))
+							|| (this._User.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Users.Entity = null;
+						this._User.Entity = null;
 						previousValue.Friends.Remove(this);
 					}
-					this._Users.Entity = value;
+					this._User.Entity = value;
 					if ((value != null))
 					{
 						value.Friends.Add(this);
@@ -489,31 +489,31 @@ namespace Server.Database
 					{
 						this._friend_one = default(int);
 					}
-					this.SendPropertyChanged("Users");
+					this.SendPropertyChanged("User");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Friends1", Storage="_Users1", ThisKey="friend_two", OtherKey="user_id", IsForeignKey=true)]
-		public User Users1
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Friend1", Storage="_User1", ThisKey="friend_two", OtherKey="user_id", IsForeignKey=true)]
+		public User User1
 		{
 			get
 			{
-				return this._Users1.Entity;
+				return this._User1.Entity;
 			}
 			set
 			{
-				User previousValue = this._Users1.Entity;
+				User previousValue = this._User1.Entity;
 				if (((previousValue != value) 
-							|| (this._Users1.HasLoadedOrAssignedValue == false)))
+							|| (this._User1.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Users1.Entity = null;
+						this._User1.Entity = null;
 						previousValue.Friends1.Remove(this);
 					}
-					this._Users1.Entity = value;
+					this._User1.Entity = value;
 					if ((value != null))
 					{
 						value.Friends1.Add(this);
@@ -523,7 +523,7 @@ namespace Server.Database
 					{
 						this._friend_two = default(int);
 					}
-					this.SendPropertyChanged("Users1");
+					this.SendPropertyChanged("User1");
 				}
 			}
 		}
@@ -563,9 +563,9 @@ namespace Server.Database
 		
 		private EntitySet<ConversationReply> _Conversation_replies;
 		
-		private EntityRef<User> _Users;
+		private EntityRef<User> _User;
 		
-		private EntityRef<User> _Users1;
+		private EntityRef<User> _User1;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -582,8 +582,8 @@ namespace Server.Database
 		public Conversation()
 		{
 			this._Conversation_replies = new EntitySet<ConversationReply>(new Action<ConversationReply>(this.attach_Conversation_replies), new Action<ConversationReply>(this.detach_Conversation_replies));
-			this._Users = default(EntityRef<User>);
-			this._Users1 = default(EntityRef<User>);
+			this._User = default(EntityRef<User>);
+			this._User1 = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -618,7 +618,7 @@ namespace Server.Database
 			{
 				if ((this._user_one != value))
 				{
-					if (this._Users.HasLoadedOrAssignedValue)
+					if (this._User.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -642,7 +642,7 @@ namespace Server.Database
 			{
 				if ((this._user_two != value))
 				{
-					if (this._Users1.HasLoadedOrAssignedValue)
+					if (this._User1.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -655,7 +655,7 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Conversations_Conversation_replies", Storage="_Conversation_replies", ThisKey="conversation_id", OtherKey="conversation_id")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Conversation_Conversation_reply", Storage="_Conversation_replies", ThisKey="conversation_id", OtherKey="conversation_id")]
 		public EntitySet<ConversationReply> Conversation_replies
 		{
 			get
@@ -668,26 +668,26 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversations", Storage="_Users", ThisKey="user_one", OtherKey="user_id", IsForeignKey=true)]
-		public User Users
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Conversation", Storage="_User", ThisKey="user_one", OtherKey="user_id", IsForeignKey=true)]
+		public User User
 		{
 			get
 			{
-				return this._Users.Entity;
+				return this._User.Entity;
 			}
 			set
 			{
-				User previousValue = this._Users.Entity;
+				User previousValue = this._User.Entity;
 				if (((previousValue != value) 
-							|| (this._Users.HasLoadedOrAssignedValue == false)))
+							|| (this._User.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Users.Entity = null;
+						this._User.Entity = null;
 						previousValue.Conversations.Remove(this);
 					}
-					this._Users.Entity = value;
+					this._User.Entity = value;
 					if ((value != null))
 					{
 						value.Conversations.Add(this);
@@ -697,31 +697,31 @@ namespace Server.Database
 					{
 						this._user_one = default(int);
 					}
-					this.SendPropertyChanged("Users");
+					this.SendPropertyChanged("User");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversations1", Storage="_Users1", ThisKey="user_two", OtherKey="user_id", IsForeignKey=true)]
-		public User Users1
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Conversation1", Storage="_User1", ThisKey="user_two", OtherKey="user_id", IsForeignKey=true)]
+		public User User1
 		{
 			get
 			{
-				return this._Users1.Entity;
+				return this._User1.Entity;
 			}
 			set
 			{
-				User previousValue = this._Users1.Entity;
+				User previousValue = this._User1.Entity;
 				if (((previousValue != value) 
-							|| (this._Users1.HasLoadedOrAssignedValue == false)))
+							|| (this._User1.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Users1.Entity = null;
+						this._User1.Entity = null;
 						previousValue.Conversations1.Remove(this);
 					}
-					this._Users1.Entity = value;
+					this._User1.Entity = value;
 					if ((value != null))
 					{
 						value.Conversations1.Add(this);
@@ -731,7 +731,7 @@ namespace Server.Database
 					{
 						this._user_two = default(int);
 					}
-					this.SendPropertyChanged("Users1");
+					this.SendPropertyChanged("User1");
 				}
 			}
 		}
@@ -759,13 +759,13 @@ namespace Server.Database
 		private void attach_Conversation_replies(ConversationReply entity)
 		{
 			this.SendPropertyChanging();
-			entity.Conversations = this;
+			entity.Conversation = this;
 		}
 		
 		private void detach_Conversation_replies(ConversationReply entity)
 		{
 			this.SendPropertyChanging();
-			entity.Conversations = null;
+			entity.Conversation = null;
 		}
 	}
 	
@@ -785,9 +785,9 @@ namespace Server.Database
 		
 		private System.DateTime _time;
 		
-		private EntityRef<Conversation> _Conversations;
+		private EntityRef<Conversation> _Conversation;
 		
-		private EntityRef<User> _Users;
+		private EntityRef<User> _User;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -807,8 +807,8 @@ namespace Server.Database
 		
 		public ConversationReply()
 		{
-			this._Conversations = default(EntityRef<Conversation>);
-			this._Users = default(EntityRef<User>);
+			this._Conversation = default(EntityRef<Conversation>);
+			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -832,7 +832,7 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reply", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reply", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
 		public string reply
 		{
 			get
@@ -863,7 +863,7 @@ namespace Server.Database
 			{
 				if ((this._conversation_id != value))
 				{
-					if (this._Conversations.HasLoadedOrAssignedValue)
+					if (this._Conversation.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -887,7 +887,7 @@ namespace Server.Database
 			{
 				if ((this._user_id != value))
 				{
-					if (this._Users.HasLoadedOrAssignedValue)
+					if (this._User.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -920,26 +920,26 @@ namespace Server.Database
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Conversations_Conversation_replies", Storage="_Conversations", ThisKey="conversation_id", OtherKey="conversation_id", IsForeignKey=true)]
-		public Conversation Conversations
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Conversation_Conversation_reply", Storage="_Conversation", ThisKey="conversation_id", OtherKey="conversation_id", IsForeignKey=true)]
+		public Conversation Conversation
 		{
 			get
 			{
-				return this._Conversations.Entity;
+				return this._Conversation.Entity;
 			}
 			set
 			{
-				Conversation previousValue = this._Conversations.Entity;
+				Conversation previousValue = this._Conversation.Entity;
 				if (((previousValue != value) 
-							|| (this._Conversations.HasLoadedOrAssignedValue == false)))
+							|| (this._Conversation.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Conversations.Entity = null;
+						this._Conversation.Entity = null;
 						previousValue.Conversation_replies.Remove(this);
 					}
-					this._Conversations.Entity = value;
+					this._Conversation.Entity = value;
 					if ((value != null))
 					{
 						value.Conversation_replies.Add(this);
@@ -949,31 +949,31 @@ namespace Server.Database
 					{
 						this._conversation_id = default(int);
 					}
-					this.SendPropertyChanged("Conversations");
+					this.SendPropertyChanged("Conversation");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Users_Conversation_replies", Storage="_Users", ThisKey="user_id", OtherKey="user_id", IsForeignKey=true)]
-		public User Users
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Conversation_reply", Storage="_User", ThisKey="user_id", OtherKey="user_id", IsForeignKey=true)]
+		public User User
 		{
 			get
 			{
-				return this._Users.Entity;
+				return this._User.Entity;
 			}
 			set
 			{
-				User previousValue = this._Users.Entity;
+				User previousValue = this._User.Entity;
 				if (((previousValue != value) 
-							|| (this._Users.HasLoadedOrAssignedValue == false)))
+							|| (this._User.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Users.Entity = null;
+						this._User.Entity = null;
 						previousValue.Conversation_replies.Remove(this);
 					}
-					this._Users.Entity = value;
+					this._User.Entity = value;
 					if ((value != null))
 					{
 						value.Conversation_replies.Add(this);
@@ -983,7 +983,7 @@ namespace Server.Database
 					{
 						this._user_id = default(int);
 					}
-					this.SendPropertyChanged("Users");
+					this.SendPropertyChanged("User");
 				}
 			}
 		}

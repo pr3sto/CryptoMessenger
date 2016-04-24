@@ -184,9 +184,9 @@ namespace Server
 								break;
 						}
 					}
-					else if (message is ReplyMessage)
+					else if (message is NewReplyMessage)
 					{
-						HandleReply(user, ((ReplyMessage)message).interlocutor, ((ReplyMessage)message).reply_text);
+						HandleReply(user, ((NewReplyMessage)message).interlocutor, ((NewReplyMessage)message).reply_text);
 					}
 					else if (message is LogoutRequestMessage)
 					{
@@ -293,11 +293,10 @@ namespace Server
 			// get replies from db
 			ConversationReply[] replies = DBoperations.GetConversation(user.id, interlocutors_id);
 
-			
 			if (replies != null)
 			{
 				foreach (var r in replies)
-					user.client.SendMessage(new ReplyMessage
+					user.client.SendMessage(new OldReplyMessage
 					{
 						interlocutor = interlocutor,
 						reply_author = DBoperations.GetUserLogin(r.user_id),
@@ -437,7 +436,7 @@ namespace Server
 			if (DBoperations.AddNewReply(user.id, interlocutors_id, text, time))
 			{
 				// send reply to user one
-				user.client.SendMessage(new ReplyMessage
+				user.client.SendMessage(new NewReplyMessage
 				{
 					interlocutor = interlocutor,
 					reply_author = user.login,
@@ -449,7 +448,7 @@ namespace Server
 				OnlineUser friend = GetOnlineUser(interlocutor);
 				if (friend != null)
 				{
-					friend.client.SendMessage(new ReplyMessage
+					friend.client.SendMessage(new NewReplyMessage
 					{
 						interlocutor = user.login,
 						reply_author = user.login,

@@ -59,9 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\DBoperations.cs" />
-    <Compile Include="Database\LinqToSql.cs">
-      <DependentUpon>LinqToSql.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Database\LinqToSql.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

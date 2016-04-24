@@ -1,45 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Database" Class="LinqToSqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\Database.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="Server.Properties.Settings" SettingsPropertyName="DatabaseConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSqlLocalDB;AttachDbFilename=|DataDirectory|\Database\Database.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="Server.Properties.Settings" SettingsPropertyName="DatabaseConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Users" Member="Users">
-    <Type Name="Users">
+    <Type Name="User">
       <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="login" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
       <Column Name="password" Type="System.String" DbType="VarChar(70) NOT NULL" CanBeNull="false" />
-      <Association Name="Users_Friends" Member="Friends" ThisKey="user_id" OtherKey="friend_one" Type="Friends" />
-      <Association Name="Users_Friends1" Member="Friends1" ThisKey="user_id" OtherKey="friend_two" Type="Friends" />
-      <Association Name="Users_Conversations" Member="Conversations" ThisKey="user_id" OtherKey="user_one" Type="Conversations" />
-      <Association Name="Users_Conversations1" Member="Conversations1" ThisKey="user_id" OtherKey="user_two" Type="Conversations" />
-      <Association Name="Users_Conversation_replies" Member="Conversation_replies" ThisKey="user_id" OtherKey="user_id" Type="Conversation_replies" />
+      <Association Name="User_Friend" Member="Friends" ThisKey="user_id" OtherKey="friend_one" Type="Friend" />
+      <Association Name="User_Friend1" Member="Friends1" ThisKey="user_id" OtherKey="friend_two" Type="Friend" />
+      <Association Name="User_Conversation" Member="Conversations" ThisKey="user_id" OtherKey="user_one" Type="Conversation" />
+      <Association Name="User_Conversation1" Member="Conversations1" ThisKey="user_id" OtherKey="user_two" Type="Conversation" />
+      <Association Name="User_Conversation_reply" Member="Conversation_replies" ThisKey="user_id" OtherKey="user_id" Type="Conversation_reply" />
     </Type>
   </Table>
   <Table Name="dbo.Friends" Member="Friends">
-    <Type Name="Friends">
+    <Type Name="Friend">
       <Column Name="friend_one" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="friend_two" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="accepted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Association Name="Users_Friends" Member="Users" ThisKey="friend_one" OtherKey="user_id" Type="Users" IsForeignKey="true" />
-      <Association Name="Users_Friends1" Member="Users1" ThisKey="friend_two" OtherKey="user_id" Type="Users" IsForeignKey="true" />
+      <Association Name="User_Friend" Member="User" ThisKey="friend_one" OtherKey="user_id" Type="User" IsForeignKey="true" />
+      <Association Name="User_Friend1" Member="User1" ThisKey="friend_two" OtherKey="user_id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Conversations" Member="Conversations">
-    <Type Name="Conversations">
+    <Type Name="Conversation">
       <Column Name="conversation_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="user_one" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="user_two" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Conversations_Conversation_replies" Member="Conversation_replies" ThisKey="conversation_id" OtherKey="conversation_id" Type="Conversation_replies" />
-      <Association Name="Users_Conversations" Member="Users" ThisKey="user_one" OtherKey="user_id" Type="Users" IsForeignKey="true" />
-      <Association Name="Users_Conversations1" Member="Users1" ThisKey="user_two" OtherKey="user_id" Type="Users" IsForeignKey="true" />
+      <Association Name="Conversation_Conversation_reply" Member="Conversation_replies" ThisKey="conversation_id" OtherKey="conversation_id" Type="Conversation_reply" />
+      <Association Name="User_Conversation" Member="User" ThisKey="user_one" OtherKey="user_id" Type="User" IsForeignKey="true" />
+      <Association Name="User_Conversation1" Member="User1" ThisKey="user_two" OtherKey="user_id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Conversation_replies" Member="Conversation_replies">
-    <Type Name="Conversation_replies">
+    <Type Name="Conversation_reply">
       <Column Name="reply_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="reply" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="reply" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="conversation_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="user_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="time" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
-      <Association Name="Conversations_Conversation_replies" Member="Conversations" ThisKey="conversation_id" OtherKey="conversation_id" Type="Conversations" IsForeignKey="true" />
-      <Association Name="Users_Conversation_replies" Member="Users" ThisKey="user_id" OtherKey="user_id" Type="Users" IsForeignKey="true" />
+      <Association Name="Conversation_Conversation_reply" Member="Conversation" ThisKey="conversation_id" OtherKey="conversation_id" Type="Conversation" IsForeignKey="true" />
+      <Association Name="User_Conversation_reply" Member="User" ThisKey="user_id" OtherKey="user_id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
