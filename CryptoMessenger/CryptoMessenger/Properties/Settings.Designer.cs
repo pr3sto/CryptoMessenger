@@ -112,5 +112,14 @@ namespace CryptoMessenger.Properties {
                 return ((global::System.Windows.Media.Color)(this["AlertColor"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF56514D")]
+        public global::System.Windows.Media.SolidColorBrush MainFirstLightBrush {
+            get {
+                return ((global::System.Windows.Media.SolidColorBrush)(this["MainFirstLightBrush"]));
+            }
+        }
     }
 }

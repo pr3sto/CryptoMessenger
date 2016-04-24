@@ -16,8 +16,6 @@ namespace CryptoMessenger.Models
 	{
 		// is client logged in
 		private bool _isLoggedIn = false;
-		// is client now log out
-		private bool _isLogoutingNow = false;
 
 		// server's port 
 		private int port;
@@ -25,6 +23,11 @@ namespace CryptoMessenger.Models
 		private string ip;
 		// client
 		private MpClient client;
+
+		/// <summary>
+		/// Client's name.
+		/// </summary>
+		public string Name { get; set; }
 
 		/// <summary>
 		/// Notify about connection breaks.
@@ -124,6 +127,7 @@ namespace CryptoMessenger.Models
 			OutcomeRequestsList = null;
 			
 			client = new MpClient();
+			Name = null;
 			Conversations = new Conversations();
 
 			this.ConnectionBreaks += () => { _isLoggedIn = false; };
@@ -170,6 +174,7 @@ namespace CryptoMessenger.Models
 			if (LoginRegisterResponse.SUCCESS.Equals(serverResp.response))
 			{
 				_isLoggedIn = true;
+				Name = login;
 			}
 			else
 			{
@@ -230,8 +235,8 @@ namespace CryptoMessenger.Models
 			if (!_isLoggedIn) return;
 
 			_isLoggedIn = false;
-			_isLogoutingNow = true;
 
+			Name = null;
 			FriendsList = null;
 			SearchUsersList = null;
 			IncomeRequestsList = null;
@@ -257,8 +262,6 @@ namespace CryptoMessenger.Models
 				{
 					// dont mind because we exit
 				}
-
-				_isLogoutingNow = false;
 			}
 		}
 
@@ -297,7 +300,7 @@ namespace CryptoMessenger.Models
 				}
 				catch (ConnectionInterruptedException)
 				{
-					if (!_isLogoutingNow)
+					if (_isLoggedIn)
 						ConnectionBreaks();
 
 					return;
@@ -387,6 +390,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					// fail two times -> something wrong with connection
+					Logout();
 					ConnectionBreaks();
 				}
 			}

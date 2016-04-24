@@ -25,11 +25,11 @@ namespace CryptoMessenger.ViewModels
 			ShowLoginPanel();
 		}
 
-		private void ShowMainPanel(string login)
+		private void ShowMainPanel()
 		{
 			mainPanelViewModel = new MainPanelViewModel(client);
+			mainPanelViewModel.Logout += ShowLoginPanel;
 			MainWindowPanel = mainPanelViewModel;
-			WindowTitle = login;
 		}
 
 		private void ShowLoginPanel()
@@ -37,22 +37,9 @@ namespace CryptoMessenger.ViewModels
 			loginPanelViewModel = new LoginPanelViewModel(client);
 			loginPanelViewModel.LoginSuccess += ShowMainPanel;
 			MainWindowPanel = loginPanelViewModel;
-			WindowTitle = Properties.Resources.APP_NAME;
 		}
 
 		#region Properties
-
-		// window title
-		private string _windowTitle;
-		public string WindowTitle
-		{
-			get { return _windowTitle; }
-			set
-			{
-				_windowTitle = value;
-				OnPropertyChanged(nameof(WindowTitle));
-			}
-		}
 
 		// warning 
 		private bool _showWarning;
@@ -96,22 +83,37 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
-		// exit
-		private DelegateCommand exitCommand;
-		public ICommand ExitCommand
+		// logout
+		private DelegateCommand logoutCommand;
+		public ICommand LogoutCommand
 		{
 			get
 			{
-				if (exitCommand == null)
+				if (logoutCommand == null)
 				{
-					exitCommand = new DelegateCommand(() => 
+					logoutCommand = new DelegateCommand(() => 
 					{
 						client.Logout();
 						ShowWarning = false;
 						ShowLoginPanel();
 					});
 				}
-				return exitCommand;
+				return logoutCommand;
+			}
+		}
+
+		// do before closing
+		private DelegateCommand windowClosingCommand;
+		public ICommand WindowClosingCommand
+		{
+			get
+			{
+				if (windowClosingCommand == null)
+				{
+					windowClosingCommand = new DelegateCommand(() =>
+					{ client.Logout(); });
+				}
+				return windowClosingCommand;
 			}
 		}
 

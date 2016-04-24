@@ -253,4 +253,10 @@
   <data name="OK_BUTTON_TEXT" xml:space="preserve">
     <value>ОК</value>
   </data>
+  <data name="STATUS_OFFLINE_TEXT" xml:space="preserve">
+    <value>ОФФЛАЙН</value>
+  </data>
+  <data name="STATUS_ONLINE_TEXT" xml:space="preserve">
+    <value>ОНЛАЙН</value>
+  </data>
 </root>

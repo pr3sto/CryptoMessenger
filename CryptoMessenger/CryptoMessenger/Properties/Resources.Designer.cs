@@ -447,6 +447,24 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ОФФЛАЙН.
+        /// </summary>
+        public static string STATUS_OFFLINE_TEXT {
+            get {
+                return ResourceManager.GetString("STATUS_OFFLINE_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ОНЛАЙН.
+        /// </summary>
+        public static string STATUS_ONLINE_TEXT {
+            get {
+                return ResourceManager.GetString("STATUS_ONLINE_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Неизвестная ошибка. Повторите действие позже.
         /// </summary>
         public static string UNKNOWNERROR_NOTIFICATION {

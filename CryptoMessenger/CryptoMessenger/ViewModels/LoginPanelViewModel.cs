@@ -27,7 +27,7 @@ namespace CryptoMessenger.ViewModels
 		/// <summary>
 		/// Fire event when login success.
 		/// </summary>
-		public event Action<string> LoginSuccess;
+		public event Action LoginSuccess;
 
 		#region Properties
 
@@ -170,7 +170,7 @@ namespace CryptoMessenger.ViewModels
 
 				if (LoginRegisterResponse.SUCCESS.Equals(response))
 				{
-					LoginSuccess(Login);
+					LoginSuccess();
 					Notification = Properties.Resources.STANDART_NOTIFICATION;
 				}
 				else if (LoginRegisterResponse.FAIL.Equals(response))

@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -40,6 +42,25 @@ namespace CryptoMessenger.ViewModels
 	}
 
 	/// <summary>
+	/// Reply in conversation.
+	/// </summary>
+	class Reply
+	{
+		public Reply(ConversationReply r, string myLogin)
+		{
+			Author = r.Author;
+			Time = r.Time;
+			Text = r.Text;
+			IsMyReply = r.Author == myLogin;
+		}
+
+		public string Author { get; set; }
+		public DateTime Time { get; set; }
+		public string Text { get; set; }
+		public bool IsMyReply { get; set; }
+	}
+
+	/// <summary>
 	/// View model for friends panel (mvvm pattern).
 	/// </summary>
 	class FriendsPanelViewModel : ViewModelBase, IWindowPanel
@@ -54,7 +75,7 @@ namespace CryptoMessenger.ViewModels
 			client.OldReplyComes += OldReply;
 
 			FriendsList = null;
-			RepliesList = new ObservableCollection<ConversationReply>();
+			RepliesList = new ObservableCollection<Reply>();
 
 			IsDialogVisible = false;
 
@@ -78,14 +99,14 @@ namespace CryptoMessenger.ViewModels
 		private void NewReply(string interlocutor, ConversationReply reply)
 		{
 			if (SelectedFriend != null && interlocutor == SelectedFriend.Name)
-				RepliesList.Add(reply);
+				RepliesList.Add(new Reply(reply, client.Name));
 		}
 
 		// update conversations
 		private void OldReply(string interlocutor, ConversationReply reply)
 		{
 			if (SelectedFriend != null && interlocutor == SelectedFriend.Name)
-				RepliesList.Insert(0, reply);
+				RepliesList.Insert(0, new Reply(reply, client.Name));
 		}
 
 		#region Properties
@@ -103,8 +124,8 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// replies list
-		private ObservableCollection<ConversationReply> _repliesList;
-		public ObservableCollection<ConversationReply> RepliesList
+		private ObservableCollection<Reply> _repliesList;
+		public ObservableCollection<Reply> RepliesList
 		{
 			get { return _repliesList; }
 			set
@@ -141,11 +162,19 @@ namespace CryptoMessenger.ViewModels
 					if (!client.Conversations.Contains(_selectedFriend.Name))
 					{
 						client.GetConversation(_selectedFriend.Name);
-						RepliesList = new ObservableCollection<ConversationReply>();
+						RepliesList = new ObservableCollection<Reply>();
 					}
 					else
-						RepliesList = new ObservableCollection<ConversationReply>(
-							client.Conversations.GetConversation(_selectedFriend.Name)?.replies);
+					{
+						List<ConversationReply> replies_tmp = client.Conversations.GetConversation(_selectedFriend.Name)?.replies;
+						List<Reply> replies = new List<Reply>();
+
+						if (replies_tmp != null)
+							foreach (var r in replies_tmp)
+								replies.Add(new Reply(r, client.Name));
+						
+						RepliesList = new ObservableCollection<Reply>(replies);
+					}
 				}
 
 				OnPropertyChanged(nameof(SelectedFriend));

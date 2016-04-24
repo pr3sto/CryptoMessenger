@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
@@ -72,6 +71,11 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" 
                         Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+                </Trigger>
+                <!-- mouse pressed -->
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Foreground" 
+                        Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
                 </Trigger>
                 <!-- textblock selected -->
                 <Trigger Property="extensions:Extensions.ElementSelected" Value="True">
@@ -173,6 +177,79 @@
                 Canvas.Top="2"
                 />
         </Canvas>
+        
+        <!-- account -->
+        <Grid
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="0,0,20,0"
+            HorizontalAlignment="Right"
+            >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                Grid.Column="0"
+                Margin="0,0,5,0"
+                VerticalAlignment="Center"
+                TextOptions.TextRenderingMode="ClearType"
+                TextOptions.TextFormattingMode="Display"
+                FontSize="17"
+                Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                Text="{Binding Login}"
+                />
+            <TextBlock
+                Grid.Column="1"
+                Margin="0,0,20,0"
+                VerticalAlignment="Center"
+                TextOptions.TextRenderingMode="ClearType"
+                TextOptions.TextFormattingMode="Display"
+                FontSize="17"
+                Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                Text="{Binding Status}"
+                />
+            <Button
+                Grid.Column="2"
+                Style="{StaticResource LeftPanelButtonStyle}"
+                Cursor="Hand"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                FontSize="17"
+                Content="{Binding Source={x:Static props:Resources.EXIT_BUTTON_TEXT}}"
+                Command="{Binding LogoutCommand}"
+                />
+        </Grid>
+
+        <Canvas 
+            Grid.Row="1"
+            Grid.Column="1"
+            >
+            <Line
+                Stroke="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                StrokeThickness="2"
+                X1="10" X2="470"
+                Y1="5" Y2="5"
+                />
+        </Canvas>
+
+        <!-- select friend notify -->
+        <TextBlock  
+            Grid.Column="1"
+            Grid.Row="2"
+            Width="200"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            TextOptions.TextRenderingMode="ClearType"
+            TextOptions.TextFormattingMode="Display"
+            FontSize="26" 
+            Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+            Text="{Binding Source={x:Static props:Resources.SELECTFRIEND_NOTIFICATION}}"
+            Visibility="Visible"
+            />
 
         <!-- panel -->
         <ContentControl 

@@ -16,7 +16,7 @@
         WindowStartupLocation="CenterScreen"
         Height="500" Width="750"
         FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
-        Title="{Binding WindowTitle}" 
+        Title="{Binding Source={x:Static props:Resources.APP_NAME}}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"
         extensions:Extensions.ShowWarning="{Binding ShowWarning}"
         >
@@ -107,7 +107,7 @@
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 Content="{Binding Source={x:Static props:Resources.EXIT_BUTTON_TEXT}}"
-                Command="{Binding ExitCommand}"
+                Command="{Binding LogoutCommand}"
                 >
                 <Button.Background>
                     <ImageBrush/>
@@ -127,5 +127,11 @@
             </Button>
         </Grid>
     </Grid>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding WindowClosingCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
 </Window>

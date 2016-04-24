@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
 using CryptoMessenger.Commands;
 using CryptoMessenger.Models;
@@ -17,6 +18,11 @@ namespace CryptoMessenger.ViewModels
 			this.client = client;
 			client.Listen();
 
+			Login = client.Name;
+			Status = $"({Properties.Resources.STATUS_ONLINE_TEXT})";
+
+			client.ConnectionBreaks += () => { Status = $"({Properties.Resources.STATUS_OFFLINE_TEXT})"; };
+
 			RequestsButtonSelected = false;
 			FriendsButtonSelected = true;
 			SearchButtonSelected = false;
@@ -24,7 +30,36 @@ namespace CryptoMessenger.ViewModels
 			WindowPanel = new FriendsPanelViewModel(client);
 		}
 
+		/// <summary>
+		/// Fire event when logout.
+		/// </summary>
+		public event Action Logout;
+
 		#region Properties
+
+		// account login
+		private string _login;
+		public string Login
+		{
+			get { return _login; }
+			set
+			{
+				_login = value;
+				OnPropertyChanged(nameof(Login));
+			}
+		}
+
+		// account status
+		private string _status;
+		public string Status
+		{
+			get { return _status; }
+			set
+			{
+				_status = value;
+				OnPropertyChanged(nameof(Status));
+			}
+		}
 
 		// requests button selected
 		private bool _requestsButtonSelected;
@@ -142,6 +177,24 @@ namespace CryptoMessenger.ViewModels
 			SearchButtonSelected = true;
 
 			WindowPanel = new SearchPanelViewModel(client);
+		}
+
+		// logout
+		private DelegateCommand logoutCommand;
+		public ICommand LogoutCommand
+		{
+			get
+			{
+				if (logoutCommand == null)
+				{
+					logoutCommand = new DelegateCommand(() =>
+					{
+						client.Logout();
+						Logout();
+					});
+				}
+				return logoutCommand;
+			}
 		}
 
 		#endregion
