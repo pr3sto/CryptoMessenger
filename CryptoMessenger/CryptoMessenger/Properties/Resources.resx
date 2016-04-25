@@ -230,7 +230,7 @@
     <value>Чтобы начать диалог, выберите друга из списка друзей слева</value>
   </data>
   <data name="MESSAGE_TEXTBOX_PLACEHOLDER" xml:space="preserve">
-    <value>Введите Ваше сообщение здесь...</value>
+    <value>Введите сообщение... &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка</value>
   </data>
   <data name="SENDMESSAGE_BUTTON_TOOLTIP" xml:space="preserve">
     <value>Отправить сообщение</value>

@@ -275,7 +275,16 @@
                         FontSize="17"
                         Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged}"
                         Tag="{Binding Source={x:Static props:Resources.MESSAGE_TEXTBOX_PLACEHOLDER}}"
-                        />
+                        >
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding MessageEnterCommand}"/>
+                            <KeyBinding Key="Enter" 
+                                        Modifiers="Shift" 
+                                        Command="{Binding MessageShiftEnterCommand}"
+                                        CommandParameter="{Binding ElementName=msgTextbox}"
+                                        />
+                        </TextBox.InputBindings>
+                    </TextBox>
                     <!-- send message button -->
                     <Button
                         x:Name="sendButton"

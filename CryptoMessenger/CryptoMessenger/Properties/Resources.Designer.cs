@@ -281,7 +281,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Введите Ваше сообщение здесь....
+        ///   Looks up a localized string similar to Введите сообщение... &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка.
         /// </summary>
         public static string MESSAGE_TEXTBOX_PLACEHOLDER {
             get {

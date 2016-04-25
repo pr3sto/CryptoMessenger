@@ -210,12 +210,46 @@ namespace CryptoMessenger.ViewModels
 				return sendCommand;
 			}
 		}
+
+		// on press enter
+		private DelegateCommand messageEnterCommand;
+		public ICommand MessageEnterCommand
+		{
+			get
+			{
+				if (messageEnterCommand == null)
+				{
+					messageEnterCommand = new DelegateCommand(DoSend);
+				}
+				return messageEnterCommand;
+			}
+		}
+
 		private void DoSend()
 		{
 			if (SelectedFriend != null && !string.IsNullOrEmpty(MessageText))
 			{
 				client.SendReply(SelectedFriend.Name, MessageText);
 				MessageText = null;
+			}
+		}
+
+		// on press shift + enter
+		private DelegateCommand<object> messageShiftEnterCommand;
+		public ICommand MessageShiftEnterCommand
+		{
+			get
+			{
+				if (messageShiftEnterCommand == null)
+				{
+					messageShiftEnterCommand = new DelegateCommand<object>((t) =>
+					{
+						System.Windows.Controls.TextBox textbox = t as System.Windows.Controls.TextBox;
+						System.Windows.Clipboard.SetText(Environment.NewLine);
+						textbox?.Paste();
+					});
+				}
+				return messageShiftEnterCommand;
 			}
 		}
 
