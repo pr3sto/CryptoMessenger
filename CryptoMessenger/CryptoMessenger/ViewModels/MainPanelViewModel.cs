@@ -19,9 +19,9 @@ namespace CryptoMessenger.ViewModels
 			client.Listen();
 
 			Login = client.Name;
-			Status = $"({Properties.Resources.STATUS_ONLINE_TEXT})";
+			Status = $"({Properties.Resources.StatusOnlineText})";
 
-			client.ConnectionBreaks += () => { Status = $"({Properties.Resources.STATUS_OFFLINE_TEXT})"; };
+			client.ConnectionBreaks += delegate { Status = $"({Properties.Resources.StatusOfflineText})"; };
 
 			RequestsButtonSelected = false;
 			FriendsButtonSelected = true;
@@ -38,49 +38,49 @@ namespace CryptoMessenger.ViewModels
 		#region Properties
 
 		// account login
-		private string _login;
+		private string login;
 		public string Login
 		{
-			get { return _login; }
+			get { return login; }
 			set
 			{
-				_login = value;
+				login = value;
 				OnPropertyChanged(nameof(Login));
 			}
 		}
 
 		// account status
-		private string _status;
+		private string status;
 		public string Status
 		{
-			get { return _status; }
+			get { return status; }
 			set
 			{
-				_status = value;
+				status = value;
 				OnPropertyChanged(nameof(Status));
 			}
 		}
 
 		// requests button selected
-		private bool _requestsButtonSelected;
+		private bool requestsButtonSelected;
 		public bool RequestsButtonSelected
 		{
-			get { return _requestsButtonSelected; }
+			get { return requestsButtonSelected; }
 			set
 			{
-				_requestsButtonSelected = value;
+				requestsButtonSelected = value;
 				OnPropertyChanged(nameof(RequestsButtonSelected));
 			}
 		}
 
 		// friends button selected
-		private bool _friendsButtonSelected;
+		private bool friendsButtonSelected;
 		public bool FriendsButtonSelected
 		{
-			get { return _friendsButtonSelected; }
+			get { return friendsButtonSelected; }
 			set
 			{
-				_friendsButtonSelected = value;
+				friendsButtonSelected = value;
 				OnPropertyChanged(nameof(FriendsButtonSelected));
 			}
 		}
@@ -98,13 +98,13 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// panel
-		private IWindowPanel _windowPanel;
+		private IWindowPanel windowPanel;
 		public IWindowPanel WindowPanel
 		{
-			get { return _windowPanel; }
+			get { return windowPanel; }
 			set
 			{
-				_windowPanel = value;
+				windowPanel = value;
 				OnPropertyChanged(nameof(WindowPanel));
 			}
 		}
@@ -187,7 +187,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (logoutCommand == null)
 				{
-					logoutCommand = new DelegateCommand(() =>
+					logoutCommand = new DelegateCommand(delegate
 					{
 						client.Logout();
 						Logout();

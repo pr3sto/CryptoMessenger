@@ -21,13 +21,13 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
-				var user_id =
+				var userId =
 					from user in DBcontext.Users
 					where user.login.Equals(login)
 					select user.user_id;
 
-				if (user_id.Any())
-					return user_id.First();
+				if (userId.Any())
+					return userId.First();
 				else
 					return 0;
 			}
@@ -42,13 +42,13 @@ namespace Server.Database
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
-				var user_login =
+				var userLogin =
 					from user in DBcontext.Users
 					where user.user_id.Equals(id)
 					select user.login;
 
-				if (user_login.Any())
-					return user_login.First();
+				if (userLogin.Any())
+					return userLogin.First();
 				else
 					return null;
 			}
@@ -161,7 +161,7 @@ namespace Server.Database
 		}
 
 		/// <summary>
-		/// Get friends from database.
+		/// Get friends of user with this id from database.
 		/// </summary>
 		/// <param name="id">user's id</param>
 		/// <returns>array with friends.</returns>
@@ -184,11 +184,11 @@ namespace Server.Database
 				{
 					foreach (Friendship f in data)
 					{
-						int friend_id = f.friend_one.Equals(id) ? f.friend_two : f.friend_one;
-						string friend_login = GetUserLogin(friend_id);
+						int friendId = f.friend_one.Equals(id) ? f.friend_two : f.friend_one;
+						string friendLogin = GetUserLogin(friendId);
 							
-						if (!string.IsNullOrEmpty(friend_login))
-							friends.Add(friend_login);
+						if (!string.IsNullOrEmpty(friendLogin))
+							friends.Add(friendLogin);
 					}
 				}
 
@@ -199,21 +199,21 @@ namespace Server.Database
 		/// <summary>
 		/// Add or update friendship in database.
 		/// </summary>
+		/// <param name="userOneId">user one id.</param>
+		/// <param name="userTwoId">user two id.</param>
 		/// <param name="accepted">is friendship request accepted.</param>
-		/// <param name="user_one_id">user one id.</param>
-		/// <param name="user_two_id">user two id.</param>
 		/// <returns>true if operations success; otherwise, false.</returns>
-		public static bool SetFriendship(bool accepted, int user_one_id, int user_two_id)
+		public static bool SetFriendship(int userOneId, int userTwoId, bool accepted)
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// get friendship records
 				var data =
 					from friendship in DBcontext.Friends
-					where (friendship.friend_one.Equals(user_one_id) &
-					friendship.friend_two.Equals(user_two_id)) |
-					(friendship.friend_two.Equals(user_one_id) &
-					friendship.friend_one.Equals(user_two_id))
+					where (friendship.friend_one.Equals(userOneId) &
+					friendship.friend_two.Equals(userTwoId)) |
+					(friendship.friend_two.Equals(userOneId) &
+					friendship.friend_one.Equals(userTwoId))
 					select friendship;
 
 				// already friends
@@ -233,8 +233,8 @@ namespace Server.Database
 					{
 						Friendship f = new Friendship
 						{
-							friend_one = user_one_id,
-							friend_two = user_two_id,
+							friend_one = userOneId,
+							friend_two = userTwoId,
 							accepted = accepted
 						};
 						DBcontext.Friends.InsertOnSubmit(f);
@@ -255,7 +255,7 @@ namespace Server.Database
 		}
 
 		/// <summary>
-		/// Get array of income friendship requests.
+		/// Get array of income friendship requests for user with this id.
 		/// </summary>
 		/// <param name="id">user's id.</param>
 		/// <returns>array of income friendship requests.</returns>
@@ -277,10 +277,10 @@ namespace Server.Database
 				{
 					foreach (int uid in data)
 					{
-						string user_login = GetUserLogin(uid);
+						string userLogin = GetUserLogin(uid);
 
-						if (!string.IsNullOrEmpty(user_login))
-							logins.Add(user_login);
+						if (!string.IsNullOrEmpty(userLogin))
+							logins.Add(userLogin);
 					}
 				}
 
@@ -289,7 +289,7 @@ namespace Server.Database
 		}
 
 		/// <summary>
-		/// Get array of outcome friendship requests.
+		/// Get array of outcome friendship requests for user with this id.
 		/// </summary>
 		/// <param name="id">user's id.</param>
 		/// <returns>array of outcome friendship requests.</returns>
@@ -311,10 +311,10 @@ namespace Server.Database
 				{
 					foreach (int uid in data)
 					{
-						string user_login = GetUserLogin(uid);
+						string userLogin = GetUserLogin(uid);
 
-						if (!string.IsNullOrEmpty(user_login))
-							logins.Add(user_login);
+						if (!string.IsNullOrEmpty(userLogin))
+							logins.Add(userLogin);
 					}
 				}
 
@@ -325,18 +325,18 @@ namespace Server.Database
 		/// <summary>
 		/// Remove friendship request.
 		/// </summary>
-		/// <param name="user_one_id">user one id.</param>
-		/// <param name="user_two_id">user two id.</param>
+		/// <param name="userOneId">user one id.</param>
+		/// <param name="userTwoId">user two id.</param>
 		/// <returns>true if operations success; otherwise, false.</returns>
-		public static bool RemoveFriendshipRequest(int user_one_id, int user_two_id)
+		public static bool RemoveFriendshipRequest(int userOneId, int userTwoId)
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// get friendsip requests
 				var data =
 					from friendship in DBcontext.Friends
-					where friendship.friend_one.Equals(user_one_id) &
-					friendship.friend_two.Equals(user_two_id) &
+					where friendship.friend_one.Equals(userOneId) &
+					friendship.friend_two.Equals(userTwoId) &
 					!friendship.accepted
 					select friendship;
 
@@ -361,21 +361,21 @@ namespace Server.Database
 		/// <summary>
 		/// Remove friend.
 		/// </summary>
-		/// <param name="user_one_id">user one id.</param>
-		/// <param name="user_two_id">user two id.</param>
+		/// <param name="userOneId">user one id.</param>
+		/// <param name="userTwoId">user two id.</param>
 		/// <returns>true if operations success; otherwise, false.</returns>
-		public static bool RemoveFriend(int user_one_id, int user_two_id)
+		public static bool RemoveFriend(int userOneId, int userTwoId)
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// get friendship records
 				var data =
 					from friendship in DBcontext.Friends
-					where (friendship.friend_one.Equals(user_one_id) &
-					friendship.friend_two.Equals(user_two_id) &
+					where (friendship.friend_one.Equals(userOneId) &
+					friendship.friend_two.Equals(userTwoId) &
 					friendship.accepted) |
-					(friendship.friend_one.Equals(user_two_id) &
-					friendship.friend_two.Equals(user_one_id) &
+					(friendship.friend_one.Equals(userTwoId) &
+					friendship.friend_two.Equals(userOneId) &
 					friendship.accepted)
 					select friendship;
 
@@ -400,30 +400,29 @@ namespace Server.Database
 		/// <summary>
 		/// Add new reply (conversation) to database.
 		/// </summary>
-		/// <param name="sender_id">sender's id.</param>
-		/// <param name="receiver_id">receiver's id.</param>
+		/// <param name="senderId">sender's id.</param>
+		/// <param name="receiverId">receiver's id.</param>
 		/// <param name="text">text of reply.</param>
 		/// <param name="time">time.</param>
 		/// <returns>true if operations success; otherwise, false.</returns>
-		public static bool AddNewReply(int sender_id, int receiver_id, string text, DateTime time)
+		public static bool AddNewReply(int senderId, int receiverId, string text, DateTime time)
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// get conversation id
 				var data = from conversation in DBcontext.Conversations
-					where (conversation.user_one.Equals(sender_id) &
-					conversation.user_two.Equals(receiver_id)) |
-					(conversation.user_one.Equals(receiver_id) &
-					conversation.user_two.Equals(sender_id))
+					where (conversation.user_one.Equals(senderId) &
+					conversation.user_two.Equals(receiverId)) |
+					(conversation.user_one.Equals(receiverId) &
+					conversation.user_two.Equals(senderId))
 					select conversation.conversation_id;
-
-				// conversation_id
-				int c_id;
+				
+				int conversationId;
 
 				// conversation exist
 				if (data.Any())
 				{
-					c_id = data.First();
+					conversationId = data.First();
 				}
 				// conversation dont exist
 				else
@@ -431,15 +430,15 @@ namespace Server.Database
 					// new conversation
 					Conversation conv = new Conversation
 					{
-						user_one = sender_id,
-						user_two = receiver_id
+						user_one = senderId,
+						user_two = receiverId
 					};
 					DBcontext.Conversations.InsertOnSubmit(conv);
 
 					try
 					{
 						DBcontext.SubmitChanges();
-						c_id = conv.conversation_id;
+						conversationId = conv.conversation_id;
 					}
 					catch (Exception e)
 					{
@@ -452,8 +451,8 @@ namespace Server.Database
 				ConversationReply reply = new ConversationReply
 				{
 					reply = text,
-					conversation_id = c_id,
-					user_id = sender_id,
+					conversation_id = conversationId,
+					user_id = senderId,
 					time = time
 				};
 				DBcontext.Conversation_replies.InsertOnSubmit(reply);
@@ -474,26 +473,26 @@ namespace Server.Database
 		/// <summary>
 		/// Get array of conversation replies.
 		/// </summary>
-		/// <param name="user_one_id">user one id.</param>
-		/// <param name="user_two_id">user two id.</param>
+		/// <param name="userOneId">user one id.</param>
+		/// <param name="userTwoId">user two id.</param>
 		/// <returns>array of conversation replies.</returns>
-		public static ConversationReply[] GetConversation(int user_one_id, int user_two_id)
+		public static ConversationReply[] GetConversation(int userOneId, int userTwoId)
 		{
 			using (var DBcontext = new LinqToSqlDataContext())
 			{
 				// get conversation id
-				var c_id = from conversation in DBcontext.Conversations
-					where (conversation.user_one.Equals(user_one_id) &
-					conversation.user_two.Equals(user_two_id)) |
-					(conversation.user_one.Equals(user_two_id) &
-					conversation.user_two.Equals(user_one_id))
+				var conversationId = from conversation in DBcontext.Conversations
+					where (conversation.user_one.Equals(userOneId) &
+					conversation.user_two.Equals(userTwoId)) |
+					(conversation.user_one.Equals(userTwoId) &
+					conversation.user_two.Equals(userOneId))
 					select conversation.conversation_id;
 
 				// conversation exist
-				if (c_id.Any())
+				if (conversationId.Any())
 				{
 					var replies = from reply in DBcontext.Conversation_replies
-						where reply.conversation_id.Equals(c_id.First())
+						where reply.conversation_id.Equals(conversationId.First())
 						select reply;
 
 					if (replies.Any())

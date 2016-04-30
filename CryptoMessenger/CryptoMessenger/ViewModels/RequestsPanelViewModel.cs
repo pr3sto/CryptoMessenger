@@ -31,7 +31,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (acceptRequestCommand == null)
 				{
-					acceptRequestCommand = new DelegateCommand(() => 
+					acceptRequestCommand = new DelegateCommand(delegate 
 					{ client.AcceptFriendshipRequest(Name); });
 				}
 				return acceptRequestCommand;
@@ -46,7 +46,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (rejectRequestCommand == null)
 				{
-					rejectRequestCommand = new DelegateCommand(() => 
+					rejectRequestCommand = new DelegateCommand(delegate
 					{ client.RejectFriendshipRequest(Name); });
 				}
 				return rejectRequestCommand;
@@ -78,7 +78,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (cancelRequestCommand == null)
 				{
-					cancelRequestCommand = new DelegateCommand(() =>
+					cancelRequestCommand = new DelegateCommand(delegate
 					{ client.CancelFriendshipRequest(Name); });
 				}
 				return cancelRequestCommand;
@@ -126,25 +126,25 @@ namespace CryptoMessenger.ViewModels
 		#region Properties
 
 		// income requests list
-		private ObservableCollection<IncomeRequest> _incomeReqsList;
+		private ObservableCollection<IncomeRequest> incomeReqsList;
 		public ObservableCollection<IncomeRequest> IncomeReqsList
 		{
-			get { return _incomeReqsList; }
+			get { return incomeReqsList; }
 			set
 			{
-				_incomeReqsList = value;
+				incomeReqsList = value;
 				OnPropertyChanged(nameof(IncomeReqsList));
 			}
 		}
 
 		// outcome requests list
-		private ObservableCollection<OutcomeRequest> _outcomeReqsList;
+		private ObservableCollection<OutcomeRequest> outcomeReqsList;
 		public ObservableCollection<OutcomeRequest> OutcomeReqsList
 		{
-			get { return _outcomeReqsList; }
+			get { return outcomeReqsList; }
 			set
 			{
-				_outcomeReqsList = value;
+				outcomeReqsList = value;
 				OnPropertyChanged(nameof(OutcomeReqsList));
 			}
 		}

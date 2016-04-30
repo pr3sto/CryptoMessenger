@@ -33,7 +33,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (removeFriendCommand == null)
 				{
-					removeFriendCommand = new DelegateCommand(() =>
+					removeFriendCommand = new DelegateCommand(delegate
 					{ client.RemoveFriend(Name); });
 				}
 				return removeFriendCommand;
@@ -46,12 +46,12 @@ namespace CryptoMessenger.ViewModels
 	/// </summary>
 	class Reply
 	{
-		public Reply(ConversationReply r, string myLogin)
+		public Reply(ConversationReply reply, string myLogin)
 		{
-			Author = r.Author;
-			Time = r.Time;
-			Text = r.Text;
-			IsMyReply = r.Author == myLogin;
+			Author = reply.Author;
+			Time = reply.Time;
+			Text = reply.Text;
+			IsMyReply = reply.Author == myLogin;
 		}
 
 		public string Author { get; set; }
@@ -112,65 +112,65 @@ namespace CryptoMessenger.ViewModels
 		#region Properties
 
 		// friends list
-		private ObservableCollection<Friend> _friendsList;
+		private ObservableCollection<Friend> friendsList;
 		public ObservableCollection<Friend> FriendsList
 		{
-			get { return _friendsList; }
+			get { return friendsList; }
 			set
 			{
-				_friendsList = value;
+				friendsList = value;
 				OnPropertyChanged(nameof(FriendsList));
 			}
 		}
 
 		// replies list
-		private ObservableCollection<Reply> _repliesList;
+		private ObservableCollection<Reply> repliesList;
 		public ObservableCollection<Reply> RepliesList
 		{
-			get { return _repliesList; }
+			get { return repliesList; }
 			set
 			{
-				_repliesList = value;
+				repliesList = value;
 				OnPropertyChanged(nameof(RepliesList));
 			}
 		}
 
 		// message text
-		private string _messageText;
+		private string messageText;
 		public string MessageText
 		{
-			get { return _messageText; }
+			get { return messageText; }
 			set
 			{
-				_messageText = value;
+				messageText = value;
 				OnPropertyChanged(nameof(MessageText));
 			}
 		}
 
 		// selected friend
-		private Friend _selectedFriend;
+		private Friend selectedFriend;
 		public Friend SelectedFriend
 		{
-			get { return _selectedFriend; }
+			get { return selectedFriend; }
 			set
 			{
-				_selectedFriend = value;
-				IsDialogVisible = (_selectedFriend != null);
+				selectedFriend = value;
+				IsDialogVisible = (selectedFriend != null);
 
-				if (_selectedFriend != null)
+				if (selectedFriend != null)
 				{
-					if (!client.Conversations.Contains(_selectedFriend.Name))
+					if (!client.Conversations.Contains(selectedFriend.Name))
 					{
-						client.GetConversation(_selectedFriend.Name);
+						client.GetConversation(selectedFriend.Name);
 						RepliesList = new ObservableCollection<Reply>();
 					}
 					else
 					{
-						List<ConversationReply> replies_tmp = client.Conversations.GetConversation(_selectedFriend.Name)?.replies;
+						List<ConversationReply> repliesTmp = client.Conversations.GetConversation(selectedFriend.Name)?.replies;
 						List<Reply> replies = new List<Reply>();
 
-						if (replies_tmp != null)
-							foreach (var r in replies_tmp)
+						if (repliesTmp != null)
+							foreach (var r in repliesTmp)
 								replies.Add(new Reply(r, client.Name));
 						
 						RepliesList = new ObservableCollection<Reply>(replies);
@@ -182,13 +182,13 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// is dialg visible
-		private bool _isDialogVisible;
+		private bool isDialogVisible;
 		public bool IsDialogVisible
 		{
-			get { return _isDialogVisible; }
+			get { return isDialogVisible; }
 			set
 			{
-				_isDialogVisible = value;
+				isDialogVisible = value;
 				OnPropertyChanged(nameof(IsDialogVisible));
 			}
 		}
@@ -244,9 +244,13 @@ namespace CryptoMessenger.ViewModels
 				{
 					messageShiftEnterCommand = new DelegateCommand<object>((t) =>
 					{
+						var oldClipboard = System.Windows.Clipboard.GetText();
+
 						System.Windows.Controls.TextBox textbox = t as System.Windows.Controls.TextBox;
 						System.Windows.Clipboard.SetText(Environment.NewLine);
 						textbox?.Paste();
+
+						System.Windows.Clipboard.SetText(oldClipboard);
 					});
 				}
 				return messageShiftEnterCommand;

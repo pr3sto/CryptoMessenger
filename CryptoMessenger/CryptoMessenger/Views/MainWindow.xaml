@@ -16,7 +16,7 @@
         WindowStartupLocation="CenterScreen"
         Height="500" Width="750"
         FontFamily="/CryptoMessenger;component/Resources/#Rain Tungsten Medium"
-        Title="{Binding Source={x:Static props:Resources.APP_NAME}}" 
+        Title="{Binding Source={x:Static props:Resources.AppName}}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"
         extensions:Extensions.ShowWarning="{Binding ShowWarning}"
         >
@@ -67,7 +67,7 @@
                 HorizontalAlignment="Center"
                 FontSize="24"
                 Foreground="Red"
-                Text="{Binding Source={x:Static props:Resources.CONNECTIONBREAKS_NOTFICATION}}"
+                Text="{Binding Source={x:Static props:Resources.ConnectionBreaksNotification}}"
                 />
             <Button 
                 Cursor="Hand"
@@ -78,7 +78,7 @@
                 FontSize="17"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
-                Content="{Binding Source={x:Static props:Resources.OK_BUTTON_TEXT}}"
+                Content="{Binding Source={x:Static props:Resources.OkButtonText}}"
                 Command="{Binding HideWarningCommand}"
                 >
                 <Button.Background>
@@ -106,7 +106,7 @@
                 FontSize="17"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
-                Content="{Binding Source={x:Static props:Resources.EXIT_BUTTON_TEXT}}"
+                Content="{Binding Source={x:Static props:Resources.ExitButtonText}}"
                 Command="{Binding LogoutCommand}"
                 >
                 <Button.Background>

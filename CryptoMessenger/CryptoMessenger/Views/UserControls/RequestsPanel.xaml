@@ -41,7 +41,7 @@
                 TextOptions.TextFormattingMode="Display"
                 FontSize="17"
                 Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
-                Text="{Binding Source={x:Static props:Resources.INCOMEREQUESTS_TEXTBLOCK_TEXT}}"
+                Text="{Binding Source={x:Static props:Resources.IncomeRequestsTextblockText}}"
                 />
             <!-- empty list notify -->
             <TextBlock  
@@ -52,7 +52,7 @@
                 TextOptions.TextFormattingMode="Display"
                 FontSize="26" 
                 Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                Text="{Binding Source={x:Static props:Resources.EMPTYREQUESTS_LISTBOX_PLACEHOLDER}}">
+                Text="{Binding Source={x:Static props:Resources.EmptyRequestsListboxPlaceholder}}">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -105,7 +105,7 @@
                                 Height="25" Width="25"
                                 Foreground="White"
                                 Command="{Binding Path=AcceptRequestCommand}"
-                                ToolTip="{Binding Source={x:Static props:Resources.ACCEPTFRIENDSHIP_BUTTON_TOOLTIP}}"
+                                ToolTip="{Binding Source={x:Static props:Resources.AcceptFriendshipButtonTooltip}}"
                                 Visibility="Collapsed"
                                 >
                                 <Button.Background>
@@ -124,7 +124,7 @@
                                 Height="25" Width="25"
                                 Foreground="White"
                                 Command="{Binding Path=RejectRequestCommand}"
-                                ToolTip="{Binding Source={x:Static props:Resources.REJECTFRIENDSHIP_BUTTON_TOOLTIP}}"
+                                ToolTip="{Binding Source={x:Static props:Resources.RejectFriendshipButtonTooltip}}"
                                 Visibility="Collapsed"
                                 >
                                 <Button.Background>
@@ -171,7 +171,7 @@
                 TextOptions.TextFormattingMode="Display"
                 FontSize="17"
                 Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
-                Text="{Binding Source={x:Static props:Resources.OUTCOMEREQUESTS_TEXTBLOCK_TEXT}}"
+                Text="{Binding Source={x:Static props:Resources.OutcomeRequestsTextblockText}}"
                 />
             <!-- empty list notify -->
             <TextBlock  
@@ -182,7 +182,7 @@
                 TextOptions.TextFormattingMode="Display"
                 FontSize="26" 
                 Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                Text="{Binding Source={x:Static props:Resources.EMPTYREQUESTS_LISTBOX_PLACEHOLDER}}">
+                Text="{Binding Source={x:Static props:Resources.EmptyRequestsListboxPlaceholder}}">
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -228,7 +228,7 @@
                                 Height="25" Width="25"
                                 Foreground="White"
                                 Command="{Binding Path=CancelRequestCommand}"
-                                ToolTip="{Binding Source={x:Static props:Resources.CANCELREQUEST_BUTTON_TOOLTIP}}"
+                                ToolTip="{Binding Source={x:Static props:Resources.CancelRequestButtonTooltip}}"
                                 Visibility="Collapsed"
                                 >
                                 <Button.Background>

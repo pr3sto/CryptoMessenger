@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
-    xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
     >
 
     <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
@@ -17,14 +16,14 @@
                     <Grid>
                         <!-- background color -->
                         <Rectangle 
-                            x:Name="BackgroundRect"
+                            x:Name="backgroundRect"
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch" 
                             Fill="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                             />
                         <!-- background image -->
                         <Rectangle 
-                            x:Name="buttonBackground"
+                            x:Name="backgroundImage"
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch" 
                             Fill="{TemplateBinding Foreground}"
@@ -45,13 +44,13 @@
                     <ControlTemplate.Triggers>
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="BackgroundRect" Property="Fill" 
+                            <Setter TargetName="backgroundRect" Property="Fill" 
                                     Value="{Binding Path=MainSecondLightBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
                         <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="BackgroundRect" Property="Fill" 
+                            <Setter TargetName="backgroundRect" Property="Fill" 
                                     Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                                     />
                             <Setter Property="Foreground" 
@@ -60,7 +59,7 @@
                         </Trigger>
                         <!-- button disabled -->
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="buttonBackground" Property="Fill" 
+                            <Setter TargetName="backgroundImage" Property="Fill" 
                                     Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
                             <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
                                     Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>

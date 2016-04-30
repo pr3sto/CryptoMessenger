@@ -15,7 +15,7 @@ namespace CryptoMessenger.Models
 	public class Client : INotifyPropertyChanged
 	{
 		// is client logged in
-		private bool _isLoggedIn = false;
+		private bool isLoggedIn = false;
 
 		// server's port 
 		private int port;
@@ -42,55 +42,55 @@ namespace CryptoMessenger.Models
 
 		#region Data that comes from server
 
-		private string[] _friendsList;
+		private string[] friendsList;
 		/// <summary>
 		/// Array of friends.
 		/// </summary>
 		public string[] FriendsList
 		{
-			get { return _friendsList; }
+			get { return friendsList; }
 			private set
 			{
-				_friendsList = value;
+				friendsList = value;
 				RaisePropertyChanged(nameof(FriendsList));
 			}
 		}
-		private string[] _searchUsersList;
+		private string[] searchUsersList;
 		/// <summary>
 		/// Array of all users.
 		/// </summary>
 		public string[] SearchUsersList
 		{
-			get { return _searchUsersList; }
+			get { return searchUsersList; }
 			private set
 			{
-				_searchUsersList = value;
+				searchUsersList = value;
 				RaisePropertyChanged(nameof(SearchUsersList));
 			}
 		}
-		private string[] _incomeRequestsList;
+		private string[] incomeRequestsList;
 		/// <summary>
 		/// Array of income requests.
 		/// </summary>
 		public string[] IncomeRequestsList
 		{
-			get { return _incomeRequestsList; }
+			get { return incomeRequestsList; }
 			private set
 			{
-				_incomeRequestsList = value;
+				incomeRequestsList = value;
 				RaisePropertyChanged(nameof(IncomeRequestsList));
 			}
 		}
-		private string[] _outcomeRequestsList;
+		private string[] outcomeRequestsList;
 		/// <summary>
 		/// Array of outcome requests.
 		/// </summary>
 		public string[] OutcomeRequestsList
 		{
-			get { return _outcomeRequestsList; }
+			get { return outcomeRequestsList; }
 			private set
 			{
-				_outcomeRequestsList = value;
+				outcomeRequestsList = value;
 				RaisePropertyChanged(nameof(OutcomeRequestsList));
 			}
 		}
@@ -130,7 +130,7 @@ namespace CryptoMessenger.Models
 			Name = null;
 			Conversations = new Conversations();
 
-			this.ConnectionBreaks += () => { _isLoggedIn = false; };
+			ConnectionBreaks += delegate { isLoggedIn = false; };
 		}
 
 		/// <summary>
@@ -143,7 +143,7 @@ namespace CryptoMessenger.Models
 		/// <exception cref="CertificateException"></exception>
 		public async Task<LoginRegisterResponse> Login(string login, string password)
 		{
-			if (_isLoggedIn) return LoginRegisterResponse.ERROR;
+			if (isLoggedIn) return LoginRegisterResponse.Error;
 
 			// certificate
 			X509Certificate2 cert = SslTools.CreateCertificate(typeof(Client), "CryptoMessenger.Certificate.cert.pfx");
@@ -157,8 +157,8 @@ namespace CryptoMessenger.Models
 				// send login request
 				client.SendMessage(new LoginRequestMessage
 				{
-					login = login,
-					password = password
+					Login = login,
+					Password = password
 				});
 
 				// async wait for server's response
@@ -171,9 +171,9 @@ namespace CryptoMessenger.Models
 			}
 
 			// dont disconnect if login success
-			if (LoginRegisterResponse.SUCCESS.Equals(serverResp.response))
+			if (LoginRegisterResponse.Success.Equals(serverResp.Response))
 			{
-				_isLoggedIn = true;
+				isLoggedIn = true;
 				Name = login;
 			}
 			else
@@ -181,20 +181,20 @@ namespace CryptoMessenger.Models
 				client.Close();
 			}
 
-			return serverResp.response;
+			return serverResp.Response;
 		}
 
 		/// <summary>
 		/// Try to register client on the server.
 		/// </summary>
-		/// <param name="_login">users login.</param>
-		/// <param name="_password">users password.</param>
+		/// <param name="login">users login.</param>
+		/// <param name="password">users password.</param>
 		/// <returns>server's response.</returns>
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		/// <exception cref="CertificateException"></exception>
-		public async Task<LoginRegisterResponse> Register(string _login, string _password)
+		public async Task<LoginRegisterResponse> Register(string login, string password)
 		{
-			if (_isLoggedIn) return LoginRegisterResponse.ERROR;
+			if (isLoggedIn) return LoginRegisterResponse.Error;
 
 			// certificate
 			X509Certificate2 cert = SslTools.CreateCertificate(typeof(Client), "CryptoMessenger.Certificate.cert.pfx");
@@ -208,8 +208,8 @@ namespace CryptoMessenger.Models
 				// send register request
 				client.SendMessage(new RegisterRequestMessage
 				{
-					login = _login,
-					password = _password
+					Login = login,
+					Password = password
 				});
 
 				// async wait for server's response
@@ -224,7 +224,7 @@ namespace CryptoMessenger.Models
 				client.Close();
 			}
 
-			return serverResp.response;
+			return serverResp.Response;
 		}
 
 		/// <summary>
@@ -232,16 +232,13 @@ namespace CryptoMessenger.Models
 		/// </summary>
 		public void Logout()
 		{
-			if (!_isLoggedIn) return;
-
-			_isLoggedIn = false;
+			isLoggedIn = false;
 
 			Name = null;
 			FriendsList = null;
 			SearchUsersList = null;
 			IncomeRequestsList = null;
 			OutcomeRequestsList = null;
-
 			Conversations = new Conversations();
 
 			try
@@ -268,14 +265,10 @@ namespace CryptoMessenger.Models
 
 		/// <summary>
 		/// Notify about reply from server comes.
-		/// <param name="interlocutor">interlocutor.</param>
-		/// <param name="reply">new reply.</param>
 		/// </summary>
 		public event Action<string, ConversationReply> NewReplyComes;
 		/// <summary>
 		/// Notify about reply from server comes.
-		/// <param name="interlocutor">interlocutor.</param>
-		/// <param name="reply">new reply.</param>
 		/// </summary>
 		public event Action<string, ConversationReply> OldReplyComes;
 
@@ -286,7 +279,7 @@ namespace CryptoMessenger.Models
 		/// <param name="//form">//form to update when message come.</param>
 		public async void Listen()
 		{
-			if (!_isLoggedIn) return;
+			if (!isLoggedIn) return;
 			
 			// message from server
 			Message message;
@@ -300,7 +293,7 @@ namespace CryptoMessenger.Models
 				}
 				catch (ConnectionInterruptedException)
 				{
-					if (_isLoggedIn)
+					if (isLoggedIn)
 						ConnectionBreaks();
 
 					return;
@@ -309,58 +302,58 @@ namespace CryptoMessenger.Models
 				// handle message
 				if (message is AllUsersMessage)
 				{
-					SearchUsersList = ((AllUsersMessage)message).users;
+					SearchUsersList = ((AllUsersMessage)message).Users;
 				}
 				else if (message is FriendsMessage)
 				{
-					FriendsList = ((FriendsMessage)message).friends;					
+					FriendsList = ((FriendsMessage)message).Friends;					
 				}
 				else if (message is IncomeFriendshipRequestsMessage)
 				{
-					IncomeRequestsList = ((IncomeFriendshipRequestsMessage)message).logins;
+					IncomeRequestsList = ((IncomeFriendshipRequestsMessage)message).Logins;
 				}
 				else if (message is OutcomeFriendshipRequestsMessage)
 				{
-					OutcomeRequestsList = ((OutcomeFriendshipRequestsMessage)message).logins;
+					OutcomeRequestsList = ((OutcomeFriendshipRequestsMessage)message).Logins;
 				}
 				else if (message is NewReplyMessage)
 				{
 					Conversations.AddReply(
-						((NewReplyMessage)message).interlocutor,
+						((NewReplyMessage)message).Interlocutor,
 						new ConversationReply
 						{
-							Author = ((NewReplyMessage)message).reply_author,
-							Time = ((NewReplyMessage)message).reply_time,
-							Text = ((NewReplyMessage)message).reply_text
+							Author = ((NewReplyMessage)message).Author,
+							Time = ((NewReplyMessage)message).Time,
+							Text = ((NewReplyMessage)message).Text
 						}
 					);
 					NewReplyComes(
-						((NewReplyMessage)message).interlocutor,
+						((NewReplyMessage)message).Interlocutor,
 						new ConversationReply
 						{
-							Author = ((NewReplyMessage)message).reply_author,
-							Time = ((NewReplyMessage)message).reply_time,
-							Text = ((NewReplyMessage)message).reply_text
+							Author = ((NewReplyMessage)message).Author,
+							Time = ((NewReplyMessage)message).Time,
+							Text = ((NewReplyMessage)message).Text
 						});
 				}
 				else if (message is OldReplyMessage)
 				{
 					Conversations.InsertReplyToTop(
-						((OldReplyMessage)message).interlocutor,
+						((OldReplyMessage)message).Interlocutor,
 						new ConversationReply
 						{
-							Author = ((OldReplyMessage)message).reply_author,
-							Time = ((OldReplyMessage)message).reply_time,
-							Text = ((OldReplyMessage)message).reply_text
+							Author = ((OldReplyMessage)message).Author,
+							Time = ((OldReplyMessage)message).Time,
+							Text = ((OldReplyMessage)message).Text
 						}
 					);
 					OldReplyComes(
-						((OldReplyMessage)message).interlocutor,
+						((OldReplyMessage)message).Interlocutor,
 						new ConversationReply
 						{
-							Author = ((OldReplyMessage)message).reply_author,
-							Time = ((OldReplyMessage)message).reply_time,
-							Text = ((OldReplyMessage)message).reply_text
+							Author = ((OldReplyMessage)message).Author,
+							Time = ((OldReplyMessage)message).Time,
+							Text = ((OldReplyMessage)message).Text
 						});
 				}
 			}
@@ -374,7 +367,7 @@ namespace CryptoMessenger.Models
 		/// <param name="message">message to send.</param>
 		private void SendMessage(Message message)
 		{
-			if (!_isLoggedIn) return;
+			if (!isLoggedIn) return;
 
 			try
 			{
@@ -461,7 +454,7 @@ namespace CryptoMessenger.Models
 		{
 			SendMessage(new FriendshipRequestMessage
 			{
-				login_of_needed_user = login
+				LoginOfNeededUser = login
 			});
 		}
 
@@ -473,8 +466,8 @@ namespace CryptoMessenger.Models
 		{
 			SendMessage(new FriendActionMessage
 			{
-				friends_login = login,
-				action = ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST
+				FriendLogin = login,
+				Action = ActionsWithFriend.CancelFriendshipRequest
 			});
 		}
 		
@@ -486,8 +479,8 @@ namespace CryptoMessenger.Models
 		{
 			SendMessage(new FriendActionMessage
 			{
-				friends_login = login,
-				action = ActionsWithFriend.ACCEPT_FRIENDSHIP
+				FriendLogin = login,
+				Action = ActionsWithFriend.AcceptFriendship
 			});
 		}
 
@@ -499,8 +492,8 @@ namespace CryptoMessenger.Models
 		{
 			SendMessage(new FriendActionMessage
 			{
-				friends_login = login,
-				action = ActionsWithFriend.REJECT_FRIENDSHIP
+				FriendLogin = login,
+				Action = ActionsWithFriend.RejectFriendship
 			});
 		}
 
@@ -512,8 +505,8 @@ namespace CryptoMessenger.Models
 		{
 			SendMessage(new FriendActionMessage
 			{
-				friends_login = login,
-				action = ActionsWithFriend.REMOVE_FROM_FRIENDS
+				FriendLogin = login,
+				Action = ActionsWithFriend.RemoveFromFriends
 			});
 		}
 
@@ -526,8 +519,8 @@ namespace CryptoMessenger.Models
 		{
 			SendMessage(new NewReplyMessage
 			{
-				interlocutor = receiver,
-				reply_text = text
+				Interlocutor = receiver,
+				Text = text
 			});
 		}
 
@@ -540,7 +533,7 @@ namespace CryptoMessenger.Models
 		{
 			SendMessage(new GetConversationMessage
 			{
-				interlocutor = interlocutor
+				Interlocutor = interlocutor
 			});
 		}
 

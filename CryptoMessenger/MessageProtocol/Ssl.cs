@@ -155,12 +155,11 @@ namespace MessageProtocol
 		{
 			try
 			{
-				byte[] embeddedCert;
 				var thisAssembly = Assembly.GetAssembly(type);
 
 				using (Stream certStream = thisAssembly.GetManifestResourceStream(pathToResource))
 				{
-					embeddedCert = new byte[certStream.Length];
+					byte[] embeddedCert = new byte[certStream.Length];
 					certStream.Read(embeddedCert, 0, (int)certStream.Length);
 
 					return new X509Certificate2(embeddedCert, "", X509KeyStorageFlags.MachineKeySet);

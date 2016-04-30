@@ -79,7 +79,7 @@ namespace Server
 		/// </summary>
 		public void Dispose()
 		{
-			onlineUsers.ForEach((x) => { x.Dispose(); });
+			onlineUsers.ForEach(x => x.Dispose());
 			onlineUsers.Clear();
 
 			log.Info("All clients disconnected.");
@@ -128,8 +128,7 @@ namespace Server
 				{
 					if (onlineUsers.Contains(user))
 					{
-						log.Info(string.Format("Client disconnected. ip {0}",
-							((IPEndPoint)user.client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
+						log.Info($"Client disconnected. ip {((IPEndPoint)user.client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
 
 						onlineUsers.Remove(user);
 						user.Dispose();
@@ -158,35 +157,35 @@ namespace Server
 					}
 					else if (message is GetConversationMessage)
 					{
-						SendConversation(user, ((GetConversationMessage)message).interlocutor);
+						SendConversation(user, ((GetConversationMessage)message).Interlocutor);
 					}
 					else if (message is FriendshipRequestMessage)
 					{
-						SetFriendshipRequest(user, ((FriendshipRequestMessage)message).login_of_needed_user);
+						SetFriendshipRequest(user, ((FriendshipRequestMessage)message).LoginOfNeededUser);
 					}
 					else if (message is FriendActionMessage)
 					{
 						FriendActionMessage msg = (FriendActionMessage)message;
 
-						switch (msg.action)
+						switch (msg.Action)
 						{
-							case ActionsWithFriend.CANCEL_FRIENDSHIP_REQUEST:
-								CancelFriendshipRequest(user, msg.friends_login);
+							case ActionsWithFriend.CancelFriendshipRequest:
+								CancelFriendshipRequest(user, msg.FriendLogin);
 								break;
-							case ActionsWithFriend.ACCEPT_FRIENDSHIP:
-								AcceptFriendshipRequest(user, msg.friends_login);
+							case ActionsWithFriend.AcceptFriendship:
+								AcceptFriendshipRequest(user, msg.FriendLogin);
 								break;
-							case ActionsWithFriend.REJECT_FRIENDSHIP:
-								RejectFriendshipRequest(user, msg.friends_login);
+							case ActionsWithFriend.RejectFriendship:
+								RejectFriendshipRequest(user, msg.FriendLogin);
 								break;
-							case ActionsWithFriend.REMOVE_FROM_FRIENDS:
-								RemoveFriend(user, msg.friends_login);
+							case ActionsWithFriend.RemoveFromFriends:
+								RemoveFriend(user, msg.FriendLogin);
 								break;
 						}
 					}
 					else if (message is NewReplyMessage)
 					{
-						HandleReply(user, ((NewReplyMessage)message).interlocutor, ((NewReplyMessage)message).reply_text);
+						HandleReply(user, ((NewReplyMessage)message).Interlocutor, ((NewReplyMessage)message).Text);
 					}
 					else if (message is LogoutRequestMessage)
 					{
@@ -196,7 +195,7 @@ namespace Server
 				}
 				catch (ConnectionInterruptedException e)
 				{
-					log.Error(string.Format("client '{0}' disconnected", user.login), e);
+					log.Error($"Client '{user.login}' disconnected", e);
 				}
 			}
 		}
@@ -209,8 +208,7 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void Logout(OnlineUser user)
 		{
-			log.Info(string.Format("Client disconnected. ip {0}",
-				((IPEndPoint)user.client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
+			log.Info($"Client disconnected. ip {((IPEndPoint)user.client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
 
 			onlineUsers.Remove(user);
 			user.Dispose();
@@ -223,20 +221,20 @@ namespace Server
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		private void SendAllUsers(OnlineUser user)
 		{
-			string[] all_users = DBoperations.GetAllUsers();
-			string[] income_requests = DBoperations.GetIncomeFriendshipRequests(user.id);
-			string[] outcome_requests = DBoperations.GetOutcomeFriendshipRequests(user.id);
+			string[] allUsers = DBoperations.GetAllUsers();
+			string[] incomeRequests = DBoperations.GetIncomeFriendshipRequests(user.id);
+			string[] outcomeRequests = DBoperations.GetOutcomeFriendshipRequests(user.id);
 			string[] friends = DBoperations.GetFriends(user.id);
 
-			string[] users = all_users.Where(x =>
-				!income_requests.Contains(x) & 
-				!outcome_requests.Contains(x) &
+			string[] users = allUsers.Where(x =>
+				!incomeRequests.Contains(x) & 
+				!outcomeRequests.Contains(x) &
 				!friends.Contains(x) &
 				x != user.login).ToArray();
 
 			user.client.SendMessage(new AllUsersMessage
 			{
-				users = users
+				Users = users
 			});
 		}
 
@@ -249,7 +247,7 @@ namespace Server
 		{
 			user.client.SendMessage(new FriendsMessage
 			{
-				friends = DBoperations.GetFriends(user.id)
+				Friends = DBoperations.GetFriends(user.id)
 			});
 		}
 
@@ -262,7 +260,7 @@ namespace Server
 		{
 			user.client.SendMessage(new IncomeFriendshipRequestsMessage
 			{
-				logins = DBoperations.GetIncomeFriendshipRequests(user.id)
+				Logins = DBoperations.GetIncomeFriendshipRequests(user.id)
 			});
 		}
 
@@ -275,7 +273,7 @@ namespace Server
 		{
 			user.client.SendMessage(new OutcomeFriendshipRequestsMessage
 			{
-				logins = DBoperations.GetOutcomeFriendshipRequests(user.id)
+				Logins = DBoperations.GetOutcomeFriendshipRequests(user.id)
 			});
 		}
 
@@ -287,21 +285,21 @@ namespace Server
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		private void SendConversation(OnlineUser user, string interlocutor)
 		{
-			int interlocutors_id = DBoperations.GetUserId(interlocutor);
-			if (interlocutors_id == 0) return;
+			int interlocutorId = DBoperations.GetUserId(interlocutor);
+			if (interlocutorId == 0) return;
 
 			// get replies from db
-			ConversationReply[] replies = DBoperations.GetConversation(user.id, interlocutors_id);
+			ConversationReply[] replies = DBoperations.GetConversation(user.id, interlocutorId);
 
 			if (replies != null)
 			{
 				foreach (var r in replies)
 					user.client.SendMessage(new OldReplyMessage
 					{
-						interlocutor = interlocutor,
-						reply_author = DBoperations.GetUserLogin(r.user_id),
-						reply_time = r.time,
-						reply_text = r.reply
+						Interlocutor = interlocutor,
+						Author = DBoperations.GetUserLogin(r.user_id),
+						Time = r.time,
+						Text = r.reply
 					});
 			}
 		}
@@ -310,21 +308,21 @@ namespace Server
 		/// Set friendship request in db.
 		/// </summary>
 		/// <param name="user">user.</param>
-		/// <param name="friends_login">friend's login.</param>
+		/// <param name="friendLogin">friend's login.</param>
 		/// <exception cref="ConnectionInterruptedException"></exception>
-		private void SetFriendshipRequest(OnlineUser user, string friends_login)
+		private void SetFriendshipRequest(OnlineUser user, string friendLogin)
 		{
-			int friends_id = DBoperations.GetUserId(friends_login);
-			if (friends_id == 0) return;
+			int friendId = DBoperations.GetUserId(friendLogin);
+			if (friendId == 0) return;
 
 			// set friendship request
-			if (DBoperations.SetFriendship(false, user.id, friends_id))
+			if (DBoperations.SetFriendship(user.id, friendId, false))
 			{
 				// send new data to user one
 				SendAllUsers(user);
 				SendOutcomeFriendshipRequests(user);
 				// send new data to user two if online
-				OnlineUser friend = GetOnlineUser(friends_login);
+				OnlineUser friend = GetOnlineUser(friendLogin);
 				if (friend != null) SendIncomeFriendshipRequests(friend);
 			}
 		}
@@ -333,19 +331,19 @@ namespace Server
 		/// Cancel friendship request.
 		/// </summary>
 		/// <param name="user">user.</param>
-		/// <param name="friends_login">friend's login.</param>
+		/// <param name="friendLogin">friend's login.</param>
 		/// <exception cref="ConnectionInterruptedException"></exception>
-		private void CancelFriendshipRequest(OnlineUser user, string friends_login)
+		private void CancelFriendshipRequest(OnlineUser user, string friendLogin)
 		{
-			int friends_id = DBoperations.GetUserId(friends_login);
-			if (friends_id == 0) return;
+			int friendId = DBoperations.GetUserId(friendLogin);
+			if (friendId == 0) return;
 
-			if (DBoperations.RemoveFriendshipRequest(user.id, friends_id))
+			if (DBoperations.RemoveFriendshipRequest(user.id, friendId))
 			{
 				// send new data to user one
 				SendOutcomeFriendshipRequests(user);
 				// send new data to user two if online
-				OnlineUser friend = GetOnlineUser(friends_login);
+				OnlineUser friend = GetOnlineUser(friendLogin);
 				if (friend != null) SendIncomeFriendshipRequests(friend);
 			}
 		}
@@ -354,20 +352,20 @@ namespace Server
 		/// Accept friendship request.
 		/// </summary>
 		/// <param name="user">user.</param>
-		/// <param name="friends_login">friend's login.</param>
+		/// <param name="friendLogin">friend's login.</param>
 		/// <exception cref="ConnectionInterruptedException"></exception>
-		private void AcceptFriendshipRequest(OnlineUser user, string friends_login)
+		private void AcceptFriendshipRequest(OnlineUser user, string friendLogin)
 		{
-			int friends_id = DBoperations.GetUserId(friends_login);
-			if (friends_id == 0) return;
+			int friendId = DBoperations.GetUserId(friendLogin);
+			if (friendId == 0) return;
 
-			if (DBoperations.SetFriendship(true, friends_id, user.id))
+			if (DBoperations.SetFriendship(friendId, user.id, true))
 			{
 				// send new data to user one
 				SendIncomeFriendshipRequests(user);
 				SendFriends(user);
 				// send new data to user two if online
-				OnlineUser friend = GetOnlineUser(friends_login);
+				OnlineUser friend = GetOnlineUser(friendLogin);
 				if (friend != null)
 				{
 					SendOutcomeFriendshipRequests(friend);
@@ -380,19 +378,19 @@ namespace Server
 		/// Reject friendship request.
 		/// </summary>
 		/// <param name="user">user.</param>
-		/// <param name="friends_login">friend's login.</param>
+		/// <param name="friendLogin">friend's login.</param>
 		/// <exception cref="ConnectionInterruptedException"></exception>
-		private void RejectFriendshipRequest(OnlineUser user, string friends_login)
+		private void RejectFriendshipRequest(OnlineUser user, string friendLogin)
 		{
-			int friends_id = DBoperations.GetUserId(friends_login);
-			if (friends_id == 0) return;
+			int friendId = DBoperations.GetUserId(friendLogin);
+			if (friendId == 0) return;
 
-			if (DBoperations.RemoveFriendshipRequest(friends_id, user.id))
+			if (DBoperations.RemoveFriendshipRequest(friendId, user.id))
 			{
 				// send new data to user one
 				SendIncomeFriendshipRequests(user);
 				// send new data to user two if online
-				OnlineUser friend = GetOnlineUser(friends_login);
+				OnlineUser friend = GetOnlineUser(friendLogin);
 				if (friend != null) SendOutcomeFriendshipRequests(friend);
 			}
 		}
@@ -401,19 +399,19 @@ namespace Server
 		/// Remove user from friends.
 		/// </summary>
 		/// <param name="user">user.</param>
-		/// <param name="friends_login">friend's login.</param>
+		/// <param name="friendLogin">friend's login.</param>
 		/// <exception cref="ConnectionInterruptedException"></exception>
-		private void RemoveFriend(OnlineUser user, string friends_login)
+		private void RemoveFriend(OnlineUser user, string friendLogin)
 		{
-			int friends_id = DBoperations.GetUserId(friends_login);
-			if (friends_id == 0) return;
+			int friendId = DBoperations.GetUserId(friendLogin);
+			if (friendId == 0) return;
 
-			if (DBoperations.RemoveFriend(user.id, friends_id))
+			if (DBoperations.RemoveFriend(user.id, friendId))
 			{
 				// send new data to user one
 				SendFriends(user);
 				// send new data to user two if online
-				OnlineUser friend = GetOnlineUser(friends_login);
+				OnlineUser friend = GetOnlineUser(friendLogin);
 				if (friend != null) SendFriends(friend);
 			}
 		}
@@ -427,21 +425,21 @@ namespace Server
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		private void HandleReply(OnlineUser user, string interlocutor, string text)
 		{
-			int interlocutors_id = DBoperations.GetUserId(interlocutor);
-			if (interlocutors_id == 0) return;
+			int interlocutorId = DBoperations.GetUserId(interlocutor);
+			if (interlocutorId == 0) return;
 
 			// time of reply
 			DateTime time = DateTime.Now;
 
-			if (DBoperations.AddNewReply(user.id, interlocutors_id, text, time))
+			if (DBoperations.AddNewReply(user.id, interlocutorId, text, time))
 			{
 				// send reply to user one
 				user.client.SendMessage(new NewReplyMessage
 				{
-					interlocutor = interlocutor,
-					reply_author = user.login,
-					reply_time = time,
-					reply_text = text
+					Interlocutor = interlocutor,
+					Author = user.login,
+					Time = time,
+					Text = text
 				});
 
 				// send reply to user two if online
@@ -450,10 +448,10 @@ namespace Server
 				{
 					friend.client.SendMessage(new NewReplyMessage
 					{
-						interlocutor = user.login,
-						reply_author = user.login,
-						reply_time = time,
-						reply_text = text
+						Interlocutor = user.login,
+						Author = user.login,
+						Time = time,
+						Text = text
 					});
 				}
 			}

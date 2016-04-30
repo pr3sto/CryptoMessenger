@@ -29,7 +29,7 @@
             TextOptions.TextFormattingMode="Display"
             FontSize="26" 
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-            Text="{Binding Source={x:Static props:Resources.EMPTYUSERS_LISTBOX_PLACEHOLDER}}">
+            Text="{Binding Source={x:Static props:Resources.EmptyUsersListboxPlaceholder}}">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -79,7 +79,7 @@
                             Height="25" Width="25"
                             Foreground="White"
                             Command="{Binding Path=AddToFriendsCommand}"
-                            ToolTip="{Binding Source={x:Static props:Resources.ADDTOFRIENDS_BUTTON_TOOLTIP}}"
+                            ToolTip="{Binding Source={x:Static props:Resources.AddToFriendsButtonTooltip}}"
                             >
                             <Button.Background>
                                 <ImageBrush ImageSource="/CryptoMessenger;component/Resources/plus.png"/>

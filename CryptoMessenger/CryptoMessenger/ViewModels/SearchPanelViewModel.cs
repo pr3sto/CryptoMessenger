@@ -31,7 +31,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (addToFriendsCommand == null)
 				{
-					addToFriendsCommand = new DelegateCommand(() => 
+					addToFriendsCommand = new DelegateCommand(delegate
 					{ client.SendFriendshipRequest(Name); });
 				}
 				return addToFriendsCommand;
@@ -71,13 +71,13 @@ namespace CryptoMessenger.ViewModels
 		#region Properties
 
 		// users list
-		private ObservableCollection<User> _usersList;
+		private ObservableCollection<User> usersList;
 		public ObservableCollection<User> UsersList
 		{
-			get { return _usersList; }
+			get { return usersList; }
 			set
 			{
-				_usersList = value;
+				usersList = value;
 				OnPropertyChanged(nameof(UsersList));
 			}
 		}

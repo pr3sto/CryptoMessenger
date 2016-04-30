@@ -12,12 +12,12 @@ namespace Server
 		/// </summary>
 		static void Main()
 		{
-			Console.Title = "Server";
+			Console.Title = "Server is stopped";
 
 			Server server = new Server(443);
 
 			// commands
-			Console.WriteLine("Server is running.");
+			Console.WriteLine("Server is stopped.");
 			Console.WriteLine("==================");
 			Console.WriteLine("Commands:");
 			Console.WriteLine("start - Start listening to clients.");
@@ -30,9 +30,15 @@ namespace Server
 				string command = Console.ReadLine();
 
 				if ("start".Equals(command))
+				{
 					server.Start();
+					Console.Title = "Server is running";
+				}
 				else if ("stop".Equals(command))
+				{
 					server.Stop();
+					Console.Title = "Server is stopped";
+				}
 				else if ("exit".Equals(command))
 					return;
 			}

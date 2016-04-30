@@ -108,7 +108,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             FontSize="17"
-            Content="{Binding Source={x:Static props:Resources.REQUESTS_TEXTBLOCK_TEXT}}"
+            Content="{Binding Source={x:Static props:Resources.RequestTextblockText}}"
             extensions:Extensions.ElementSelected="{Binding RequestsButtonSelected}"
             Command="{Binding RequestsTextBlockClickedCommand}"
             >
@@ -126,7 +126,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="17"
-            Content="{Binding Source={x:Static props:Resources.FRIENDS_TEXTBLOCK_TEXT}}"
+            Content="{Binding Source={x:Static props:Resources.FriendsTextboxText}}"
             extensions:Extensions.ElementSelected="{Binding FriendsButtonSelected}"
             Command="{Binding FriendsTextBlockClickedCommand}"
             >
@@ -145,7 +145,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
             FontSize="17"
-            Content="{Binding Source={x:Static props:Resources.SEARCH_TEXTBLOCK_TEXT}}"
+            Content="{Binding Source={x:Static props:Resources.SearchTextblockText}}"
             extensions:Extensions.ElementSelected="{Binding SearchButtonSelected}"
             Command="{Binding SearchTextBlockClickedCommand}"
             >
@@ -217,7 +217,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 FontSize="17"
-                Content="{Binding Source={x:Static props:Resources.EXIT_BUTTON_TEXT}}"
+                Content="{Binding Source={x:Static props:Resources.ExitButtonText}}"
                 Command="{Binding LogoutCommand}"
                 />
         </Grid>
@@ -247,7 +247,7 @@
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
             TextWrapping="Wrap"
             TextAlignment="Center"
-            Text="{Binding Source={x:Static props:Resources.SELECTFRIEND_NOTIFICATION}}"
+            Text="{Binding Source={x:Static props:Resources.SelectFriendNotification}}"
             Visibility="Visible"
             />
 

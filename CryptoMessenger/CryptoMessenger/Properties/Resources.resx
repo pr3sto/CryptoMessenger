@@ -133,130 +133,130 @@
   <data name="register" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\register.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="APP_NAME" xml:space="preserve">
-    <value>CRYPTO MESSENGER</value>
-  </data>
-  <data name="INCORRECTDATA_NOTIFICATION" xml:space="preserve">
-    <value>Логин и пароль должны состоять только из английских символов и цифр</value>
-  </data>
-  <data name="LOGIN_BUTTON_TEXT" xml:space="preserve">
-    <value>ВХОД</value>
-  </data>
-  <data name="LOGINERROR_NOTIFICATION" xml:space="preserve">
-    <value>Неверная комбинация логина и пароля</value>
-  </data>
-  <data name="LOGIN_NOTIFICATION" xml:space="preserve">
-    <value>Вход. Пожалуйста, подождите...</value>
-  </data>
-  <data name="REGISTRATION_BUTTON_TEXT" xml:space="preserve">
-    <value>РЕГИСТРАЦИЯ</value>
-  </data>
-  <data name="REGISTRATIONERROR_NOTIFICATION" xml:space="preserve">
-    <value>Аккаунт с данным логином уже зарегистрирован</value>
-  </data>
-  <data name="REGISTRATION_NOTIFICATION" xml:space="preserve">
-    <value>Регистрация. Пожалуйста, подождите...</value>
-  </data>
-  <data name="REGISTRATIONSUCCESS_NOTIFICATION" xml:space="preserve">
-    <value>Вы успешно зарегистрировались</value>
-  </data>
-  <data name="CONNECTIONERROR_NOTIFICATION" xml:space="preserve">
-    <value>Не удается подключиться к серверу</value>
-  </data>
-  <data name="STANDART_NOTIFICATION" xml:space="preserve">
-    <value>Добро пожаловать</value>
-  </data>
-  <data name="USERNAME_TEXTFIELD_PLACEHOLDER" xml:space="preserve">
-    <value>ЛОГИН</value>
-  </data>
-  <data name="USERPASSWORD_TEXTFIELD_PLACEHOLDER" xml:space="preserve">
-    <value>ПАРОЛЬ</value>
-  </data>
-  <data name="CERTIFICATEERROR_NOTIFICATION" xml:space="preserve">
-    <value>Не удается найти сертификат приложения. Переустановка может исправить проблему</value>
-  </data>
-  <data name="UNKNOWNERROR_NOTIFICATION" xml:space="preserve">
-    <value>Неизвестная ошибка. Повторите действие позже</value>
-  </data>
-  <data name="ALREADYLOGIN_NOTIFICATION" xml:space="preserve">
-    <value>Вход в данный аккаунт уже выполнен</value>
-  </data>
-  <data name="FRIENDS_TEXTBLOCK_TEXT" xml:space="preserve">
-    <value>ДРУЗЬЯ</value>
-  </data>
-  <data name="REQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
-    <value>ЗАЯВКИ</value>
-  </data>
-  <data name="SEARCH_TEXTBLOCK_TEXT" xml:space="preserve">
-    <value>ПОИСК</value>
-  </data>
-  <data name="INCOMEREQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
-    <value>Заявки вам:</value>
-  </data>
-  <data name="OUTCOMEREQUESTS_TEXTBLOCK_TEXT" xml:space="preserve">
-    <value>Ваши заявки:</value>
-  </data>
   <data name="cross" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cross.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\plus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="EMPTYFRIENDS_LISTBOX_PLACEHOLDER" xml:space="preserve">
-    <value>Друзей нет</value>
-  </data>
-  <data name="EMPTYREQUESTS_LISTBOX_PLACEHOLDER" xml:space="preserve">
-    <value>Заявок нет</value>
-  </data>
-  <data name="EMPTYUSERS_LISTBOX_PLACEHOLDER" xml:space="preserve">
-    <value>Пользователей не найдено</value>
-  </data>
-  <data name="ACCEPTFRIENDSHIP_BUTTON_TOOLTIP" xml:space="preserve">
-    <value>Принять заявку</value>
-  </data>
-  <data name="ADDTOFRIENDS_BUTTON_TOOLTIP" xml:space="preserve">
-    <value>Добавить в друзья</value>
-  </data>
-  <data name="CANCELREQUEST_BUTTON_TOOLTIP" xml:space="preserve">
-    <value>Отменить заявку</value>
-  </data>
-  <data name="REJECTFRIENDSHIP_BUTTON_TOOLTIP" xml:space="preserve">
-    <value>Отклонить заявку</value>
-  </data>
-  <data name="REMOVEFRIEND_BUTTON_TOOLTIP" xml:space="preserve">
-    <value>Удалить из друзей</value>
-  </data>
-  <data name="SELECTFRIEND_NOTIFICATION" xml:space="preserve">
-    <value>Чтобы начать диалог, выберите друга из списка друзей слева</value>
-  </data>
-  <data name="MESSAGE_TEXTBOX_PLACEHOLDER" xml:space="preserve">
-    <value>Введите сообщение... &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка</value>
-  </data>
-  <data name="SENDMESSAGE_BUTTON_TOOLTIP" xml:space="preserve">
-    <value>Отправить сообщение</value>
-  </data>
   <data name="send" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\send.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="EMPTYDIALOG_LISTBOX_PLACEHOLDER" xml:space="preserve">
-    <value>Сообщений нет</value>
+  <data name="AcceptFriendshipButtonTooltip" xml:space="preserve">
+    <value>Принять заявку</value>
   </data>
-  <data name="EMPTYDATA_NOTIFICATION" xml:space="preserve">
-    <value>Введите логин и пароль</value>
+  <data name="AddToFriendsButtonTooltip" xml:space="preserve">
+    <value>Добавить в друзья</value>
   </data>
-  <data name="CONNECTIONBREAKS_NOTFICATION" xml:space="preserve">
+  <data name="AlreadyLoginNotification" xml:space="preserve">
+    <value>Вход в данный аккаунт уже выполнен</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>CRYPTO MESSENGER</value>
+  </data>
+  <data name="CancelRequestButtonTooltip" xml:space="preserve">
+    <value>Отменить заявку</value>
+  </data>
+  <data name="CertificateErrorNotification" xml:space="preserve">
+    <value>Не удается найти сертификат приложения. Переустановка может исправить проблему</value>
+  </data>
+  <data name="ConnectionBreaksNotification" xml:space="preserve">
     <value>Соединение с сервером разорвано. Вы можете не выходить из приложения, чтобы иметь доступ к загруженным сообщениям</value>
   </data>
-  <data name="EXIT_BUTTON_TEXT" xml:space="preserve">
+  <data name="ConnectionErrorNotification" xml:space="preserve">
+    <value>Не удается подключиться к серверу</value>
+  </data>
+  <data name="EmptyDataNotification" xml:space="preserve">
+    <value>Введите логин и пароль</value>
+  </data>
+  <data name="EmptyDialogListboxPlaceholder" xml:space="preserve">
+    <value>Сообщений нет</value>
+  </data>
+  <data name="EmptyFriendsListboxPlaceholder" xml:space="preserve">
+    <value>Друзей нет</value>
+  </data>
+  <data name="EmptyRequestsListboxPlaceholder" xml:space="preserve">
+    <value>Заявок нет</value>
+  </data>
+  <data name="EmptyUsersListboxPlaceholder" xml:space="preserve">
+    <value>Пользователей не найдено</value>
+  </data>
+  <data name="ExitButtonText" xml:space="preserve">
     <value>ВЫХОД ИЗ АККАУНТА</value>
   </data>
-  <data name="OK_BUTTON_TEXT" xml:space="preserve">
+  <data name="FriendsTextboxText" xml:space="preserve">
+    <value>ДРУЗЬЯ</value>
+  </data>
+  <data name="IncomeRequestsTextblockText" xml:space="preserve">
+    <value>Заявки вам:</value>
+  </data>
+  <data name="IncorrectDataNotification" xml:space="preserve">
+    <value>Логин и пароль должны состоять только из английских символов и цифр</value>
+  </data>
+  <data name="LoginButtonText" xml:space="preserve">
+    <value>ВХОД</value>
+  </data>
+  <data name="LoginErrorNotification" xml:space="preserve">
+    <value>Неверная комбинация логина и пароля</value>
+  </data>
+  <data name="LoginNotification" xml:space="preserve">
+    <value>Вход. Пожалуйста, подождите...</value>
+  </data>
+  <data name="MessageTextboxPlaceholder" xml:space="preserve">
+    <value>Введите сообщение... &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка</value>
+  </data>
+  <data name="OkButtonText" xml:space="preserve">
     <value>ОК</value>
   </data>
-  <data name="STATUS_OFFLINE_TEXT" xml:space="preserve">
+  <data name="OutcomeRequestsTextblockText" xml:space="preserve">
+    <value>Ваши заявки:</value>
+  </data>
+  <data name="RegistrationButtonText" xml:space="preserve">
+    <value>РЕГИСТРАЦИЯ</value>
+  </data>
+  <data name="RegistrationErrorNotification" xml:space="preserve">
+    <value>Аккаунт с данным логином уже зарегистрирован</value>
+  </data>
+  <data name="RegistrationSuccessNotification" xml:space="preserve">
+    <value>Вы успешно зарегистрировались</value>
+  </data>
+  <data name="RegistrationNotification" xml:space="preserve">
+    <value>Регистрация. Пожалуйста, подождите...</value>
+  </data>
+  <data name="RejectFriendshipButtonTooltip" xml:space="preserve">
+    <value>Отклонить заявку</value>
+  </data>
+  <data name="RemoveFriendButtonTooltip" xml:space="preserve">
+    <value>Удалить из друзей</value>
+  </data>
+  <data name="RequestTextblockText" xml:space="preserve">
+    <value>ЗАЯВКИ</value>
+  </data>
+  <data name="SearchTextblockText" xml:space="preserve">
+    <value>ПОИСК</value>
+  </data>
+  <data name="SelectFriendNotification" xml:space="preserve">
+    <value>Чтобы начать диалог, выберите друга из списка друзей слева</value>
+  </data>
+  <data name="SendMessageButtonTooltip" xml:space="preserve">
+    <value>Отправить сообщение</value>
+  </data>
+  <data name="StatusOfflineText" xml:space="preserve">
     <value>ОФФЛАЙН</value>
   </data>
-  <data name="STATUS_ONLINE_TEXT" xml:space="preserve">
+  <data name="StatusOnlineText" xml:space="preserve">
     <value>ОНЛАЙН</value>
+  </data>
+  <data name="UnknownErrorNotification" xml:space="preserve">
+    <value>Неизвестная ошибка. Повторите действие позже</value>
+  </data>
+  <data name="UsernameTextboxPlaceholder" xml:space="preserve">
+    <value>ЛОГИН</value>
+  </data>
+  <data name="UserPasswordTextboxPlaceholder" xml:space="preserve">
+    <value>ПАРОЛЬ</value>
+  </data>
+  <data name="WelcomeNotification" xml:space="preserve">
+    <value>Добро пожаловать</value>
   </data>
 </root>

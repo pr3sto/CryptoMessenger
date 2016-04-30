@@ -296,12 +296,12 @@ namespace MessageProtocol
 					// handshake
 					Ssl.ServerSideHandshake(certificate, sslStream);
 
-					// create MP client
-					MpClient mpClient = new MpClient();
-					mpClient.tcpClient = tcpClient;
-					mpClient.sslStream = sslStream;
-
-					return mpClient;
+					// return MP client
+					return new MpClient()
+					{
+						tcpClient = tcpClient,
+						sslStream = sslStream
+					};			
 				}
 				catch (CertificateException e)
 				{

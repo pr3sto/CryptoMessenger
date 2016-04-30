@@ -28,7 +28,7 @@
             TextOptions.TextFormattingMode="Display"
             FontSize="26" 
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-            Text="{Binding Source={x:Static props:Resources.EMPTYFRIENDS_LISTBOX_PLACEHOLDER}}">
+            Text="{Binding Source={x:Static props:Resources.EmptyFriendsListboxPlaceholder}}">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -77,7 +77,7 @@
                             Height="25" Width="25"
                             Foreground="White"
                             Command="{Binding Path=RemoveFriendCommand}"
-                            ToolTip="{Binding Source={x:Static props:Resources.REMOVEFRIEND_BUTTON_TOOLTIP}}"
+                            ToolTip="{Binding Source={x:Static props:Resources.RemoveFriendButtonTooltip}}"
                             Visibility="Collapsed"
                             >
                             <Button.Background>
@@ -138,7 +138,7 @@
                         TextOptions.TextFormattingMode="Display"
                         FontSize="26" 
                         Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                        Text="{Binding Source={x:Static props:Resources.EMPTYDIALOG_LISTBOX_PLACEHOLDER}}"
+                        Text="{Binding Source={x:Static props:Resources.EmptyDialogListboxPlaceholder}}"
                         >
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
@@ -274,7 +274,7 @@
                         TextOptions.TextFormattingMode="Display"
                         FontSize="17"
                         Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged}"
-                        Tag="{Binding Source={x:Static props:Resources.MESSAGE_TEXTBOX_PLACEHOLDER}}"
+                        Tag="{Binding Source={x:Static props:Resources.MessageTextboxPlaceholder}}"
                         >
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding MessageEnterCommand}"/>
@@ -295,7 +295,7 @@
                         Width="40"
                         Foreground="White"
                         Command="{Binding Path=SendCommand}"
-                        ToolTip="{Binding Source={x:Static props:Resources.SENDMESSAGE_BUTTON_TOOLTIP}}"
+                        ToolTip="{Binding Source={x:Static props:Resources.SendMessageButtonTooltip}}"
                         IsEnabled="{Binding Path=MessageText, Converter={StaticResource StringEmptynessToBooleanConverter}}"
                         >
                         <Button.Background>

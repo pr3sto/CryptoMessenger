@@ -28,7 +28,7 @@
                         </Trigger>
                         <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Foreground" Value="{Binding Path=BorderBrush, ElementName=WindowBorder}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=BorderBrush, ElementName=windowBorder}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -48,7 +48,7 @@
                     <Grid Margin="5">
                         <!-- window border -->
                         <Border
-                            x:Name="WindowBorder"
+                            x:Name="windowBorder"
                             Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
                             BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                             BorderThickness="1"
@@ -148,16 +148,16 @@
                     <ControlTemplate.Triggers>
                         <!-- window lost focus -->
                         <Trigger Property="IsActive" Value="False">
-                            <Setter TargetName="WindowBorder" Property="Effect" Value="{x:Null}"/>
+                            <Setter TargetName="windowBorder" Property="Effect" Value="{x:Null}"/>
                             <Setter Property="Opacity" Value="0.8"/>
                         </Trigger>
                         <!-- show warning -->
                         <Trigger Property="extensions:Extensions.ShowWarning" Value="True">
-                            <Setter TargetName="WindowBorder" 
+                            <Setter TargetName="windowBorder" 
                                     Property="BorderBrush" 
                                     Value="{Binding Path=AlertBrush, Source={x:Static props:Settings.Default}}"
                                     />
-                            <Setter TargetName="WindowBorder" Property="Effect">
+                            <Setter TargetName="windowBorder" Property="Effect">
                                 <Setter.Value>
                                     <DropShadowEffect
                                         Color="{Binding Path=AlertColor, Source={x:Static props:Settings.Default}}"

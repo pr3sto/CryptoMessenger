@@ -23,7 +23,7 @@ namespace Server
 		// port number
 		private int port;
 		// message protocol listener
-		private MpListener listener;
+		private MpListener mpListener;
 		// active tasks of handling connections
 		private List<Task> activeTasks;
 		// is server started listening to clients
@@ -71,19 +71,19 @@ namespace Server
 			{
 				string login = "user" + i.ToString();
 				DBoperations.Register(login, login);
-				DBoperations.SetFriendship(false, DBoperations.GetUserId(login), DBoperations.GetUserId("13"));
+				DBoperations.SetFriendship(DBoperations.GetUserId(login), DBoperations.GetUserId("13"), false);
 			}
 			for (int i = 20; i < 30; i++)
 			{
 				string login = "user" + i.ToString();
 				DBoperations.Register(login, login);
-				DBoperations.SetFriendship(false, DBoperations.GetUserId("13"), DBoperations.GetUserId(login));
+				DBoperations.SetFriendship(DBoperations.GetUserId("13"), DBoperations.GetUserId(login), false);
 			}
 			for (int i = 30; i < 40; i++)
 			{
 				string login = "user" + i.ToString();
 				DBoperations.Register(login, login);
-				DBoperations.SetFriendship(true, DBoperations.GetUserId("13"), DBoperations.GetUserId(login));
+				DBoperations.SetFriendship(DBoperations.GetUserId("13"), DBoperations.GetUserId(login), true);
 			}
 
 			#endregion
@@ -91,8 +91,8 @@ namespace Server
 			if (isStarted) return;
 			if (certificate == null) return;
 
-			listener = new MpListener(port, certificate);
-			listener.Start();
+			mpListener = new MpListener(port, certificate);
+			mpListener.Start();
 			isStarted = true;
 
 			log.Info("Server is now listening.");
@@ -101,12 +101,12 @@ namespace Server
 			{
 				try
 				{
-					MpClient client = await listener.AcceptMpClientAsync();
+					MpClient client = await mpListener.AcceptMpClientAsync();
 					Task t = HandleClient(client);
 					activeTasks.Add(t);
 
 					// remove completed tasks
-					activeTasks.RemoveAll(x => x.IsCompleted == true);
+					activeTasks.RemoveAll(x => x.IsCompleted);
 				}
 				catch (ConnectionInterruptedException e)
 				{
@@ -117,13 +117,14 @@ namespace Server
 				}
 				catch (SocketException e)
 				{
-					log.Info("Socket exception. Trying to restart listening.");
-					log.Error(e);
+					log.Info("Socket exception. Trying to restart listening.", e);
 
-					listener.Stop();
-					listener = null;
-					listener = new MpListener(port, certificate);
-					listener.Start();
+					mpListener.Stop();
+					mpListener = null;
+					mpListener = new MpListener(port, certificate);
+					mpListener.Start();
+
+					continue;
 				}
 				catch (ObjectDisposedException)
 				{
@@ -147,8 +148,8 @@ namespace Server
 			if (!isStarted) return;
 
 			usersHandler.Dispose();
-			listener.Stop();
-			listener = null;
+			mpListener.Stop();
+			mpListener = null;
 		}
 
 		/// <summary>
@@ -157,8 +158,7 @@ namespace Server
 		/// <param name="client">Connected client.</param>
 		private async Task HandleClient(MpClient client)
 		{
-			log.Info(string.Format("Client connected. ip {0}",
-				((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
+			log.Info($"Client connected. ip {((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
 
 			await Task.Run(() =>
 			{
@@ -180,8 +180,7 @@ namespace Server
 				{
 					log.Error(e);
 
-					log.Info(string.Format("Client disconnected. ip {0}",
-						((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
+					log.Info($"Client disconnected. ip {((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
 				}
 			});
 		}
@@ -196,32 +195,32 @@ namespace Server
 			bool isLoggedIn = false;
 			Message response;
 
-			if (string.IsNullOrEmpty(message.login) ||
-				string.IsNullOrEmpty(message.password) ||
-				message.login.Length > 30)
+			if (string.IsNullOrEmpty(message.Login) ||
+				string.IsNullOrEmpty(message.Password) ||
+				message.Login.Length > 30)
 			{
-				response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.ERROR };
+				response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.Error };
 			}
-			else if (usersHandler.GetOnlineUser(message.login) != null)
+			else if (usersHandler.GetOnlineUser(message.Login) != null)
 			{
-				response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.ALREADY_LOGIN };
+				response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.AlreadyLogin };
 			}
 			else
 			{
 				int id; // client's id in db
-				if (DBoperations.Login(message.login, message.password, out id))
+				if (DBoperations.Login(message.Login, message.Password, out id))
 				{
-					log.Info(string.Format("Client login: {0}", message.login));
+					log.Info($"Client login: {message.Login}");
 
 					// user is online
-					OnlineUser user = new OnlineUser(id, message.login, client);
+					OnlineUser user = new OnlineUser(id, message.Login, client);
 					usersHandler.AddUser(user);
 					isLoggedIn = true;
-					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
+					response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.Success };
 				}
 				else
 				{
-					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.FAIL };
+					response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.Fail };
 				}
 			}
 
@@ -238,8 +237,7 @@ namespace Server
 			// close connection with client if client not logged in
 			if (!isLoggedIn)
 			{
-				log.Info(string.Format("Client disconnected. ip {0}",
-					((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
+				log.Info($"Client disconnected. ip {((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
 
 				try
 				{
@@ -261,23 +259,23 @@ namespace Server
 		{
 			Message response;
 
-			if (string.IsNullOrEmpty(message.login) ||
-				string.IsNullOrEmpty(message.password) ||
-				message.login.Length > 30)
+			if (string.IsNullOrEmpty(message.Login) ||
+				string.IsNullOrEmpty(message.Password) ||
+				message.Login.Length > 30)
 			{
-				response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.ERROR };
+				response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.Error };
 			}
 			else
 			{
-				if (DBoperations.Register(message.login, message.password))
+				if (DBoperations.Register(message.Login, message.Password))
 				{
-					log.Info(string.Format("Client registered: {0}", message.login));
+					log.Info($"Client registered: {message.Login}");
 
-					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.SUCCESS };
+					response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.Success };
 				}
 				else
 				{
-					response = new LoginRegisterResponseMessage { response = LoginRegisterResponse.FAIL };
+					response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.Fail };
 				}
 			}
 
@@ -292,8 +290,7 @@ namespace Server
 			}
 
 			// close connection
-			log.Info(string.Format("Client disconnected. ip {0}",
-					((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()));
+			log.Info($"Client disconnected. ip {((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
 
 			try
 			{

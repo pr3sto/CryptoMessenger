@@ -20,7 +20,7 @@ namespace CryptoMessenger.ViewModels
 		{
 			client = new Client();
 			ShowWarning = false;
-			client.ConnectionBreaks += () => { ShowWarning = true; };
+			client.ConnectionBreaks += delegate { ShowWarning = true; };
 
 			ShowLoginPanel();
 		}
@@ -42,25 +42,25 @@ namespace CryptoMessenger.ViewModels
 		#region Properties
 
 		// warning 
-		private bool _showWarning;
+		private bool showWarning;
 		public bool ShowWarning
 		{
-			get { return _showWarning; }
+			get { return showWarning; }
 			set
 			{
-				_showWarning = value;
+				showWarning = value;
 				OnPropertyChanged(nameof(ShowWarning));
 			}
 		}
 
 		// panel
-		private IWindowPanel _mainWindowPanel;
+		private IWindowPanel mainWindowPanel;
 		public IWindowPanel MainWindowPanel
 		{
-			get { return _mainWindowPanel; }
+			get { return mainWindowPanel; }
 			set
 			{
-				_mainWindowPanel = value;
+				mainWindowPanel = value;
 				OnPropertyChanged(nameof(MainWindowPanel));
 			}
 		}
@@ -77,7 +77,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (hideWarningCommand == null)
 				{
-					hideWarningCommand = new DelegateCommand(() => { ShowWarning = false; });
+					hideWarningCommand = new DelegateCommand(delegate { ShowWarning = false; });
 				}
 				return hideWarningCommand;
 			}
@@ -91,7 +91,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (logoutCommand == null)
 				{
-					logoutCommand = new DelegateCommand(() => 
+					logoutCommand = new DelegateCommand(delegate 
 					{
 						client.Logout();
 						ShowWarning = false;
@@ -110,8 +110,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (windowClosingCommand == null)
 				{
-					windowClosingCommand = new DelegateCommand(() =>
-					{ client.Logout(); });
+					windowClosingCommand = new DelegateCommand(client.Logout);
 				}
 				return windowClosingCommand;
 			}

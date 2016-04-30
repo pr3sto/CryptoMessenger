@@ -20,7 +20,7 @@ namespace CryptoMessenger.ViewModels
 		public LoginPanelViewModel(Client client)
         {
 			this.client = client;
-			Notification = Properties.Resources.STANDART_NOTIFICATION;
+			Notification = Properties.Resources.WelcomeNotification;
 			IsLoading = false;
 		}
 
@@ -56,61 +56,61 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// user login
-		private string _login;
+		private string login;
 		public string Login
 		{
-			get { return _login; }
+			get { return login; }
 			set
 			{
-				_login = value;
+				login = value;
 				OnPropertyChanged(nameof(Login));
 			}
 		}
 
 		// is user login incorrect
-		private bool _isLoginIncorrect;
+		private bool isLoginIncorrect;
 		public bool IsLoginIncorrect
 		{
-			get { return _isLoginIncorrect; }
+			get { return isLoginIncorrect; }
 			set
 			{
-				_isLoginIncorrect = value;
+				isLoginIncorrect = value;
 				OnPropertyChanged(nameof(IsLoginIncorrect));
 			}
 		}
 
 		// is user login correct
-		private bool _isLoginCorrect;
+		private bool isLoginCorrect;
 		public bool IsLoginCorrect
 		{
-			get { return _isLoginCorrect; }
+			get { return isLoginCorrect; }
 			set
 			{
-				_isLoginCorrect = value;
+				isLoginCorrect = value;
 				OnPropertyChanged(nameof(IsLoginCorrect));
 			}
 		}
 
 		// is user password incorrect
-		private bool _isPasswordIncorrect;
+		private bool isPasswordIncorrect;
 		public bool IsPasswordIncorrect
 		{
-			get { return _isPasswordIncorrect; }
+			get { return isPasswordIncorrect; }
 			set
 			{
-				_isPasswordIncorrect = value;
+				isPasswordIncorrect = value;
 				OnPropertyChanged(nameof(IsPasswordIncorrect));
 			}
 		}
 
 		// is user password correct
-		private bool _isPasswordCorrect;
+		private bool isPasswordCorrect;
 		public bool IsPasswordCorrect
 		{
-			get { return _isPasswordCorrect; }
+			get { return isPasswordCorrect; }
 			set
 			{
-				_isPasswordCorrect = value;
+				isPasswordCorrect = value;
 				OnPropertyChanged(nameof(IsPasswordCorrect));
 			}
 		}
@@ -134,61 +134,60 @@ namespace CryptoMessenger.ViewModels
 		}
 		private async void DoLogin(object passwordBox)
 		{
-			PasswordBox pb = (PasswordBox)passwordBox;
-			string Password = pb.Password;
+			string password = ((PasswordBox)passwordBox).Password;
 
 			SetDefaultColors();
 
-			if (IsUserDataCorrect(Password))
+			if (IsUserDataCorrect(password))
 			{
 				IsLoading = true;
 				
-				Notification = Properties.Resources.LOGIN_NOTIFICATION;
+				Notification = Properties.Resources.LoginNotification;
 
 				// try login
 				LoginRegisterResponse response;
 				try
 				{
-					response = await client.Login(Login, Password);
+					response = await client.Login(Login, password);
 				}
 				catch (ConnectionInterruptedException)
 				{
-					Notification = Properties.Resources.CONNECTIONERROR_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.ConnectionErrorNotification;
+					isColorsChanged = true;
 					
 					IsLoading = false;
 					return;
 				}
 				catch (CertificateException)
 				{
-					Notification = Properties.Resources.CERTIFICATEERROR_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.CertificateErrorNotification;
+					isColorsChanged = true;
 
 					IsLoading = false;
 					return;
 				}
 
-				if (LoginRegisterResponse.SUCCESS.Equals(response))
+				if (LoginRegisterResponse.Success.Equals(response))
 				{
 					LoginSuccess();
-					Notification = Properties.Resources.STANDART_NOTIFICATION;
+					Notification = Properties.Resources.WelcomeNotification;
 				}
-				else if (LoginRegisterResponse.FAIL.Equals(response))
+				else if (LoginRegisterResponse.Fail.Equals(response))
 				{
-					Notification = Properties.Resources.LOGINERROR_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.LoginErrorNotification;
+					isColorsChanged = true;
 					IsLoginIncorrect = true;
 					IsPasswordIncorrect = true;
 				}
-				else if (LoginRegisterResponse.ERROR.Equals(response))
+				else if (LoginRegisterResponse.Error.Equals(response))
 				{
-					Notification = Properties.Resources.UNKNOWNERROR_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.UnknownErrorNotification;
+					isColorsChanged = true;
 				}
-				else if (LoginRegisterResponse.ALREADY_LOGIN.Equals(response))
+				else if (LoginRegisterResponse.AlreadyLogin.Equals(response))
 				{
-					Notification = Properties.Resources.ALREADYLOGIN_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.AlreadyLoginNotification;
+					isColorsChanged = true;
 				}
 				
 				IsLoading = false;
@@ -210,58 +209,57 @@ namespace CryptoMessenger.ViewModels
 		}
 		private async void DoRegister(object passwordBox)
 		{
-			PasswordBox pb = (PasswordBox)passwordBox;
-			string Password = pb.Password;
+			string password = ((PasswordBox)passwordBox).Password;
 		
 			SetDefaultColors();
 
-			if (IsUserDataCorrect(Password))
+			if (IsUserDataCorrect(password))
 			{
 				IsLoading = true;
 				
-				Notification = Properties.Resources.REGISTRATION_NOTIFICATION;
+				Notification = Properties.Resources.RegistrationNotification;
 
 				// try register
 				LoginRegisterResponse response;
 				try
 				{
-					response = await client.Register(Login, Password);
+					response = await client.Register(Login, password);
 				}
 				catch (ConnectionInterruptedException)
 				{
-					Notification = Properties.Resources.CONNECTIONERROR_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.ConnectionErrorNotification;
+					isColorsChanged = true;
 					
 					IsLoading = false;
 					return;
 				}
 				catch (CertificateException)
 				{
-					Notification = Properties.Resources.CERTIFICATEERROR_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.CertificateErrorNotification;
+					isColorsChanged = true;
 					
 					IsLoading = false;
 					return;
 				}
 
-				if (LoginRegisterResponse.SUCCESS.Equals(response))
+				if (LoginRegisterResponse.Success.Equals(response))
 				{
-					Notification = Properties.Resources.REGISTRATIONSUCCESS_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.RegistrationSuccessNotification;
+					isColorsChanged = true;
 					IsLoginCorrect = true;
 					IsPasswordCorrect = true;
 				}
-				else if (LoginRegisterResponse.FAIL.Equals(response))
+				else if (LoginRegisterResponse.Fail.Equals(response))
 				{
-					Notification = Properties.Resources.REGISTRATIONERROR_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.RegistrationErrorNotification;
+					isColorsChanged = true;
 					IsLoginIncorrect = true;
 					IsPasswordIncorrect = true;
 				}
-				else if (LoginRegisterResponse.ERROR.Equals(response))
+				else if (LoginRegisterResponse.Error.Equals(response))
 				{
-					Notification = Properties.Resources.UNKNOWNERROR_NOTIFICATION;
-					_isColorsChanged = true;
+					Notification = Properties.Resources.UnknownErrorNotification;
+					isColorsChanged = true;
 				}
 				
 				IsLoading = false;
@@ -285,13 +283,13 @@ namespace CryptoMessenger.ViewModels
 		#endregion
 
 		// set default colors
-		bool _isColorsChanged = false;
+		bool isColorsChanged = false;
 		private void SetDefaultColors()
 		{
-			if (_isColorsChanged)
+			if (isColorsChanged)
 			{
-				Notification = Properties.Resources.STANDART_NOTIFICATION;
-				_isColorsChanged = false;
+				Notification = Properties.Resources.WelcomeNotification;
+				isColorsChanged = false;
 
 				IsLoginIncorrect = false;
 				IsPasswordIncorrect = false;
@@ -304,51 +302,50 @@ namespace CryptoMessenger.ViewModels
 		// check textboxes
 		private bool IsUserDataCorrect(string Password)
 		{
-			bool ret = true;
-
+			bool isDataCorrect = true;
 
 			// empty login
 			if (string.IsNullOrEmpty(Login))
 			{
-				_isColorsChanged = true;
+				isColorsChanged = true;
 				IsLoginIncorrect = true;
-				ret = false;
+				isDataCorrect = false;
 			}
 			// empty password
 			if (string.IsNullOrEmpty(Password))
 			{
-				_isColorsChanged = true;
+				isColorsChanged = true;
 				IsPasswordIncorrect = true;
-				ret = false;
+				isDataCorrect = false;
 			}
 
-			if (ret == false)
+			if (isDataCorrect == false)
 			{
-				Notification = Properties.Resources.EMPTYDATA_NOTIFICATION;
-				return ret;
+				Notification = Properties.Resources.EmptyDataNotification;
+				return isDataCorrect;
 			}
 
 			// incorrect login
 			if (!string.IsNullOrEmpty(Login) &&
 				!System.Text.RegularExpressions.Regex.IsMatch(Login, @"^[a-zA-Z0-9]+$"))
 			{
-				Notification = Properties.Resources.INCORRECTDATA_NOTIFICATION;
-				_isColorsChanged = true;
+				Notification = Properties.Resources.IncorrectDataNotification;
+				isColorsChanged = true;
 				IsLoginIncorrect = true;
-				ret = false;
+				isDataCorrect = false;
 			}
 
 			// incorrect password
 			if (!string.IsNullOrEmpty(Password) &&
 				!System.Text.RegularExpressions.Regex.IsMatch(Password, @"^[a-zA-Z0-9]+$"))
 			{
-				Notification = Properties.Resources.INCORRECTDATA_NOTIFICATION;
-				_isColorsChanged = true;
+				Notification = Properties.Resources.IncorrectDataNotification;
+				isColorsChanged = true;
 				IsPasswordIncorrect = true;
-				ret = false;
+				isDataCorrect = false;
 			}
 			
-			return ret;
+			return isDataCorrect;
 		}
 	}
 }

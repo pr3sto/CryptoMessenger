@@ -9,10 +9,10 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public enum LoginRegisterResponse
 	{
-		SUCCESS,
-		FAIL,
-		ERROR,
-		ALREADY_LOGIN
+		Success,
+		Fail,
+		Error,
+		AlreadyLogin
 	};
 
 	/// <summary>
@@ -21,10 +21,10 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public enum ActionsWithFriend
 	{
-		CANCEL_FRIENDSHIP_REQUEST,
-		ACCEPT_FRIENDSHIP,
-		REJECT_FRIENDSHIP,
-		REMOVE_FROM_FRIENDS
+		CancelFriendshipRequest,
+		AcceptFriendship,
+		RejectFriendship,
+		RemoveFromFriends
 	};
 
 	/// <summary>
@@ -59,8 +59,8 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class LoginRequestMessage : Message
 	{
-		public string login { get; set; }
-		public string password { get; set; }
+		public string Login { get; set; }
+		public string Password { get; set; }
 	}
 
 	/// <summary>
@@ -70,8 +70,8 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class RegisterRequestMessage : Message
 	{
-		public string login { get; set; }
-		public string password { get; set; }
+		public string Login { get; set; }
+		public string Password { get; set; }
 	}
 
 	/// <summary>
@@ -81,7 +81,7 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class LoginRegisterResponseMessage : Message
 	{
-		public LoginRegisterResponse response { get; set; }
+		public LoginRegisterResponse Response { get; set; }
 	}
 
 	/// <summary>
@@ -108,7 +108,7 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class AllUsersMessage : Message
 	{
-		public string[] users { get; set; }
+		public string[] Users { get; set; }
 	}
 
 	/// <summary>
@@ -126,7 +126,7 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class FriendsMessage : Message
 	{
-		public string[] friends { get; set; }
+		public string[] Friends { get; set; }
 	}
 
 	/// <summary>
@@ -144,7 +144,7 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class IncomeFriendshipRequestsMessage : Message
 	{
-		public string[] logins { get; set; }
+		public string[] Logins { get; set; }
 	}
 
 	/// <summary>
@@ -162,7 +162,7 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class OutcomeFriendshipRequestsMessage : Message
 	{
-		public string[] logins { get; set; }
+		public string[] Logins { get; set; }
 	}
 
 	/// <summary>
@@ -171,7 +171,7 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class FriendshipRequestMessage : Message
 	{
-		public string login_of_needed_user { get; set; }
+		public string LoginOfNeededUser { get; set; }
 	}
 
 	/// <summary>
@@ -180,8 +180,8 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class FriendActionMessage : Message
 	{
-		public string friends_login { get; set; }
-		public ActionsWithFriend action { get; set; }
+		public string FriendLogin { get; set; }
+		public ActionsWithFriend Action { get; set; }
 	}
 
 	/// <summary>
@@ -191,7 +191,7 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class GetConversationMessage : Message
 	{
-		public string interlocutor { get; set; }
+		public string Interlocutor { get; set; }
 	}
 
 	/// <summary>
@@ -200,11 +200,11 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class NewReplyMessage : Message
 	{
-		public string interlocutor { get; set; }
+		public string Interlocutor { get; set; }
 
-		public string reply_author { get; set; }
-		public DateTime reply_time { get; set; }
-		public string reply_text { get; set; }
+		public string Author { get; set; }
+		public DateTime Time { get; set; }
+		public string Text { get; set; }
 	}
 
 	/// <summary>
@@ -213,10 +213,10 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class OldReplyMessage : Message
 	{
-		public string interlocutor { get; set; }
+		public string Interlocutor { get; set; }
 
-		public string reply_author { get; set; }
-		public DateTime reply_time { get; set; }
-		public string reply_text { get; set; }
+		public string Author { get; set; }
+		public DateTime Time { get; set; }
+		public string Text { get; set; }
 	}
 }

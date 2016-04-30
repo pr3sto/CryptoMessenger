@@ -63,72 +63,72 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Принять заявку.
         /// </summary>
-        public static string ACCEPTFRIENDSHIP_BUTTON_TOOLTIP {
+        public static string AcceptFriendshipButtonTooltip {
             get {
-                return ResourceManager.GetString("ACCEPTFRIENDSHIP_BUTTON_TOOLTIP", resourceCulture);
+                return ResourceManager.GetString("AcceptFriendshipButtonTooltip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Добавить в друзья.
         /// </summary>
-        public static string ADDTOFRIENDS_BUTTON_TOOLTIP {
+        public static string AddToFriendsButtonTooltip {
             get {
-                return ResourceManager.GetString("ADDTOFRIENDS_BUTTON_TOOLTIP", resourceCulture);
+                return ResourceManager.GetString("AddToFriendsButtonTooltip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Вход в данный аккаунт уже выполнен.
         /// </summary>
-        public static string ALREADYLOGIN_NOTIFICATION {
+        public static string AlreadyLoginNotification {
             get {
-                return ResourceManager.GetString("ALREADYLOGIN_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("AlreadyLoginNotification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to CRYPTO MESSENGER.
         /// </summary>
-        public static string APP_NAME {
+        public static string AppName {
             get {
-                return ResourceManager.GetString("APP_NAME", resourceCulture);
+                return ResourceManager.GetString("AppName", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Отменить заявку.
         /// </summary>
-        public static string CANCELREQUEST_BUTTON_TOOLTIP {
+        public static string CancelRequestButtonTooltip {
             get {
-                return ResourceManager.GetString("CANCELREQUEST_BUTTON_TOOLTIP", resourceCulture);
+                return ResourceManager.GetString("CancelRequestButtonTooltip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Не удается найти сертификат приложения. Переустановка может исправить проблему.
         /// </summary>
-        public static string CERTIFICATEERROR_NOTIFICATION {
+        public static string CertificateErrorNotification {
             get {
-                return ResourceManager.GetString("CERTIFICATEERROR_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("CertificateErrorNotification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Соединение с сервером разорвано. Вы можете не выходить из приложения, чтобы иметь доступ к загруженным сообщениям.
         /// </summary>
-        public static string CONNECTIONBREAKS_NOTFICATION {
+        public static string ConnectionBreaksNotification {
             get {
-                return ResourceManager.GetString("CONNECTIONBREAKS_NOTFICATION", resourceCulture);
+                return ResourceManager.GetString("ConnectionBreaksNotification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Не удается подключиться к серверу.
         /// </summary>
-        public static string CONNECTIONERROR_NOTIFICATION {
+        public static string ConnectionErrorNotification {
             get {
-                return ResourceManager.GetString("CONNECTIONERROR_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("ConnectionErrorNotification", resourceCulture);
             }
         }
         
@@ -145,45 +145,45 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Введите логин и пароль.
         /// </summary>
-        public static string EMPTYDATA_NOTIFICATION {
+        public static string EmptyDataNotification {
             get {
-                return ResourceManager.GetString("EMPTYDATA_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("EmptyDataNotification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Сообщений нет.
         /// </summary>
-        public static string EMPTYDIALOG_LISTBOX_PLACEHOLDER {
+        public static string EmptyDialogListboxPlaceholder {
             get {
-                return ResourceManager.GetString("EMPTYDIALOG_LISTBOX_PLACEHOLDER", resourceCulture);
+                return ResourceManager.GetString("EmptyDialogListboxPlaceholder", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Друзей нет.
         /// </summary>
-        public static string EMPTYFRIENDS_LISTBOX_PLACEHOLDER {
+        public static string EmptyFriendsListboxPlaceholder {
             get {
-                return ResourceManager.GetString("EMPTYFRIENDS_LISTBOX_PLACEHOLDER", resourceCulture);
+                return ResourceManager.GetString("EmptyFriendsListboxPlaceholder", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Заявок нет.
         /// </summary>
-        public static string EMPTYREQUESTS_LISTBOX_PLACEHOLDER {
+        public static string EmptyRequestsListboxPlaceholder {
             get {
-                return ResourceManager.GetString("EMPTYREQUESTS_LISTBOX_PLACEHOLDER", resourceCulture);
+                return ResourceManager.GetString("EmptyRequestsListboxPlaceholder", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Пользователей не найдено.
         /// </summary>
-        public static string EMPTYUSERS_LISTBOX_PLACEHOLDER {
+        public static string EmptyUsersListboxPlaceholder {
             get {
-                return ResourceManager.GetString("EMPTYUSERS_LISTBOX_PLACEHOLDER", resourceCulture);
+                return ResourceManager.GetString("EmptyUsersListboxPlaceholder", resourceCulture);
             }
         }
         
@@ -200,18 +200,18 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized string similar to ВЫХОД ИЗ АККАУНТА.
         /// </summary>
-        public static string EXIT_BUTTON_TEXT {
+        public static string ExitButtonText {
             get {
-                return ResourceManager.GetString("EXIT_BUTTON_TEXT", resourceCulture);
+                return ResourceManager.GetString("ExitButtonText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ДРУЗЬЯ.
         /// </summary>
-        public static string FRIENDS_TEXTBLOCK_TEXT {
+        public static string FriendsTextboxText {
             get {
-                return ResourceManager.GetString("FRIENDS_TEXTBLOCK_TEXT", resourceCulture);
+                return ResourceManager.GetString("FriendsTextboxText", resourceCulture);
             }
         }
         
@@ -228,18 +228,18 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Заявки вам:.
         /// </summary>
-        public static string INCOMEREQUESTS_TEXTBLOCK_TEXT {
+        public static string IncomeRequestsTextblockText {
             get {
-                return ResourceManager.GetString("INCOMEREQUESTS_TEXTBLOCK_TEXT", resourceCulture);
+                return ResourceManager.GetString("IncomeRequestsTextblockText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Логин и пароль должны состоять только из английских символов и цифр.
         /// </summary>
-        public static string INCORRECTDATA_NOTIFICATION {
+        public static string IncorrectDataNotification {
             get {
-                return ResourceManager.GetString("INCORRECTDATA_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("IncorrectDataNotification", resourceCulture);
             }
         }
         
@@ -256,54 +256,54 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized string similar to ВХОД.
         /// </summary>
-        public static string LOGIN_BUTTON_TEXT {
+        public static string LoginButtonText {
             get {
-                return ResourceManager.GetString("LOGIN_BUTTON_TEXT", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Вход. Пожалуйста, подождите....
-        /// </summary>
-        public static string LOGIN_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("LOGIN_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("LoginButtonText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Неверная комбинация логина и пароля.
         /// </summary>
-        public static string LOGINERROR_NOTIFICATION {
+        public static string LoginErrorNotification {
             get {
-                return ResourceManager.GetString("LOGINERROR_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("LoginErrorNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вход. Пожалуйста, подождите....
+        /// </summary>
+        public static string LoginNotification {
+            get {
+                return ResourceManager.GetString("LoginNotification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Введите сообщение... &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка.
         /// </summary>
-        public static string MESSAGE_TEXTBOX_PLACEHOLDER {
+        public static string MessageTextboxPlaceholder {
             get {
-                return ResourceManager.GetString("MESSAGE_TEXTBOX_PLACEHOLDER", resourceCulture);
+                return ResourceManager.GetString("MessageTextboxPlaceholder", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ОК.
         /// </summary>
-        public static string OK_BUTTON_TEXT {
+        public static string OkButtonText {
             get {
-                return ResourceManager.GetString("OK_BUTTON_TEXT", resourceCulture);
+                return ResourceManager.GetString("OkButtonText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Ваши заявки:.
         /// </summary>
-        public static string OUTCOMEREQUESTS_TEXTBLOCK_TEXT {
+        public static string OutcomeRequestsTextblockText {
             get {
-                return ResourceManager.GetString("OUTCOMEREQUESTS_TEXTBLOCK_TEXT", resourceCulture);
+                return ResourceManager.GetString("OutcomeRequestsTextblockText", resourceCulture);
             }
         }
         
@@ -340,81 +340,81 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized string similar to РЕГИСТРАЦИЯ.
         /// </summary>
-        public static string REGISTRATION_BUTTON_TEXT {
+        public static string RegistrationButtonText {
             get {
-                return ResourceManager.GetString("REGISTRATION_BUTTON_TEXT", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Регистрация. Пожалуйста, подождите....
-        /// </summary>
-        public static string REGISTRATION_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("REGISTRATION_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("RegistrationButtonText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Аккаунт с данным логином уже зарегистрирован.
         /// </summary>
-        public static string REGISTRATIONERROR_NOTIFICATION {
+        public static string RegistrationErrorNotification {
             get {
-                return ResourceManager.GetString("REGISTRATIONERROR_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("RegistrationErrorNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Регистрация. Пожалуйста, подождите....
+        /// </summary>
+        public static string RegistrationNotification {
+            get {
+                return ResourceManager.GetString("RegistrationNotification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Вы успешно зарегистрировались.
         /// </summary>
-        public static string REGISTRATIONSUCCESS_NOTIFICATION {
+        public static string RegistrationSuccessNotification {
             get {
-                return ResourceManager.GetString("REGISTRATIONSUCCESS_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("RegistrationSuccessNotification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Отклонить заявку.
         /// </summary>
-        public static string REJECTFRIENDSHIP_BUTTON_TOOLTIP {
+        public static string RejectFriendshipButtonTooltip {
             get {
-                return ResourceManager.GetString("REJECTFRIENDSHIP_BUTTON_TOOLTIP", resourceCulture);
+                return ResourceManager.GetString("RejectFriendshipButtonTooltip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Удалить из друзей.
         /// </summary>
-        public static string REMOVEFRIEND_BUTTON_TOOLTIP {
+        public static string RemoveFriendButtonTooltip {
             get {
-                return ResourceManager.GetString("REMOVEFRIEND_BUTTON_TOOLTIP", resourceCulture);
+                return ResourceManager.GetString("RemoveFriendButtonTooltip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ЗАЯВКИ.
         /// </summary>
-        public static string REQUESTS_TEXTBLOCK_TEXT {
+        public static string RequestTextblockText {
             get {
-                return ResourceManager.GetString("REQUESTS_TEXTBLOCK_TEXT", resourceCulture);
+                return ResourceManager.GetString("RequestTextblockText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ПОИСК.
         /// </summary>
-        public static string SEARCH_TEXTBLOCK_TEXT {
+        public static string SearchTextblockText {
             get {
-                return ResourceManager.GetString("SEARCH_TEXTBLOCK_TEXT", resourceCulture);
+                return ResourceManager.GetString("SearchTextblockText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Чтобы начать диалог, выберите друга из списка друзей слева.
         /// </summary>
-        public static string SELECTFRIEND_NOTIFICATION {
+        public static string SelectFriendNotification {
             get {
-                return ResourceManager.GetString("SELECTFRIEND_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("SelectFriendNotification", resourceCulture);
             }
         }
         
@@ -431,63 +431,63 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Отправить сообщение.
         /// </summary>
-        public static string SENDMESSAGE_BUTTON_TOOLTIP {
+        public static string SendMessageButtonTooltip {
             get {
-                return ResourceManager.GetString("SENDMESSAGE_BUTTON_TOOLTIP", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Добро пожаловать.
-        /// </summary>
-        public static string STANDART_NOTIFICATION {
-            get {
-                return ResourceManager.GetString("STANDART_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("SendMessageButtonTooltip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ОФФЛАЙН.
         /// </summary>
-        public static string STATUS_OFFLINE_TEXT {
+        public static string StatusOfflineText {
             get {
-                return ResourceManager.GetString("STATUS_OFFLINE_TEXT", resourceCulture);
+                return ResourceManager.GetString("StatusOfflineText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ОНЛАЙН.
         /// </summary>
-        public static string STATUS_ONLINE_TEXT {
+        public static string StatusOnlineText {
             get {
-                return ResourceManager.GetString("STATUS_ONLINE_TEXT", resourceCulture);
+                return ResourceManager.GetString("StatusOnlineText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Неизвестная ошибка. Повторите действие позже.
         /// </summary>
-        public static string UNKNOWNERROR_NOTIFICATION {
+        public static string UnknownErrorNotification {
             get {
-                return ResourceManager.GetString("UNKNOWNERROR_NOTIFICATION", resourceCulture);
+                return ResourceManager.GetString("UnknownErrorNotification", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ЛОГИН.
         /// </summary>
-        public static string USERNAME_TEXTFIELD_PLACEHOLDER {
+        public static string UsernameTextboxPlaceholder {
             get {
-                return ResourceManager.GetString("USERNAME_TEXTFIELD_PLACEHOLDER", resourceCulture);
+                return ResourceManager.GetString("UsernameTextboxPlaceholder", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to ПАРОЛЬ.
         /// </summary>
-        public static string USERPASSWORD_TEXTFIELD_PLACEHOLDER {
+        public static string UserPasswordTextboxPlaceholder {
             get {
-                return ResourceManager.GetString("USERPASSWORD_TEXTFIELD_PLACEHOLDER", resourceCulture);
+                return ResourceManager.GetString("UserPasswordTextboxPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Добро пожаловать.
+        /// </summary>
+        public static string WelcomeNotification {
+            get {
+                return ResourceManager.GetString("WelcomeNotification", resourceCulture);
             }
         }
     }
