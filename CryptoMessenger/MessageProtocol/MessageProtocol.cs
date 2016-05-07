@@ -150,8 +150,8 @@ namespace MessageProtocol
 			}
 			finally
 			{
-				sslStream.Dispose();
-				tcpClient.Close();
+				sslStream?.Dispose();
+				tcpClient?.Close();
 			}
 		}
 

@@ -99,7 +99,6 @@
                                         VerticalAlignment="Center"
                                         TextOptions.TextRenderingMode="ClearType"
                                         TextOptions.TextFormattingMode="Display"
-                                        FontSize="17"
                                         Foreground="{TemplateBinding Foreground}"
                                         Text="{TemplateBinding Title}"
                                         />

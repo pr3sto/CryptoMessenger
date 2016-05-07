@@ -88,7 +88,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CRYPTO MESSENGER.
+        ///   Looks up a localized string similar to Crypto Messenger.
         /// </summary>
         public static string AppName {
             get {
@@ -198,7 +198,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ВЫХОД ИЗ АККАУНТА.
+        ///   Looks up a localized string similar to Выход из аккаунта.
         /// </summary>
         public static string ExitButtonText {
             get {
@@ -254,7 +254,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ВХОД.
+        ///   Looks up a localized string similar to Вход.
         /// </summary>
         public static string LoginButtonText {
             get {
@@ -281,7 +281,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Введите сообщение... &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка.
+        ///   Looks up a localized string similar to &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка.
         /// </summary>
         public static string MessageTextboxPlaceholder {
             get {
@@ -290,11 +290,21 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ОК.
+        ///   Looks up a localized string similar to Ок.
         /// </summary>
         public static string OkButtonText {
             get {
                 return ResourceManager.GetString("OkButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] OpenSans_CondBold {
+            get {
+                object obj = ResourceManager.GetObject("OpenSans_CondBold", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -338,7 +348,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to РЕГИСТРАЦИЯ.
+        ///   Looks up a localized string similar to Регистрация.
         /// </summary>
         public static string RegistrationButtonText {
             get {
@@ -438,7 +448,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ОФФЛАЙН.
+        ///   Looks up a localized string similar to Оффлайн.
         /// </summary>
         public static string StatusOfflineText {
             get {
@@ -447,7 +457,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ОНЛАЙН.
+        ///   Looks up a localized string similar to Онлайн.
         /// </summary>
         public static string StatusOnlineText {
             get {
@@ -465,7 +475,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ЛОГИН.
+        ///   Looks up a localized string similar to Логин.
         /// </summary>
         public static string UsernameTextboxPlaceholder {
             get {
@@ -474,7 +484,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ПАРОЛЬ.
+        ///   Looks up a localized string similar to Пароль.
         /// </summary>
         public static string UserPasswordTextboxPlaceholder {
             get {

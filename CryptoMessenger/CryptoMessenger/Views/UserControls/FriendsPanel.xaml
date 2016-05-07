@@ -26,7 +26,7 @@
             HorizontalAlignment="Center"
             TextOptions.TextRenderingMode="ClearType"
             TextOptions.TextFormattingMode="Display"
-            FontSize="26" 
+            FontSize="20" 
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
             Text="{Binding Source={x:Static props:Resources.EmptyFriendsListboxPlaceholder}}">
             <TextBlock.Style>
@@ -63,7 +63,6 @@
                             HorizontalAlignment="Left"
                             TextOptions.TextRenderingMode="ClearType"
                             TextOptions.TextFormattingMode="Display"
-                            FontSize="17"
                             Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
                             Text="{Binding Name}"
                             />
@@ -136,7 +135,7 @@
                         HorizontalAlignment="Center"
                         TextOptions.TextRenderingMode="ClearType"
                         TextOptions.TextFormattingMode="Display"
-                        FontSize="26" 
+                        FontSize="20" 
                         Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                         Text="{Binding Source={x:Static props:Resources.EmptyDialogListboxPlaceholder}}"
                         >
@@ -188,7 +187,6 @@
                                             HorizontalAlignment="Left"
                                             TextOptions.TextRenderingMode="ClearType"
                                             TextOptions.TextFormattingMode="Display"
-                                            FontSize="17"
                                             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionOpacity="0.5"
@@ -205,7 +203,6 @@
                                             HorizontalAlignment="Right"
                                             TextOptions.TextRenderingMode="ClearType"
                                             TextOptions.TextFormattingMode="Display"
-                                            FontSize="17"
                                             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionOpacity="0.5"
@@ -222,7 +219,6 @@
                                             HorizontalAlignment="Left"
                                             TextOptions.TextRenderingMode="ClearType"
                                             TextOptions.TextFormattingMode="Display"
-                                            FontSize="17"
                                             Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionOpacity="0.5"
@@ -272,7 +268,6 @@
                         VerticalScrollBarVisibility="Auto"
                         TextOptions.TextRenderingMode="ClearType"
                         TextOptions.TextFormattingMode="Display"
-                        FontSize="17"
                         Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged}"
                         Tag="{Binding Source={x:Static props:Resources.MessageTextboxPlaceholder}}"
                         >

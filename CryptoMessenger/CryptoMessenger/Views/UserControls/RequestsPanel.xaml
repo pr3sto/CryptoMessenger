@@ -39,7 +39,6 @@
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                FontSize="17"
                 Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
                 Text="{Binding Source={x:Static props:Resources.IncomeRequestsTextblockText}}"
                 />
@@ -50,7 +49,7 @@
                 HorizontalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                FontSize="26" 
+                FontSize="20" 
                 Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                 Text="{Binding Source={x:Static props:Resources.EmptyRequestsListboxPlaceholder}}">
                 <TextBlock.Style>
@@ -90,7 +89,6 @@
                                 HorizontalAlignment="Left"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
-                                FontSize="17"
                                 Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
                                 Text="{Binding Path=Name}" 
                                 />
@@ -169,7 +167,6 @@
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                FontSize="17"
                 Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
                 Text="{Binding Source={x:Static props:Resources.OutcomeRequestsTextblockText}}"
                 />
@@ -180,7 +177,7 @@
                 HorizontalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                FontSize="26" 
+                FontSize="20" 
                 Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                 Text="{Binding Source={x:Static props:Resources.EmptyRequestsListboxPlaceholder}}">
                 <TextBlock.Style>
@@ -214,7 +211,6 @@
                                 HorizontalAlignment="Left"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
-                                FontSize="17"
                                 Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
                                 Text="{Binding Path=Name}" 
                                 />

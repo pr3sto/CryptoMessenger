@@ -200,12 +200,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Resources\OpenSans-CondBold.ttf" />
     <Resource Include="Resources\send.png" />
     <Resource Include="Resources\cross.png" />
     <Resource Include="Resources\plus.png" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Certificate\cert.pfx" />
     <Content Include="connection.config">

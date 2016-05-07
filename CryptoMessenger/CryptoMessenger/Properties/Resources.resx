@@ -152,7 +152,7 @@
     <value>Вход в данный аккаунт уже выполнен</value>
   </data>
   <data name="AppName" xml:space="preserve">
-    <value>CRYPTO MESSENGER</value>
+    <value>Crypto Messenger</value>
   </data>
   <data name="CancelRequestButtonTooltip" xml:space="preserve">
     <value>Отменить заявку</value>
@@ -182,7 +182,7 @@
     <value>Пользователей не найдено</value>
   </data>
   <data name="ExitButtonText" xml:space="preserve">
-    <value>ВЫХОД ИЗ АККАУНТА</value>
+    <value>Выход из аккаунта</value>
   </data>
   <data name="FriendsTextboxText" xml:space="preserve">
     <value>ДРУЗЬЯ</value>
@@ -194,7 +194,7 @@
     <value>Логин и пароль должны состоять только из английских символов и цифр</value>
   </data>
   <data name="LoginButtonText" xml:space="preserve">
-    <value>ВХОД</value>
+    <value>Вход</value>
   </data>
   <data name="LoginErrorNotification" xml:space="preserve">
     <value>Неверная комбинация логина и пароля</value>
@@ -203,16 +203,16 @@
     <value>Вход. Пожалуйста, подождите...</value>
   </data>
   <data name="MessageTextboxPlaceholder" xml:space="preserve">
-    <value>Введите сообщение... &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка</value>
+    <value>&lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка</value>
   </data>
   <data name="OkButtonText" xml:space="preserve">
-    <value>ОК</value>
+    <value>Ок</value>
   </data>
   <data name="OutcomeRequestsTextblockText" xml:space="preserve">
     <value>Ваши заявки:</value>
   </data>
   <data name="RegistrationButtonText" xml:space="preserve">
-    <value>РЕГИСТРАЦИЯ</value>
+    <value>Регистрация</value>
   </data>
   <data name="RegistrationErrorNotification" xml:space="preserve">
     <value>Аккаунт с данным логином уже зарегистрирован</value>
@@ -242,21 +242,24 @@
     <value>Отправить сообщение</value>
   </data>
   <data name="StatusOfflineText" xml:space="preserve">
-    <value>ОФФЛАЙН</value>
+    <value>Оффлайн</value>
   </data>
   <data name="StatusOnlineText" xml:space="preserve">
-    <value>ОНЛАЙН</value>
+    <value>Онлайн</value>
   </data>
   <data name="UnknownErrorNotification" xml:space="preserve">
     <value>Неизвестная ошибка. Повторите действие позже</value>
   </data>
   <data name="UsernameTextboxPlaceholder" xml:space="preserve">
-    <value>ЛОГИН</value>
+    <value>Логин</value>
   </data>
   <data name="UserPasswordTextboxPlaceholder" xml:space="preserve">
-    <value>ПАРОЛЬ</value>
+    <value>Пароль</value>
   </data>
   <data name="WelcomeNotification" xml:space="preserve">
     <value>Добро пожаловать</value>
+  </data>
+  <data name="OpenSans_CondBold" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OpenSans-CondBold.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
