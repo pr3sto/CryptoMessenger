@@ -108,7 +108,8 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class AllUsersMessage : Message
 	{
-		public string[] Users { get; set; }
+		public string[] OnlineUsers { get; set; }
+		public string[] OfflineUsers { get; set; }
 	}
 
 	/// <summary>
@@ -126,7 +127,8 @@ namespace MessageProtocol.MessageTypes
 	[Serializable]
 	public class FriendsMessage : Message
 	{
-		public string[] Friends { get; set; }
+		public string[] OnlineFriends { get; set; }
+		public string[] OfflineFriends { get; set; }
 	}
 
 	/// <summary>

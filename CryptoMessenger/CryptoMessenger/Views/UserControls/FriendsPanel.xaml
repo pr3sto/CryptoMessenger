@@ -54,17 +54,25 @@
             >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Height="25">
                         <!-- friend's login -->
                         <TextBlock
-                            x:Name="textBlock"
-                            Height="25"
+                            x:Name="loginTextBlock"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
                             TextOptions.TextRenderingMode="ClearType"
                             TextOptions.TextFormattingMode="Display"
                             Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
                             Text="{Binding Name}"
+                            />
+                        <!-- friend's status -->
+                        <TextBlock
+                            x:Name="statusTextBlock"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            TextOptions.TextRenderingMode="ClearType"
+                            TextOptions.TextFormattingMode="Display"
+                            FontSize="11"
                             />
                         <!-- remove from friends button -->
                         <Button 
@@ -86,6 +94,20 @@
                     </Grid>
 
                     <DataTemplate.Triggers>
+                        <!-- online status -->
+                        <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                            <Setter TargetName="statusTextBlock" Property="Foreground" 
+                                    Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter TargetName="statusTextBlock" Property="Text" 
+                                    Value="{Binding Source={x:Static props:Resources.StatusOnlineText}}"/>
+                        </DataTrigger>
+                        <!-- offline status -->
+                        <DataTrigger Binding="{Binding Path=IsOnline, Converter={StaticResource InverseBooleanConverter}}" Value="True">
+                            <Setter TargetName="statusTextBlock" Property="Foreground" 
+                                    Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter TargetName="statusTextBlock" Property="Text" 
+                                    Value="{Binding Source={x:Static props:Resources.StatusOfflineText}}"/>
+                        </DataTrigger>
                         <!-- on mouse hover -->
                         <DataTrigger
                             Binding="{Binding
@@ -93,8 +115,9 @@
                                 AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}"
                             Value="True"
                             >
-                            <Setter TargetName="textBlock" Property="Foreground" 
+                            <Setter TargetName="loginTextBlock" Property="Foreground" 
                                     Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter TargetName="statusTextBlock" Property="Visibility" Value="Hidden"/>
                             <Setter TargetName="button" Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                         <!-- on selected item -->
@@ -104,7 +127,7 @@
                                 AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
                             Value="True"
                             >
-                            <Setter TargetName="textBlock" Property="Foreground" 
+                            <Setter TargetName="loginTextBlock" Property="Foreground" 
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
                         </DataTrigger>
                     </DataTemplate.Triggers>

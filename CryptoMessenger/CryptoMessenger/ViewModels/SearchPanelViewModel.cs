@@ -14,14 +14,17 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
-		public User(Client client, string name)
+		// user's name.
+		public string Name { get; }
+
+		public bool IsOnline { get; }
+
+		public User(Client client, string name, bool isOnline)
 		{
 			this.client = client;
 			Name = name;
+			IsOnline = isOnline;
 		}
-
-		// user's name.
-		public string Name { get; }
 
 		// add to friends
 		private DelegateCommand addToFriendsCommand;
@@ -60,11 +63,15 @@ namespace CryptoMessenger.ViewModels
 		// update UsersList when property in client changed
 		private void UsersListChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == nameof(client.SearchUsersList) && client.SearchUsersList != null)
+			if (e.PropertyName == nameof(client.OfflineUsersList) && client.OfflineUsersList != null)
 			{
 				UsersList = new ObservableCollection<User>();
-				foreach (var name in client.SearchUsersList)
-					UsersList.Add(new User(client, name));
+
+				foreach (var name in client.OnlineUsersList)
+					UsersList.Add(new User(client, name, true));
+
+				foreach (var name in client.OfflineUsersList)
+					UsersList.Add(new User(client, name, false));				
 			}
 		}
 

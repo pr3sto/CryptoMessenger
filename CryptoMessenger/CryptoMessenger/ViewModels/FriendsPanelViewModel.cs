@@ -16,14 +16,17 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
-		public Friend(Client client, string name)
+		// friend's name.
+		public string Name { get; }
+
+		public bool IsOnline { get; }
+
+		public Friend(Client client, string name, bool isOnline)
 		{
 			this.client = client;
 			Name = name;
+			IsOnline = isOnline;
 		}		
-
-		// friend's name.
-		public string Name { get; }
 
 		// remove friend
 		private DelegateCommand removeFriendCommand;
@@ -86,12 +89,15 @@ namespace CryptoMessenger.ViewModels
 		// update FriendsList when property in client changed
 		private void FriendsListChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == nameof(client.FriendsList) && client.FriendsList != null)
+			if (e.PropertyName == nameof(client.OfflineFriendsList) && client.OfflineFriendsList != null)
 			{
 				FriendsList = new ObservableCollection<Friend>();
-				foreach (var name in client.FriendsList)
-					FriendsList.Add(new Friend(client, name));
-				
+
+				foreach (var name in client.OnlineFriendsList)
+					FriendsList.Add(new Friend(client, name, true));
+
+				foreach (var name in client.OfflineFriendsList)
+					FriendsList.Add(new Friend(client, name, false));
 			}
 		}
 

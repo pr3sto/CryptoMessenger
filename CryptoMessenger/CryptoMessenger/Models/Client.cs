@@ -42,30 +42,56 @@ namespace CryptoMessenger.Models
 
 		#region Data that comes from server
 
-		private string[] friendsList;
+		private string[] onlineFriendsList;
 		/// <summary>
-		/// Array of friends.
+		/// Array of online friends.
 		/// </summary>
-		public string[] FriendsList
+		public string[] OnlineFriendsList
 		{
-			get { return friendsList; }
+			get { return onlineFriendsList; }
 			private set
 			{
-				friendsList = value;
-				RaisePropertyChanged(nameof(FriendsList));
+				onlineFriendsList = value;
+				RaisePropertyChanged(nameof(OnlineFriendsList));
 			}
 		}
-		private string[] searchUsersList;
+		private string[] offlineFriendsList;
 		/// <summary>
-		/// Array of all users.
+		/// Array of offline friends.
 		/// </summary>
-		public string[] SearchUsersList
+		public string[] OfflineFriendsList
 		{
-			get { return searchUsersList; }
+			get { return offlineFriendsList; }
 			private set
 			{
-				searchUsersList = value;
-				RaisePropertyChanged(nameof(SearchUsersList));
+				offlineFriendsList = value;
+				RaisePropertyChanged(nameof(OfflineFriendsList));
+			}
+		}
+		private string[] onlineUsersList;
+		/// <summary>
+		/// Array of all online users.
+		/// </summary>
+		public string[] OnlineUsersList
+		{
+			get { return onlineUsersList; }
+			private set
+			{
+				onlineUsersList = value;
+				RaisePropertyChanged(nameof(OnlineUsersList));
+			}
+		}
+		private string[] offlineUsersList;
+		/// <summary>
+		/// Array of all offline users.
+		/// </summary>
+		public string[] OfflineUsersList
+		{
+			get { return offlineUsersList; }
+			private set
+			{
+				offlineUsersList = value;
+				RaisePropertyChanged(nameof(OfflineUsersList));
 			}
 		}
 		private string[] incomeRequestsList;
@@ -121,8 +147,10 @@ namespace CryptoMessenger.Models
 			port = 0;
 			foreach (var i in _port) port = int.Parse(i.Value);
 
-			FriendsList = null;
-			SearchUsersList = null;
+			OnlineFriendsList = null;
+			OfflineFriendsList = null;
+			OnlineUsersList = null;
+			OfflineUsersList = null;
 			IncomeRequestsList = null;
 			OutcomeRequestsList = null;
 			
@@ -235,8 +263,10 @@ namespace CryptoMessenger.Models
 			isLoggedIn = false;
 
 			Name = null;
-			FriendsList = null;
-			SearchUsersList = null;
+			OnlineFriendsList = null;
+			OfflineFriendsList = null;
+			OnlineUsersList = null;
+			OfflineUsersList = null;
 			IncomeRequestsList = null;
 			OutcomeRequestsList = null;
 			Conversations = new Conversations();
@@ -302,11 +332,13 @@ namespace CryptoMessenger.Models
 				// handle message
 				if (message is AllUsersMessage)
 				{
-					SearchUsersList = ((AllUsersMessage)message).Users;
+					OnlineUsersList = ((AllUsersMessage)message).OnlineUsers;
+					OfflineUsersList = ((AllUsersMessage)message).OfflineUsers;
 				}
 				else if (message is FriendsMessage)
 				{
-					FriendsList = ((FriendsMessage)message).Friends;					
+					OnlineFriendsList = ((FriendsMessage)message).OnlineFriends;
+					OfflineFriendsList = ((FriendsMessage)message).OfflineFriends;
 				}
 				else if (message is IncomeFriendshipRequestsMessage)
 				{
@@ -404,13 +436,6 @@ namespace CryptoMessenger.Models
 		/// </summary>
 		public void GetFriends()
 		{
-			// dont ask server if we have
-			if (FriendsList != null)
-			{
-				RaisePropertyChanged(nameof(FriendsList));
-				return;
-			}
-
 			SendMessage(new GetFriendsMessage());
 		}
 

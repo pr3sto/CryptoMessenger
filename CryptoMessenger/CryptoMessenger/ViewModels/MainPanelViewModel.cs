@@ -19,9 +19,9 @@ namespace CryptoMessenger.ViewModels
 			client.Listen();
 
 			Login = client.Name;
-			Status = $"({Properties.Resources.StatusOnlineText})";
+			IsOnline = true;
 
-			client.ConnectionBreaks += delegate { Status = $"({Properties.Resources.StatusOfflineText})"; };
+			client.ConnectionBreaks += delegate { IsOnline = false; };
 
 			RequestsButtonSelected = false;
 			FriendsButtonSelected = true;
@@ -50,14 +50,14 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// account status
-		private string status;
-		public string Status
+		private bool isOnline;
+		public bool IsOnline
 		{
-			get { return status; }
+			get { return isOnline; }
 			set
 			{
-				status = value;
-				OnPropertyChanged(nameof(Status));
+				isOnline = value;
+				OnPropertyChanged(nameof(IsOnline));
 			}
 		}
 

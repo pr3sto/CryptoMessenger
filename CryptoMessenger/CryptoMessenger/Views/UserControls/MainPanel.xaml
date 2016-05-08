@@ -189,7 +189,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock
                 Grid.Column="0"
-                Margin="0,0,5,0"
+                Margin="0,0,10,0"
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
@@ -197,14 +197,35 @@
                 Text="{Binding Login}"
                 />
             <TextBlock
+                x:Name="statusTextBlock"
                 Grid.Column="1"
-                Margin="0,0,20,0"
+                Margin="0,0,10,0"
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
-                Text="{Binding Status}"
-                />
+                FontSize="11"
+                >
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <!-- online status -->
+                            <DataTrigger Binding="{Binding IsOnline}" Value="True">
+                                <Setter Property="Foreground" 
+                                        Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
+                                <Setter Property="Text" 
+                                        Value="{Binding Source={x:Static props:Resources.StatusOnlineText}}"/>
+                            </DataTrigger>
+                            <!-- offline status -->
+                            <DataTrigger Binding="{Binding Path=IsOnline, Converter={StaticResource InverseBooleanConverter}}" Value="True">
+                                <Setter Property="Foreground" 
+                                        Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+                                <Setter Property="Text" 
+                                        Value="{Binding Source={x:Static props:Resources.StatusOfflineText}}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <Button
                 Grid.Column="2"
                 Style="{StaticResource LeftPanelButtonStyle}"

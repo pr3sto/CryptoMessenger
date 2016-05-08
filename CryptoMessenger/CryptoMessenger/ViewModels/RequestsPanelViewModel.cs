@@ -14,14 +14,14 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
+		// name of user that send this request
+		public string Name { get; }
+
 		public IncomeRequest(Client client, string name)
 		{
 			this.client = client;
 			Name = name;
 		}
-
-		// name of user that send this request
-		public string Name { get; }
 
 		// accept request
 		private DelegateCommand acceptRequestCommand;
@@ -61,14 +61,14 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
+		// name of user
+		public string Name { get; }
+
 		public OutcomeRequest(Client client, string name)
 		{
 			this.client = client;
 			Name = name;
 		}
-
-		// name of user
-		public string Name { get; }
 
 		// cancel request
 		private DelegateCommand cancelRequestCommand;

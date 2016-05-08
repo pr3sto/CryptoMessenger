@@ -232,9 +232,12 @@ namespace Server
 				!friends.Contains(x) &
 				x != user.login).ToArray();
 
+			string[] online_users = onlineUsers.Select(x => x.login).ToArray();
+
 			user.client.SendMessage(new AllUsersMessage
 			{
-				Users = users
+				OnlineUsers = users.Where(x => online_users.Contains(x)).ToArray(),
+				OfflineUsers = users.Where(x => !online_users.Contains(x)).ToArray()
 			});
 		}
 
@@ -245,9 +248,13 @@ namespace Server
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		private void SendFriends(OnlineUser user)
 		{
+			string[] allFriends = DBoperations.GetFriends(user.id);
+			string[] online_users = onlineUsers.Select(x => x.login).ToArray();
+
 			user.client.SendMessage(new FriendsMessage
 			{
-				Friends = DBoperations.GetFriends(user.id)
+				OnlineFriends = allFriends.Where(x => online_users.Contains(x)).ToArray(),
+				OfflineFriends = allFriends.Where(x => !online_users.Contains(x)).ToArray()
 			});
 		}
 
