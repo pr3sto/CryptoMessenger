@@ -299,16 +299,6 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] OpenSans_CondBold {
-            get {
-                object obj = ResourceManager.GetObject("OpenSans_CondBold", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Ваши заявки:.
         /// </summary>
         public static string OutcomeRequestsTextblockText {
@@ -397,6 +387,16 @@ namespace CryptoMessenger.Properties {
         public static string RequestTextblockText {
             get {
                 return ResourceManager.GetString("RequestTextblockText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] RobotoCondensed_Bold {
+            get {
+                object obj = ResourceManager.GetObject("RobotoCondensed_Bold", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

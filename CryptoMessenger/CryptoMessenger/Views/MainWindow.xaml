@@ -15,7 +15,7 @@
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         Height="500" Width="750"
-        FontFamily="/CryptoMessenger;component/Resources/#Open Sans Condensed"
+        FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed"
         FontSize="14"
         Title="{Binding Source={x:Static props:Resources.AppName}}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"

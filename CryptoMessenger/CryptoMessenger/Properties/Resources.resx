@@ -256,7 +256,7 @@
   <data name="WelcomeNotification" xml:space="preserve">
     <value>Добро пожаловать</value>
   </data>
-  <data name="OpenSans_CondBold" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OpenSans-CondBold.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="RobotoCondensed_Bold" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RobotoCondensed-Bold.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

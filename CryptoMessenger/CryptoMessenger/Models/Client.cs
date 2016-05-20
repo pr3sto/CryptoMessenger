@@ -436,6 +436,16 @@ namespace CryptoMessenger.Models
 		/// </summary>
 		public void GetFriends()
 		{
+			if (!isLoggedIn)
+			{
+				if (OnlineFriendsList != null)
+					RaisePropertyChanged(nameof(OnlineFriendsList));
+				if (OfflineFriendsList != null)
+					RaisePropertyChanged(nameof(OfflineFriendsList));
+
+				return;
+			}
+
 			SendMessage(new GetFriendsMessage());
 		}
 
