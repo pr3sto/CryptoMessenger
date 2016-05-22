@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 using CryptoMessenger.Commands;
@@ -6,6 +9,21 @@ using CryptoMessenger.Models;
 
 namespace CryptoMessenger.ViewModels
 {
+	/// <summary>
+	/// Notification item.
+	/// </summary>
+	class NotificationItem
+	{
+		public NotificationItem(string text, DateTime time)
+		{
+			Text = text;
+			Time = time;
+		}
+
+		public string Text { get; set; }
+		public DateTime Time { get; set; }
+	}
+
 	/// <summary>
 	/// View model for main panel (mvvm pattern).
 	/// </summary>
@@ -18,8 +36,45 @@ namespace CryptoMessenger.ViewModels
 			this.client = client;
 			client.Listen();
 
+			Notification = Properties.Resources.NotificationListPlaceholder;
+			NotificationList = new ObservableCollection<NotificationItem>();
+			IsNotificationOpen = false;
+			Application.Current.MainWindow.Deactivated += delegate { IsNotificationOpen = false; };
+			UnreadNotificationCount = 0;
+
 			Login = client.Name;
 			IsOnline = true;
+
+			// client's notification events
+			client.FriendshipAccepted += async delegate (string login)
+			{
+				string notification = login + " " + Properties.Resources.FriendshipAcceptedNotificationText;
+				await addNotification(notification);
+			};
+
+			client.FriendshipRejected += async delegate(string login)
+			{
+				string notification = login + " " + Properties.Resources.FriendshipRejectedNotificationText;
+				await addNotification(notification);
+			};
+
+			client.NewFriendshipRequest += async delegate(string login)
+			{
+				string notification = login + " " + Properties.Resources.NewFriendshipRequestNotificationText;
+				await addNotification(notification);
+			};
+
+			client.FriendshipRequestCancelled += async delegate(string login)
+			{
+				string notification = login + " " + Properties.Resources.FriendshipRequestCancelledNotificationText;
+				await addNotification(notification);
+			};
+
+			client.RemovedFromeFriends += async delegate(string login)
+			{
+				string notification = login + " " + Properties.Resources.FriendRemovedNotificationText;
+				await addNotification(notification);
+			};
 
 			client.ConnectionBreaks += delegate { IsOnline = false; };
 
@@ -31,11 +86,76 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		/// <summary>
+		/// Add notification and do other ui stuff.
+		/// </summary>
+		/// <param name="notification">notification.</param>
+		private async Task addNotification(string notification)
+		{
+			NotificationList.Add(new NotificationItem(notification, DateTime.Now));
+			if (!IsNotificationOpen) UnreadNotificationCount++;
+			Notification = notification;
+
+			await Task.Run(() =>
+			{
+				System.Threading.Thread.Sleep(3000);
+				Notification = Properties.Resources.NotificationListPlaceholder;
+			});
+		}
+
+		/// <summary>
 		/// Fire event when logout.
 		/// </summary>
 		public event Action Logout;
 
 		#region Properties
+
+		// notification
+		private string notification;
+		public string Notification
+		{
+			get { return notification; }
+			set
+			{
+				notification = value;
+				OnPropertyChanged(nameof(Notification));
+			}
+		}
+
+		// unread notification count
+		private int unreadNotificationCount;
+		public int UnreadNotificationCount
+		{
+			get { return unreadNotificationCount; }
+			set
+			{
+				unreadNotificationCount = value;
+				OnPropertyChanged(nameof(UnreadNotificationCount));
+			}
+		}
+
+		// is notification list showed
+		private bool isNotificationOpen;
+		public bool IsNotificationOpen
+		{
+			get { return isNotificationOpen; }
+			set
+			{
+				isNotificationOpen = value;
+				OnPropertyChanged(nameof(IsNotificationOpen));
+			}
+		}
+
+		// notifications list
+		private ObservableCollection<NotificationItem> notificationList;
+		public ObservableCollection<NotificationItem> NotificationList
+		{
+			get { return notificationList; }
+			set
+			{
+				notificationList = value;
+				OnPropertyChanged(nameof(NotificationList));
+			}
+		}
 
 		// account login
 		private string login;
@@ -108,10 +228,46 @@ namespace CryptoMessenger.ViewModels
 				OnPropertyChanged(nameof(WindowPanel));
 			}
 		}
-		
+
 		#endregion
 
 		#region Commands
+
+		// open notification
+		private DelegateCommand openNotificationCommand;
+		public ICommand OpenNotificationCommand
+		{
+			get
+			{
+				if (openNotificationCommand == null)
+				{
+					openNotificationCommand = new DelegateCommand(delegate 
+					{
+						IsNotificationOpen = !IsNotificationOpen;
+						if (IsNotificationOpen)
+							UnreadNotificationCount = 0;
+					});
+				}
+				return openNotificationCommand;
+			}
+		}
+
+		// close notification
+		private DelegateCommand closeNotificationCommand;
+		public ICommand CloseNotificationCommand
+		{
+			get
+			{
+				if (closeNotificationCommand == null)
+				{
+					closeNotificationCommand = new DelegateCommand(delegate
+					{
+						IsNotificationOpen = false;
+					});
+				}
+				return closeNotificationCommand;
+			}
+		}
 
 		// requests textblock clicked
 		private DelegateCommand requestsTextBlockClickedCommand;
@@ -190,7 +346,7 @@ namespace CryptoMessenger.ViewModels
 					logoutCommand = new DelegateCommand(delegate
 					{
 						client.Logout();
-						Logout();
+						Logout?.Invoke();
 					});
 				}
 				return logoutCommand;

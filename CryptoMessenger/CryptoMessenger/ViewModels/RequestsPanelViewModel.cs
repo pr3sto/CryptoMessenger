@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Linq;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -98,8 +99,29 @@ namespace CryptoMessenger.ViewModels
 			this.client = client;
 			client.PropertyChanged += ReqsListChanged;
 
-			IncomeReqsList = null;
-			OutcomeReqsList = null;
+			IncomeReqsList = new ObservableCollection<IncomeRequest>();
+			OutcomeReqsList = new ObservableCollection<OutcomeRequest>();
+
+			client.FriendshipAccepted += async delegate (string login)
+			{
+				await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+				OutcomeReqsList.Remove(OutcomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
+			};
+			client.FriendshipRejected += async delegate (string login)
+			{
+				await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+				OutcomeReqsList.Remove(OutcomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
+			};
+			client.NewFriendshipRequest += async delegate (string login)
+			{
+				await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+				IncomeReqsList.Add(new IncomeRequest(client, login));
+			};
+			client.FriendshipRequestCancelled += async delegate (string login)
+			{
+				await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+				IncomeReqsList.Remove(IncomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
+			};
 
 			// get requests when panel loads
 			client.GetIncomeFriendshipRequests();

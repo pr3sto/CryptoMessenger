@@ -197,7 +197,8 @@ namespace Server
 
 			if (string.IsNullOrEmpty(message.Login) ||
 				string.IsNullOrEmpty(message.Password) ||
-				message.Login.Length > 30)
+				message.Login.Length > 20 ||
+				message.Password.Length > 30)
 			{
 				response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.Error };
 			}
@@ -261,7 +262,8 @@ namespace Server
 
 			if (string.IsNullOrEmpty(message.Login) ||
 				string.IsNullOrEmpty(message.Password) ||
-				message.Login.Length > 30)
+				message.Login.Length > 20 ||
+				message.Password.Length > 30)
 			{
 				response = new LoginRegisterResponseMessage { Response = LoginRegisterResponse.Error };
 			}

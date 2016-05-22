@@ -34,7 +34,7 @@ namespace CryptoMessenger.Models
 		/// <param name="reply">reply.</param>
 		public void AddReply(ConversationReply reply)
 		{
-			if (reply != null) replies.Add(reply);
+			replies?.Add(reply);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace CryptoMessenger.Models
 		/// <param name="reply">reply.</param>
 		public void InsertReplyToTop(ConversationReply reply)
 		{
-			if (reply != null) replies.Insert(0, reply);
+			replies?.Insert(0, reply);
 		}
 	}
 
@@ -67,9 +67,7 @@ namespace CryptoMessenger.Models
 		public bool Contains(string interlocutor)
 		{
 			var data = conversations.Find(x => x.interlocutor.Equals(interlocutor));
-
-			if (data != null) return true;
-			else return false;
+			return (data != null);
 		}
 
 		/// <summary>

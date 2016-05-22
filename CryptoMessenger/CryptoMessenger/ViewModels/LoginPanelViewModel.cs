@@ -169,7 +169,7 @@ namespace CryptoMessenger.ViewModels
 
 				if (LoginRegisterResponse.Success.Equals(response))
 				{
-					LoginSuccess();
+					LoginSuccess?.Invoke();
 					Notification = Properties.Resources.WelcomeNotification;
 				}
 				else if (LoginRegisterResponse.Fail.Equals(response))

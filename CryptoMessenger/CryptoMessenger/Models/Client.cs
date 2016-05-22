@@ -6,6 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 
 using MessageProtocol;
 using MessageProtocol.MessageTypes;
+using System.Collections.Generic;
 
 namespace CryptoMessenger.Models
 {
@@ -29,10 +30,17 @@ namespace CryptoMessenger.Models
 		/// </summary>
 		public string Name { get; set; }
 
-		/// <summary>
-		/// Notify about connection breaks.
-		/// </summary>
+		// events
 		public event Action ConnectionBreaks;
+		public event Action<string> FriendGoOnline;
+		public event Action<string> FriendGoOffline;
+		public event Action<string> FriendshipAccepted;
+		public event Action<string> FriendshipRejected;
+		public event Action<string> FriendshipRequestCancelled;
+		public event Action<string> NewFriendshipRequest;
+		public event Action<string> RemovedFromeFriends;
+		public event Action<string, ConversationReply> NewReplyComes;
+		public event Action<string, ConversationReply> OldReplyComes;
 
 		/// <summary>
 		/// User conversations.
@@ -42,11 +50,11 @@ namespace CryptoMessenger.Models
 
 		#region Data that comes from server
 
-		private string[] onlineFriendsList;
+		private List<string> onlineFriendsList;
 		/// <summary>
 		/// Array of online friends.
 		/// </summary>
-		public string[] OnlineFriendsList
+		public List<string> OnlineFriendsList
 		{
 			get { return onlineFriendsList; }
 			private set
@@ -55,11 +63,11 @@ namespace CryptoMessenger.Models
 				RaisePropertyChanged(nameof(OnlineFriendsList));
 			}
 		}
-		private string[] offlineFriendsList;
+		private List<string> offlineFriendsList;
 		/// <summary>
 		/// Array of offline friends.
 		/// </summary>
-		public string[] OfflineFriendsList
+		public List<string> OfflineFriendsList
 		{
 			get { return offlineFriendsList; }
 			private set
@@ -68,11 +76,11 @@ namespace CryptoMessenger.Models
 				RaisePropertyChanged(nameof(OfflineFriendsList));
 			}
 		}
-		private string[] onlineUsersList;
+		private List<string> onlineUsersList;
 		/// <summary>
 		/// Array of all online users.
 		/// </summary>
-		public string[] OnlineUsersList
+		public List<string> OnlineUsersList
 		{
 			get { return onlineUsersList; }
 			private set
@@ -81,11 +89,11 @@ namespace CryptoMessenger.Models
 				RaisePropertyChanged(nameof(OnlineUsersList));
 			}
 		}
-		private string[] offlineUsersList;
+		private List<string> offlineUsersList;
 		/// <summary>
 		/// Array of all offline users.
 		/// </summary>
-		public string[] OfflineUsersList
+		public List<string> OfflineUsersList
 		{
 			get { return offlineUsersList; }
 			private set
@@ -94,11 +102,11 @@ namespace CryptoMessenger.Models
 				RaisePropertyChanged(nameof(OfflineUsersList));
 			}
 		}
-		private string[] incomeRequestsList;
+		private List<string> incomeRequestsList;
 		/// <summary>
 		/// Array of income requests.
 		/// </summary>
-		public string[] IncomeRequestsList
+		public List<string> IncomeRequestsList
 		{
 			get { return incomeRequestsList; }
 			private set
@@ -107,11 +115,11 @@ namespace CryptoMessenger.Models
 				RaisePropertyChanged(nameof(IncomeRequestsList));
 			}
 		}
-		private string[] outcomeRequestsList;
+		private List<string> outcomeRequestsList;
 		/// <summary>
 		/// Array of outcome requests.
 		/// </summary>
-		public string[] OutcomeRequestsList
+		public List<string> OutcomeRequestsList
 		{
 			get { return outcomeRequestsList; }
 			private set
@@ -137,13 +145,12 @@ namespace CryptoMessenger.Models
 		{
 			// get data from connection.cfg
 			XDocument doc = XDocument.Load("connection.config");
-
+			
 			var _ip = doc.Descendants("ip");
-			var _port = doc.Descendants("port");
-
 			ip = "";
 			foreach (var i in _ip) ip = i.Value;
-	
+
+			var _port = doc.Descendants("port");
 			port = 0;
 			foreach (var i in _port) port = int.Parse(i.Value);
 
@@ -153,9 +160,9 @@ namespace CryptoMessenger.Models
 			OfflineUsersList = null;
 			IncomeRequestsList = null;
 			OutcomeRequestsList = null;
-			
-			client = new MpClient();
+
 			Name = null;
+			client = new MpClient();
 			Conversations = new Conversations();
 
 			ConnectionBreaks += delegate { isLoggedIn = false; };
@@ -292,21 +299,9 @@ namespace CryptoMessenger.Models
 			}
 		}
 
-
-		/// <summary>
-		/// Notify about reply from server comes.
-		/// </summary>
-		public event Action<string, ConversationReply> NewReplyComes;
-		/// <summary>
-		/// Notify about reply from server comes.
-		/// </summary>
-		public event Action<string, ConversationReply> OldReplyComes;
-
-
 		/// <summary>
 		/// Listen for messages from server.
 		/// </summary>
-		/// <param name="//form">//form to update when message come.</param>
 		public async void Listen()
 		{
 			if (!isLoggedIn) return;
@@ -324,7 +319,7 @@ namespace CryptoMessenger.Models
 				catch (ConnectionInterruptedException)
 				{
 					if (isLoggedIn)
-						ConnectionBreaks();
+						ConnectionBreaks?.Invoke();
 
 					return;
 				}
@@ -332,21 +327,66 @@ namespace CryptoMessenger.Models
 				// handle message
 				if (message is AllUsersMessage)
 				{
-					OnlineUsersList = ((AllUsersMessage)message).OnlineUsers;
-					OfflineUsersList = ((AllUsersMessage)message).OfflineUsers;
+					OnlineUsersList = new List<string>(((AllUsersMessage)message).OnlineUsers);
+					OfflineUsersList = new List<string>(((AllUsersMessage)message).OfflineUsers);
 				}
 				else if (message is FriendsMessage)
 				{
-					OnlineFriendsList = ((FriendsMessage)message).OnlineFriends;
-					OfflineFriendsList = ((FriendsMessage)message).OfflineFriends;
+					OnlineFriendsList = new List<string>(((FriendsMessage)message).OnlineFriends);
+					OfflineFriendsList = new List<string>(((FriendsMessage)message).OfflineFriends);
 				}
 				else if (message is IncomeFriendshipRequestsMessage)
 				{
-					IncomeRequestsList = ((IncomeFriendshipRequestsMessage)message).Logins;
+					IncomeRequestsList = new List<string>(((IncomeFriendshipRequestsMessage)message).Logins);
 				}
 				else if (message is OutcomeFriendshipRequestsMessage)
 				{
-					OutcomeRequestsList = ((OutcomeFriendshipRequestsMessage)message).Logins;
+					OutcomeRequestsList = new List<string>(((OutcomeFriendshipRequestsMessage)message).Logins);
+				}
+				else if (message is UserActionMessage)
+				{
+					UserActionMessage msg = (UserActionMessage)message;
+
+					switch (msg.Action)
+					{
+						case UserActions.GoOnline:
+							FriendGoOnline?.Invoke(msg.UserLogin);
+							break;
+
+						case UserActions.GoOffline:
+							FriendGoOffline?.Invoke(msg.UserLogin);
+							break;
+
+						case UserActions.AcceptFriendship:
+							FriendshipAccepted?.Invoke(msg.UserLogin);
+							OutcomeRequestsList?.Remove(msg.UserLogin);
+							OnlineFriendsList?.Add(msg.UserLogin);
+							break;
+
+						case UserActions.RejectFriendship:
+							FriendshipRejected?.Invoke(msg.UserLogin);
+							OutcomeRequestsList?.Remove(msg.UserLogin);
+							break;
+
+						case UserActions.SendFriendshipRequest:
+							NewFriendshipRequest?.Invoke(msg.UserLogin);
+							IncomeRequestsList?.Add(msg.UserLogin);
+							break;
+
+						case UserActions.CancelFriendshipRequest:
+							FriendshipRequestCancelled?.Invoke(msg.UserLogin);
+							IncomeRequestsList?.Remove(msg.UserLogin);
+							break;
+
+						case UserActions.RemoveFromFriends:
+							RemovedFromeFriends?.Invoke(msg.UserLogin);
+							OnlineFriendsList?.Remove(msg.UserLogin);
+							OfflineFriendsList?.Remove(msg.UserLogin);
+							break;
+
+						default:
+							break;
+					}
 				}
 				else if (message is NewReplyMessage)
 				{
@@ -359,7 +399,7 @@ namespace CryptoMessenger.Models
 							Text = ((NewReplyMessage)message).Text
 						}
 					);
-					NewReplyComes(
+					NewReplyComes?.Invoke(
 						((NewReplyMessage)message).Interlocutor,
 						new ConversationReply
 						{
@@ -379,7 +419,7 @@ namespace CryptoMessenger.Models
 							Text = ((OldReplyMessage)message).Text
 						}
 					);
-					OldReplyComes(
+					OldReplyComes?.Invoke(
 						((OldReplyMessage)message).Interlocutor,
 						new ConversationReply
 						{
@@ -416,7 +456,7 @@ namespace CryptoMessenger.Models
 				{
 					// fail two times -> something wrong with connection
 					Logout();
-					ConnectionBreaks();
+					ConnectionBreaks?.Invoke();
 				}
 			}
 		}
@@ -499,10 +539,10 @@ namespace CryptoMessenger.Models
 		/// <param name="login">needed friend login.</param>
 		public void CancelFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionMessage
+			SendMessage(new UserActionMessage
 			{
-				FriendLogin = login,
-				Action = ActionsWithFriend.CancelFriendshipRequest
+				UserLogin = login,
+				Action = UserActions.CancelFriendshipRequest
 			});
 		}
 		
@@ -512,10 +552,10 @@ namespace CryptoMessenger.Models
 		/// <param name="login">accepted friend login.</param>
 		public void AcceptFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionMessage
+			SendMessage(new UserActionMessage
 			{
-				FriendLogin = login,
-				Action = ActionsWithFriend.AcceptFriendship
+				UserLogin = login,
+				Action = UserActions.AcceptFriendship
 			});
 		}
 
@@ -525,10 +565,10 @@ namespace CryptoMessenger.Models
 		/// <param name="login">rejected user login.</param>
 		public void RejectFriendshipRequest(string login)
 		{
-			SendMessage(new FriendActionMessage
+			SendMessage(new UserActionMessage
 			{
-				FriendLogin = login,
-				Action = ActionsWithFriend.RejectFriendship
+				UserLogin = login,
+				Action = UserActions.RejectFriendship
 			});
 		}
 
@@ -538,10 +578,10 @@ namespace CryptoMessenger.Models
 		/// <param name="login">friend's login.</param>
 		public void RemoveFriend(string login)
 		{
-			SendMessage(new FriendActionMessage
+			SendMessage(new UserActionMessage
 			{
-				FriendLogin = login,
-				Action = ActionsWithFriend.RemoveFromFriends
+				UserLogin = login,
+				Action = UserActions.RemoveFromFriends
 			});
 		}
 

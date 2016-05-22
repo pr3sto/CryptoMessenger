@@ -19,12 +19,15 @@ namespace MessageProtocol.MessageTypes
 	/// Actions with frends and friendship requests.
 	/// </summary>
 	[Serializable]
-	public enum ActionsWithFriend
+	public enum UserActions
 	{
+		SendFriendshipRequest,
 		CancelFriendshipRequest,
 		AcceptFriendship,
 		RejectFriendship,
-		RemoveFromFriends
+		RemoveFromFriends,
+		GoOnline,
+		GoOffline
 	};
 
 	/// <summary>
@@ -39,7 +42,7 @@ namespace MessageProtocol.MessageTypes
 	[XmlInclude(typeof(GetIncomeFriendshipRequestsMessage))]
 	[XmlInclude(typeof(GetOutcomeFriendshipRequestsMessage))]
 	[XmlInclude(typeof(FriendshipRequestMessage))]
-	[XmlInclude(typeof(FriendActionMessage))]
+	[XmlInclude(typeof(UserActionMessage))]
 	[XmlInclude(typeof(LoginRegisterResponseMessage))]
 	[XmlInclude(typeof(AllUsersMessage))]
 	[XmlInclude(typeof(FriendsMessage))]
@@ -180,10 +183,10 @@ namespace MessageProtocol.MessageTypes
 	/// Message with action.
 	/// </summary>
 	[Serializable]
-	public class FriendActionMessage : Message
+	public class UserActionMessage : Message
 	{
-		public string FriendLogin { get; set; }
-		public ActionsWithFriend Action { get; set; }
+		public string UserLogin { get; set; }
+		public UserActions Action { get; set; }
 	}
 
 	/// <summary>

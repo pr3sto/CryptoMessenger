@@ -19,11 +19,11 @@ namespace Server
 		private bool disposed = false;
 
 		// client's id in db
-		public int id { get; private set; }
+		public int Id { get; private set; }
 		// client's login
-		public string login { get; private set; }
+		public string Login { get; private set; }
 		// client
-		public MpClient client { get; private set; }
+		public MpClient Client { get; private set; }
 
 		/// <summary>
 		/// Create user.
@@ -33,9 +33,9 @@ namespace Server
 		/// <param name="client">client.</param>
 		public OnlineUser(int id, string login, MpClient client)
 		{
-			this.id = id;
-			this.login = login;
-			this.client = client;
+			Id = id;
+			Login = login;
+			Client = client;
 		}
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace Server
 
 			try
 			{
-				client.Close();	
+				Client.Close();	
 			}
 			catch
 			{
@@ -92,7 +92,23 @@ namespace Server
 		public void AddUser(OnlineUser user)
 		{
 			if (user != null)
+			{
 				onlineUsers.Add(user);
+
+				string[] allFriends = DBoperations.GetFriends(user.Id);
+				string[] online_users = onlineUsers.Select(x => x.Login).ToArray();
+				string[] onlineFriends = allFriends.Where(x => online_users.Contains(x)).ToArray();
+
+				foreach (var login in onlineFriends)
+				{
+					OnlineUser friend = GetOnlineUser(login);
+					friend?.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = user.Login,
+						Action = UserActions.GoOnline
+					});
+				}
+			}
 
 			// listen this user
 			Task.Run(() => UserListener(user));
@@ -105,7 +121,7 @@ namespace Server
 		/// <returns>user, if he online; otherwise - null.</returns>
 		public OnlineUser GetOnlineUser(string login)
 		{
-			return onlineUsers.Find(x => x.login.Equals(login));
+			return onlineUsers.Find(x => x.Login.Equals(login));
 		}
 
 		/// <summary>
@@ -121,14 +137,14 @@ namespace Server
 				try
 				{
 					// user's incoming message
-					message = user.client.ReceiveMessage();
+					message = user.Client.ReceiveMessage();
 				}
 				// user disconnected
 				catch (ConnectionInterruptedException)
 				{
 					if (onlineUsers.Contains(user))
 					{
-						log.Info($"Client disconnected. ip {((IPEndPoint)user.client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
+						log.Info($"Client disconnected. ip {((IPEndPoint)user.Client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
 
 						onlineUsers.Remove(user);
 						user.Dispose();
@@ -163,23 +179,25 @@ namespace Server
 					{
 						SetFriendshipRequest(user, ((FriendshipRequestMessage)message).LoginOfNeededUser);
 					}
-					else if (message is FriendActionMessage)
+					else if (message is UserActionMessage)
 					{
-						FriendActionMessage msg = (FriendActionMessage)message;
+						UserActionMessage msg = (UserActionMessage)message;
 
 						switch (msg.Action)
 						{
-							case ActionsWithFriend.CancelFriendshipRequest:
-								CancelFriendshipRequest(user, msg.FriendLogin);
+							case UserActions.CancelFriendshipRequest:
+								CancelFriendshipRequest(user, msg.UserLogin);
 								break;
-							case ActionsWithFriend.AcceptFriendship:
-								AcceptFriendshipRequest(user, msg.FriendLogin);
+							case UserActions.AcceptFriendship:
+								AcceptFriendshipRequest(user, msg.UserLogin);
 								break;
-							case ActionsWithFriend.RejectFriendship:
-								RejectFriendshipRequest(user, msg.FriendLogin);
+							case UserActions.RejectFriendship:
+								RejectFriendshipRequest(user, msg.UserLogin);
 								break;
-							case ActionsWithFriend.RemoveFromFriends:
-								RemoveFriend(user, msg.FriendLogin);
+							case UserActions.RemoveFromFriends:
+								RemoveFriend(user, msg.UserLogin);
+								break;
+							default:
 								break;
 						}
 					}
@@ -195,7 +213,7 @@ namespace Server
 				}
 				catch (ConnectionInterruptedException e)
 				{
-					log.Error($"Client '{user.login}' disconnected", e);
+					log.Error($"Client '{user.Login}' disconnected", e);
 				}
 			}
 		}
@@ -208,7 +226,21 @@ namespace Server
 		/// <param name="user">user.</param>
 		private void Logout(OnlineUser user)
 		{
-			log.Info($"Client disconnected. ip {((IPEndPoint)user.client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
+			log.Info($"Client disconnected. ip {((IPEndPoint)user.Client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
+
+			string[] allFriends = DBoperations.GetFriends(user.Id);
+			string[] online_users = onlineUsers.Select(x => x.Login).ToArray();
+			string[] onlineFriends = allFriends.Where(x => online_users.Contains(x)).ToArray();
+
+			foreach (var login in onlineFriends)
+			{
+				OnlineUser friend = GetOnlineUser(login);
+				friend?.Client.SendMessage(new UserActionMessage
+				{
+					UserLogin = user.Login,
+					Action = UserActions.GoOffline
+				});
+			}
 
 			onlineUsers.Remove(user);
 			user.Dispose();
@@ -222,19 +254,19 @@ namespace Server
 		private void SendAllUsers(OnlineUser user)
 		{
 			string[] allUsers = DBoperations.GetAllUsers();
-			string[] incomeRequests = DBoperations.GetIncomeFriendshipRequests(user.id);
-			string[] outcomeRequests = DBoperations.GetOutcomeFriendshipRequests(user.id);
-			string[] friends = DBoperations.GetFriends(user.id);
+			string[] incomeRequests = DBoperations.GetIncomeFriendshipRequests(user.Id);
+			string[] outcomeRequests = DBoperations.GetOutcomeFriendshipRequests(user.Id);
+			string[] friends = DBoperations.GetFriends(user.Id);
 
 			string[] users = allUsers.Where(x =>
 				!incomeRequests.Contains(x) & 
 				!outcomeRequests.Contains(x) &
 				!friends.Contains(x) &
-				x != user.login).ToArray();
+				x != user.Login).ToArray();
 
-			string[] online_users = onlineUsers.Select(x => x.login).ToArray();
+			string[] online_users = onlineUsers.Select(x => x.Login).ToArray();
 
-			user.client.SendMessage(new AllUsersMessage
+			user.Client.SendMessage(new AllUsersMessage
 			{
 				OnlineUsers = users.Where(x => online_users.Contains(x)).ToArray(),
 				OfflineUsers = users.Where(x => !online_users.Contains(x)).ToArray()
@@ -248,10 +280,10 @@ namespace Server
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		private void SendFriends(OnlineUser user)
 		{
-			string[] allFriends = DBoperations.GetFriends(user.id);
-			string[] online_users = onlineUsers.Select(x => x.login).ToArray();
+			string[] allFriends = DBoperations.GetFriends(user.Id);
+			string[] online_users = onlineUsers.Select(x => x.Login).ToArray();
 
-			user.client.SendMessage(new FriendsMessage
+			user.Client.SendMessage(new FriendsMessage
 			{
 				OnlineFriends = allFriends.Where(x => online_users.Contains(x)).ToArray(),
 				OfflineFriends = allFriends.Where(x => !online_users.Contains(x)).ToArray()
@@ -265,9 +297,9 @@ namespace Server
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		private void SendIncomeFriendshipRequests(OnlineUser user)
 		{
-			user.client.SendMessage(new IncomeFriendshipRequestsMessage
+			user.Client.SendMessage(new IncomeFriendshipRequestsMessage
 			{
-				Logins = DBoperations.GetIncomeFriendshipRequests(user.id)
+				Logins = DBoperations.GetIncomeFriendshipRequests(user.Id)
 			});
 		}
 
@@ -278,9 +310,9 @@ namespace Server
 		/// <exception cref="ConnectionInterruptedException"></exception>
 		private void SendOutcomeFriendshipRequests(OnlineUser user)
 		{
-			user.client.SendMessage(new OutcomeFriendshipRequestsMessage
+			user.Client.SendMessage(new OutcomeFriendshipRequestsMessage
 			{
-				Logins = DBoperations.GetOutcomeFriendshipRequests(user.id)
+				Logins = DBoperations.GetOutcomeFriendshipRequests(user.Id)
 			});
 		}
 
@@ -296,12 +328,12 @@ namespace Server
 			if (interlocutorId == 0) return;
 
 			// get replies from db
-			ConversationReply[] replies = DBoperations.GetConversation(user.id, interlocutorId);
+			ConversationReply[] replies = DBoperations.GetConversation(user.Id, interlocutorId);
 
 			if (replies != null)
 			{
 				foreach (var r in replies)
-					user.client.SendMessage(new OldReplyMessage
+					user.Client.SendMessage(new OldReplyMessage
 					{
 						Interlocutor = interlocutor,
 						Author = DBoperations.GetUserLogin(r.user_id),
@@ -323,14 +355,18 @@ namespace Server
 			if (friendId == 0) return;
 
 			// set friendship request
-			if (DBoperations.SetFriendship(user.id, friendId, false))
+			if (DBoperations.SetFriendship(user.Id, friendId, false))
 			{
 				// send new data to user one
 				SendAllUsers(user);
 				SendOutcomeFriendshipRequests(user);
 				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				if (friend != null) SendIncomeFriendshipRequests(friend);
+				friend?.Client.SendMessage(new UserActionMessage
+				{
+					UserLogin = user.Login,
+					Action = UserActions.SendFriendshipRequest
+				});
 			}
 		}
 
@@ -345,13 +381,17 @@ namespace Server
 			int friendId = DBoperations.GetUserId(friendLogin);
 			if (friendId == 0) return;
 
-			if (DBoperations.RemoveFriendshipRequest(user.id, friendId))
+			if (DBoperations.RemoveFriendshipRequest(user.Id, friendId))
 			{
 				// send new data to user one
 				SendOutcomeFriendshipRequests(user);
 				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				if (friend != null) SendIncomeFriendshipRequests(friend);
+				friend?.Client.SendMessage(new UserActionMessage
+				{
+					UserLogin = user.Login,
+					Action = UserActions.CancelFriendshipRequest
+				});
 			}
 		}
 
@@ -366,18 +406,18 @@ namespace Server
 			int friendId = DBoperations.GetUserId(friendLogin);
 			if (friendId == 0) return;
 
-			if (DBoperations.SetFriendship(friendId, user.id, true))
+			if (DBoperations.SetFriendship(friendId, user.Id, true))
 			{
 				// send new data to user one
 				SendIncomeFriendshipRequests(user);
 				SendFriends(user);
 				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				if (friend != null)
+				friend?.Client.SendMessage(new UserActionMessage
 				{
-					SendOutcomeFriendshipRequests(friend);
-					SendFriends(friend);
-				}
+					UserLogin = user.Login,
+					Action = UserActions.AcceptFriendship
+				});
 			}
 		}
 
@@ -392,13 +432,17 @@ namespace Server
 			int friendId = DBoperations.GetUserId(friendLogin);
 			if (friendId == 0) return;
 
-			if (DBoperations.RemoveFriendshipRequest(friendId, user.id))
+			if (DBoperations.RemoveFriendshipRequest(friendId, user.Id))
 			{
 				// send new data to user one
 				SendIncomeFriendshipRequests(user);
 				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				if (friend != null) SendOutcomeFriendshipRequests(friend);
+				friend?.Client.SendMessage(new UserActionMessage
+				{
+					UserLogin = user.Login,
+					Action = UserActions.RejectFriendship
+				});
 			}
 		}
 
@@ -413,13 +457,17 @@ namespace Server
 			int friendId = DBoperations.GetUserId(friendLogin);
 			if (friendId == 0) return;
 
-			if (DBoperations.RemoveFriend(user.id, friendId))
+			if (DBoperations.RemoveFriend(user.Id, friendId))
 			{
 				// send new data to user one
 				SendFriends(user);
 				// send new data to user two if online
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				if (friend != null) SendFriends(friend);
+				friend?.Client.SendMessage(new UserActionMessage
+				{
+					UserLogin = user.Login,
+					Action = UserActions.RemoveFromFriends
+				});
 			}
 		}
 
@@ -438,29 +486,26 @@ namespace Server
 			// time of reply
 			DateTime time = DateTime.Now;
 
-			if (DBoperations.AddNewReply(user.id, interlocutorId, text, time))
+			if (DBoperations.AddNewReply(user.Id, interlocutorId, text, time))
 			{
 				// send reply to user one
-				user.client.SendMessage(new NewReplyMessage
+				user.Client.SendMessage(new NewReplyMessage
 				{
 					Interlocutor = interlocutor,
-					Author = user.login,
+					Author = user.Login,
 					Time = time,
 					Text = text
 				});
 
 				// send reply to user two if online
 				OnlineUser friend = GetOnlineUser(interlocutor);
-				if (friend != null)
+				friend?.Client.SendMessage(new NewReplyMessage
 				{
-					friend.client.SendMessage(new NewReplyMessage
-					{
-						Interlocutor = user.login,
-						Author = user.login,
-						Time = time,
-						Text = text
-					});
-				}
+					Interlocutor = user.Login,
+					Author = user.Login,
+					Time = time,
+					Text = text
+				});
 			}
 		}
 

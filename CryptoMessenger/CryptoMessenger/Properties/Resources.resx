@@ -259,4 +259,25 @@
   <data name="RobotoCondensed_Bold" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RobotoCondensed-Bold.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="NotificationListPlaceholder" xml:space="preserve">
+    <value>Уведомления</value>
+  </data>
+  <data name="EmptyNotificationListboxPlaceholder" xml:space="preserve">
+    <value>Уведомлений нет</value>
+  </data>
+  <data name="FriendRemovedNotificationText" xml:space="preserve">
+    <value>удалил Вас из друзей.</value>
+  </data>
+  <data name="FriendshipAcceptedNotificationText" xml:space="preserve">
+    <value>принял предложение дружбы.</value>
+  </data>
+  <data name="FriendshipRejectedNotificationText" xml:space="preserve">
+    <value>отклонил предложение дружбы.</value>
+  </data>
+  <data name="FriendshipRequestCancelledNotificationText" xml:space="preserve">
+    <value>отменил предложение дружбы.</value>
+  </data>
+  <data name="NewFriendshipRequestNotificationText" xml:space="preserve">
+    <value>хочет добавить вас в друзья.</value>
+  </data>
 </root>

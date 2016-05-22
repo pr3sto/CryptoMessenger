@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,14 +13,24 @@ namespace CryptoMessenger.ViewModels
 	/// <summary>
 	/// Friend for ItemSource of ListBox.
 	/// </summary>
-	class Friend
+	class Friend : INotifyPropertyChanged
 	{
 		private Client client;
 
 		// friend's name.
 		public string Name { get; }
 
-		public bool IsOnline { get; }
+		// friends list
+		private bool isOnline;
+		public bool IsOnline
+		{
+			get { return isOnline; }
+			set
+			{
+				isOnline = value;
+				OnPropertyChanged(nameof(IsOnline));
+			}
+		}
 
 		public Friend(Client client, string name, bool isOnline)
 		{
@@ -41,6 +52,13 @@ namespace CryptoMessenger.ViewModels
 				}
 				return removeFriendCommand;
 			}
+		}
+
+		// INotifyPropertyChanged implementation
+		public event PropertyChangedEventHandler PropertyChanged;
+		protected void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 
@@ -76,8 +94,12 @@ namespace CryptoMessenger.ViewModels
 			client.PropertyChanged += FriendsListChanged;
 			client.NewReplyComes += NewReply;
 			client.OldReplyComes += OldReply;
+			client.FriendGoOnline += FriendGoOnline;
+			client.FriendGoOffline += FriendGoOffline;
+			client.FriendshipAccepted += FriendshipAccepted;
+			client.RemovedFromeFriends += RemovedFromeFriends;
 
-			FriendsList = null;
+			FriendsList = new ObservableCollection<Friend>();
 			RepliesList = new ObservableCollection<Reply>();
 
 			IsDialogVisible = false;
@@ -113,6 +135,44 @@ namespace CryptoMessenger.ViewModels
 		{
 			if (SelectedFriend != null && interlocutor == SelectedFriend.Name)
 				RepliesList.Insert(0, new Reply(reply, client.Name));
+		}
+
+		// update friend status
+		private void FriendGoOnline(string login)
+		{
+			if (!string.IsNullOrEmpty(login))
+			{
+				Friend f = FriendsList.FirstOrDefault(x => x.Name.Equals(login));
+
+				if (f != null)
+					f.IsOnline = true;
+			}
+		}
+
+		// update friend status
+		private void FriendGoOffline(string login)
+		{
+			if (!string.IsNullOrEmpty(login))
+			{
+				Friend f = FriendsList.FirstOrDefault(x => x.Name.Equals(login));
+
+				if (f != null)
+					f.IsOnline = false;
+			}
+		}
+
+		// your request for friendship accepted
+		private async void FriendshipAccepted(string login)
+		{
+			await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+			FriendsList.Add(new Friend(client, login, true));
+		}
+
+		// you have ben removed from friends
+		private async void RemovedFromeFriends(string login)
+		{
+			await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+			FriendsList.Remove(FriendsList.FirstOrDefault(x => x.Name.Equals(login)));
 		}
 
 		#region Properties

@@ -47,10 +47,7 @@ namespace Server.Database
 					where user.user_id.Equals(id)
 					select user.login;
 
-				if (userLogin.Any())
-					return userLogin.First();
-				else
-					return null;
+				return userLogin.FirstOrDefault();
 			}
 		}
 
@@ -154,7 +151,7 @@ namespace Server.Database
 					select user;
 
 				if (users.Any())
-					return users.Select(x => x.login).ToArray();
+					return users.Select(x => x.login)?.ToArray();
 				else
 					return null;
 			}

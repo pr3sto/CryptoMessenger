@@ -52,12 +52,12 @@ namespace CryptoMessenger.ViewModels
 		public SearchPanelViewModel(Client client)
 		{
 			this.client = client;
-			client.PropertyChanged += UsersListChanged;
+			this.client.PropertyChanged += UsersListChanged;
 
-			UsersList = null;
-
+			UsersList = new ObservableCollection<User>();
+			
 			// get users when panel loads
-			client.GetAllUsers();
+			this.client.GetAllUsers();
 		}
 
 		// update UsersList when property in client changed

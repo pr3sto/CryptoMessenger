@@ -170,6 +170,15 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Уведомлений нет.
+        /// </summary>
+        public static string EmptyNotificationListboxPlaceholder {
+            get {
+                return ResourceManager.GetString("EmptyNotificationListboxPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Заявок нет.
         /// </summary>
         public static string EmptyRequestsListboxPlaceholder {
@@ -203,6 +212,42 @@ namespace CryptoMessenger.Properties {
         public static string ExitButtonText {
             get {
                 return ResourceManager.GetString("ExitButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to удалил Вас из друзей..
+        /// </summary>
+        public static string FriendRemovedNotificationText {
+            get {
+                return ResourceManager.GetString("FriendRemovedNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to принял предложение дружбы..
+        /// </summary>
+        public static string FriendshipAcceptedNotificationText {
+            get {
+                return ResourceManager.GetString("FriendshipAcceptedNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to отклонил предложение дружбы..
+        /// </summary>
+        public static string FriendshipRejectedNotificationText {
+            get {
+                return ResourceManager.GetString("FriendshipRejectedNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to отменил предложение дружбы..
+        /// </summary>
+        public static string FriendshipRequestCancelledNotificationText {
+            get {
+                return ResourceManager.GetString("FriendshipRequestCancelledNotificationText", resourceCulture);
             }
         }
         
@@ -286,6 +331,24 @@ namespace CryptoMessenger.Properties {
         public static string MessageTextboxPlaceholder {
             get {
                 return ResourceManager.GetString("MessageTextboxPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to хочет добавить вас в друзья..
+        /// </summary>
+        public static string NewFriendshipRequestNotificationText {
+            get {
+                return ResourceManager.GetString("NewFriendshipRequestNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Уведомления.
+        /// </summary>
+        public static string NotificationListPlaceholder {
+            get {
+                return ResourceManager.GetString("NotificationListPlaceholder", resourceCulture);
             }
         }
         

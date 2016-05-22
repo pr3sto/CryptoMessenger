@@ -33,7 +33,7 @@
                 Source="/CryptoMessenger;component/Resources/icon.ico"
                 />
             <!-- loading indicator -->
-            <Ellipse
+            <Ellipse 
                 Canvas.Bottom="1"
                 Canvas.Left="319"
                 Width="102"
@@ -80,7 +80,7 @@
         </Canvas>
 
         <!-- notification label -->
-        <TextBlock
+        <TextBlock 
             Grid.Row="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
@@ -99,10 +99,10 @@
             Width="300"
             Height="33"
             BorderThickness="2"
-            MaxLength="30"
+            MaxLength="20"
             Text="{Binding Path=Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             Tag="{Binding Source={x:Static props:Resources.UsernameTextboxPlaceholder}}"
-            TabIndex="1"
+            TabIndex="0"
             IsTabStop="True"
             IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBooleanConverter}}"
             extensions:Extensions.IsDataIncorrect="{Binding IsLoginIncorrect}"
@@ -133,7 +133,7 @@
             BorderThickness="2"
             MaxLength="30"
             Tag="{Binding Source={x:Static props:Resources.UserPasswordTextboxPlaceholder}}"
-            TabIndex="2"
+            TabIndex="1"
             IsTabStop="True"
             IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBooleanConverter}}"
             extensions:Extensions.IsDataIncorrect="{Binding IsPasswordIncorrect}"
