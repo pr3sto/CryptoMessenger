@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MessageProtocol.MessageTypes;
+
 namespace Server.Database
 {
 	/// <summary>
@@ -150,10 +152,7 @@ namespace Server.Database
 					from user in DBcontext.Users
 					select user;
 
-				if (users.Any())
-					return users.Select(x => x.login)?.ToArray();
-				else
-					return null;
+				return users.Select(x => x.login)?.ToArray();
 			}
 		}
 
@@ -183,7 +182,7 @@ namespace Server.Database
 					{
 						int friendId = f.friend_one.Equals(id) ? f.friend_two : f.friend_one;
 						string friendLogin = GetUserLogin(friendId);
-							
+
 						if (!string.IsNullOrEmpty(friendLogin))
 							friends.Add(friendLogin);
 					}
@@ -408,12 +407,12 @@ namespace Server.Database
 			{
 				// get conversation id
 				var data = from conversation in DBcontext.Conversations
-					where (conversation.user_one.Equals(senderId) &
-					conversation.user_two.Equals(receiverId)) |
-					(conversation.user_one.Equals(receiverId) &
-					conversation.user_two.Equals(senderId))
-					select conversation.conversation_id;
-				
+						   where (conversation.user_one.Equals(senderId) &
+						   conversation.user_two.Equals(receiverId)) |
+						   (conversation.user_one.Equals(receiverId) &
+						   conversation.user_two.Equals(senderId))
+						   select conversation.conversation_id;
+
 				int conversationId;
 
 				// conversation exist
@@ -479,25 +478,161 @@ namespace Server.Database
 			{
 				// get conversation id
 				var conversationId = from conversation in DBcontext.Conversations
-					where (conversation.user_one.Equals(userOneId) &
-					conversation.user_two.Equals(userTwoId)) |
-					(conversation.user_one.Equals(userTwoId) &
-					conversation.user_two.Equals(userOneId))
-					select conversation.conversation_id;
+									 where (conversation.user_one.Equals(userOneId) &
+									 conversation.user_two.Equals(userTwoId)) |
+									 (conversation.user_one.Equals(userTwoId) &
+									 conversation.user_two.Equals(userOneId))
+									 select conversation.conversation_id;
 
 				// conversation exist
 				if (conversationId.Any())
 				{
 					var replies = from reply in DBcontext.Conversation_replies
-						where reply.conversation_id.Equals(conversationId.First())
-						select reply;
+								  where reply.conversation_id.Equals(conversationId.First())
+								  select reply;
 
 					if (replies.Any())
 						return replies.AsEnumerable().Reverse().ToArray();
 				}
-				
+
 				// no conversation or no replies
 				return null;
+			}
+		}
+
+		/// <summary>
+		/// Add notification about action to db.
+		/// </summary>
+		/// <param name="userOneId">user one id.</param>
+		/// <param name="userTwoId">user two id.</param>
+		/// <param name="action">action.</param>
+		/// <param name="actionTime">time of action.</param>
+		/// <returns>true if operations success; otherwise, false.</returns>
+		public static bool AddNotification(int userOneId, int userTwoId, UserActions action, DateTime actionTime)
+		{
+			using (var DBcontext = new LinqToSqlDataContext())
+			{
+				// new notification
+				Notification newNotification;
+				switch (action)
+				{
+					case UserActions.AcceptFriendship:
+						newNotification = new Notification
+						{
+							user_one = userOneId,
+							user_two = userTwoId,
+							time = actionTime,
+							accept_friendship = true
+						};
+						break;
+
+					case UserActions.RejectFriendship:
+						newNotification = new Notification
+						{
+							user_one = userOneId,
+							user_two = userTwoId,
+							time = actionTime,
+							reject_friendship = true
+						};
+						break;
+
+					case UserActions.SendFriendshipRequest:
+						newNotification = new Notification
+						{
+							user_one = userOneId,
+							user_two = userTwoId,
+							time = actionTime,
+							send_friendship = true
+						};
+						break;
+
+					case UserActions.CancelFriendshipRequest:
+						newNotification = new Notification
+						{
+							user_one = userOneId,
+							user_two = userTwoId,
+							time = actionTime,
+							cancel_friendship = true
+						};
+						break;
+
+					case UserActions.RemoveFromFriends:
+						newNotification = new Notification
+						{
+							user_one = userOneId,
+							user_two = userTwoId,
+							time = actionTime,
+							remove_friend = true
+						};
+						break;
+
+					default:
+						return false;
+				}
+
+				DBcontext.Notifications.InsertOnSubmit(newNotification);
+				try
+				{
+					DBcontext.SubmitChanges();
+					return true;
+				}
+				catch (Exception e)
+				{
+					log.Error(e);
+					return false;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Get array of notifications for user.
+		/// </summary>
+		/// <param name="userId">user id.</param>
+		/// <returns>array of notifications.</returns>
+		public static Notification[] GetNotifications(int userId)
+		{
+			using (var DBcontext = new LinqToSqlDataContext())
+			{
+				// get notifications
+				var data =
+					from notifications in DBcontext.Notifications
+					where notifications.user_one.Equals(userId)
+					select notifications;
+
+				return data.ToArray();
+			}
+		}
+
+		/// <summary>
+		/// Delete notifications for user from db.
+		/// </summary>
+		/// <param name="userId">user id.</param>
+		/// <returns>true if operations success; otherwise, false.</returns>
+		public static bool RemoveNotifications(int userId)
+		{
+			using (var DBcontext = new LinqToSqlDataContext())
+			{
+				// get notifications
+				var data =
+					from notifications in DBcontext.Notifications
+					where notifications.user_one.Equals(userId)
+					select notifications;
+
+				foreach (var notification in data)
+				{
+					DBcontext.Notifications.DeleteOnSubmit(notification);
+				}
+
+				try
+				{
+					DBcontext.SubmitChanges();
+					return true;
+				}
+				catch (Exception e)
+				{
+					log.Error(e);
+					return false;
+				}
 			}
 		}
 	}

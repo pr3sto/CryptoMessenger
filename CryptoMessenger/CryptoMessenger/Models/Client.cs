@@ -34,11 +34,11 @@ namespace CryptoMessenger.Models
 		public event Action ConnectionBreaks;
 		public event Action<string> FriendGoOnline;
 		public event Action<string> FriendGoOffline;
-		public event Action<string> FriendshipAccepted;
-		public event Action<string> FriendshipRejected;
-		public event Action<string> FriendshipRequestCancelled;
-		public event Action<string> NewFriendshipRequest;
-		public event Action<string> RemovedFromeFriends;
+		public event Action<string, DateTime> FriendshipAccepted;
+		public event Action<string, DateTime> FriendshipRejected;
+		public event Action<string, DateTime> FriendshipRequestCancelled;
+		public event Action<string, DateTime> NewFriendshipRequest;
+		public event Action<string, DateTime> RemovedFromeFriends;
 		public event Action<string, ConversationReply> NewReplyComes;
 		public event Action<string, ConversationReply> OldReplyComes;
 
@@ -183,7 +183,7 @@ namespace CryptoMessenger.Models
 			// certificate
 			X509Certificate2 cert = SslTools.CreateCertificate(typeof(Client), "CryptoMessenger.Certificate.cert.pfx");
 
-			await client.ConnectWithTimeoutAsync(ip, port, cert, 5000);
+			await client.ConnectWithTimeoutAsync(ip, port, cert, Properties.Settings.Default.WaitServerConnectionDelayMsec);
 
 			LoginRegisterResponseMessage serverResp;
 
@@ -358,28 +358,30 @@ namespace CryptoMessenger.Models
 							break;
 
 						case UserActions.AcceptFriendship:
-							FriendshipAccepted?.Invoke(msg.UserLogin);
+							FriendshipAccepted?.Invoke(msg.UserLogin, msg.Time);
 							OutcomeRequestsList?.Remove(msg.UserLogin);
-							OnlineFriendsList?.Add(msg.UserLogin);
+							if (OnlineFriendsList != null && !OnlineFriendsList.Contains(msg.UserLogin))
+								OnlineFriendsList.Add(msg.UserLogin);
 							break;
 
 						case UserActions.RejectFriendship:
-							FriendshipRejected?.Invoke(msg.UserLogin);
+							FriendshipRejected?.Invoke(msg.UserLogin, msg.Time);
 							OutcomeRequestsList?.Remove(msg.UserLogin);
 							break;
 
 						case UserActions.SendFriendshipRequest:
-							NewFriendshipRequest?.Invoke(msg.UserLogin);
-							IncomeRequestsList?.Add(msg.UserLogin);
+							NewFriendshipRequest?.Invoke(msg.UserLogin, msg.Time);
+							if (IncomeRequestsList != null && !IncomeRequestsList.Contains(msg.UserLogin))
+								IncomeRequestsList.Add(msg.UserLogin);
 							break;
 
 						case UserActions.CancelFriendshipRequest:
-							FriendshipRequestCancelled?.Invoke(msg.UserLogin);
+							FriendshipRequestCancelled?.Invoke(msg.UserLogin, msg.Time);
 							IncomeRequestsList?.Remove(msg.UserLogin);
 							break;
 
 						case UserActions.RemoveFromFriends:
-							RemovedFromeFriends?.Invoke(msg.UserLogin);
+							RemovedFromeFriends?.Invoke(msg.UserLogin, msg.Time);
 							OnlineFriendsList?.Remove(msg.UserLogin);
 							OfflineFriendsList?.Remove(msg.UserLogin);
 							break;
@@ -462,6 +464,16 @@ namespace CryptoMessenger.Models
 		}
 
 		/// <summary>
+		/// Get array of all notifications from server;
+		/// listener should receive response message.
+		/// </summary>
+		public void GetNotifications()
+		{
+			SendMessage(new GetNotificationsMessage());
+		}
+
+
+		/// <summary>
 		/// Get array of all users from server;
 		/// listener should receive response message.
 		/// </summary>
@@ -476,15 +488,20 @@ namespace CryptoMessenger.Models
 		/// </summary>
 		public void GetFriends()
 		{
-			if (!isLoggedIn)
-			{
-				if (OnlineFriendsList != null)
-					RaisePropertyChanged(nameof(OnlineFriendsList));
-				if (OfflineFriendsList != null)
-					RaisePropertyChanged(nameof(OfflineFriendsList));
 
-				return;
+			// dont ask server if we have
+			bool have = false;
+			if (OnlineFriendsList != null)
+			{
+				RaisePropertyChanged(nameof(OnlineFriendsList));
+				have = true;
 			}
+			if (OfflineFriendsList != null)
+			{
+				RaisePropertyChanged(nameof(OfflineFriendsList));
+				have = true;
+			}
+			if (have) return;
 
 			SendMessage(new GetFriendsMessage());
 		}

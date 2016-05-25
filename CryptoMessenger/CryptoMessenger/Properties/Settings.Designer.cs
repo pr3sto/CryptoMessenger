@@ -41,12 +41,15 @@ namespace CryptoMessenger.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFFEC606")]
         public global::System.Windows.Media.SolidColorBrush SpecialBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["SpecialBrush"]));
+            }
+            set {
+                this["SpecialBrush"] = value;
             }
         }
         
@@ -95,12 +98,15 @@ namespace CryptoMessenger.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFFEC606")]
         public global::System.Windows.Media.Color SpecialColor {
             get {
                 return ((global::System.Windows.Media.Color)(this["SpecialColor"]));
+            }
+            set {
+                this["SpecialColor"] = value;
             }
         }
         
@@ -119,6 +125,33 @@ namespace CryptoMessenger.Properties {
         public global::System.Windows.Media.SolidColorBrush MainFirstLightBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["MainFirstLightBrush"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int ActionDelayMsec {
+            get {
+                return ((int)(this["ActionDelayMsec"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2500")]
+        public int HideNotificationDelayMsec {
+            get {
+                return ((int)(this["HideNotificationDelayMsec"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        public int WaitServerConnectionDelayMsec {
+            get {
+                return ((int)(this["WaitServerConnectionDelayMsec"]));
             }
         }
     }

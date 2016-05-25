@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -102,24 +103,29 @@ namespace CryptoMessenger.ViewModels
 			IncomeReqsList = new ObservableCollection<IncomeRequest>();
 			OutcomeReqsList = new ObservableCollection<OutcomeRequest>();
 
-			client.FriendshipAccepted += async delegate (string login)
+			client.FriendshipAccepted += async delegate (string login, DateTime time)
 			{
-				await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+				await System.Threading.Tasks.Task.Run(() => 
+				System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 				OutcomeReqsList.Remove(OutcomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
 			};
-			client.FriendshipRejected += async delegate (string login)
+			client.FriendshipRejected += async delegate (string login, DateTime time)
 			{
-				await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+				await System.Threading.Tasks.Task.Run(() => 
+				System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 				OutcomeReqsList.Remove(OutcomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
 			};
-			client.NewFriendshipRequest += async delegate (string login)
+			client.NewFriendshipRequest += async delegate (string login, DateTime time)
 			{
-				await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
-				IncomeReqsList.Add(new IncomeRequest(client, login));
+				await System.Threading.Tasks.Task.Run(() => 
+				System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
+				if (IncomeReqsList.FirstOrDefault(x => x.Name.Equals(login)) == null)
+					IncomeReqsList.Add(new IncomeRequest(client, login));
 			};
-			client.FriendshipRequestCancelled += async delegate (string login)
+			client.FriendshipRequestCancelled += async delegate (string login, DateTime time)
 			{
-				await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+				await System.Threading.Tasks.Task.Run(() => 
+				System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 				IncomeReqsList.Remove(IncomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
 			};
 

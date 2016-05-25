@@ -42,6 +42,9 @@ namespace Server.Database
     partial void InsertConversation_reply(ConversationReply instance);
     partial void UpdateConversation_reply(ConversationReply instance);
     partial void DeleteConversation_reply(ConversationReply instance);
+    partial void InsertNotification(Notification instance);
+    partial void UpdateNotification(Notification instance);
+    partial void DeleteNotification(Notification instance);
     #endregion
 		
 		public LinqToSqlDataContext() : 
@@ -105,6 +108,14 @@ namespace Server.Database
 				return this.GetTable<ConversationReply>();
 			}
 		}
+		
+		public System.Data.Linq.Table<Notification> Notifications
+		{
+			get
+			{
+				return this.GetTable<Notification>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Users")]
@@ -129,6 +140,10 @@ namespace Server.Database
 		
 		private EntitySet<ConversationReply> _Conversation_replies;
 		
+		private EntitySet<Notification> _Notifications;
+		
+		private EntitySet<Notification> _Notifications1;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -148,6 +163,8 @@ namespace Server.Database
 			this._Conversations = new EntitySet<Conversation>(new Action<Conversation>(this.attach_Conversations), new Action<Conversation>(this.detach_Conversations));
 			this._Conversations1 = new EntitySet<Conversation>(new Action<Conversation>(this.attach_Conversations1), new Action<Conversation>(this.detach_Conversations1));
 			this._Conversation_replies = new EntitySet<ConversationReply>(new Action<ConversationReply>(this.attach_Conversation_replies), new Action<ConversationReply>(this.detach_Conversation_replies));
+			this._Notifications = new EntitySet<Notification>(new Action<Notification>(this.attach_Notifications), new Action<Notification>(this.detach_Notifications));
+			this._Notifications1 = new EntitySet<Notification>(new Action<Notification>(this.attach_Notifications1), new Action<Notification>(this.detach_Notifications1));
 			OnCreated();
 		}
 		
@@ -276,6 +293,32 @@ namespace Server.Database
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Notification", Storage="_Notifications", ThisKey="user_id", OtherKey="user_one")]
+		public EntitySet<Notification> Notifications
+		{
+			get
+			{
+				return this._Notifications;
+			}
+			set
+			{
+				this._Notifications.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Notification1", Storage="_Notifications1", ThisKey="user_id", OtherKey="user_two")]
+		public EntitySet<Notification> Notifications1
+		{
+			get
+			{
+				return this._Notifications1;
+			}
+			set
+			{
+				this._Notifications1.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -354,6 +397,30 @@ namespace Server.Database
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
+		}
+		
+		private void attach_Notifications(Notification entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = this;
+		}
+		
+		private void detach_Notifications(Notification entity)
+		{
+			this.SendPropertyChanging();
+			entity.User = null;
+		}
+		
+		private void attach_Notifications1(Notification entity)
+		{
+			this.SendPropertyChanging();
+			entity.User1 = this;
+		}
+		
+		private void detach_Notifications1(Notification entity)
+		{
+			this.SendPropertyChanging();
+			entity.User1 = null;
 		}
 	}
 	
@@ -984,6 +1051,342 @@ namespace Server.Database
 						this._user_id = default(int);
 					}
 					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Notifications")]
+	public partial class Notification : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _notification_id;
+		
+		private int _user_one;
+		
+		private int _user_two;
+		
+		private System.DateTime _time;
+		
+		private bool _accept_friendship;
+		
+		private bool _reject_friendship;
+		
+		private bool _send_friendship;
+		
+		private bool _cancel_friendship;
+		
+		private bool _remove_friend;
+		
+		private EntityRef<User> _User;
+		
+		private EntityRef<User> _User1;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void Onnotification_idChanging(int value);
+    partial void Onnotification_idChanged();
+    partial void Onuser_oneChanging(int value);
+    partial void Onuser_oneChanged();
+    partial void Onuser_twoChanging(int value);
+    partial void Onuser_twoChanged();
+    partial void OntimeChanging(System.DateTime value);
+    partial void OntimeChanged();
+    partial void Onaccept_friendshipChanging(bool value);
+    partial void Onaccept_friendshipChanged();
+    partial void Onreject_friendshipChanging(bool value);
+    partial void Onreject_friendshipChanged();
+    partial void Onsend_friendshipChanging(bool value);
+    partial void Onsend_friendshipChanged();
+    partial void Oncancel_friendshipChanging(bool value);
+    partial void Oncancel_friendshipChanged();
+    partial void Onremove_friendChanging(bool value);
+    partial void Onremove_friendChanged();
+    #endregion
+		
+		public Notification()
+		{
+			this._User = default(EntityRef<User>);
+			this._User1 = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_notification_id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int notification_id
+		{
+			get
+			{
+				return this._notification_id;
+			}
+			set
+			{
+				if ((this._notification_id != value))
+				{
+					this.Onnotification_idChanging(value);
+					this.SendPropertyChanging();
+					this._notification_id = value;
+					this.SendPropertyChanged("notification_id");
+					this.Onnotification_idChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_one", DbType="Int NOT NULL")]
+		public int user_one
+		{
+			get
+			{
+				return this._user_one;
+			}
+			set
+			{
+				if ((this._user_one != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onuser_oneChanging(value);
+					this.SendPropertyChanging();
+					this._user_one = value;
+					this.SendPropertyChanged("user_one");
+					this.Onuser_oneChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_user_two", DbType="Int NOT NULL")]
+		public int user_two
+		{
+			get
+			{
+				return this._user_two;
+			}
+			set
+			{
+				if ((this._user_two != value))
+				{
+					if (this._User1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onuser_twoChanging(value);
+					this.SendPropertyChanging();
+					this._user_two = value;
+					this.SendPropertyChanged("user_two");
+					this.Onuser_twoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_time", DbType="DateTime2 NOT NULL")]
+		public System.DateTime time
+		{
+			get
+			{
+				return this._time;
+			}
+			set
+			{
+				if ((this._time != value))
+				{
+					this.OntimeChanging(value);
+					this.SendPropertyChanging();
+					this._time = value;
+					this.SendPropertyChanged("time");
+					this.OntimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_accept_friendship", DbType="Bit NOT NULL")]
+		public bool accept_friendship
+		{
+			get
+			{
+				return this._accept_friendship;
+			}
+			set
+			{
+				if ((this._accept_friendship != value))
+				{
+					this.Onaccept_friendshipChanging(value);
+					this.SendPropertyChanging();
+					this._accept_friendship = value;
+					this.SendPropertyChanged("accept_friendship");
+					this.Onaccept_friendshipChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_reject_friendship", DbType="Bit NOT NULL")]
+		public bool reject_friendship
+		{
+			get
+			{
+				return this._reject_friendship;
+			}
+			set
+			{
+				if ((this._reject_friendship != value))
+				{
+					this.Onreject_friendshipChanging(value);
+					this.SendPropertyChanging();
+					this._reject_friendship = value;
+					this.SendPropertyChanged("reject_friendship");
+					this.Onreject_friendshipChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_send_friendship", DbType="Bit NOT NULL")]
+		public bool send_friendship
+		{
+			get
+			{
+				return this._send_friendship;
+			}
+			set
+			{
+				if ((this._send_friendship != value))
+				{
+					this.Onsend_friendshipChanging(value);
+					this.SendPropertyChanging();
+					this._send_friendship = value;
+					this.SendPropertyChanged("send_friendship");
+					this.Onsend_friendshipChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_cancel_friendship", DbType="Bit NOT NULL")]
+		public bool cancel_friendship
+		{
+			get
+			{
+				return this._cancel_friendship;
+			}
+			set
+			{
+				if ((this._cancel_friendship != value))
+				{
+					this.Oncancel_friendshipChanging(value);
+					this.SendPropertyChanging();
+					this._cancel_friendship = value;
+					this.SendPropertyChanged("cancel_friendship");
+					this.Oncancel_friendshipChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_remove_friend", DbType="Bit NOT NULL")]
+		public bool remove_friend
+		{
+			get
+			{
+				return this._remove_friend;
+			}
+			set
+			{
+				if ((this._remove_friend != value))
+				{
+					this.Onremove_friendChanging(value);
+					this.SendPropertyChanging();
+					this._remove_friend = value;
+					this.SendPropertyChanged("remove_friend");
+					this.Onremove_friendChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Notification", Storage="_User", ThisKey="user_one", OtherKey="user_id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Notifications.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Notifications.Add(this);
+						this._user_one = value.user_id;
+					}
+					else
+					{
+						this._user_one = default(int);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Notification1", Storage="_User1", ThisKey="user_two", OtherKey="user_id", IsForeignKey=true)]
+		public User User1
+		{
+			get
+			{
+				return this._User1.Entity;
+			}
+			set
+			{
+				User previousValue = this._User1.Entity;
+				if (((previousValue != value) 
+							|| (this._User1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User1.Entity = null;
+						previousValue.Notifications1.Remove(this);
+					}
+					this._User1.Entity = value;
+					if ((value != null))
+					{
+						value.Notifications1.Add(this);
+						this._user_two = value.user_id;
+					}
+					else
+					{
+						this._user_two = default(int);
+					}
+					this.SendPropertyChanged("User1");
 				}
 			}
 		}

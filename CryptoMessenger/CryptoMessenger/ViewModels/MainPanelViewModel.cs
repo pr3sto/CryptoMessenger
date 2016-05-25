@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 using CryptoMessenger.Commands;
@@ -39,41 +38,40 @@ namespace CryptoMessenger.ViewModels
 			Notification = Properties.Resources.NotificationListPlaceholder;
 			NotificationList = new ObservableCollection<NotificationItem>();
 			IsNotificationOpen = false;
-			Application.Current.MainWindow.Deactivated += delegate { IsNotificationOpen = false; };
 			UnreadNotificationCount = 0;
 
 			Login = client.Name;
 			IsOnline = true;
 
 			// client's notification events
-			client.FriendshipAccepted += async delegate (string login)
+			client.FriendshipAccepted += async delegate (string login, DateTime time)
 			{
 				string notification = login + " " + Properties.Resources.FriendshipAcceptedNotificationText;
-				await addNotification(notification);
+				await addNotification(notification, time);
 			};
 
-			client.FriendshipRejected += async delegate(string login)
+			client.FriendshipRejected += async delegate(string login, DateTime time)
 			{
 				string notification = login + " " + Properties.Resources.FriendshipRejectedNotificationText;
-				await addNotification(notification);
+				await addNotification(notification, time);
 			};
 
-			client.NewFriendshipRequest += async delegate(string login)
+			client.NewFriendshipRequest += async delegate(string login, DateTime time)
 			{
 				string notification = login + " " + Properties.Resources.NewFriendshipRequestNotificationText;
-				await addNotification(notification);
+				await addNotification(notification, time);
 			};
 
-			client.FriendshipRequestCancelled += async delegate(string login)
+			client.FriendshipRequestCancelled += async delegate(string login, DateTime time)
 			{
 				string notification = login + " " + Properties.Resources.FriendshipRequestCancelledNotificationText;
-				await addNotification(notification);
+				await addNotification(notification, time);
 			};
 
-			client.RemovedFromeFriends += async delegate(string login)
+			client.RemovedFromeFriends += async delegate(string login, DateTime time)
 			{
 				string notification = login + " " + Properties.Resources.FriendRemovedNotificationText;
-				await addNotification(notification);
+				await addNotification(notification, time);
 			};
 
 			client.ConnectionBreaks += delegate { IsOnline = false; };
@@ -83,21 +81,24 @@ namespace CryptoMessenger.ViewModels
 			SearchButtonSelected = false;
 
 			WindowPanel = new FriendsPanelViewModel(client);
+
+			// get notifications when view loads
+			client.GetNotifications();
 		}
 
 		/// <summary>
 		/// Add notification and do other ui stuff.
 		/// </summary>
 		/// <param name="notification">notification.</param>
-		private async Task addNotification(string notification)
+		private async Task addNotification(string notification, DateTime time)
 		{
-			NotificationList.Add(new NotificationItem(notification, DateTime.Now));
+			NotificationList.Insert(0, new NotificationItem(notification, time));
 			if (!IsNotificationOpen) UnreadNotificationCount++;
 			Notification = notification;
 
 			await Task.Run(() =>
 			{
-				System.Threading.Thread.Sleep(3000);
+				System.Threading.Thread.Sleep(Properties.Settings.Default.HideNotificationDelayMsec);
 				Notification = Properties.Resources.NotificationListPlaceholder;
 			});
 		}
@@ -243,29 +244,12 @@ namespace CryptoMessenger.ViewModels
 				{
 					openNotificationCommand = new DelegateCommand(delegate 
 					{
-						IsNotificationOpen = !IsNotificationOpen;
+						IsNotificationOpen = true;
 						if (IsNotificationOpen)
 							UnreadNotificationCount = 0;
 					});
 				}
 				return openNotificationCommand;
-			}
-		}
-
-		// close notification
-		private DelegateCommand closeNotificationCommand;
-		public ICommand CloseNotificationCommand
-		{
-			get
-			{
-				if (closeNotificationCommand == null)
-				{
-					closeNotificationCommand = new DelegateCommand(delegate
-					{
-						IsNotificationOpen = false;
-					});
-				}
-				return closeNotificationCommand;
 			}
 		}
 

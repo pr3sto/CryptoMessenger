@@ -37,6 +37,7 @@ namespace MessageProtocol.MessageTypes
 	[XmlInclude(typeof(LoginRequestMessage))]
 	[XmlInclude(typeof(LogoutRequestMessage))]
 	[XmlInclude(typeof(RegisterRequestMessage))]
+	[XmlInclude(typeof(GetNotificationsMessage))]
 	[XmlInclude(typeof(GetAllUsersMessage))]
 	[XmlInclude(typeof(GetFriendsMessage))]
 	[XmlInclude(typeof(GetIncomeFriendshipRequestsMessage))]
@@ -93,6 +94,15 @@ namespace MessageProtocol.MessageTypes
 	/// </summary>
 	[Serializable]
 	public class LogoutRequestMessage : Message
+	{
+	}
+
+	/// <summary>
+	/// Message, that client send to server 
+	/// to get array of all notifications.
+	/// </summary>
+	[Serializable]
+	public class GetNotificationsMessage : Message
 	{
 	}
 
@@ -186,6 +196,7 @@ namespace MessageProtocol.MessageTypes
 	public class UserActionMessage : Message
 	{
 		public string UserLogin { get; set; }
+		public DateTime Time { get; set; }
 		public UserActions Action { get; set; }
 	}
 

@@ -95,6 +95,7 @@ namespace Server
 			{
 				onlineUsers.Add(user);
 
+				// online notification to friends
 				string[] allFriends = DBoperations.GetFriends(user.Id);
 				string[] online_users = onlineUsers.Select(x => x.Login).ToArray();
 				string[] onlineFriends = allFriends.Where(x => online_users.Contains(x)).ToArray();
@@ -155,6 +156,10 @@ namespace Server
 				// process message
 				try
 				{
+					if (message is GetNotificationsMessage)
+					{
+						SendNotifications(user);
+					}
 					if (message is GetAllUsersMessage)
 					{
 						SendAllUsers(user);
@@ -244,6 +249,57 @@ namespace Server
 
 			onlineUsers.Remove(user);
 			user.Dispose();
+		}
+
+		/// <summary>
+		/// Send array all notifications to user.
+		/// </summary>
+		/// <param name="user">user.</param>
+		/// <exception cref="ConnectionInterruptedException"></exception>
+		private void SendNotifications(OnlineUser user)
+		{
+			Notification[] notifications = DBoperations.GetNotifications(user.Id);
+			foreach (var notification in notifications)
+			{
+				if (notification.accept_friendship)
+					user.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = DBoperations.GetUserLogin(notification.user_two),
+						Time = notification.time,
+						Action = UserActions.AcceptFriendship
+					});
+				else if (notification.reject_friendship)
+					user.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = DBoperations.GetUserLogin(notification.user_two),
+						Time = notification.time,
+						Action = UserActions.RejectFriendship
+					});
+				else if (notification.send_friendship)
+					user.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = DBoperations.GetUserLogin(notification.user_two),
+						Time = notification.time,
+						Action = UserActions.SendFriendshipRequest				
+					});
+				else if (notification.cancel_friendship)
+					user.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = DBoperations.GetUserLogin(notification.user_two),
+						Time = notification.time,
+						Action = UserActions.CancelFriendshipRequest
+					});
+				else if (notification.remove_friend)
+					user.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = DBoperations.GetUserLogin(notification.user_two),
+						Time = notification.time,
+						Action = UserActions.RemoveFromFriends
+					});
+			}
+
+			// delete notifications from db
+			DBoperations.RemoveNotifications(user.Id);
 		}
 
 		/// <summary>
@@ -360,13 +416,23 @@ namespace Server
 				// send new data to user one
 				SendAllUsers(user);
 				SendOutcomeFriendshipRequests(user);
-				// send new data to user two if online
+				
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				friend?.Client.SendMessage(new UserActionMessage
+				// send notification to user two if online
+				if (friend != null)
 				{
-					UserLogin = user.Login,
-					Action = UserActions.SendFriendshipRequest
-				});
+					friend.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = user.Login,
+						Time = DateTime.Now,
+						Action = UserActions.SendFriendshipRequest
+					});
+				}
+				// write to db
+				else
+				{
+					DBoperations.AddNotification(friendId, user.Id, UserActions.SendFriendshipRequest, DateTime.Now);
+				}
 			}
 		}
 
@@ -385,13 +451,23 @@ namespace Server
 			{
 				// send new data to user one
 				SendOutcomeFriendshipRequests(user);
-				// send new data to user two if online
+
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				friend?.Client.SendMessage(new UserActionMessage
+				// send notification to user two if online
+				if (friend != null)
 				{
-					UserLogin = user.Login,
-					Action = UserActions.CancelFriendshipRequest
-				});
+					friend.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = user.Login,
+						Time = DateTime.Now,
+						Action = UserActions.CancelFriendshipRequest
+					});
+				}
+				// write to db
+				else
+				{
+					DBoperations.AddNotification(friendId, user.Id, UserActions.CancelFriendshipRequest, DateTime.Now);
+				}
 			}
 		}
 
@@ -411,13 +487,23 @@ namespace Server
 				// send new data to user one
 				SendIncomeFriendshipRequests(user);
 				SendFriends(user);
-				// send new data to user two if online
+
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				friend?.Client.SendMessage(new UserActionMessage
+				// send notification to user two if online
+				if (friend != null)
 				{
-					UserLogin = user.Login,
-					Action = UserActions.AcceptFriendship
-				});
+					friend.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = user.Login,
+						Time = DateTime.Now,
+						Action = UserActions.AcceptFriendship
+					});
+				}
+				// write to db
+				else
+				{
+					DBoperations.AddNotification(friendId, user.Id, UserActions.AcceptFriendship, DateTime.Now);
+				}
 			}
 		}
 
@@ -436,13 +522,23 @@ namespace Server
 			{
 				// send new data to user one
 				SendIncomeFriendshipRequests(user);
-				// send new data to user two if online
+
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				friend?.Client.SendMessage(new UserActionMessage
+				// send notification to user two if online
+				if (friend != null)
 				{
-					UserLogin = user.Login,
-					Action = UserActions.RejectFriendship
-				});
+					friend.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = user.Login,
+						Time = DateTime.Now,
+						Action = UserActions.RejectFriendship
+					});
+				}
+				// write to db
+				else
+				{
+					DBoperations.AddNotification(friendId, user.Id, UserActions.RejectFriendship, DateTime.Now);
+				}
 			}
 		}
 
@@ -461,13 +557,23 @@ namespace Server
 			{
 				// send new data to user one
 				SendFriends(user);
-				// send new data to user two if online
+
 				OnlineUser friend = GetOnlineUser(friendLogin);
-				friend?.Client.SendMessage(new UserActionMessage
+				// send notification to user two if online
+				if (friend != null)
 				{
-					UserLogin = user.Login,
-					Action = UserActions.RemoveFromFriends
-				});
+					friend.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = user.Login,
+						Time = DateTime.Now,
+						Action = UserActions.RemoveFromFriends
+					});
+				}
+				// write to db
+				else
+				{
+					DBoperations.AddNotification(friendId, user.Id, UserActions.RemoveFromFriends, DateTime.Now);
+				}
 			}
 		}
 

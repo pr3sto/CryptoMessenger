@@ -10,6 +10,8 @@
       <Association Name="User_Conversation" Member="Conversations" ThisKey="user_id" OtherKey="user_one" Type="Conversation" />
       <Association Name="User_Conversation1" Member="Conversations1" ThisKey="user_id" OtherKey="user_two" Type="Conversation" />
       <Association Name="User_Conversation_reply" Member="Conversation_replies" ThisKey="user_id" OtherKey="user_id" Type="Conversation_reply" />
+      <Association Name="User_Notification" Member="Notifications" ThisKey="user_id" OtherKey="user_one" Type="Notification" />
+      <Association Name="User_Notification1" Member="Notifications1" ThisKey="user_id" OtherKey="user_two" Type="Notification" />
     </Type>
   </Table>
   <Table Name="dbo.Friends" Member="Friends">
@@ -40,6 +42,21 @@
       <Column Name="time" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Association Name="Conversation_Conversation_reply" Member="Conversation" ThisKey="conversation_id" OtherKey="conversation_id" Type="Conversation" IsForeignKey="true" />
       <Association Name="User_Conversation_reply" Member="User" ThisKey="user_id" OtherKey="user_id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Notifications" Member="Notifications">
+    <Type Name="Notification">
+      <Column Name="notification_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="user_one" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="user_two" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="time" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
+      <Column Name="accept_friendship" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="reject_friendship" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="send_friendship" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="cancel_friendship" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="remove_friend" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="User_Notification" Member="User" ThisKey="user_one" OtherKey="user_id" Type="User" IsForeignKey="true" />
+      <Association Name="User_Notification1" Member="User1" ThisKey="user_two" OtherKey="user_id" Type="User" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

@@ -162,16 +162,19 @@ namespace CryptoMessenger.ViewModels
 		}
 
 		// your request for friendship accepted
-		private async void FriendshipAccepted(string login)
+		private async void FriendshipAccepted(string login, DateTime time)
 		{
-			await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
-			FriendsList.Add(new Friend(client, login, true));
+			await System.Threading.Tasks.Task.Run(() => 
+			System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
+			if (FriendsList.FirstOrDefault(x => x.Name.Equals(login)) == null)
+				FriendsList.Add(new Friend(client, login, true));
 		}
 
 		// you have ben removed from friends
-		private async void RemovedFromeFriends(string login)
+		private async void RemovedFromeFriends(string login, DateTime time)
 		{
-			await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1000));
+			await System.Threading.Tasks.Task.Run(() => 
+			System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 			FriendsList.Remove(FriendsList.FirstOrDefault(x => x.Name.Equals(login)));
 		}
 

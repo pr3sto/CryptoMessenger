@@ -2,70 +2,90 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="LinqToSql">
   <DataContextMoniker Name="/LinqToSqlDataContext" />
   <nestedChildShapes>
-    <classShape Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" absoluteBounds="5, 0.5, 2, 1.3862939453125">
+    <classShape Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" absoluteBounds="5, 3.5, 2, 1.3862939453125">
       <DataClassMoniker Name="/LinqToSqlDataContext/User" />
       <nestedChildShapes>
-        <elementListCompartment Id="f1eb8b88-3da1-4798-be4c-4af4f87003c2" absoluteBounds="5.015, 0.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f1eb8b88-3da1-4798-be4c-4af4f87003c2" absoluteBounds="5.015, 3.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="6797a46d-ccba-4c8e-8a85-272bbe573096" absoluteBounds="5, 2.75, 2, 1.3862939453125">
+    <classShape Id="6797a46d-ccba-4c8e-8a85-272bbe573096" absoluteBounds="5, 6, 2, 1.3862939453125">
       <DataClassMoniker Name="/LinqToSqlDataContext/Friend" />
       <nestedChildShapes>
-        <elementListCompartment Id="1b517932-e189-4db8-b305-245ca273e31c" absoluteBounds="5.015, 3.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="1b517932-e189-4db8-b305-245ca273e31c" absoluteBounds="5.015, 6.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(6 : 1.8862939453125); (6 : 2.75)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(6 : 4.8862939453125); (6 : 6)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/LinqToSqlDataContext/User/User_Friend" />
       <nodes>
         <classShapeMoniker Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" />
         <classShapeMoniker Id="6797a46d-ccba-4c8e-8a85-272bbe573096" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(6.5625 : 1.8862939453125); (6.5625 : 2.75)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(6.5625 : 4.8862939453125); (6.5625 : 6)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/LinqToSqlDataContext/User/User_Friend1" />
       <nodes>
         <classShapeMoniker Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" />
         <classShapeMoniker Id="6797a46d-ccba-4c8e-8a85-272bbe573096" />
       </nodes>
     </associationConnector>
-    <classShape Id="f2ea1a89-7c91-45c3-b84e-be49bafd0dfa" absoluteBounds="1, 0.5, 2, 1.3862939453125">
+    <classShape Id="f2ea1a89-7c91-45c3-b84e-be49bafd0dfa" absoluteBounds="1, 3.625, 2, 1.3862939453125">
       <DataClassMoniker Name="/LinqToSqlDataContext/Conversation" />
       <nestedChildShapes>
-        <elementListCompartment Id="9787edff-4349-4ae7-adf4-4f8088a5383e" absoluteBounds="1.0150000000000001, 0.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="9787edff-4349-4ae7-adf4-4f8088a5383e" absoluteBounds="1.0150000000000001, 4.085, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5 : 1.19314697265625); (3 : 1.19314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5 : 4.5569482421875); (3 : 4.5569482421875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/LinqToSqlDataContext/User/User_Conversation" />
       <nodes>
         <classShapeMoniker Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" />
         <classShapeMoniker Id="f2ea1a89-7c91-45c3-b84e-be49bafd0dfa" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5 : 0.784073486328125); (3 : 0.784073486328125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5 : 4.02847412109375); (3 : 4.02847412109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/LinqToSqlDataContext/User/User_Conversation1" />
       <nodes>
         <classShapeMoniker Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" />
         <classShapeMoniker Id="f2ea1a89-7c91-45c3-b84e-be49bafd0dfa" />
       </nodes>
     </associationConnector>
-    <classShape Id="39306335-cb5b-44d2-ada5-9353379cb022" absoluteBounds="1, 2.25, 2, 1.7708968098958331">
+    <classShape Id="39306335-cb5b-44d2-ada5-9353379cb022" absoluteBounds="1, 5.75, 2, 1.7708968098958331">
       <DataClassMoniker Name="/LinqToSqlDataContext/Conversation_reply" />
       <nestedChildShapes>
-        <elementListCompartment Id="65af4a6f-d924-4a9c-9d75-555b58f81888" absoluteBounds="1.0150000000000001, 2.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="65af4a6f-d924-4a9c-9d75-555b58f81888" absoluteBounds="1.0150000000000001, 6.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2 : 1.8862939453125); (2 : 2.25)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2 : 5.0112939453125); (2 : 5.75)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/LinqToSqlDataContext/Conversation/Conversation_Conversation_reply" />
       <nodes>
         <classShapeMoniker Id="f2ea1a89-7c91-45c3-b84e-be49bafd0dfa" />
         <classShapeMoniker Id="39306335-cb5b-44d2-ada5-9353379cb022" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5 : 1.8862939453125); (4.625 : 2.2612939453125); (3.375 : 2.2612939453125); (3.375 : 1.875); (3 : 2.25)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(5 : 4.8862939453125); (4.625 : 5.2612939453125); (4.625 : 6.63544840494792); (3 : 6.63544840494792)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/LinqToSqlDataContext/User/User_Conversation_reply" />
       <nodes>
         <classShapeMoniker Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" />
         <classShapeMoniker Id="39306335-cb5b-44d2-ada5-9353379cb022" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="2c082045-55cb-429b-abb2-bba493850158" absoluteBounds="1, 0.5, 2, 2.5401025390625">
+      <DataClassMoniker Name="/LinqToSqlDataContext/Notification" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6582ff5d-d162-409b-9e3c-7c18f3784b49" absoluteBounds="1.0149999999999997, 0.96, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(6 : 3.5); (6 : 1.77005126953125); (3 : 1.77005126953125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/LinqToSqlDataContext/User/User_Notification" />
+      <nodes>
+        <classShapeMoniker Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" />
+        <classShapeMoniker Id="2c082045-55cb-429b-abb2-bba493850158" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.4687475 : 3.5); (5.4687475 : 2.43632940429688); (3 : 2.43632940429688)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/LinqToSqlDataContext/User/User_Notification1" />
+      <nodes>
+        <classShapeMoniker Id="d3357ac3-8c54-4884-8b2b-2b38f4718371" />
+        <classShapeMoniker Id="2c082045-55cb-429b-abb2-bba493850158" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>
