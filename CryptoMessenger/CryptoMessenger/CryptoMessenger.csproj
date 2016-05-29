@@ -88,6 +88,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\ListBoxBehavior.cs" />
+    <Compile Include="Behaviors\WindowBehavior.cs" />
     <Compile Include="Commands\CommandReference.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="IWindowPanel.cs" />
@@ -200,7 +202,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Resource Include="Resources\RobotoCondensed-Bold.ttf" />
+    <Resource Include="Resources\RobotoCondensed-Regular.ttf" />
     <Resource Include="Resources\send.png" />
     <Resource Include="Resources\cross.png" />
     <Resource Include="Resources\plus.png" />

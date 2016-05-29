@@ -11,6 +11,11 @@
     xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"  
     >
 
+    <UserControl.Resources>
+        <!-- appear animations -->
+        <!-- disappear animations -->
+    </UserControl.Resources>
+
     <Grid Height="460" Width="740" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition/>

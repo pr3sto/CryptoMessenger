@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     mc:Ignorable="d" 
+    xmlns:lb="clr-namespace:CryptoMessenger.Behaviors"
     xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
     xmlns:props="clr-namespace:CryptoMessenger.Properties" 
     >
@@ -188,6 +189,7 @@
                         HorizontalContentAlignment="Stretch"
                         ScrollViewer.CanContentScroll="False"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        lb:ListBoxBehavior.ScrollOnNewItem="true"
                         >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>

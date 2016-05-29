@@ -456,9 +456,9 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] RobotoCondensed_Bold {
+        public static byte[] RobotoCondensed_Regular {
             get {
-                object obj = ResourceManager.GetObject("RobotoCondensed_Bold", resourceCulture);
+                object obj = ResourceManager.GetObject("RobotoCondensed_Regular", resourceCulture);
                 return ((byte[])(obj));
             }
         }
