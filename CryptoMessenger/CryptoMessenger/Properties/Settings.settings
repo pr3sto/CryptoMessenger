@@ -17,9 +17,6 @@
     <Setting Name="AlertBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FFFF0000</Value>
     </Setting>
-    <Setting Name="SuccessBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF00FF00</Value>
-    </Setting>
     <Setting Name="SecondaryFirstBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
       <Value Profile="(Default)">#FFFFFFFF</Value>
     </Setting>

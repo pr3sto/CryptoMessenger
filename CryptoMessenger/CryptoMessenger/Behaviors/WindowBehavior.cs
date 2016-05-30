@@ -10,13 +10,13 @@ namespace CryptoMessenger.Behaviors
 	/// </summary>
 	public class WindowBehavior : Behavior<Window>
 	{
-		public static readonly DependencyProperty StoryboardProperty =
-			DependencyProperty.Register("Storyboard", typeof(Storyboard), typeof(WindowBehavior), new PropertyMetadata(default(Storyboard)));
+		public static readonly DependencyProperty ClosingStoryboardProperty =
+			DependencyProperty.Register("ClosingStoryboard", typeof(Storyboard), typeof(WindowBehavior), new PropertyMetadata(default(Storyboard)));
 
-		public Storyboard Storyboard
+		public Storyboard ClosingStoryboard
 		{
-			get { return (Storyboard)GetValue(StoryboardProperty); }
-			set { SetValue(StoryboardProperty, value); }
+			get { return (Storyboard)GetValue(ClosingStoryboardProperty); }
+			set { SetValue(ClosingStoryboardProperty, value); }
 		}
 
 		protected override void OnAttached()
@@ -27,14 +27,14 @@ namespace CryptoMessenger.Behaviors
 
 		private void onWindowClosing(object sender, CancelEventArgs e)
 		{
-			if (Storyboard == null)
+			if (ClosingStoryboard == null)
 				return;
 
 			e.Cancel = true;
 			AssociatedObject.Closing -= onWindowClosing;
 
-			Storyboard.Completed += (o, a) => AssociatedObject.Close();
-			Storyboard.Begin(AssociatedObject);
+			ClosingStoryboard.Completed += (o, a) => AssociatedObject.Close();
+			ClosingStoryboard.Begin(AssociatedObject);
 		}
 	}
 }

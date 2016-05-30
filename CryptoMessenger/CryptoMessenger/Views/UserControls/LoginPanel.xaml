@@ -4,17 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"    
     xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"  
     >
-
-    <UserControl.Resources>
-        <!-- appear animations -->
-        <!-- disappear animations -->
-    </UserControl.Resources>
 
     <Grid Height="460" Width="740" Background="Transparent">
         <Grid.RowDefinitions>
@@ -30,7 +26,7 @@
         </Grid.RowDefinitions>
 
         <!-- logo -->
-        <Canvas Grid.Row="1">
+        <Canvas x:Name="logoCanvas" Grid.Row="1">
             <Image
                 Canvas.Bottom="2"
                 Canvas.Left="320"
@@ -82,10 +78,25 @@
                     </Style>
                 </Ellipse.Style>
             </Ellipse>
+
+            <!-- animation -->
+            <Canvas.Triggers>
+                <EventTrigger RoutedEvent="Canvas.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(Canvas.Opacity)"
+                                  From="0.0" To="1.0" Duration="0:0:1.5"
+                                  />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Canvas.Triggers>
         </Canvas>
 
         <!-- notification label -->
         <TextBlock 
+            x:Name="notifyTextblock"
             Grid.Row="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
@@ -93,10 +104,33 @@
             TextOptions.TextFormattingMode="Display"
             Foreground="White"
             Text="{Binding Notification}"
-            />
+            >
+            <!-- animation -->
+            <TextBlock.Triggers>
+                <EventTrigger RoutedEvent="TextBlock.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <MatrixAnimationUsingPath
+                                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                                Duration="0:0:0.4"
+                                >
+                                <MatrixAnimationUsingPath.PathGeometry>
+                                    <PathGeometry Figures="M 300,0 L 0,0" />
+                                </MatrixAnimationUsingPath.PathGeometry>
+                            </MatrixAnimationUsingPath>
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(TextBlock.Opacity)"
+                                  From="0.0" To="1.0" Duration="0:0:1.0"
+                                  />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBlock.Triggers>
+        </TextBlock>
 
         <!-- login -->
         <TextBox
+            x:Name="loginTextbox"
             Grid.Row="3"
             Style="{StaticResource TextBoxStyle}"
             HorizontalAlignment="Center"
@@ -116,7 +150,7 @@
             <!-- login on enter click -->
             <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding LoginCommand}"
-                            CommandParameter="{Binding ElementName=password}"/>
+                            CommandParameter="{Binding ElementName=passwordTextbox}"/>
             </TextBox.InputBindings>
             <!-- clear notifications on focus -->
             <i:Interaction.Triggers>
@@ -124,11 +158,37 @@
                     <i:InvokeCommandAction Command="{Binding TextBoxGotFocusCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <!-- animation -->
+            <TextBox.Triggers>
+                <EventTrigger RoutedEvent="TextBox.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <MatrixAnimationUsingPath
+                                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                                Duration="0:0:0.4" BeginTime="0:0:0.1"
+                                >
+                                <MatrixAnimationUsingPath.PathGeometry>
+                                    <PathGeometry Figures="M 350,0 L 0,0" />
+                                </MatrixAnimationUsingPath.PathGeometry>
+                            </MatrixAnimationUsingPath>
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(TextBox.Opacity)"
+                                  From="0.0" To="0.0" Duration="0:0:0.1"
+                                  />
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(TextBox.Opacity)"
+                                  From="0.0" To="1.0" Duration="0:0:1.0"
+                                  BeginTime="0:0:0.1"
+                                  />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </TextBox.Triggers>
         </TextBox>
 
         <!-- password -->
         <PasswordBox
-            x:Name="password"
+            x:Name="passwordTextbox"
             Grid.Row="5"
             Style="{StaticResource PasswordBoxStyle}"
             HorizontalAlignment="Center"
@@ -147,7 +207,7 @@
             <!-- login on enter click -->
             <PasswordBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding LoginCommand}"
-                            CommandParameter="{Binding ElementName=password}"/>
+                            CommandParameter="{Binding ElementName=passwordTextbox}"/>
             </PasswordBox.InputBindings>
             <!-- clear notifications on focus -->
             <i:Interaction.Triggers>
@@ -155,10 +215,37 @@
                     <i:InvokeCommandAction Command="{Binding TextBoxGotFocusCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <!-- animation -->
+            <PasswordBox.Triggers>
+                <EventTrigger RoutedEvent="PasswordBox.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <MatrixAnimationUsingPath
+                                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                                Duration="0:0:0.4" BeginTime="0:0:0.2"
+                                >
+                                <MatrixAnimationUsingPath.PathGeometry>
+                                    <PathGeometry Figures="M 250,0 L 0,0" />
+                                </MatrixAnimationUsingPath.PathGeometry>
+                            </MatrixAnimationUsingPath>
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(PasswordBox.Opacity)"
+                                  From="0.0" To="0.0" Duration="0:0:0.2"
+                                  />
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(PasswordBox.Opacity)"
+                                  From="0.0" To="1.0" Duration="0:0:1.0"
+                                  BeginTime="0:0:0.2"
+                                  />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </PasswordBox.Triggers>
         </PasswordBox>
 
         <!-- login button -->
         <Button
+            x:Name="loginButton"
             Grid.Row="7"
             Style="{StaticResource ButtonStyle}"
             Cursor="Hand"
@@ -171,16 +258,43 @@
             Content="{Binding Source={x:Static props:Resources.LoginButtonText}}"
             IsTabStop="False"
             Command="{Binding LoginCommand}"
-            CommandParameter="{Binding ElementName=password}"
+            CommandParameter="{Binding ElementName=passwordTextbox}"
             IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBooleanConverter}}"
             >
             <Button.Background>
                 <ImageBrush ImageSource="/CryptoMessenger;component/Resources/login.png"/>
             </Button.Background>
+            <!-- animation -->
+            <Button.Triggers>
+                <EventTrigger RoutedEvent="Button.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <MatrixAnimationUsingPath
+                                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                                Duration="0:0:0.4" BeginTime="0:0:0.3"
+                                >
+                                <MatrixAnimationUsingPath.PathGeometry>
+                                    <PathGeometry Figures="M 400,0 L 0,0" />
+                                </MatrixAnimationUsingPath.PathGeometry>
+                            </MatrixAnimationUsingPath>
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(Button.Opacity)"
+                                  From="0.0" To="0.0" Duration="0:0:0.3"
+                                  />
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(Button.Opacity)"
+                                  From="0.0" To="1.0" Duration="0:0:1.0"
+                                  BeginTime="0:0:0.3"
+                                  />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Button.Triggers>
         </Button>
 
         <!-- registration button -->
         <Button
+            x:Name="registerButton"
             Grid.Row="7"
             Margin="0,0,220,0"
             Style="{StaticResource ButtonStyle}"
@@ -193,12 +307,38 @@
             Content="{Binding Source={x:Static props:Resources.RegistrationButtonText}}"
             IsTabStop="False"
             Command="{Binding RegisterCommand}"
-            CommandParameter="{Binding ElementName=password}"
+            CommandParameter="{Binding ElementName=passwordTextbox}"
             IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBooleanConverter}}"
             >
             <Button.Background>
                 <ImageBrush ImageSource="/CryptoMessenger;component/Resources/register.png"/>
             </Button.Background>
+            <!-- animation -->
+            <Button.Triggers>
+                <EventTrigger RoutedEvent="Button.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <MatrixAnimationUsingPath
+                                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                                Duration="0:0:0.4" BeginTime="0:0:0.4"
+                                >
+                                <MatrixAnimationUsingPath.PathGeometry>
+                                    <PathGeometry Figures="M 300,0 L 0,0" />
+                                </MatrixAnimationUsingPath.PathGeometry>
+                            </MatrixAnimationUsingPath>
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(Button.Opacity)"
+                                  From="0.0" To="0.0" Duration="0:0:0.4"
+                                  />
+                            <DoubleAnimation 
+                                  Storyboard.TargetProperty="(Button.Opacity)"
+                                  From="0.0" To="1.0" Duration="0:0:1.0"
+                                  BeginTime="0:0:0.4"
+                                  />                            
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Button.Triggers>
         </Button>
 
         <!-- wait cursor while loading -->
@@ -212,4 +352,104 @@
             </Style>
         </Grid.Style>
     </Grid>
+
+    <!-- animations -->
+    <UserControl.Resources>
+        <Storyboard x:Key="closingStb">
+            <!-- logo -->
+            <DoubleAnimation 
+                Storyboard.TargetName="logoCanvas"
+                Storyboard.TargetProperty="(Canvas.Opacity)"
+                From="1.0" To="0.0" Duration="0:0:1.5"
+                />
+            <!-- notification -->
+            <MatrixAnimationUsingPath
+                Storyboard.TargetName="notifyTextblock"
+                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                Duration="0:0:0.4" BeginTime="0:0:0.6"
+                >
+                <MatrixAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 0,0 L -300,0" />
+                </MatrixAnimationUsingPath.PathGeometry>
+            </MatrixAnimationUsingPath>
+            <DoubleAnimation 
+                Storyboard.TargetName="notifyTextblock"
+                Storyboard.TargetProperty="(TextBlock.Opacity)"
+                From="1.0" To="0.0" Duration="0:0:1.0"
+                />
+            <!-- login -->
+            <MatrixAnimationUsingPath
+                Storyboard.TargetName="loginTextbox"
+                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                Duration="0:0:0.4" BeginTime="0:0:0.7"
+                >
+                <MatrixAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 0,0 L -350,0" />
+                </MatrixAnimationUsingPath.PathGeometry>
+            </MatrixAnimationUsingPath>
+            <DoubleAnimation 
+                Storyboard.TargetName="loginTextbox"
+                Storyboard.TargetProperty="(TextBox.Opacity)"
+                From="1.0" To="0.0" Duration="0:0:1.0"
+                BeginTime="0:0:0.1"
+                />
+            <!-- password -->
+            <MatrixAnimationUsingPath
+                Storyboard.TargetName="passwordTextbox"
+                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                Duration="0:0:0.4" BeginTime="0:0:0.8"
+                >
+                <MatrixAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 0,0 L -250,0" />
+                </MatrixAnimationUsingPath.PathGeometry>
+            </MatrixAnimationUsingPath>
+            <DoubleAnimation 
+                Storyboard.TargetName="passwordTextbox"
+                Storyboard.TargetProperty="(PasswordBox.Opacity)"
+                From="1.0" To="0.0" Duration="0:0:1.0"
+                BeginTime="0:0:0.2"
+                />
+            <!-- login button -->
+            <MatrixAnimationUsingPath
+                Storyboard.TargetName="loginButton"
+                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                Duration="0:0:0.4" BeginTime="0:0:0.9"
+                >
+                <MatrixAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 0,0 L -400,0" />
+                </MatrixAnimationUsingPath.PathGeometry>
+            </MatrixAnimationUsingPath>
+            <DoubleAnimation 
+                Storyboard.TargetName="loginButton"
+                Storyboard.TargetProperty="(Button.Opacity)"
+                From="1.0" To="0.0" Duration="0:0:1.0"
+                BeginTime="0:0:0.3"
+                />
+            <!-- register button -->
+            <MatrixAnimationUsingPath
+                Storyboard.TargetName="registerButton"
+                Storyboard.TargetProperty="RenderTransform.(MatrixTransform.Matrix)"
+                Duration="0:0:0.4" BeginTime="0:0:1.0"
+                >
+                <MatrixAnimationUsingPath.PathGeometry>
+                    <PathGeometry Figures="M 0,0 L -300,0" />
+                </MatrixAnimationUsingPath.PathGeometry>
+            </MatrixAnimationUsingPath>
+            <DoubleAnimation 
+                Storyboard.TargetName="registerButton"
+                Storyboard.TargetProperty="(Button.Opacity)"
+                From="1.0" To="0.0" Duration="0:0:1.0"
+                BeginTime="0:0:0.4"
+                />
+        </Storyboard>
+    </UserControl.Resources>
+    
+    <!-- play animation when user control is closing -->
+    <i:Interaction.Triggers>
+        <ei:DataTrigger Binding="{Binding IsClosing, Mode=OneWay}" Value="True">
+            <ei:ControlStoryboardAction Storyboard="{StaticResource closingStb}"     
+                                        ControlStoryboardOption="Play"/>
+        </ei:DataTrigger>
+    </i:Interaction.Triggers>
+    
 </UserControl>

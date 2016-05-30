@@ -10,17 +10,23 @@
         xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
         xmlns:usercontrols="clr-namespace:CryptoMessenger.Views.UserControls"
         xmlns:viewmodels="clr-namespace:CryptoMessenger.ViewModels"
+        xmlns:behave="clr-namespace:CryptoMessenger.Behaviors"
         
+        x:Name="window"
         Style="{StaticResource WindowStyle}"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
         Height="500" Width="750"
         FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed"
-        FontSize="14.5"
+        FontSize="15"
         Title="{Binding Source={x:Static props:Resources.AppName}}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"
         extensions:Extensions.ShowWarning="{Binding ShowWarning}"
         >
+
+    <Window.RenderTransform>
+        <ScaleTransform x:Name="windowScale" ScaleX="1" ScaleY="1" CenterX="375" CenterY="250"/>
+    </Window.RenderTransform>
 
     <Window.Resources>
         <!-- main panels -->
@@ -30,6 +36,25 @@
         <DataTemplate DataType="{x:Type viewmodels:MainPanelViewModel}">
             <usercontrols:MainPanel />
         </DataTemplate>
+        <!-- closing animation -->
+        <Storyboard x:Key="ClosingStb">
+            <DoubleAnimation 
+                Storyboard.TargetName="window"
+                Storyboard.TargetProperty="(Window.Opacity)" 
+                From="1.0" To="0.0" 
+                Duration="0:0:0.6"/>
+            <DoubleAnimation 
+                Storyboard.TargetName="windowScale"
+                Storyboard.TargetProperty="ScaleY" 
+                From="1" To="0.001" 
+                Duration="0:0:0.3"/>
+            <DoubleAnimation 
+                Storyboard.TargetName="windowScale"
+                Storyboard.TargetProperty="ScaleX" 
+                From="1" To="0" 
+                Duration="0:0:0.2" 
+                BeginTime="0:0:0.3"/>
+        </Storyboard>
     </Window.Resources>
 
     <Grid Height="460">
@@ -134,5 +159,9 @@
             <i:InvokeCommandAction Command="{Binding WindowClosingCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
+
+    <i:Interaction.Behaviors>
+        <behave:WindowBehavior ClosingStoryboard="{StaticResource ClosingStb}"/>
+    </i:Interaction.Behaviors>
 
 </Window>

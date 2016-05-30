@@ -22,6 +22,7 @@ namespace CryptoMessenger.ViewModels
 			this.client = client;
 			Notification = Properties.Resources.WelcomeNotification;
 			IsLoading = false;
+			IsClosing = false;
 		}
 
 		/// <summary>
@@ -32,25 +33,37 @@ namespace CryptoMessenger.ViewModels
 		#region Properties
 
 		// is something loading 
-		private bool _isLoading;
+		private bool isLoading;
 		public bool IsLoading
 		{
-			get { return _isLoading; }
+			get { return isLoading; }
 			set
 			{
-				_isLoading = value;
+				isLoading = value;
 				OnPropertyChanged(nameof(IsLoading));
 			}
 		}
 
-		// notification textblock
-		private string _notification;
-		public string Notification
+		// is login panel closing 
+		private bool isClosing;
+		public bool IsClosing
 		{
-			get { return _notification; }
+			get { return isClosing; }
 			set
 			{
-				_notification = value;
+				isClosing = value;
+				OnPropertyChanged(nameof(IsClosing));
+			}
+		}
+
+		// notification textblock
+		private string notification;
+		public string Notification
+		{
+			get { return notification; }
+			set
+			{
+				notification = value;
 				OnPropertyChanged(nameof(Notification));
 			}
 		}
@@ -169,6 +182,10 @@ namespace CryptoMessenger.ViewModels
 
 				if (LoginRegisterResponse.Success.Equals(response))
 				{
+					IsClosing = true;
+					// wait for animation
+					await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(1700));
+
 					LoginSuccess?.Invoke();
 					Notification = Properties.Resources.WelcomeNotification;
 				}
