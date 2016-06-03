@@ -25,7 +25,7 @@ namespace CryptoMessenger.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF4C4743")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF252525")]
         public global::System.Windows.Media.SolidColorBrush MainFirstBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["MainFirstBrush"]));
@@ -34,7 +34,7 @@ namespace CryptoMessenger.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF818181")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF656565")]
         public global::System.Windows.Media.SolidColorBrush MainSecondBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["MainSecondBrush"]));
@@ -43,7 +43,7 @@ namespace CryptoMessenger.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFFEC606")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF00A388")]
         public global::System.Windows.Media.SolidColorBrush SpecialBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["SpecialBrush"]));
@@ -55,7 +55,7 @@ namespace CryptoMessenger.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF959590")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF757575")]
         public global::System.Windows.Media.SolidColorBrush MainSecondLightBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["MainSecondLightBrush"]));
@@ -91,7 +91,7 @@ namespace CryptoMessenger.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFFEC606")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF00A388")]
         public global::System.Windows.Media.Color SpecialColor {
             get {
                 return ((global::System.Windows.Media.Color)(this["SpecialColor"]));
@@ -112,7 +112,7 @@ namespace CryptoMessenger.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FF56514D")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF303030")]
         public global::System.Windows.Media.SolidColorBrush MainFirstLightBrush {
             get {
                 return ((global::System.Windows.Media.SolidColorBrush)(this["MainFirstLightBrush"]));

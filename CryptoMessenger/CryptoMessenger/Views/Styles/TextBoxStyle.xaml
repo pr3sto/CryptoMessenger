@@ -34,6 +34,7 @@
                                 Foreground="{TemplateBinding Foreground}"
                                 Background="Transparent" 
                                 Panel.ZIndex="2"
+                                VerticalAlignment="Center"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
                                 />
@@ -43,6 +44,7 @@
                                 Text="{TemplateBinding Tag}" 
                                 Background="Transparent" 
                                 Panel.ZIndex="1"
+                                VerticalAlignment="Center"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
                                 Foreground="Transparent"

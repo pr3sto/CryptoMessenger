@@ -280,4 +280,13 @@
   <data name="RobotoCondensed_Regular" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RobotoCondensed-Regular.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="CreditsText" xml:space="preserve">
+    <value>Created by PR3STO</value>
+  </data>
+  <data name="CreditsHyperlink" xml:space="preserve">
+    <value>https://github.com/pr3sto/</value>
+  </data>
+  <data name="CreditsHyperlinkTooltip" xml:space="preserve">
+    <value>Открыть сайт разработчика в браузере</value>
+  </data>
 </root>

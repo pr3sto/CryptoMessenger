@@ -51,7 +51,7 @@
                             x:Name="windowBorder"
                             Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
                             BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                            BorderThickness="1"
+                            BorderThickness="0"
                             Padding="0"
                             >
                             <!-- window shadow -->

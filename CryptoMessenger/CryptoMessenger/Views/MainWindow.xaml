@@ -47,13 +47,19 @@
                 Storyboard.TargetName="windowScale"
                 Storyboard.TargetProperty="ScaleY" 
                 From="1" To="0.001" 
-                Duration="0:0:0.3"/>
+                Duration="0:0:0.3"
+                >
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
             <DoubleAnimation 
                 Storyboard.TargetName="windowScale"
                 Storyboard.TargetProperty="ScaleX" 
                 From="1" To="0" 
                 Duration="0:0:0.2" 
-                BeginTime="0:0:0.3"/>
+                BeginTime="0:0:0.3"
+                />
         </Storyboard>
     </Window.Resources>
 

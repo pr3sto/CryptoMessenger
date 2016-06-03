@@ -133,6 +133,33 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/pr3sto/.
+        /// </summary>
+        public static string CreditsHyperlink {
+            get {
+                return ResourceManager.GetString("CreditsHyperlink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Открыть сайт разработчика в браузере.
+        /// </summary>
+        public static string CreditsHyperlinkTooltip {
+            get {
+                return ResourceManager.GetString("CreditsHyperlinkTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created by PR3STO.
+        /// </summary>
+        public static string CreditsText {
+            get {
+                return ResourceManager.GetString("CreditsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap cross {

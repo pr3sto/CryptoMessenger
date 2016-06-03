@@ -297,6 +297,23 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
+		// open hyperlink in browser
+		private DelegateCommand openHyperlinkCommand;
+		public ICommand OpenHyperlinkCommand
+		{
+			get
+			{
+				if (openHyperlinkCommand == null)
+				{
+					openHyperlinkCommand = new DelegateCommand(delegate
+					{
+						System.Diagnostics.Process.Start(Properties.Resources.CreditsHyperlink);
+					});
+				}
+				return openHyperlinkCommand;
+			}
+		}
+
 		#endregion
 
 		// set default colors

@@ -75,7 +75,7 @@
                             HorizontalAlignment="Right"
                             TextOptions.TextRenderingMode="ClearType"
                             TextOptions.TextFormattingMode="Display"
-                            FontSize="11"
+                            FontSize="10"
                             />
                         <!-- remove from friends button -->
                         <Button 
