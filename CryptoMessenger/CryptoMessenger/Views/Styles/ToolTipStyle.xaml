@@ -9,7 +9,7 @@
     <!-- tooltip style -->
     <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="Foreground" Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
         <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
         <Setter Property="Opacity" Value="0.8"/>
@@ -22,7 +22,7 @@
                         RenderOptions.EdgeMode="Aliased"
                         BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                         BorderThickness="1"
-                        Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                        Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                         >
                         <ContentPresenter Margin="5,5,5,5"/>
                     </Border>

@@ -16,13 +16,13 @@
                     <Border 
                         x:Name="border" 
                         RenderOptions.EdgeMode="Aliased"
-                        Background="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                        Background="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
                         />
                     <ControlTemplate.Triggers>
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background" 
-                                    Value="{Binding Path=MainSecondLightBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{Binding Path=UISecondaryLightBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
                         <!-- mouse dragging -->
@@ -47,7 +47,7 @@
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Border 
                         RenderOptions.EdgeMode="Aliased"
-                        Background="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                        Background="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
                         Opacity="0.5"
                         />
                 </ControlTemplate>

@@ -20,13 +20,13 @@ namespace CryptoMessenger.Converters
 			float brightness = color.GetBrightness();
 
 			if (brightness < 0.2f)
-				return Properties.Settings.Default.SecondaryFirstBrush;
+				return Properties.Settings.Default.TextPrimaryBrush;
 			else if (brightness < 0.5f)
-				return Properties.Settings.Default.SecondarySecondBrush;
+				return Properties.Settings.Default.TextSecondaryBrush;
 			else if (brightness < 0.8f)
-				return Properties.Settings.Default.MainSecondBrush;
+				return Properties.Settings.Default.UISecondaryBrush;
 			else
-				return Properties.Settings.Default.MainFirstBrush;
+				return Properties.Settings.Default.UIPrimaryBrush;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

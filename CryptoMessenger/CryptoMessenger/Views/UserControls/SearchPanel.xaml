@@ -52,7 +52,7 @@
             ItemContainerStyle="{StaticResource ListBoxItemStyle}"
             ItemsSource="{Binding UsersList}"
             Margin="20,10,10,20"
-            Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+            Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
             HorizontalContentAlignment="Stretch"            
             >
             <ListBox.ItemTemplate>
@@ -65,7 +65,7 @@
                             HorizontalAlignment="Left"
                             TextOptions.TextRenderingMode="ClearType"
                             TextOptions.TextFormattingMode="Display"
-                            Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                            Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
                             Text="{Binding Path=Name}" 
                             />
                         <!-- users's status -->
@@ -108,7 +108,7 @@
                         <!-- offline status -->
                         <DataTrigger Binding="{Binding Path=IsOnline, Converter={StaticResource InverseBooleanConverter}}" Value="True">
                             <Setter TargetName="statusTextBlock" Property="Foreground" 
-                                    Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+                                    Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
                             <Setter TargetName="statusTextBlock" Property="Text" 
                                     Value="{Binding Source={x:Static props:Resources.StatusOfflineText}}"/>
                         </DataTrigger>
@@ -120,7 +120,7 @@
                             Value="True"
                             >
                             <Setter TargetName="loginTextBlock" Property="Foreground" 
-                                    Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+                                    Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
                             <Setter TargetName="statusTextBlock" Property="Visibility" Value="Hidden"/>
                             <Setter TargetName="button" Property="Visibility" Value="Visible"/>
                         </DataTrigger>

@@ -65,7 +65,7 @@
                             HorizontalAlignment="Left"
                             TextOptions.TextRenderingMode="ClearType"
                             TextOptions.TextFormattingMode="Display"
-                            Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                            Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
                             Text="{Binding Name}"
                             />
                         <!-- friend's status -->
@@ -108,7 +108,7 @@
                         <!-- offline status -->
                         <DataTrigger Binding="{Binding Path=IsOnline, Converter={StaticResource InverseBooleanConverter}}" Value="True">
                             <Setter TargetName="statusTextBlock" Property="Foreground" 
-                                    Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+                                    Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
                             <Setter TargetName="statusTextBlock" Property="Text" 
                                     Value="{Binding Source={x:Static props:Resources.StatusOfflineText}}"/>
                         </DataTrigger>
@@ -120,7 +120,7 @@
                             Value="True"
                             >
                             <Setter TargetName="loginTextBlock" Property="Foreground" 
-                                    Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+                                    Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
                             <Setter TargetName="statusTextBlock" Property="Visibility" Value="Hidden"/>
                             <Setter TargetName="button" Property="Visibility" Value="Visible"/>
                         </DataTrigger>
@@ -151,9 +151,9 @@
             <Border            
                 Margin="10,36,20,120"
                 RenderOptions.EdgeMode="Aliased"
-                BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
+                BorderBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}" 
                 BorderThickness="2 0 2 0"
-                Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                 >
                 <Grid>
                     <!-- empty list notify -->
@@ -185,7 +185,7 @@
                         ItemsSource="{Binding RepliesList}"
                         IsTabStop="False"
                         Margin="5,5,5,5"
-                        Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                        Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                         HorizontalContentAlignment="Stretch"
                         ScrollViewer.CanContentScroll="False"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -199,7 +199,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border
-                                    BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
+                                    BorderBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}" 
                                     BorderThickness="0 0 0 1"
                                     >
                                     <Grid Margin="0,0,0,10">
@@ -218,7 +218,7 @@
                                             TextOptions.TextFormattingMode="Display"
                                             IsTabStop="False"
                                             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionOpacity="0.5"
                                             Text="{Binding Path=Author, Mode=OneWay}"
                                             TextWrapping="Wrap" 
@@ -235,7 +235,7 @@
                                             TextOptions.TextFormattingMode="Display"
                                             IsTabStop="False"
                                             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionOpacity="0.5"
                                             Text="{Binding Path=Time, StringFormat='yyyy-MM-dd HH:mm', Mode=OneWay}"
                                             TextWrapping="Wrap" 
@@ -251,8 +251,8 @@
                                             TextOptions.TextRenderingMode="ClearType"
                                             TextOptions.TextFormattingMode="Display"
                                             IsTabStop="False"
-                                            Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                                            Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
+                                            SelectionBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
                                             SelectionOpacity="0.5"
                                             TextWrapping="Wrap"
                                             TextAlignment="Left"
@@ -265,7 +265,7 @@
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Path=IsMyReply, Converter={StaticResource InverseBooleanConverter}}" Value="True">
                                                     <Setter Property="Background" 
-                                                            Value="{Binding Path=MainFirstLightBrush, Source={x:Static props:Settings.Default}}"/>
+                                                            Value="{Binding Path=UIPrimaryLightBrush, Source={x:Static props:Settings.Default}}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -334,7 +334,7 @@
                 </Grid>
                 <Border.Style>
                     <Style TargetType="Border">
-                        <Setter Property="BorderBrush" Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+                        <Setter Property="BorderBrush" Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=IsFocused, ElementName=msgTextbox}" Value="true">
                                 <Setter Property="BorderBrush" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" />

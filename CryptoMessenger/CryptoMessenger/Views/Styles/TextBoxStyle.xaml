@@ -9,11 +9,11 @@
 
     <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="BorderBrush" Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
-        <Setter Property="SelectionBrush" Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="BorderBrush" Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="SelectionBrush" Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="SelectionOpacity" Value="0.5"/>
-        <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
-        <Setter Property="CaretBrush" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="Foreground" Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="CaretBrush" Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="extensions:Extensions.IsMonitoring" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -21,7 +21,7 @@
                     <Border
                         x:Name="border"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                        Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                         RenderOptions.EdgeMode="Aliased"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         >
@@ -55,7 +55,7 @@
                         <!-- placeholder -->
                         <Trigger Property="extensions:Extensions.TextLength" Value="0">
                             <Setter TargetName="placeholder" Property="Foreground" 
-                                    Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+                                    Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
                         </Trigger>
                         <!-- textbox got focus -->
                         <Trigger Property="IsFocused" Value="True">
@@ -66,12 +66,12 @@
                         </Trigger>
                         <!-- textbox disabled -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
                             <Setter TargetName="PART_ContentHost" Property="Background" 
                                     Value="{Binding ElementName=border, Path=Background}"/>
                             <Setter TargetName="border" 
                                     Property="BorderBrush" 
-                                    Value="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
                         <!-- is data incorrect -->

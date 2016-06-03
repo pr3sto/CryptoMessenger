@@ -13,7 +13,7 @@
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="Foreground" Value="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -24,7 +24,7 @@
                     <ControlTemplate.Triggers>
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
                         </Trigger>
                         <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
@@ -38,10 +38,11 @@
 
     <!-- window style -->
     <Style x:Key="WindowStyle" TargetType="{x:Type Window}">
+        <EventSetter Event="Loaded" Handler="Window_Loaded"/>
         <Setter Property="AllowsTransparency" Value="true"/>
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="Foreground" Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -49,7 +50,7 @@
                         <!-- window border -->
                         <Border
                             x:Name="windowBorder"
-                            Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                            Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                             BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                             BorderThickness="0"
                             Padding="0"
@@ -145,7 +146,7 @@
 
                         </DockPanel>
                     </Grid>
-                    
+
                     <ControlTemplate.Triggers>
                         <!-- window lost focus -->
                         <Trigger Property="IsActive" Value="False">

@@ -39,7 +39,7 @@
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
                 Text="{Binding Source={x:Static props:Resources.IncomeRequestsTextblockText}}"
                 />
             <!-- empty list notify -->
@@ -71,7 +71,7 @@
                 ItemsSource="{Binding IncomeReqsList}"
                 IsTabStop="False"
                 KeyboardNavigation.TabNavigation="None"
-                Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                 HorizontalContentAlignment="Stretch"
                 >
                 <ListBox.ItemTemplate>
@@ -91,7 +91,7 @@
                                 HorizontalAlignment="Left"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
-                                Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
                                 Text="{Binding Path=Name}" 
                                 />
                             <!-- accept income request button -->
@@ -144,7 +144,7 @@
                                 Value="True"
                                 >
                                 <Setter TargetName="incomeTextBlock" Property="Foreground" 
-                                        Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+                                        Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
                                 <Setter TargetName="incomeAcceptButton" Property="Visibility" Value="Visible"/>
                                 <Setter TargetName="incomeRejectButton" Property="Visibility" Value="Visible"/>
                             </DataTrigger>
@@ -171,7 +171,7 @@
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
                 Text="{Binding Source={x:Static props:Resources.OutcomeRequestsTextblockText}}"
                 />
             <!-- empty list notify -->
@@ -203,7 +203,7 @@
                 ItemsSource="{Binding OutcomeReqsList}"
                 IsTabStop="False"
                 KeyboardNavigation.TabNavigation="None"
-                Background="{Binding Path=MainFirstBrush, Source={x:Static props:Settings.Default}}"
+                Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                 HorizontalContentAlignment="Stretch"
                 >
                 <ListBox.ItemTemplate>
@@ -217,7 +217,7 @@
                                 HorizontalAlignment="Left"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
-                                Foreground="{Binding Path=SecondarySecondBrush, Source={x:Static props:Settings.Default}}"
+                                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
                                 Text="{Binding Path=Name}" 
                                 />
                             <!-- cancel outcome request button -->
@@ -249,7 +249,7 @@
                                 Value="True"
                                 >
                                 <Setter TargetName="outcomeTextBlock" Property="Foreground" 
-                                        Value="{Binding Path=SecondaryFirstBrush, Source={x:Static props:Settings.Default}}"/>
+                                        Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
                                 <Setter TargetName="outcomeCancelButton" Property="Visibility" Value="Visible"/>
                             </DataTrigger>
                             <!-- on selected item -->

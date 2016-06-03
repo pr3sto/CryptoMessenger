@@ -24,10 +24,6 @@
         extensions:Extensions.ShowWarning="{Binding ShowWarning}"
         >
 
-    <Window.RenderTransform>
-        <ScaleTransform x:Name="windowScale" ScaleX="1" ScaleY="1" CenterX="375" CenterY="250"/>
-    </Window.RenderTransform>
-
     <Window.Resources>
         <!-- main panels -->
         <DataTemplate DataType="{x:Type viewmodels:LoginPanelViewModel}">
@@ -36,31 +32,6 @@
         <DataTemplate DataType="{x:Type viewmodels:MainPanelViewModel}">
             <usercontrols:MainPanel />
         </DataTemplate>
-        <!-- closing animation -->
-        <Storyboard x:Key="ClosingStb">
-            <DoubleAnimation 
-                Storyboard.TargetName="window"
-                Storyboard.TargetProperty="(Window.Opacity)" 
-                From="1.0" To="0.0" 
-                Duration="0:0:0.6"/>
-            <DoubleAnimation 
-                Storyboard.TargetName="windowScale"
-                Storyboard.TargetProperty="ScaleY" 
-                From="1" To="0.001" 
-                Duration="0:0:0.3"
-                >
-                <DoubleAnimation.EasingFunction>
-                    <CubicEase EasingMode="EaseIn"/>
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-            <DoubleAnimation 
-                Storyboard.TargetName="windowScale"
-                Storyboard.TargetProperty="ScaleX" 
-                From="1" To="0" 
-                Duration="0:0:0.2" 
-                BeginTime="0:0:0.3"
-                />
-        </Storyboard>
     </Window.Resources>
 
     <Grid Height="460">
@@ -165,9 +136,5 @@
             <i:InvokeCommandAction Command="{Binding WindowClosingCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-
-    <i:Interaction.Behaviors>
-        <behave:WindowBehavior ClosingStoryboard="{StaticResource ClosingStb}"/>
-    </i:Interaction.Behaviors>
 
 </Window>

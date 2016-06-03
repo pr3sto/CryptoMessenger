@@ -90,7 +90,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\ListBoxBehavior.cs" />
-    <Compile Include="Behaviors\WindowBehavior.cs" />
     <Compile Include="Commands\CommandReference.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="IWindowPanel.cs" />

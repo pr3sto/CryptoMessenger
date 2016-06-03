@@ -29,7 +29,7 @@
         <Border 
             Grid.Row="9"
             BorderThickness="0 1 0 0"
-            BorderBrush="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}"
+            BorderBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
             Background="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
             />
 
@@ -47,7 +47,7 @@
                 Canvas.Left="319"
                 Width="102"
                 Height="102"
-                Stroke="{Binding Path=MainSecondBrush, Source={x:Static props:Settings.Default}}" 
+                Stroke="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}" 
                 StrokeThickness="2"            
                 />
             <Ellipse

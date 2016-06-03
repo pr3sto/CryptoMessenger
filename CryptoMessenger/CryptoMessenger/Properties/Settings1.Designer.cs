@@ -26,18 +26,18 @@ namespace CryptoMessenger.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF252525")]
-        public global::System.Windows.Media.SolidColorBrush MainFirstBrush {
+        public global::System.Windows.Media.SolidColorBrush UIPrimaryBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["MainFirstBrush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["UIPrimaryBrush"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF656565")]
-        public global::System.Windows.Media.SolidColorBrush MainSecondBrush {
+        public global::System.Windows.Media.SolidColorBrush UISecondaryBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["MainSecondBrush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["UISecondaryBrush"]));
             }
         }
         
@@ -56,9 +56,9 @@ namespace CryptoMessenger.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF757575")]
-        public global::System.Windows.Media.SolidColorBrush MainSecondLightBrush {
+        public global::System.Windows.Media.SolidColorBrush UISecondaryLightBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["MainSecondLightBrush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["UISecondaryLightBrush"]));
             }
         }
         
@@ -74,18 +74,18 @@ namespace CryptoMessenger.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFFFF")]
-        public global::System.Windows.Media.SolidColorBrush SecondaryFirstBrush {
+        public global::System.Windows.Media.SolidColorBrush TextPrimaryBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["SecondaryFirstBrush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["TextPrimaryBrush"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FFDCDCDC")]
-        public global::System.Windows.Media.SolidColorBrush SecondarySecondBrush {
+        public global::System.Windows.Media.SolidColorBrush TextSecondaryBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["SecondarySecondBrush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["TextSecondaryBrush"]));
             }
         }
         
@@ -113,9 +113,9 @@ namespace CryptoMessenger.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF303030")]
-        public global::System.Windows.Media.SolidColorBrush MainFirstLightBrush {
+        public global::System.Windows.Media.SolidColorBrush UIPrimaryLightBrush {
             get {
-                return ((global::System.Windows.Media.SolidColorBrush)(this["MainFirstLightBrush"]));
+                return ((global::System.Windows.Media.SolidColorBrush)(this["UIPrimaryLightBrush"]));
             }
         }
         
