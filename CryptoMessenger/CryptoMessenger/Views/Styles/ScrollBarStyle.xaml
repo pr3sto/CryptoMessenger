@@ -16,13 +16,13 @@
                     <Border 
                         x:Name="border" 
                         RenderOptions.EdgeMode="Aliased"
-                        Background="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
+                        Background="{DynamicResource UISecondaryBrush}"
                         />
                     <ControlTemplate.Triggers>
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background" 
-                                    Value="{Binding Path=UISecondaryLightBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{DynamicResource UISecondaryShadeBrush}"
                                     />
                         </Trigger>
                         <!-- mouse dragging -->
@@ -47,8 +47,7 @@
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
                     <Border 
                         RenderOptions.EdgeMode="Aliased"
-                        Background="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
-                        Opacity="0.5"
+                        Background="{DynamicResource UIPrimaryShadeBrush}"
                         />
                 </ControlTemplate>
             </Setter.Value>
@@ -102,7 +101,6 @@
     <!-- scrollbar style -->
     <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Margin" Value="5,0,0,0"/>
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto"/>

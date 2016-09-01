@@ -23,34 +23,11 @@
             <local:SearchPanel />
         </DataTemplate>
 
-        <!-- animation storyboards -->
-        <Storyboard x:Key="st_reqs">
-            <DoubleAnimation 
-                Storyboard.TargetName="dot"
-                Storyboard.TargetProperty="(Canvas.Left)" 
-                To="17" Duration="00:00:0.5"
-                />
-        </Storyboard>
-        <Storyboard x:Key="st_friends">
-            <DoubleAnimation 
-                Storyboard.TargetName="dot"
-                Storyboard.TargetProperty="(Canvas.Left)" 
-                To="122" Duration="00:00:0.5"
-                />
-        </Storyboard>
-        <Storyboard x:Key="st_search">
-            <DoubleAnimation 
-                Storyboard.TargetName="dot"
-                Storyboard.TargetProperty="(Canvas.Left)" 
-                To="237" Duration="00:00:0.5"
-                />
-        </Storyboard>
-
         <!-- button style -->
         <Style x:Key="LeftPanelButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -69,8 +46,7 @@
             <Style.Triggers>
                 <!-- mouse hover -->
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" 
-                        Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
                 </Trigger>
                 <!-- mouse pressed -->
                 <Trigger Property="IsPressed" Value="True">
@@ -89,15 +65,42 @@
     <!-- content -->
     <Grid Height="460" Width="740" Background="Transparent">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250">
-            </ColumnDefinition>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="10"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
+        <!-- borders between panels -->
+        <Border 
+            Grid.Column="0"
+            Grid.Row="0"
+            BorderThickness="0 1 0 1"
+            BorderBrush="{DynamicResource UISecondaryBrush}"
+            Background="{DynamicResource UIPrimaryShadeBrush}"
+            />
+        <Border 
+            Grid.Column="1"
+            Grid.Row="0"
+            BorderThickness="1 1 0 1"
+            BorderBrush="{DynamicResource UISecondaryBrush}"
+            Background="{DynamicResource UIPrimaryShadeBrush}"
+            />
+        <Border 
+            Grid.Column="0"
+            Grid.Row="1"
+            BorderThickness="1 0 0 1"
+            BorderBrush="{DynamicResource UIPrimaryShadeBrush}"
+            />
+        <Border 
+            Grid.Column="1"
+            Grid.Row="1"
+            BorderThickness="1 0 1 1"
+            BorderBrush="{DynamicResource UIPrimaryShadeBrush}" 
+            />
+
         <!-- left panel buttons -->
         <Button
             Grid.Row="0"
@@ -105,19 +108,14 @@
             Style="{StaticResource LeftPanelButtonStyle}"
             Cursor="Hand"
             IsTabStop="False"
-            Margin="20,0,0,0"
+            Margin="10,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
+            FontSize="15"
             Content="{Binding Source={x:Static props:Resources.RequestTextblockText}}"
             extensions:Extensions.ElementSelected="{Binding RequestsButtonSelected}"
             Command="{Binding RequestsTextBlockClickedCommand}"
-            >
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.Click">
-                    <BeginStoryboard Storyboard="{StaticResource st_reqs}"/>
-                </EventTrigger>
-            </Button.Triggers>
-        </Button>
+            />
         <Button
             Grid.Row="0"
             Grid.Column="0"
@@ -126,16 +124,11 @@
             IsTabStop="False"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="15"
             Content="{Binding Source={x:Static props:Resources.FriendsTextboxText}}"
             extensions:Extensions.ElementSelected="{Binding FriendsButtonSelected}"
             Command="{Binding FriendsTextBlockClickedCommand}"
-            >
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.Click">
-                    <BeginStoryboard Storyboard="{StaticResource st_friends}"/>
-                </EventTrigger>
-            </Button.Triggers>
-        </Button>
+            />
         <Button
             Grid.Row="0"
             Grid.Column="0"
@@ -145,45 +138,18 @@
             Margin="0,0,10,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
+            FontSize="15"
             Content="{Binding Source={x:Static props:Resources.SearchTextblockText}}"
             extensions:Extensions.ElementSelected="{Binding SearchButtonSelected}"
             Command="{Binding SearchTextBlockClickedCommand}"
-            >
-            <Button.Triggers>
-                <EventTrigger RoutedEvent="Button.Click">
-                    <BeginStoryboard Storyboard="{StaticResource st_search}"/>
-                </EventTrigger>
-            </Button.Triggers>
-        </Button>
+            />
 
-        <!-- line -->
-        <Canvas 
-            Grid.Row="1"
-            Grid.Column="0"
-            >
-            <Line
-                Stroke="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
-                StrokeThickness="2"
-                X1="20" X2="240"
-                Y1="5" Y2="5"
-                />
-            <!-- indicator -->
-            <Ellipse
-                x:Name="dot"
-                Width="6"
-                Height="6"
-                Fill="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" 
-                Canvas.Left="122"
-                Canvas.Top="2"
-                />
-        </Canvas>
-        
         <!-- account -->
         <Grid
             Grid.Row="0"
             Grid.Column="1"
-            Width="460"
-            Margin="0,0,20,0"            
+            Width="480"
+            Margin="0 0 10 0"            
             HorizontalAlignment="Right"
             >
             <Grid.ColumnDefinitions>
@@ -195,7 +161,7 @@
             <!-- notification -->
             <Button
                 Grid.Column="0"
-                Margin="0,0,10,0"
+                Margin="10 0 10 0"
                 IsTabStop="False"
                 Style="{StaticResource LeftPanelButtonStyle}"
                 Cursor="Hand"
@@ -204,77 +170,68 @@
                 extensions:Extensions.ElementSelected="{Binding IsNotificationOpen}"
                 Command="{Binding OpenNotificationCommand}"
                 >
-                <Border 
-                    RenderOptions.EdgeMode="Aliased"
-                    Padding="0,0,0,5"
-                    BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" 
-                    Background="Transparent"
-                    BorderThickness="0 0 0 1"
-                    >
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Grid.Column="0"
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            TextTrimming="CharacterEllipsis"
-                            TextOptions.TextRenderingMode="ClearType"
-                            TextOptions.TextFormattingMode="Display"
-                            Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                            Text="{Binding Notification}"
-                            />
-                        <TextBlock
-                            Grid.Column="1"
-                            Margin="0,0,10,0"
-                            VerticalAlignment="Top"
-                            TextOptions.TextRenderingMode="ClearType"
-                            TextOptions.TextFormattingMode="Display"
-                            FontSize="10"
-                            Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                            Text="{Binding UnreadNotificationCount}"
-                            />
-                        <Path
-                            Grid.Column="2"                 
-                            Margin="0,3,0,0"
-                            Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                            StrokeThickness="1"
-                            Stretch="None"
-                            RenderOptions.EdgeMode="Aliased"
-                            Data="M0,6 L4,10 M4,10 L8,6 M8,6 L 0,6"
-                            />
-                    </Grid>
-                </Border>
+                <Grid Margin="0,0,0,5" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Center"
+                        TextTrimming="CharacterEllipsis"
+                        TextOptions.TextRenderingMode="ClearType"
+                        TextOptions.TextFormattingMode="Display"
+                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                        Text="{Binding Notification}"
+                        />
+                    <TextBlock
+                        Grid.Column="1"
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Top"
+                        TextOptions.TextRenderingMode="ClearType"
+                        TextOptions.TextFormattingMode="Display"
+                        FontSize="10"
+                        Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                        Text="{Binding UnreadNotificationCount}"
+                        />
+                    <Path
+                        Grid.Column="2"                 
+                        Margin="0,3,0,0"
+                        Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                        StrokeThickness="1"
+                        Stretch="None"
+                        RenderOptions.EdgeMode="Aliased"
+                        Data="M0,6 L4,10 M4,10 L8,6 M8,6 L 0,6"
+                        />
+                </Grid>
             </Button>
             <Popup
                 Grid.Column="0"
                 Margin="0,0,0,0"
                 x:Name="notifyPopup" 
                 Placement="Bottom" 
-                Width="470"
+                Width="500"
                 Height="150"
                 AllowsTransparency="True"
                 IsOpen="{Binding IsNotificationOpen}"
                 StaysOpen="False"
+                PopupAnimation="Fade"
                 >
                 <Grid Margin="5">
-                    <Grid.Background>
-                        <SolidColorBrush Color="Black" Opacity="0.5"/>
-                    </Grid.Background>
                     <Border
                         BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                         BorderThickness="2"
-                        
+                        Background="{DynamicResource UIPrimaryBrush}"
+                        Opacity="0.7"
                         >
                         <Border.Effect>
                             <DropShadowEffect
-                                    Color="Black"
-                                    BlurRadius="10"
-                                    ShadowDepth="0"
-                                    />
+                                Color="Black"
+                                BlurRadius="3"
+                                ShadowDepth="0"
+                                />
                         </Border.Effect>
                     </Border>
                     <!-- empty list notify -->
@@ -283,7 +240,8 @@
                         HorizontalAlignment="Center"
                         TextOptions.TextRenderingMode="ClearType"
                         TextOptions.TextFormattingMode="Display"
-                        FontSize="20" 
+                        FontSize="22" 
+                        FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
                         Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                         Text="{Binding Source={x:Static props:Resources.EmptyNotificationListboxPlaceholder}}"
                         >
@@ -305,7 +263,7 @@
                         ItemsSource="{Binding NotificationList}"
                         IsTabStop="False"
                         Margin="5"
-                        Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
+                        Background="{DynamicResource UIPrimaryBrush}"
                         HorizontalContentAlignment="Stretch"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         >
@@ -319,7 +277,7 @@
                                     <!-- text -->
                                     <Border
                                         Margin="0,0,5,0"
-                                        BorderBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
+                                        BorderBrush="{DynamicResource UISecondaryBrush}"
                                         BorderThickness="0,0,1,0"
                                         >
                                         <TextBox 
@@ -332,8 +290,8 @@
                                             TextOptions.TextRenderingMode="ClearType"
                                             TextOptions.TextFormattingMode="Display"
                                             IsTabStop="False"
-                                            Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
+                                            Foreground="{DynamicResource TextPrimaryBrush}"
+                                            SelectionBrush="{DynamicResource UISecondaryBrush}"
                                             SelectionOpacity="0.5"
                                             Text="{Binding Path=Text, Mode=OneWay}"
                                             TextWrapping="Wrap" 
@@ -351,7 +309,7 @@
                                         TextOptions.TextFormattingMode="Display"
                                         IsTabStop="False"
                                         Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                        SelectionBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
+                                        SelectionBrush="{DynamicResource UISecondaryBrush}"
                                         SelectionOpacity="0.5"
                                         Text="{Binding Path=Time, StringFormat='yyyy-MM-dd HH:mm', Mode=OneWay}"
                                         TextWrapping="Wrap" 
@@ -370,7 +328,7 @@
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
+                Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="{Binding Login}"
                 />
             <!-- status -->
@@ -396,7 +354,7 @@
                             <!-- offline status -->
                             <DataTrigger Binding="{Binding Path=IsOnline, Converter={StaticResource InverseBooleanConverter}}" Value="True">
                                 <Setter Property="Foreground" 
-                                        Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
+                                        Value="{DynamicResource UISecondaryBrush}"/>
                                 <Setter Property="Text" 
                                         Value="{Binding Source={x:Static props:Resources.StatusOfflineText}}"/>
                             </DataTrigger>
@@ -417,28 +375,17 @@
                 />
         </Grid>
 
-        <Canvas 
-            Grid.Row="1"
-            Grid.Column="1"
-            >
-            <Line
-                Stroke="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
-                StrokeThickness="2"
-                X1="10" X2="470"
-                Y1="5" Y2="5"
-                />
-        </Canvas>
-
         <!-- select friend notify -->
         <TextBlock  
             Grid.Column="1"
-            Grid.Row="2"
-            Width="200"
+            Grid.Row="1"
+            Width="230"
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
             TextOptions.TextRenderingMode="ClearType"
             TextOptions.TextFormattingMode="Display"
-            FontSize="20" 
+            FontSize="22" 
+            FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
             TextWrapping="Wrap"
             TextAlignment="Center"
@@ -451,7 +398,7 @@
             Grid.Column="0"
             Grid.Row="0"
             Grid.ColumnSpan="2"
-            Grid.RowSpan="3"
+            Grid.RowSpan="2"
             IsTabStop="False"
             Content="{Binding WindowPanel}" 
             />

@@ -8,14 +8,15 @@
     xmlns:lb="clr-namespace:CryptoMessenger.Behaviors"
     xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
     xmlns:props="clr-namespace:CryptoMessenger.Properties" 
+    xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
     >
-    <Grid Height="460">
+    <Grid Height="460" Width="740">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -27,9 +28,14 @@
             HorizontalAlignment="Center"
             TextOptions.TextRenderingMode="ClearType"
             TextOptions.TextFormattingMode="Display"
-            FontSize="20" 
+            Margin="10"
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+            FontSize="22" 
+            FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-            Text="{Binding Source={x:Static props:Resources.EmptyFriendsListboxPlaceholder}}">
+            Text="{Binding Source={x:Static props:Resources.EmptyFriendsListboxPlaceholder}}"
+            >
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -52,7 +58,6 @@
             IsTabStop="False"
             KeyboardNavigation.TabNavigation="None"
             SelectedValue="{Binding SelectedFriend}"
-            Margin="20,10,10,20"  
             HorizontalContentAlignment="Stretch"
             >
             <ListBox.ItemTemplate>
@@ -65,7 +70,7 @@
                             HorizontalAlignment="Left"
                             TextOptions.TextRenderingMode="ClearType"
                             TextOptions.TextFormattingMode="Display"
-                            Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
+                            Foreground="{DynamicResource TextPrimaryBrush}"
                             Text="{Binding Name}"
                             />
                         <!-- friend's status -->
@@ -85,7 +90,7 @@
                             IsTabStop="False"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"
-                            Height="25" Width="25"
+                            Height="16" Width="16"
                             Foreground="White"
                             Command="{Binding Path=RemoveFriendCommand}"
                             ToolTip="{Binding Source={x:Static props:Resources.RemoveFriendButtonTooltip}}"
@@ -108,7 +113,7 @@
                         <!-- offline status -->
                         <DataTrigger Binding="{Binding Path=IsOnline, Converter={StaticResource InverseBooleanConverter}}" Value="True">
                             <Setter TargetName="statusTextBlock" Property="Foreground" 
-                                    Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
+                                    Value="{DynamicResource UISecondaryBrush}"/>
                             <Setter TargetName="statusTextBlock" Property="Text" 
                                     Value="{Binding Source={x:Static props:Resources.StatusOfflineText}}"/>
                         </DataTrigger>
@@ -119,8 +124,7 @@
                                 AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}"
                             Value="True"
                             >
-                            <Setter TargetName="loginTextBlock" Property="Foreground" 
-                                    Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter TargetName="loginTextBlock" Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
                             <Setter TargetName="statusTextBlock" Property="Visibility" Value="Hidden"/>
                             <Setter TargetName="button" Property="Visibility" Value="Visible"/>
                         </DataTrigger>
@@ -143,198 +147,36 @@
         <!-- dialog -->
         <Grid
             Grid.Column="1"
-            Grid.Row="0"
-            Grid.RowSpan="2"
+            Grid.Row="1"
             Visibility="{Binding IsDialogVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             >
-            <!-- dialog panel -->
-            <Border            
-                Margin="10,36,20,120"
-                RenderOptions.EdgeMode="Aliased"
-                BorderBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}" 
-                BorderThickness="2 0 2 0"
-                Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
-                >
-                <Grid>
-                    <!-- empty list notify -->
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        TextOptions.TextRenderingMode="ClearType"
-                        TextOptions.TextFormattingMode="Display"
-                        FontSize="20" 
-                        Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                        Text="{Binding Source={x:Static props:Resources.EmptyDialogListboxPlaceholder}}"
-                        >
-                        <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=messagesListbox, Path=Items.Count}" Value="0">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                    <!-- messages -->
-                    <ListBox
-                        x:Name="messagesListbox"
-                        Style="{StaticResource ListBoxStyle}"
-                        ItemContainerStyle="{StaticResource ListBoxItemStyle}"
-                        ItemsSource="{Binding RepliesList}"
-                        IsTabStop="False"
-                        Margin="5,5,5,5"
-                        Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
-                        HorizontalContentAlignment="Stretch"
-                        ScrollViewer.CanContentScroll="False"
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        lb:ListBoxBehavior.ScrollOnNewItem="true"
-                        >
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel VerticalAlignment="Bottom"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border
-                                    BorderBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}" 
-                                    BorderThickness="0 0 0 1"
-                                    >
-                                    <Grid Margin="0,0,0,10">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <!-- login -->
-                                        <TextBox 
-                                            Grid.Row="0"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            VerticalAlignment="Top"
-                                            HorizontalAlignment="Left"
-                                            TextOptions.TextRenderingMode="ClearType"
-                                            TextOptions.TextFormattingMode="Display"
-                                            IsTabStop="False"
-                                            Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionOpacity="0.5"
-                                            Text="{Binding Path=Author, Mode=OneWay}"
-                                            TextWrapping="Wrap" 
-                                            IsReadOnly="True"
-                                            />
-                                        <!-- time -->
-                                        <TextBox
-                                            Grid.Row="0"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            VerticalAlignment="Top"
-                                            HorizontalAlignment="Right"
-                                            TextOptions.TextRenderingMode="ClearType"
-                                            TextOptions.TextFormattingMode="Display"
-                                            IsTabStop="False"
-                                            Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionOpacity="0.5"
-                                            Text="{Binding Path=Time, StringFormat='yyyy-MM-dd HH:mm', Mode=OneWay}"
-                                            TextWrapping="Wrap" 
-                                            IsReadOnly="True"
-                                            />
-                                        <!-- message -->
-                                        <TextBox
-                                            Grid.Row="1"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            VerticalAlignment="Bottom"
-                                            HorizontalAlignment="Left"
-                                            TextOptions.TextRenderingMode="ClearType"
-                                            TextOptions.TextFormattingMode="Display"
-                                            IsTabStop="False"
-                                            Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
-                                            SelectionOpacity="0.5"
-                                            TextWrapping="Wrap"
-                                            TextAlignment="Left"
-                                            Text="{Binding Path=Text, Mode=OneWay}"
-                                            IsReadOnly="True"
-                                            />
-                                    </Grid>
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=IsMyReply, Converter={StaticResource InverseBooleanConverter}}" Value="True">
-                                                    <Setter Property="Background" 
-                                                            Value="{Binding Path=UIPrimaryLightBrush, Source={x:Static props:Settings.Default}}"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </Border>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="300"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-            <!-- message textbox -->
-            <Border
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Stretch"
-                Height="100"
-                Margin="10,0,20,20"
-                Padding="0,0,5,0"
-                RenderOptions.EdgeMode="Aliased"
+            <Border 
+                Grid.Row="0"
+                BorderThickness="1 0 0 1"
+                BorderBrush="{DynamicResource UIPrimaryShadeBrush}"
+                Background="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                />
+            <Border 
+                Grid.Row="1"
+                BorderThickness="1 0 1 1"
+                BorderBrush="{DynamicResource UIPrimaryShadeBrush}"
+                Background="{DynamicResource UIPrimaryBrush}"
+                />
+            <Border 
+                Grid.Row="2"
                 BorderThickness="2"
+                Padding="2"
+                Margin="10 10 10 10"
                 >
-                <Grid>
-                    <!-- message textbox -->
-                    <TextBox
-                        x:Name="msgTextbox"
-                        Style="{StaticResource TextBoxStyle}"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch"
-                        Margin="0,0,40,0"
-                        TextWrapping="Wrap"
-                        AcceptsReturn="True"
-                        VerticalScrollBarVisibility="Auto"
-                        TextOptions.TextRenderingMode="ClearType"
-                        TextOptions.TextFormattingMode="Display"
-                        IsTabStop="False"
-                        Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged}"
-                        Tag="{Binding Source={x:Static props:Resources.MessageTextboxPlaceholder}}"
-                        >
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding MessageEnterCommand}"/>
-                            <KeyBinding Key="Enter" 
-                                        Modifiers="Shift" 
-                                        Command="{Binding MessageShiftEnterCommand}"
-                                        CommandParameter="{Binding ElementName=msgTextbox}"
-                                        />
-                        </TextBox.InputBindings>
-                    </TextBox>
-                    <!-- send message button -->
-                    <Button
-                        x:Name="sendButton"
-                        Style="{StaticResource ListBoxButtonStyle}"
-                        Cursor="Hand"
-                        IsTabStop="False"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Right"
-                        Width="40"
-                        Foreground="White"
-                        Command="{Binding Path=SendCommand}"
-                        ToolTip="{Binding Source={x:Static props:Resources.SendMessageButtonTooltip}}"
-                        IsEnabled="{Binding Path=MessageText, Converter={StaticResource StringEmptynessToBooleanConverter}}"
-                        >
-                        <Button.Background>
-                            <ImageBrush ImageSource="/CryptoMessenger;component/Resources/send.png"/>
-                        </Button.Background>
-                    </Button>
-                </Grid>
                 <Border.Style>
                     <Style TargetType="Border">
-                        <Setter Property="BorderBrush" Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource UISecondaryBrush}"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=IsFocused, ElementName=msgTextbox}" Value="true">
                                 <Setter Property="BorderBrush" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" />
@@ -346,7 +188,192 @@
                     </Style>
                 </Border.Style>
             </Border>
-        </Grid>
 
+            <!-- friend's login-->
+            <TextBox
+                Grid.Row="0"
+                Background="Transparent"
+                BorderThickness="0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                IsTabStop="False"
+                TextOptions.TextRenderingMode="ClearType"
+                TextOptions.TextFormattingMode="Display"
+                FontSize="22" 
+                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold" 
+                Foreground="{DynamicResource UIPrimaryBrush}"
+                Text="{Binding Path=SelectedFriend.Name, Mode=OneWay}"
+                SelectionBrush="{DynamicResource UISecondaryBrush}"
+                SelectionOpacity="0.5"
+                TextWrapping="Wrap" 
+                IsReadOnly="True"
+                />
+            <!-- empty list notify -->
+            <TextBlock
+                Grid.Row="1"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                TextOptions.TextRenderingMode="ClearType"
+                TextOptions.TextFormattingMode="Display"
+                FontSize="22" 
+                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold" 
+                Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                Text="{Binding Source={x:Static props:Resources.EmptyDialogListboxPlaceholder}}"
+                >
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=messagesListbox, Path=Items.Count}" Value="0">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <!-- messages -->
+            <ListBox
+                x:Name="messagesListbox"
+                Grid.Row="1"
+                Style="{StaticResource ListBoxStyle}"
+                ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                ItemsSource="{Binding RepliesList}"
+                IsTabStop="False"
+                Background="{DynamicResource UIPrimaryBrush}"
+                HorizontalContentAlignment="Stretch"
+                ScrollViewer.CanContentScroll="False"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                lb:ListBoxBehavior.ScrollOnNewItem="true"
+                >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VerticalAlignment="Bottom"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="0 0 0 1">
+                            <Grid Margin="0,0,0,10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <!-- login -->
+                                <TextBox 
+                                    Grid.Row="0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    TextOptions.TextRenderingMode="ClearType"
+                                    TextOptions.TextFormattingMode="Display"
+                                    IsTabStop="False"
+                                    Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                                    SelectionBrush="{DynamicResource UISecondaryBrush}"
+                                    SelectionOpacity="0.5"
+                                    Text="{Binding Path=Author, Mode=OneWay}"
+                                    TextWrapping="Wrap" 
+                                    IsReadOnly="True"
+                                    />
+                                <!-- time -->
+                                <TextBox
+                                    Grid.Row="0"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Right"
+                                    TextOptions.TextRenderingMode="ClearType"
+                                    TextOptions.TextFormattingMode="Display"
+                                    IsTabStop="False"
+                                    Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                                    SelectionBrush="{DynamicResource UISecondaryBrush}"
+                                    SelectionOpacity="0.5"
+                                    Text="{Binding Path=Time, StringFormat='yyyy-MM-dd HH:mm', Mode=OneWay}"
+                                    TextWrapping="Wrap" 
+                                    IsReadOnly="True"
+                                    />
+                                <!-- message -->
+                                <TextBox
+                                    Grid.Row="1"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    VerticalAlignment="Bottom"
+                                    HorizontalAlignment="Left"
+                                    TextOptions.TextRenderingMode="ClearType"
+                                    TextOptions.TextFormattingMode="Display"
+                                    IsTabStop="False"
+                                    Foreground="{DynamicResource TextPrimaryBrush}"
+                                    SelectionBrush="{DynamicResource UISecondaryBrush}"
+                                    SelectionOpacity="0.5"
+                                    TextWrapping="Wrap"
+                                    TextAlignment="Left"
+                                    Text="{Binding Path=Text, Mode=OneWay}"
+                                    IsReadOnly="True"
+                                    />
+                            </Grid>
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource UIPrimaryShadeBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsMyReply, Converter={StaticResource InverseBooleanConverter}}" Value="True">
+                                            <Setter Property="BorderBrush" 
+                                                    Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- message textbox -->
+            <TextBox
+                x:Name="msgTextbox"
+                Grid.Row="2"
+                Style="{StaticResource TextBoxStyle}"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                Margin="12 12 50 12"
+                TextWrapping="Wrap"
+                AcceptsReturn="True"
+                VerticalScrollBarVisibility="Auto"
+                TextOptions.TextRenderingMode="ClearType"
+                TextOptions.TextFormattingMode="Display"
+                IsTabStop="False"
+                Text="{Binding Path=MessageText, UpdateSourceTrigger=PropertyChanged}"
+                Tag="{Binding Source={x:Static props:Resources.MessageTextboxPlaceholder}}"
+                extensions:Extensions.TextVerticalAlignment="Top"
+                >
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding MessageEnterCommand}"/>
+                    <KeyBinding Key="Enter" 
+                                Modifiers="Shift" 
+                                Command="{Binding MessageShiftEnterCommand}"
+                                CommandParameter="{Binding ElementName=msgTextbox}"
+                                />
+                </TextBox.InputBindings>
+            </TextBox>
+            <!-- send message button -->
+            <Button
+                x:Name="sendButton"
+                Grid.Row="2"
+                Margin="0 0 15 0"
+                Style="{StaticResource ListBoxButtonStyle}"
+                Cursor="Hand"
+                IsTabStop="False"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Right"
+                Width="35"
+                Foreground="White"
+                Command="{Binding Path=SendCommand}"
+                ToolTip="{Binding Source={x:Static props:Resources.SendMessageButtonTooltip}}"
+                IsEnabled="{Binding Path=MessageText, Converter={StaticResource StringEmptynessToBooleanConverter}}"
+                >
+                <Button.Background>
+                    <ImageBrush ImageSource="/CryptoMessenger;component/Resources/send.png"/>
+                </Button.Background>
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

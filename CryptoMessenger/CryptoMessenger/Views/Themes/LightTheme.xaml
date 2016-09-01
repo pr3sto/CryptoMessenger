@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="UIPrimaryBrush">#FFFFFFF5</SolidColorBrush>
+    <SolidColorBrush x:Key="UIPrimaryShadeBrush">#FFF0F0EB</SolidColorBrush>
+    <SolidColorBrush x:Key="UISecondaryBrush">#FFD2D2C8</SolidColorBrush>
+    <SolidColorBrush x:Key="UISecondaryShadeBrush">#FFE1E1D7</SolidColorBrush>
+    <SolidColorBrush x:Key="TextPrimaryBrush">#FF5A5A5A</SolidColorBrush>
+    <SolidColorBrush x:Key="TextSecondaryBrush">#FF828282</SolidColorBrush>
+    <SolidColorBrush x:Key="AlertBrush">#FFFF0000</SolidColorBrush>
+    <Color x:Key="AlertColor">#FFFF0000</Color>
+</ResourceDictionary>

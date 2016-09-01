@@ -19,7 +19,7 @@
                             x:Name="backgroundImage"
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch" 
-                            Fill="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
+                            Fill="{DynamicResource UISecondaryBrush}"
                             OpacityMask="{TemplateBinding Background}"
                             />
                         <!-- text -->
@@ -38,7 +38,7 @@
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="backgroundImage" Property="Fill" 
-                                    Value="{Binding Path=UISecondaryLightBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{DynamicResource UISecondaryShadeBrush}"
                                     />
                         </Trigger>
                         <!-- mouse pressed -->

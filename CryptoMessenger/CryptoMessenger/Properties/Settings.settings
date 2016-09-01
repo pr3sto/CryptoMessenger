@@ -2,36 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CryptoMessenger.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="UIPrimaryBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF252525</Value>
-    </Setting>
-    <Setting Name="UISecondaryBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF656565</Value>
-    </Setting>
-    <Setting Name="SpecialBrush" Type="System.Windows.Media.SolidColorBrush" Scope="User">
-      <Value Profile="(Default)">#FF00A388</Value>
-    </Setting>
-    <Setting Name="UISecondaryLightBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF757575</Value>
-    </Setting>
-    <Setting Name="AlertBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FFFF0000</Value>
-    </Setting>
-    <Setting Name="TextPrimaryBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FFFFFFFF</Value>
-    </Setting>
-    <Setting Name="TextSecondaryBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FFDCDCDC</Value>
-    </Setting>
-    <Setting Name="SpecialColor" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FF00A388</Value>
-    </Setting>
-    <Setting Name="AlertColor" Type="System.Windows.Media.Color" Scope="Application">
-      <Value Profile="(Default)">#FFFF0000</Value>
-    </Setting>
-    <Setting Name="UIPrimaryLightBrush" Type="System.Windows.Media.SolidColorBrush" Scope="Application">
-      <Value Profile="(Default)">#FF303030</Value>
-    </Setting>
     <Setting Name="ActionDelayMsec" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">1000</Value>
     </Setting>
@@ -40,6 +10,12 @@
     </Setting>
     <Setting Name="WaitServerConnectionDelayMsec" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5000</Value>
+    </Setting>
+    <Setting Name="SpecialColor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#FFF0413C</Value>
+    </Setting>
+    <Setting Name="SpecialBrush" Type="System.Windows.Media.SolidColorBrush" Scope="User">
+      <Value Profile="(Default)">#FFF0413C</Value>
     </Setting>
   </Settings>
 </SettingsFile>

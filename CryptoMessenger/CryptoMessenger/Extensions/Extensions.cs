@@ -8,6 +8,19 @@ namespace CryptoMessenger.Extensions
 	/// </summary>
 	public class Extensions
 	{
+		// TextVerticalAlignment property
+		public static readonly DependencyProperty TextVerticalAlignmentProperty =
+			DependencyProperty.RegisterAttached("TextVerticalAlignment", typeof(VerticalAlignment), typeof(Extensions), new PropertyMetadata(VerticalAlignment.Center));
+		public static void SetTextVerticalAlignment(UIElement element, VerticalAlignment value)
+		{
+			element.SetValue(TextVerticalAlignmentProperty, value);
+		}
+		public static VerticalAlignment GetTextVerticalAlignment(UIElement element)
+		{
+			return (VerticalAlignment)element.GetValue(TextVerticalAlignmentProperty);
+		}
+
+
 		// ShowWarning property
 		public static readonly DependencyProperty ShowWarningProperty =
 			DependencyProperty.RegisterAttached("ShowWarning", typeof(bool), typeof(Extensions), new PropertyMetadata(false));

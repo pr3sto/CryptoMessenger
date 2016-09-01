@@ -12,16 +12,16 @@
     xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"  
     >
 
-    <Grid Height="460" Width="740" >
+    <Grid UseLayoutRounding="True" Height="460" Width="740" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="104"/>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="15"/>
             <RowDefinition Height="35"/>
-            <RowDefinition Height="15"/>
-            <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
@@ -29,7 +29,7 @@
         <Border 
             Grid.Row="9"
             BorderThickness="0 1 0 0"
-            BorderBrush="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
+            BorderBrush="{DynamicResource UISecondaryBrush}"
             Background="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
             />
 
@@ -47,7 +47,7 @@
                 Canvas.Left="319"
                 Width="102"
                 Height="102"
-                Stroke="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}" 
+                Stroke="{DynamicResource UISecondaryBrush}" 
                 StrokeThickness="2"            
                 />
             <Ellipse
@@ -110,7 +110,7 @@
             VerticalAlignment="Center"
             TextOptions.TextRenderingMode="ClearType"
             TextOptions.TextFormattingMode="Display"
-            Foreground="White"
+            Foreground="{DynamicResource TextPrimaryBrush}"
             Text="{Binding Notification}"
             >
             <!-- animation -->
@@ -143,8 +143,8 @@
             Style="{StaticResource TextBoxStyle}"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Width="300"
-            Height="35"
+            Width="280"
+            Height="30"
             BorderThickness="2"
             MaxLength="20"
             Text="{Binding Path=Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -152,6 +152,7 @@
             TabIndex="0"
             IsTabStop="True"
             IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+            extensions:Extensions.TextVerticalAlignment="Center"
             extensions:Extensions.IsDataIncorrect="{Binding IsLoginIncorrect}"
             extensions:Extensions.IsDataCorrect="{Binding IsLoginCorrect}"
             >
@@ -201,14 +202,15 @@
             Style="{StaticResource PasswordBoxStyle}"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Width="300"
-            Height="35"
+            Width="280"
+            Height="30"
             BorderThickness="2"
             MaxLength="30"
             Tag="{Binding Source={x:Static props:Resources.UserPasswordTextboxPlaceholder}}"
             TabIndex="1"
             IsTabStop="True"
             IsEnabled="{Binding Path=IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+            extensions:Extensions.TextVerticalAlignment="Center"
             extensions:Extensions.IsDataIncorrect="{Binding IsPasswordIncorrect}"
             extensions:Extensions.IsDataCorrect="{Binding IsPasswordCorrect}"
             >
@@ -258,9 +260,9 @@
             Style="{StaticResource ButtonStyle}"
             Cursor="Hand"
             VerticalAlignment="Top"
-            Margin="220,0,0,0"
+            Margin="230,0,0,0"
             HorizontalAlignment="Left"
-            Height="40" Width="143"
+            Height="35" Width="133"
             HorizontalContentAlignment="Right"
             VerticalContentAlignment="Center"
             Content="{Binding Source={x:Static props:Resources.LoginButtonText}}"
@@ -304,12 +306,12 @@
         <Button
             x:Name="registerButton"
             Grid.Row="7"
-            Margin="0,0,220,0"
+            Margin="0,0,230,0"
             Style="{StaticResource ButtonStyle}"
             Cursor="Hand"
             VerticalAlignment="Top"
             HorizontalAlignment="Right"
-            Height="40" Width="143"
+            Height="35" Width="133"
             HorizontalContentAlignment="Right"
             VerticalContentAlignment="Center"
             Content="{Binding Source={x:Static props:Resources.RegistrationButtonText}}"

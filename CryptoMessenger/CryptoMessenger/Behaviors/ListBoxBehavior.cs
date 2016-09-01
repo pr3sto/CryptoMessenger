@@ -101,7 +101,7 @@ namespace CryptoMessenger.Behaviors
 					if (listBox.Items.Count > 0)
 					{
 						var scrollViewer = GetDescendantByType(listBox, typeof(ScrollViewer)) as ScrollViewer;
-						if (scrollViewer.ScrollableHeight == scrollViewer.VerticalOffset)
+						if (scrollViewer.ScrollableHeight < scrollViewer.VerticalOffset + 50)
 						{
 							listBox.ScrollIntoView(listBox.Items[listBox.Items.Count - 1]);
 							listBox.SelectedItem = listBox.Items[listBox.Items.Count - 1];
@@ -116,7 +116,7 @@ namespace CryptoMessenger.Behaviors
 				{
 					var scrollViewer = GetDescendantByType(listBox, typeof(ScrollViewer)) as ScrollViewer;
 
-					if (scrollViewer.ScrollableHeight == scrollViewer.VerticalOffset)
+					if (scrollViewer.ScrollableHeight < scrollViewer.VerticalOffset + 50)
 					{
 						listBox.ScrollIntoView(listBox.Items[listBox.Items.Count - 1]);
 						listBox.SelectedItem = listBox.Items[listBox.Items.Count - 1];

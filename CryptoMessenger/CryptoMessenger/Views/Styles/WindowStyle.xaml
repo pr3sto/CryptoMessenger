@@ -13,7 +13,13 @@
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"/>
+        
+        <!-- foreground for color of button -->
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <!-- borderbrush for color of pressed button -->
+        <Setter Property="BorderBrush" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
+        
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -24,11 +30,11 @@
                     <ControlTemplate.Triggers>
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
                         </Trigger>
                         <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Foreground" Value="{Binding Path=BorderBrush, ElementName=windowBorder}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=BorderBrush, RelativeSource={RelativeSource Self}}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -42,7 +48,7 @@
         <Setter Property="AllowsTransparency" Value="true"/>
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
@@ -50,14 +56,15 @@
                         <!-- window border -->
                         <Border
                             x:Name="windowBorder"
-                            Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
-                            BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                            BorderThickness="0"
+                            Background="{DynamicResource UIPrimaryBrush}"
+                            BorderBrush="{DynamicResource UIPrimaryShadeBrush}"
+                            BorderThickness="1"
                             Padding="0"
                             >
                             <!-- window shadow -->
                             <Border.Effect>
                                 <DropShadowEffect
+                                    x:Name="borderEffect"
                                     Color="{Binding Path=SpecialColor, Source={x:Static props:Settings.Default}}"
                                     BlurRadius="5"
                                     ShadowDepth="0"
@@ -66,6 +73,7 @@
                         </Border>
                         <!-- window top panel -->
                         <DockPanel    
+                            ClipToBounds="True"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Top"
                             >
@@ -81,18 +89,23 @@
                                         <ColumnDefinition />
                                         <ColumnDefinition Width="25"/>
                                         <ColumnDefinition Width="25"/>
+                                        <ColumnDefinition Width="25"/>
                                         <ColumnDefinition Width="5"/>
                                     </Grid.ColumnDefinitions>
                                     <!-- icon -->
-                                    <Image
+                                    <Rectangle 
                                         Grid.Column="0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                        RenderOptions.BitmapScalingMode="Linear"
                                         RenderOptions.EdgeMode="Aliased"
                                         Width="25" Height="25"
-                                        Source="/CryptoMessenger;component/Resources/envelope.png"
-                                        />
+                                        Fill="{TemplateBinding Foreground}"
+                                        >
+                                        <Rectangle.OpacityMask>
+                                            <ImageBrush ImageSource="/CryptoMessenger;component/Resources/envelope.png"/>
+                                        </Rectangle.OpacityMask>
+                                    </Rectangle>
                                     <!-- title -->
                                     <TextBlock
                                         Grid.Column="1"
@@ -103,9 +116,33 @@
                                         Foreground="{TemplateBinding Foreground}"
                                         Text="{TemplateBinding Title}"
                                         />
+                                    <!-- theme button -->
+                                    <Button
+                                        x:Name="themeButton"
+                                        Grid.Column="2"
+                                        VerticalAlignment="Top"
+                                        Width="25"
+                                        Height="25"
+                                        IsTabStop="False"
+                                        Style="{StaticResource TitleBarButtonStyle}"
+                                        Click="ThemeButton_Click"
+                                        extensions:Extensions.ElementSelected="False"
+                                        >
+                                        <Path
+                                            Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                                            StrokeThickness="1"
+                                            Stretch="None"
+                                            RenderOptions.BitmapScalingMode="Linear"
+                                            RenderOptions.EdgeMode="Unspecified"
+                                            Data="M 14,13 A 2,2,180,1,1 18,17 A 2,2,180,1,1 14,13 
+                                            M 16,11 L 16,9 M 20,15 L 22,15 M 16,19 L 16,21 M 12,15 L 10,15
+                                            M 19,12 L 20,11 M 19,18 L 20,19 M 13,18 L 12,19 M 13,12 L 12,11"
+                                            />
+                                    </Button>
                                     <!-- minimize button -->
                                     <Button
-                                        Grid.Column="2"
+                                        x:Name="minimizeButton"
+                                        Grid.Column="3"
                                         VerticalAlignment="Top"
                                         Width="25"
                                         Height="25"
@@ -117,13 +154,15 @@
                                             Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                                             StrokeThickness="2"
                                             Stretch="None"
-                                            RenderOptions.EdgeMode="Aliased"
+                                            RenderOptions.BitmapScalingMode="Linear"
+                                            RenderOptions.EdgeMode="Unspecified"
                                             Data="M11,19 H21"
                                             />
                                     </Button>
                                     <!-- close button -->
                                     <Button
-                                        Grid.Column="3"
+                                        x:Name="closeButton"
+                                        Grid.Column="4"
                                         VerticalAlignment="Top"
                                         Width="30"
                                         Height="30"
@@ -135,7 +174,8 @@
                                             Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                                             StrokeThickness="1"
                                             Stretch="None"
-                                            RenderOptions.EdgeMode="Aliased"
+                                            RenderOptions.BitmapScalingMode="Linear"
+                                            RenderOptions.EdgeMode="Unspecified"
                                             Data="M11,11 L20,20 M12,11 L21,20 M11,20 L20,11 M12,20 L21,11"
                                             />
                                     </Button>
@@ -157,17 +197,20 @@
                         <Trigger Property="extensions:Extensions.ShowWarning" Value="True">
                             <Setter TargetName="windowBorder" 
                                     Property="BorderBrush" 
-                                    Value="{Binding Path=AlertBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{DynamicResource AlertBrush}"
                                     />
                             <Setter TargetName="windowBorder" Property="Effect">
                                 <Setter.Value>
                                     <DropShadowEffect
-                                        Color="{Binding Path=AlertColor, Source={x:Static props:Settings.Default}}"
+                                        Color="{DynamicResource AlertColor}"
                                         BlurRadius="5"
                                         ShadowDepth="0"
-                                    />
+                                        />
                                 </Setter.Value>
                             </Setter>
+                            <Setter TargetName="themeButton" Property="Visibility" Value="Hidden"/>
+                            <Setter TargetName="minimizeButton" Property="BorderBrush" Value="{DynamicResource AlertBrush}"/>
+                            <Setter TargetName="closeButton" Property="BorderBrush" Value="{DynamicResource AlertBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

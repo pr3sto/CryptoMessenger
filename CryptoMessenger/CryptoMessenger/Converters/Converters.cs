@@ -19,14 +19,10 @@ namespace CryptoMessenger.Converters
 			var color = System.Drawing.Color.FromArgb(b.Color.A, b.Color.R, b.Color.G, b.Color.B);
 			float brightness = color.GetBrightness();
 
-			if (brightness < 0.2f)
-				return Properties.Settings.Default.TextPrimaryBrush;
-			else if (brightness < 0.5f)
-				return Properties.Settings.Default.TextSecondaryBrush;
-			else if (brightness < 0.8f)
-				return Properties.Settings.Default.UISecondaryBrush;
+			if (brightness < 0.5f)
+				return new SolidColorBrush(Color.FromRgb(255, 255, 255));
 			else
-				return Properties.Settings.Default.UIPrimaryBrush;
+				return new SolidColorBrush(Color.FromRgb(0, 0, 0));
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

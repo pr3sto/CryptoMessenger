@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <!-- styles -->
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views/Themes/DarkTheme.xaml"/>
                 <ResourceDictionary Source="Views/Styles/WindowStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/TextBoxStyle.xaml" />
                 <ResourceDictionary Source="Views/Styles/PasswordBoxStyle.xaml" />

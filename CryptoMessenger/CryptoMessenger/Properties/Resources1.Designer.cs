@@ -483,6 +483,16 @@ namespace CryptoMessenger.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] RobotoCondensed_Bold {
+            get {
+                object obj = ResourceManager.GetObject("RobotoCondensed_Bold", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] RobotoCondensed_Regular {
             get {
                 object obj = ResourceManager.GetObject("RobotoCondensed_Regular", resourceCulture);

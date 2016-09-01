@@ -8,14 +8,13 @@
     xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"     
     >
-    <Grid Height="460">
+    <Grid Height="460" Width="740">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250">
-            </ColumnDefinition>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -23,7 +22,6 @@
         <Grid
             Grid.Row="1"
             Grid.Column="0"
-            Margin="20,10,10,20"
             >
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -32,6 +30,18 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
+            <!-- header colors -->
+            <Border 
+                Grid.Row="0"
+                BorderThickness="0 0 0 1"
+                BorderBrush="{DynamicResource UIPrimaryShadeBrush}"
+                />
+            <Border 
+                Grid.Row="2"
+                BorderThickness="0 1 0 1"
+                BorderBrush="{DynamicResource UIPrimaryShadeBrush}"
+                />
+
             <!-- list of income reqs -->
             <TextBlock 
                 Grid.Row="0"
@@ -39,7 +49,7 @@
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
+                Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="{Binding Source={x:Static props:Resources.IncomeRequestsTextblockText}}"
                 />
             <!-- empty list notify -->
@@ -49,9 +59,14 @@
                 HorizontalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                FontSize="20" 
+                Margin="10"
+                TextWrapping="Wrap"
+                TextAlignment="Center"
+                FontSize="22" 
+                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
                 Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                Text="{Binding Source={x:Static props:Resources.EmptyRequestsListboxPlaceholder}}">
+                Text="{Binding Source={x:Static props:Resources.EmptyRequestsListboxPlaceholder}}"
+                >
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -71,7 +86,6 @@
                 ItemsSource="{Binding IncomeReqsList}"
                 IsTabStop="False"
                 KeyboardNavigation.TabNavigation="None"
-                Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                 HorizontalContentAlignment="Stretch"
                 >
                 <ListBox.ItemTemplate>
@@ -91,7 +105,7 @@
                                 HorizontalAlignment="Left"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
-                                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
                                 Text="{Binding Path=Name}" 
                                 />
                             <!-- accept income request button -->
@@ -103,7 +117,7 @@
                                 IsTabStop="False"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Right"
-                                Height="25" Width="25"
+                                Height="16" Width="16"
                                 Foreground="White"
                                 Command="{Binding Path=AcceptRequestCommand}"
                                 ToolTip="{Binding Source={x:Static props:Resources.AcceptFriendshipButtonTooltip}}"
@@ -123,7 +137,7 @@
                                 IsTabStop="False"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Right"
-                                Height="25" Width="25"
+                                Height="16" Width="16"
                                 Foreground="White"
                                 Command="{Binding Path=RejectRequestCommand}"
                                 ToolTip="{Binding Source={x:Static props:Resources.RejectFriendshipButtonTooltip}}"
@@ -143,8 +157,7 @@
                                     AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}"
                                 Value="True"
                                 >
-                                <Setter TargetName="incomeTextBlock" Property="Foreground" 
-                                        Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+                                <Setter TargetName="incomeTextBlock" Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
                                 <Setter TargetName="incomeAcceptButton" Property="Visibility" Value="Visible"/>
                                 <Setter TargetName="incomeRejectButton" Property="Visibility" Value="Visible"/>
                             </DataTrigger>
@@ -171,7 +184,7 @@
                 VerticalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
+                Foreground="{DynamicResource TextPrimaryBrush}"
                 Text="{Binding Source={x:Static props:Resources.OutcomeRequestsTextblockText}}"
                 />
             <!-- empty list notify -->
@@ -181,9 +194,14 @@
                 HorizontalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                FontSize="20" 
+                Margin="10"
+                TextWrapping="Wrap"
+                TextAlignment="Center"
+                FontSize="22" 
+                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
                 Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                Text="{Binding Source={x:Static props:Resources.EmptyRequestsListboxPlaceholder}}">
+                Text="{Binding Source={x:Static props:Resources.EmptyRequestsListboxPlaceholder}}"
+                >
                 <TextBlock.Style>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -203,7 +221,6 @@
                 ItemsSource="{Binding OutcomeReqsList}"
                 IsTabStop="False"
                 KeyboardNavigation.TabNavigation="None"
-                Background="{Binding Path=UIPrimaryBrush, Source={x:Static props:Settings.Default}}"
                 HorizontalContentAlignment="Stretch"
                 >
                 <ListBox.ItemTemplate>
@@ -217,7 +234,7 @@
                                 HorizontalAlignment="Left"
                                 TextOptions.TextRenderingMode="ClearType"
                                 TextOptions.TextFormattingMode="Display"
-                                Foreground="{Binding Path=TextSecondaryBrush, Source={x:Static props:Settings.Default}}"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
                                 Text="{Binding Path=Name}" 
                                 />
                             <!-- cancel outcome request button -->
@@ -228,7 +245,7 @@
                                 IsTabStop="False"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Right"
-                                Height="25" Width="25"
+                                Height="16" Width="16"
                                 Foreground="White"
                                 Command="{Binding Path=CancelRequestCommand}"
                                 ToolTip="{Binding Source={x:Static props:Resources.CancelRequestButtonTooltip}}"
@@ -248,8 +265,7 @@
                                     AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}"
                                 Value="True"
                                 >
-                                <Setter TargetName="outcomeTextBlock" Property="Foreground" 
-                                        Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+                                <Setter TargetName="outcomeTextBlock" Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
                                 <Setter TargetName="outcomeCancelButton" Property="Visibility" Value="Visible"/>
                             </DataTrigger>
                             <!-- on selected item -->

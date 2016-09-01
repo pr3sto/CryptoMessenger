@@ -77,7 +77,12 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (hideWarningCommand == null)
 				{
-					hideWarningCommand = new DelegateCommand(delegate { ShowWarning = false; });
+					hideWarningCommand = new DelegateCommand(async delegate 
+					{
+						// wait for animation
+						await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(300));
+						ShowWarning = false;
+					});
 				}
 				return hideWarningCommand;
 			}

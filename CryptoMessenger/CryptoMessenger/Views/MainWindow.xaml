@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:CryptoMessenger"
@@ -18,7 +19,7 @@
         WindowStartupLocation="CenterScreen"
         Height="500" Width="750"
         FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed"
-        FontSize="15"
+        FontSize="13.5"
         Title="{Binding Source={x:Static props:Resources.AppName}}" 
         Icon="/CryptoMessenger;component/Resources/icon.ico"
         extensions:Extensions.ShowWarning="{Binding ShowWarning}"
@@ -32,10 +33,24 @@
         <DataTemplate DataType="{x:Type viewmodels:MainPanelViewModel}">
             <usercontrols:MainPanel />
         </DataTemplate>
+        
+        <!-- error appear animation -->
+        <Storyboard x:Key="errorAppearStb">
+            <DoubleAnimation 
+                Storyboard.TargetName="border"
+                Storyboard.TargetProperty="(Effect).Radius"
+                From="0" To="20" Duration="0:0:0.3"
+                />
+            <DoubleAnimation 
+                Storyboard.TargetName="warningPanel"
+                Storyboard.TargetProperty="(Grid.Opacity)"
+                From="0.0" To="1.0" Duration="0:0:0.3"
+                />
+        </Storyboard>
     </Window.Resources>
 
-    <Grid Height="460">
-        <Border>
+    <Grid Height="460" Width="740">
+        <Border x:Name="border">
             <!-- content -->
             <ContentControl Content="{Binding MainWindowPanel}"/>
             <!-- blur when warning shows -->
@@ -61,23 +76,24 @@
             Visibility="{Binding Path=ShowWarning, Converter={StaticResource BooleanToVisibilityConverter}}"
             >
             <TextBlock
-                Margin="0,140,0,0"
-                Width="400"
+                Margin="0,135,0,0"
+                Width="350"
                 TextWrapping="Wrap"
                 TextAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
                 HorizontalAlignment="Center"
-                FontSize="20"
+                FontSize="22"
+                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
                 Foreground="Red"
                 Text="{Binding Source={x:Static props:Resources.ConnectionBreaksNotification}}"
                 />
             <Button 
                 Cursor="Hand"
-                Margin="175,60,0,0"
+                Margin="210 100 0 0"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Left"
-                Height="40" Width="190"
+                Height="35" Width="150"
                 IsTabStop="False"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
@@ -93,19 +109,37 @@
                             <!-- mouse pressed -->
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Foreground" 
-                                    Value="{Binding Path=AlertBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{DynamicResource AlertBrush}"
                                     />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.Click">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation 
+                                    Storyboard.TargetName="border"
+                                    Storyboard.TargetProperty="(Effect).Radius"
+                                    From="20" To="0" Duration="0:0:0.3"
+                                    />
+                                <DoubleAnimation 
+                                    Storyboard.TargetName="warningPanel"
+                                    Storyboard.TargetProperty="(Grid.Opacity)"
+                                    From="1.0" To="0.0" Duration="0:0:0.3"
+                                    />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
             </Button>
             <Button
                 Cursor="Hand"
-                Margin="0,60,175,0"
+                Margin="0 100 210 0"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
-                Height="40" Width="190"
+                Height="35" Width="150"
                 IsTabStop="False"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
@@ -121,7 +155,7 @@
                             <!-- mouse pressed -->
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Foreground" 
-                                    Value="{Binding Path=AlertBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{DynamicResource AlertBrush}"
                                     />
                             </Trigger>
                         </Style.Triggers>
@@ -135,6 +169,11 @@
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding WindowClosingCommand}" />
         </i:EventTrigger>
+
+        <ei:DataTrigger Binding="{Binding ShowWarning, Mode=OneWay}" Value="True">
+            <ei:ControlStoryboardAction Storyboard="{StaticResource errorAppearStb}"     
+                                        ControlStoryboardOption="Play"/>
+        </ei:DataTrigger>
     </i:Interaction.Triggers>
 
 </Window>

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Linq;
 
 namespace CryptoMessenger.Views.Styles
 {
@@ -21,6 +22,13 @@ namespace CryptoMessenger.Views.Styles
 
 		private IntPtr hWnd;
 		private Window window;
+
+		internal enum Theme { Light, Dark };
+		Theme currentTheme = Theme.Dark;
+		
+		private const string LightThemePath = "Views/Themes/LightTheme.xaml";
+		private const string DarkThemePath = "Views/Themes/DarkTheme.xaml";
+		
 
 		private IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 		{
@@ -63,8 +71,91 @@ namespace CryptoMessenger.Views.Styles
 			if (_window != null)
 			{
 				window = _window;
+
+				// transform for animation
+				ScaleTransform myScaleTransform = new ScaleTransform(1, 1, 375, 250);
+				window.RegisterName("MyAnimatedScaleTransform", myScaleTransform);
+				window.RenderTransform = myScaleTransform;
+
 				hWnd = new System.Windows.Interop.WindowInteropHelper(window).Handle;
 				System.Windows.Interop.HwndSource.FromHwnd(hWnd).AddHook(WindowProc);
+			}
+		}
+
+		// change theme
+		void ThemeButton_Click(object sender, RoutedEventArgs e)
+		{
+			// opacity animation
+			var opacityDownAnim = new DoubleAnimation(0, TimeSpan.FromMilliseconds(300));
+			var opacityUpAnim = new DoubleAnimation(1, TimeSpan.FromMilliseconds(300));
+
+			// scale animation
+			SineEase easingFunction = new SineEase();
+			easingFunction.EasingMode = EasingMode.EaseIn;
+			var scaleDownAnim = new DoubleAnimation(0.001, TimeSpan.FromMilliseconds(300));
+			scaleDownAnim.EasingFunction = easingFunction;
+			var scaleUpAnim = new DoubleAnimation(1, TimeSpan.FromMilliseconds(300));
+			scaleUpAnim.EasingFunction = easingFunction;
+
+			// storyboard
+			var storyboard = new Storyboard();
+
+			Storyboard.SetTargetProperty(opacityDownAnim, new PropertyPath(UIElement.OpacityProperty));
+			Storyboard.SetTargetName(scaleDownAnim, "MyAnimatedScaleTransform");
+			Storyboard.SetTargetProperty(scaleDownAnim, new PropertyPath(ScaleTransform.ScaleYProperty));
+
+			Storyboard.SetTargetProperty(opacityUpAnim, new PropertyPath(UIElement.OpacityProperty));
+			Storyboard.SetTargetName(scaleUpAnim, "MyAnimatedScaleTransform");
+			Storyboard.SetTargetProperty(scaleUpAnim, new PropertyPath(ScaleTransform.ScaleYProperty));
+
+			storyboard.Children.Add(opacityDownAnim);
+			storyboard.Children.Add(scaleDownAnim);
+
+			storyboard.Completed += delegate 
+			{
+				ChangeTheme();
+				storyboard = new Storyboard();
+				storyboard.Children.Add(opacityUpAnim);
+				storyboard.Children.Add(scaleUpAnim);
+				window.BeginStoryboard(storyboard);
+			};
+
+			window.BeginStoryboard(storyboard);
+		}
+
+		void ChangeTheme()
+		{
+			if (currentTheme == Theme.Dark)
+			{
+				// remove old theme
+				Application.Current.Resources.MergedDictionaries.Remove(
+					Application.Current.Resources.MergedDictionaries.FirstOrDefault(
+						x => x.Source.OriginalString.Equals(DarkThemePath)
+						)
+					);
+
+				// apply new theme
+				var newTheme = new ResourceDictionary();
+				newTheme.Source = new Uri(LightThemePath, UriKind.Relative);
+				Application.Current.Resources.MergedDictionaries.Add(newTheme);
+
+				currentTheme = Theme.Light;
+			}
+			else
+			{
+				// remove old theme
+				Application.Current.Resources.MergedDictionaries.Remove(
+					Application.Current.Resources.MergedDictionaries.FirstOrDefault(
+						x => x.Source.OriginalString.Equals(LightThemePath)
+						)
+					);
+
+				// apply new theme
+				var newTheme = new ResourceDictionary();
+				newTheme.Source = new Uri(DarkThemePath, UriKind.Relative);
+				Application.Current.Resources.MergedDictionaries.Add(newTheme);
+
+				currentTheme = Theme.Dark;
 			}
 		}
 
@@ -89,11 +180,6 @@ namespace CryptoMessenger.Views.Styles
 			// scale X animation
 			var scaleXAnim = new DoubleAnimation(0, TimeSpan.FromMilliseconds(200));
 			scaleXAnim.BeginTime = TimeSpan.FromMilliseconds(300);
-
-			// animated transform
-			ScaleTransform myScaleTransform = new ScaleTransform(1, 1, 375, 250);
-			window.RegisterName("MyAnimatedScaleTransform", myScaleTransform);
-			window.RenderTransform = myScaleTransform;
 
 			// storyboard
 			var storyboard = new Storyboard();

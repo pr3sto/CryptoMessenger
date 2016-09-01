@@ -8,7 +8,7 @@
 
     <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Foreground" Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -17,15 +17,17 @@
                         <!-- background color -->
                         <Rectangle 
                             x:Name="backgroundRect"
+                            RenderOptions.EdgeMode="Aliased"
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch" 
-                            Fill="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
+                            Fill="{DynamicResource UISecondaryBrush}"
                             />
                         <!-- background image -->
                         <Rectangle 
                             x:Name="backgroundImage"
                             HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch" 
+                            RenderOptions.BitmapScalingMode="Linear"
                             Fill="{TemplateBinding Foreground}"
                             OpacityMask="{TemplateBinding Background}"
                             />
@@ -45,13 +47,13 @@
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="backgroundRect" Property="Fill" 
-                                    Value="{Binding Path=UISecondaryLightBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{DynamicResource UISecondaryShadeBrush}"
                                     />
                         </Trigger>
                         <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="backgroundRect" Property="Fill" 
-                                    Value="{Binding Path=UISecondaryBrush, Source={x:Static props:Settings.Default}}"
+                                    Value="{DynamicResource UISecondaryBrush}"
                                     />
                             <Setter Property="Foreground" 
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
@@ -60,9 +62,9 @@
                         <!-- button disabled -->
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter TargetName="backgroundImage" Property="Fill" 
-                                    Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+                                    Value="{DynamicResource TextSecondaryBrush}"/>
                             <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
-                                    Value="{Binding Path=TextPrimaryBrush, Source={x:Static props:Settings.Default}}"/>
+                                    Value="{DynamicResource TextSecondaryBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
