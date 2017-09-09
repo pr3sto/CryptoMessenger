@@ -3,7 +3,7 @@
 namespace Server
 {
 	/// <summary>
-	/// Help methods for logger. 
+	/// Help methods for logger.
 	/// </summary>
 	class LogHelper
 	{

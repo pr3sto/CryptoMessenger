@@ -48,7 +48,7 @@ namespace MessageProtocol
 		public SslStream sslStream { get; set; }
 
 		/// <summary>
-		/// Connects the client to a remote host using the specified 
+		/// Connects the client to a remote host using the specified
 		/// IP address and port number as an asynchronous operation.
 		/// </summary>
 		/// <param name="host">host.</param>
@@ -86,7 +86,7 @@ namespace MessageProtocol
 		}
 
 		/// <summary>
-		/// Connects the client to a remote host using the specified 
+		/// Connects the client to a remote host using the specified
 		/// IP address and port number as an asynchronous operation.
 		/// </summary>
 		/// <param name="host">host.</param>
@@ -180,13 +180,12 @@ namespace MessageProtocol
 					sslStream.Write(DataLength);
 					// send message
 					sslStream.Write(BinaryData);
-				}	
+				}
 			}
 			catch
 			{
 				throw new ConnectionInterruptedException("Error sending data.");
 			}
-			
 		}
 
 		/// <summary>
@@ -274,7 +273,7 @@ namespace MessageProtocol
 		}
 
 		/// <summary>
-		/// Accepts a pending connection request as an asynchronous operation. 
+		/// Accepts a pending connection request as an asynchronous operation.
 		/// </summary>
 		/// <exception cref="SocketException"></exception>
 		/// <exception cref="ConnectionInterruptedException"></exception>
@@ -301,7 +300,7 @@ namespace MessageProtocol
 					{
 						tcpClient = tcpClient,
 						sslStream = sslStream
-					};			
+					};
 				}
 				catch (CertificateException e)
 				{

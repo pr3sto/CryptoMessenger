@@ -49,8 +49,7 @@ namespace Server
 			}
 			catch (CertificateException e)
 			{
-				log.Info("Can't create certificate. Server will not start.");
-				log.Error(e);
+				log.Error("Can't create certificate. Server will not start.", e);
 			}
 		}
 
@@ -112,12 +111,12 @@ namespace Server
 				{
 					// connection with client broke
 					// nothing critical, just continue
-					log.Error(e);
+					log.Error("Connection with client broke.", e);
 					continue;
 				}
 				catch (SocketException e)
 				{
-					log.Info("Socket exception. Trying to restart listening.", e);
+					log.Error("Socket exception. Trying to restart listening.", e);
 
 					mpListener.Stop();
 					mpListener = null;
@@ -178,9 +177,7 @@ namespace Server
 				}
 				catch (ConnectionInterruptedException e)
 				{
-					log.Error(e);
-
-					log.Info($"Client disconnected. ip {((IPEndPoint)client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
+					log.Error("Connection with client brokes.", e);
 				}
 			});
 		}
@@ -208,10 +205,10 @@ namespace Server
 			}
 			else
 			{
-				int id; // client's id in db
-				if (DBoperations.Login(message.Login, message.Password, out id))
+				// client's id in db
+				if (DBoperations.Login(message.Login, message.Password, out int id))
 				{
-					log.Info($"Client login: {message.Login}");
+					log.Info($"Client logged in: {message.Login}");
 
 					// user is online
 					OnlineUser user = new OnlineUser(id, message.Login, client);
@@ -232,7 +229,7 @@ namespace Server
 			}
 			catch (ConnectionInterruptedException e)
 			{
-				log.Error(e);
+				log.Error("Connection with client broke.", e);
 			}
 
 			// close connection with client if client not logged in
@@ -288,7 +285,7 @@ namespace Server
 			}
 			catch (ConnectionInterruptedException e)
 			{
-				log.Error(e);
+				log.Error("Connection with client brokes.", e);
 			}
 
 			// close connection

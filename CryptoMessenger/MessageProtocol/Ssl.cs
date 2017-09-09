@@ -29,7 +29,7 @@ namespace MessageProtocol
 	}
 
 	/// <summary>
-	/// Things needed for organizing ssl stream 
+	/// Things needed for organizing ssl stream
 	/// between client and server.
 	/// </summary>
 	static class Ssl
@@ -138,7 +138,7 @@ namespace MessageProtocol
 
 		#endregion
 	}
-	
+
 	/// <summary>
 	/// Helper class for ssl.
 	/// </summary>

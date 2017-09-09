@@ -1,6 +1,6 @@
 ﻿using System;
 
-// logger config 
+// logger config
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
 namespace Server

@@ -35,7 +35,6 @@ namespace MessageProtocol.MessageTypes
 	/// </summary>
 	[Serializable]
 	[XmlInclude(typeof(LoginRequestMessage))]
-	[XmlInclude(typeof(LogoutRequestMessage))]
 	[XmlInclude(typeof(RegisterRequestMessage))]
 	[XmlInclude(typeof(GetNotificationsMessage))]
 	[XmlInclude(typeof(GetAllUsersMessage))]
@@ -57,7 +56,7 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
+	/// Message, that client send to server
 	/// when try to login.
 	/// </summary>
 	[Serializable]
@@ -68,7 +67,7 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
+	/// Message, that client send to server
 	/// when try to register.
 	/// </summary>
 	[Serializable]
@@ -89,16 +88,7 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
-	/// when log out.
-	/// </summary>
-	[Serializable]
-	public class LogoutRequestMessage : Message
-	{
-	}
-
-	/// <summary>
-	/// Message, that client send to server 
+	/// Message, that client send to server
 	/// to get array of all notifications.
 	/// </summary>
 	[Serializable]
@@ -107,7 +97,7 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
+	/// Message, that client send to server
 	/// to get array of all users.
 	/// </summary>
 	[Serializable]
@@ -126,7 +116,7 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
+	/// Message, that client send to server
 	/// to get array of friends.
 	/// </summary>
 	[Serializable]
@@ -145,7 +135,7 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
+	/// Message, that client send to server
 	/// to get income friendship requests.
 	/// </summary>
 	[Serializable]
@@ -163,7 +153,7 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
+	/// Message, that client send to server
 	/// to get outcome friendship requests.
 	/// </summary>
 	[Serializable]
@@ -201,7 +191,7 @@ namespace MessageProtocol.MessageTypes
 	}
 
 	/// <summary>
-	/// Message, that client send to server 
+	/// Message, that client send to server
 	/// to get conversation with interlocutor.
 	/// </summary>
 	[Serializable]
