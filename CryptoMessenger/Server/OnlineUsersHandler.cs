@@ -288,6 +288,13 @@ namespace Server
 						Time = notification.time,
 						Action = UserActions.RemoveFromFriends
 					});
+				else
+					user.Client.SendMessage(new UserActionMessage
+					{
+						UserLogin = DBoperations.GetUserLogin(notification.user_two),
+						Time = notification.time,
+						Action = UserActions.MessageSended
+					});
 			}
 
 			// delete notifications from db
@@ -597,13 +604,22 @@ namespace Server
 
 				// send reply to user two if online
 				OnlineUser friend = GetOnlineUser(interlocutor);
-				friend?.Client.SendMessage(new NewReplyMessage
+
+				if (friend != null)
 				{
-					Interlocutor = user.Login,
-					Author = user.Login,
-					Time = time,
-					Text = text
-				});
+					friend.Client.SendMessage(new NewReplyMessage
+					{
+						Interlocutor = user.Login,
+						Author = user.Login,
+						Time = time,
+						Text = text
+					});
+				}
+				// write notification to db
+				else
+				{
+					DBoperations.AddNotification(interlocutorId, user.Id, UserActions.MessageSended, DateTime.Now);
+				}
 			}
 		}
 

@@ -301,4 +301,7 @@
   <data name="WindowThemeButtonTooltip" xml:space="preserve">
     <value>Поменять тему</value>
   </data>
+  <data name="MessageSendedNotificationText" xml:space="preserve">
+    <value>отправил вам сообщение.</value>
+  </data>
 </root>

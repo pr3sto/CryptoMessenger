@@ -62,16 +62,38 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="25">
-                        <!-- friend's login -->
-                        <TextBlock
-                            x:Name="loginTextBlock"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            TextOptions.TextRenderingMode="ClearType"
-                            TextOptions.TextFormattingMode="Display"
-                            Foreground="{DynamicResource TextPrimaryBrush}"
-                            Text="{Binding Name}"
-                            />
+                        <Grid HorizontalAlignment="Left">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <!-- unread messages -->
+                            <Rectangle
+                                Grid.Column="0"
+                                x:Name="unreadMessagesRectangle"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                RenderOptions.BitmapScalingMode="Linear"
+                                RenderOptions.EdgeMode="Aliased"
+                                Width="25" Height="25"
+                                Visibility="Collapsed"
+                                Fill="{DynamicResource TextPrimaryBrush}"
+                                >
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/CryptoMessenger;component/Resources/envelope.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <!-- friend's login -->
+                            <TextBlock
+                                Grid.Column="1"
+                                x:Name="loginTextBlock"
+                                VerticalAlignment="Center"
+                                TextOptions.TextRenderingMode="ClearType"
+                                TextOptions.TextFormattingMode="Display"
+                                Foreground="{DynamicResource TextPrimaryBrush}"
+                                Text="{Binding Name}"
+                                />
+                        </Grid>
                         <!-- friend's status -->
                         <TextBlock
                             x:Name="statusTextBlock"
@@ -102,6 +124,11 @@
                     </Grid>
 
                     <DataTemplate.Triggers>
+                        <!-- unread messages -->
+                        <DataTrigger Binding="{Binding HasUnreadMessages}" Value="True">
+                            <Setter TargetName="unreadMessagesRectangle" Property="Visibility"
+                                    Value="Visible"/>
+                        </DataTrigger>
                         <!-- online status -->
                         <DataTrigger Binding="{Binding IsOnline}" Value="True">
                             <Setter TargetName="statusTextBlock" Property="Foreground"

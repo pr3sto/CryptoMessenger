@@ -26,6 +26,7 @@ namespace MessageProtocol.MessageTypes
 		AcceptFriendship,
 		RejectFriendship,
 		RemoveFromFriends,
+		MessageSended,
 		GoOnline,
 		GoOffline
 	};

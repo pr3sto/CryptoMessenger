@@ -17,10 +17,10 @@ namespace CryptoMessenger.ViewModels
 	{
 		private Client client;
 
-		// friend's name.
+		// friend's name
 		public string Name { get; }
 
-		// friends list
+		// friend's status
 		private bool isOnline;
 		public bool IsOnline
 		{
@@ -32,11 +32,24 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
+		// has unread messages from this friend
+		private bool hasUnreadMessages;
+		public bool HasUnreadMessages
+		{
+			get { return hasUnreadMessages; }
+			set
+			{
+				hasUnreadMessages = value;
+				OnPropertyChanged(nameof(HasUnreadMessages));
+			}
+		}
+
 		public Friend(Client client, string name, bool isOnline)
 		{
 			this.client = client;
 			Name = name;
 			IsOnline = isOnline;
+			HasUnreadMessages = false;
 		}
 
 		// remove friend
@@ -128,6 +141,13 @@ namespace CryptoMessenger.ViewModels
 		{
 			if (SelectedFriend != null && interlocutor == SelectedFriend.Name)
 				RepliesList.Add(new Reply(reply, client.Name));
+			else
+			{
+				Friend f = FriendsList.FirstOrDefault(x => x.Name.Equals(interlocutor));
+
+				if (f != null)
+					f.HasUnreadMessages = true;
+			}
 		}
 
 		// update conversations
@@ -244,6 +264,8 @@ namespace CryptoMessenger.ViewModels
 
 						RepliesList = new ObservableCollection<Reply>(replies);
 					}
+
+					selectedFriend.HasUnreadMessages = false;
 				}
 
 				OnPropertyChanged(nameof(SelectedFriend));

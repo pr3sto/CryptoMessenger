@@ -74,6 +74,13 @@ namespace CryptoMessenger.ViewModels
 				await addNotification(notification, time);
 			};
 
+			client.MessageSended += async delegate (string login, DateTime time)
+			{
+				string notification = login + " " + Properties.Resources.MessageSendedNotificationText;
+				await addNotification(notification, time);
+			};
+
+
 			client.ConnectionBreaks += delegate { IsOnline = false; };
 
 			RequestsButtonSelected = false;

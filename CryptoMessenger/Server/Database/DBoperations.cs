@@ -566,6 +566,15 @@ namespace Server.Database
 						};
 						break;
 
+					case UserActions.MessageSended:
+						newNotification = new Notification
+						{
+							user_one = userOneId,
+							user_two = userTwoId,
+							time = actionTime
+						};
+						break;
+
 					default:
 						return false;
 				}

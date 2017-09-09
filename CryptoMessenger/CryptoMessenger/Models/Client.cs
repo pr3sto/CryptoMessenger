@@ -39,6 +39,7 @@ namespace CryptoMessenger.Models
 		public event Action<string, DateTime> FriendshipRequestCancelled;
 		public event Action<string, DateTime> NewFriendshipRequest;
 		public event Action<string, DateTime> RemovedFromeFriends;
+		public event Action<string, DateTime> MessageSended;
 		public event Action<string, ConversationReply> NewReplyComes;
 		public event Action<string, ConversationReply> OldReplyComes;
 
@@ -373,6 +374,10 @@ namespace CryptoMessenger.Models
 							RemovedFromeFriends?.Invoke(msg.UserLogin, msg.Time);
 							OnlineFriendsList?.Remove(msg.UserLogin);
 							OfflineFriendsList?.Remove(msg.UserLogin);
+							break;
+
+						case UserActions.MessageSended:
+							MessageSended?.Invoke(msg.UserLogin, msg.Time);
 							break;
 
 						default:

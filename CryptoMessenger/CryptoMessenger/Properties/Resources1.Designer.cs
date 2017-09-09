@@ -353,6 +353,15 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to отправил вам сообщение..
+        /// </summary>
+        public static string MessageSendedNotificationText {
+            get {
+                return ResourceManager.GetString("MessageSendedNotificationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;Enter&gt; - отправить, &lt;Shift&gt;+&lt;Enter&gt; - новая строка.
         /// </summary>
         public static string MessageTextboxPlaceholder {
