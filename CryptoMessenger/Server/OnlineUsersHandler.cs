@@ -47,7 +47,7 @@ namespace Server
 
 			try
 			{
-				Client.Close();	
+				Client.Close();
 			}
 			catch
 			{
@@ -113,7 +113,7 @@ namespace Server
 
 			// listen this user
 			Task.Run(() => UserListener(user));
-		}	
+		}
 
 		/// <summary>
 		/// Get online user.
@@ -145,10 +145,7 @@ namespace Server
 				{
 					if (onlineUsers.Contains(user))
 					{
-						log.Info($"Client disconnected. ip {((IPEndPoint)user.Client.tcpClient.Client.RemoteEndPoint).Address.ToString()}");
-
-						onlineUsers.Remove(user);
-						user.Dispose();
+						Logout(user);
 					}
 					break;
 				}
@@ -184,6 +181,10 @@ namespace Server
 					{
 						SetFriendshipRequest(user, ((FriendshipRequestMessage)message).LoginOfNeededUser);
 					}
+					else if (message is NewReplyMessage)
+					{
+						HandleReply(user, ((NewReplyMessage)message).Interlocutor, ((NewReplyMessage)message).Text);
+					}
 					else if (message is UserActionMessage)
 					{
 						UserActionMessage msg = (UserActionMessage)message;
@@ -206,19 +207,10 @@ namespace Server
 								break;
 						}
 					}
-					else if (message is NewReplyMessage)
-					{
-						HandleReply(user, ((NewReplyMessage)message).Interlocutor, ((NewReplyMessage)message).Text);
-					}
-					else if (message is LogoutRequestMessage)
-					{
-						Logout(user);
-						break;
-					}
 				}
 				catch (ConnectionInterruptedException e)
 				{
-					log.Error($"Client '{user.Login}' disconnected", e);
+					log.Error($"Connection with client '{user.Login}' brokes.", e);
 				}
 			}
 		}
@@ -280,7 +272,7 @@ namespace Server
 					{
 						UserLogin = DBoperations.GetUserLogin(notification.user_two),
 						Time = notification.time,
-						Action = UserActions.SendFriendshipRequest				
+						Action = UserActions.SendFriendshipRequest
 					});
 				else if (notification.cancel_friendship)
 					user.Client.SendMessage(new UserActionMessage
@@ -315,7 +307,7 @@ namespace Server
 			string[] friends = DBoperations.GetFriends(user.Id);
 
 			string[] users = allUsers.Where(x =>
-				!incomeRequests.Contains(x) & 
+				!incomeRequests.Contains(x) &
 				!outcomeRequests.Contains(x) &
 				!friends.Contains(x) &
 				x != user.Login).ToArray();
@@ -416,7 +408,7 @@ namespace Server
 				// send new data to user one
 				SendAllUsers(user);
 				SendOutcomeFriendshipRequests(user);
-				
+
 				OnlineUser friend = GetOnlineUser(friendLogin);
 				// send notification to user two if online
 				if (friend != null)

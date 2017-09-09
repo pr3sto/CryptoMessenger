@@ -18,7 +18,7 @@ namespace CryptoMessenger.Models
 		// is client logged in
 		private bool isLoggedIn = false;
 
-		// server's port 
+		// server's port
 		private int port;
 		// servers ip addres
 		private string ip;
@@ -145,7 +145,7 @@ namespace CryptoMessenger.Models
 		{
 			// get data from connection.cfg
 			XDocument doc = XDocument.Load("connection.config");
-			
+
 			var _ip = doc.Descendants("ip");
 			ip = "";
 			foreach (var i in _ip) ip = i.Value;
@@ -280,22 +280,11 @@ namespace CryptoMessenger.Models
 
 			try
 			{
-				client.SendMessage(new LogoutRequestMessage());
+				client.Close();
 			}
 			catch (ConnectionInterruptedException)
 			{
 				// dont mind because we exit
-			}
-			finally
-			{
-				try
-				{
-					client.Close();
-				}
-				catch (ConnectionInterruptedException)
-				{
-					// dont mind because we exit
-				}
 			}
 		}
 
@@ -305,7 +294,7 @@ namespace CryptoMessenger.Models
 		public async void Listen()
 		{
 			if (!isLoggedIn) return;
-			
+
 			// message from server
 			Message message;
 
@@ -562,7 +551,7 @@ namespace CryptoMessenger.Models
 				Action = UserActions.CancelFriendshipRequest
 			});
 		}
-		
+
 		/// <summary>
 		/// Send to server request about accepting friendship request.
 		/// </summary>
