@@ -12,4 +12,4 @@ Console server.
 
 ## Protocol
 
-Comunication protocol between client and server - MessageProtocol that is based on TCP.
+Communication protocol between client and server - MessageProtocol that is based on TCP.
