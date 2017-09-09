@@ -20,6 +20,9 @@ namespace CryptoMessenger.ViewModels
 		// friend's name
 		public string Name { get; }
 
+		// Is conversation with friend downloaded
+		public bool IsConversationDownloaded { get; set; }
+
 		// friend's status
 		private bool isOnline;
 		public bool IsOnline
@@ -50,6 +53,8 @@ namespace CryptoMessenger.ViewModels
 			Name = name;
 			IsOnline = isOnline;
 			HasUnreadMessages = false;
+			IsConversationDownloaded = false;
+
 		}
 
 		// remove friend
@@ -248,10 +253,12 @@ namespace CryptoMessenger.ViewModels
 
 				if (selectedFriend != null)
 				{
-					if (!client.Conversations.Contains(selectedFriend.Name))
+					if (!selectedFriend.IsConversationDownloaded)
 					{
 						client.GetConversation(selectedFriend.Name);
 						RepliesList = new ObservableCollection<Reply>();
+						selectedFriend.IsConversationDownloaded = true;
+
 					}
 					else
 					{
