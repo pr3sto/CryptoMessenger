@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoMessenger", "CryptoMe
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CryptoMessengerSetup", "CryptoMessengerSetup\CryptoMessengerSetup.vdproj", "{40601D60-215A-4AF0-A640-34142DBAD3FE}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{35607918-CA0C-4E4A-9969-FD261ED0D393}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{D0FB4964-09F5-419F-ABBF-5B2AA2F9E466}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,9 +53,27 @@ Global
 		{40601D60-215A-4AF0-A640-34142DBAD3FE}.Debug|x64.ActiveCfg = Debug
 		{40601D60-215A-4AF0-A640-34142DBAD3FE}.Release|Any CPU.ActiveCfg = Release
 		{40601D60-215A-4AF0-A640-34142DBAD3FE}.Release|x64.ActiveCfg = Release
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Debug|x64.Build.0 = Debug|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|x64.ActiveCfg = Release|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|x64.Build.0 = Release|Any CPU
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|x64.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CDDF981C-897E-40F4-A597-9EC433DB7449} = {35607918-CA0C-4E4A-9969-FD261ED0D393}
+		{41DE055A-66CB-4261-882B-792E302A9EA0} = {D0FB4964-09F5-419F-ABBF-5B2AA2F9E466}
+		{40601D60-215A-4AF0-A640-34142DBAD3FE} = {D0FB4964-09F5-419F-ABBF-5B2AA2F9E466}
+		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A} = {35607918-CA0C-4E4A-9969-FD261ED0D393}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6026F235-DA62-46D0-AD03-6236A12E6455}
