@@ -242,7 +242,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (openNotificationCommand == null)
 				{
-					openNotificationCommand = new DelegateCommand(delegate 
+					openNotificationCommand = new DelegateCommand(delegate
 					{
 						IsNotificationOpen = true;
 						if (IsNotificationOpen)

@@ -1,8 +1,7 @@
-﻿<ResourceDictionary 
+﻿<ResourceDictionary
     x:Class="CryptoMessenger.Views.Styles.TextBoxStyle"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
     xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
     >
@@ -27,12 +26,12 @@
                         >
                         <Grid Margin="5">
                             <!-- text -->
-                            <ScrollViewer 
+                            <ScrollViewer
                                 x:Name="PART_ContentHost"
                                 Margin="-1,-1,-1,-1"
                                 BorderThickness="0"
                                 Foreground="{TemplateBinding Foreground}"
-                                Background="Transparent" 
+                                Background="Transparent"
                                 Panel.ZIndex="2"
                                 VerticalAlignment="{TemplateBinding extensions:Extensions.TextVerticalAlignment}"
                                 TextOptions.TextRenderingMode="ClearType"
@@ -41,8 +40,8 @@
                             <!-- placeholder -->
                             <TextBlock
                                 x:Name="placeholder"
-                                Text="{TemplateBinding Tag}" 
-                                Background="Transparent" 
+                                Text="{TemplateBinding Tag}"
+                                Background="Transparent"
                                 Panel.ZIndex="1"
                                 VerticalAlignment="{TemplateBinding extensions:Extensions.TextVerticalAlignment}"
                                 TextOptions.TextRenderingMode="ClearType"
@@ -54,37 +53,37 @@
                     <ControlTemplate.Triggers>
                         <!-- placeholder -->
                         <Trigger Property="extensions:Extensions.TextLength" Value="0">
-                            <Setter TargetName="placeholder" Property="Foreground" 
+                            <Setter TargetName="placeholder" Property="Foreground"
                                     Value="{DynamicResource UISecondaryBrush}"/>
                         </Trigger>
                         <!-- textbox got focus -->
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="border" 
-                                    Property="BorderBrush" 
+                            <Setter TargetName="border"
+                                    Property="BorderBrush"
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
                         <!-- textbox disabled -->
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{DynamicResource UISecondaryBrush}"/>
-                            <Setter TargetName="PART_ContentHost" Property="Background" 
+                            <Setter TargetName="PART_ContentHost" Property="Background"
                                     Value="{Binding ElementName=border, Path=Background}"/>
-                            <Setter TargetName="border" 
-                                    Property="BorderBrush" 
+                            <Setter TargetName="border"
+                                    Property="BorderBrush"
                                     Value="{DynamicResource UISecondaryBrush}"
                                     />
                         </Trigger>
                         <!-- is data incorrect -->
                         <Trigger Property="extensions:Extensions.IsDataIncorrect" Value="True">
-                            <Setter TargetName="border" 
-                                    Property="BorderBrush" 
+                            <Setter TargetName="border"
+                                    Property="BorderBrush"
                                     Value="{DynamicResource AlertBrush}"
                                     />
                         </Trigger>
                         <!-- is data correct -->
                         <Trigger Property="extensions:Extensions.IsDataCorrect" Value="True">
-                            <Setter TargetName="border" 
-                                    Property="BorderBrush" 
+                            <Setter TargetName="border"
+                                    Property="BorderBrush"
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
@@ -93,5 +92,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+
 </ResourceDictionary>
-    

@@ -37,7 +37,7 @@ namespace CryptoMessenger.ViewModels
 			this.client = client;
 			Name = name;
 			IsOnline = isOnline;
-		}		
+		}
 
 		// remove friend
 		private DelegateCommand removeFriendCommand;
@@ -164,7 +164,7 @@ namespace CryptoMessenger.ViewModels
 		// your request for friendship accepted
 		private async void FriendshipAccepted(string login, DateTime time)
 		{
-			await System.Threading.Tasks.Task.Run(() => 
+			await System.Threading.Tasks.Task.Run(() =>
 			System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 			if (FriendsList.FirstOrDefault(x => x.Name.Equals(login)) == null)
 				FriendsList.Add(new Friend(client, login, true));
@@ -173,7 +173,7 @@ namespace CryptoMessenger.ViewModels
 		// you have ben removed from friends
 		private async void RemovedFromeFriends(string login, DateTime time)
 		{
-			await System.Threading.Tasks.Task.Run(() => 
+			await System.Threading.Tasks.Task.Run(() =>
 			System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 			FriendsList.Remove(FriendsList.FirstOrDefault(x => x.Name.Equals(login)));
 		}
@@ -241,7 +241,7 @@ namespace CryptoMessenger.ViewModels
 						if (repliesTmp != null)
 							foreach (var r in repliesTmp)
 								replies.Add(new Reply(r, client.Name));
-						
+
 						RepliesList = new ObservableCollection<Reply>(replies);
 					}
 				}

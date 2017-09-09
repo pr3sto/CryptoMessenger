@@ -284,12 +284,21 @@
     <value>Created by PR3STO</value>
   </data>
   <data name="CreditsHyperlink" xml:space="preserve">
-    <value>https://github.com/pr3sto/</value>
+    <value>https://pr3sto.github.io/</value>
   </data>
   <data name="CreditsHyperlinkTooltip" xml:space="preserve">
     <value>Открыть сайт разработчика в браузере</value>
   </data>
   <data name="RobotoCondensed_Bold" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RobotoCondensed-Bold.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="WindowCloseButtonTooltip" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="WindowMinimizeButtonTooltip" xml:space="preserve">
+    <value>Минимизировать</value>
+  </data>
+  <data name="WindowThemeButtonTooltip" xml:space="preserve">
+    <value>Поменять тему</value>
   </data>
 </root>

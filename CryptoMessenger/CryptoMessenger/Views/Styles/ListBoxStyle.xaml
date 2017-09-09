@@ -1,9 +1,7 @@
-﻿<ResourceDictionary 
+﻿<ResourceDictionary
     x:Class="CryptoMessenger.Views.Styles.ListBoxStyle"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
-    xmlns:props="clr-namespace:CryptoMessenger.Properties"
     >
 
     <Style x:Key="ListBoxStyle" TargetType="{x:Type ListBox}">
@@ -19,6 +17,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>
-    

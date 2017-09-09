@@ -19,7 +19,7 @@ namespace CryptoMessenger.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -133,7 +133,7 @@ namespace CryptoMessenger.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/pr3sto/.
+        ///   Looks up a localized string similar to https://pr3sto.github.io/.
         /// </summary>
         public static string CreditsHyperlink {
             get {
@@ -588,6 +588,33 @@ namespace CryptoMessenger.Properties {
         public static string WelcomeNotification {
             get {
                 return ResourceManager.GetString("WelcomeNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Закрыть.
+        /// </summary>
+        public static string WindowCloseButtonTooltip {
+            get {
+                return ResourceManager.GetString("WindowCloseButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Минимизировать.
+        /// </summary>
+        public static string WindowMinimizeButtonTooltip {
+            get {
+                return ResourceManager.GetString("WindowMinimizeButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Поменять тему.
+        /// </summary>
+        public static string WindowThemeButtonTooltip {
+            get {
+                return ResourceManager.GetString("WindowThemeButtonTooltip", resourceCulture);
             }
         }
     }

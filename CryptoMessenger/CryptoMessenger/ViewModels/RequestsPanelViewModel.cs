@@ -33,7 +33,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (acceptRequestCommand == null)
 				{
-					acceptRequestCommand = new DelegateCommand(delegate 
+					acceptRequestCommand = new DelegateCommand(delegate
 					{ client.AcceptFriendshipRequest(Name); });
 				}
 				return acceptRequestCommand;
@@ -105,26 +105,26 @@ namespace CryptoMessenger.ViewModels
 
 			client.FriendshipAccepted += async delegate (string login, DateTime time)
 			{
-				await System.Threading.Tasks.Task.Run(() => 
+				await System.Threading.Tasks.Task.Run(() =>
 				System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 				OutcomeReqsList.Remove(OutcomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
 			};
 			client.FriendshipRejected += async delegate (string login, DateTime time)
 			{
-				await System.Threading.Tasks.Task.Run(() => 
+				await System.Threading.Tasks.Task.Run(() =>
 				System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 				OutcomeReqsList.Remove(OutcomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
 			};
 			client.NewFriendshipRequest += async delegate (string login, DateTime time)
 			{
-				await System.Threading.Tasks.Task.Run(() => 
+				await System.Threading.Tasks.Task.Run(() =>
 				System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 				if (IncomeReqsList.FirstOrDefault(x => x.Name.Equals(login)) == null)
 					IncomeReqsList.Add(new IncomeRequest(client, login));
 			};
 			client.FriendshipRequestCancelled += async delegate (string login, DateTime time)
 			{
-				await System.Threading.Tasks.Task.Run(() => 
+				await System.Threading.Tasks.Task.Run(() =>
 				System.Threading.Thread.Sleep(Properties.Settings.Default.ActionDelayMsec));
 				IncomeReqsList.Remove(IncomeReqsList.FirstOrDefault(x => x.Name.Equals(login)));
 			};

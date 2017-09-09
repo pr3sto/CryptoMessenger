@@ -6,13 +6,11 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        xmlns:local="clr-namespace:CryptoMessenger"
         xmlns:props="clr-namespace:CryptoMessenger.Properties"
         xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
         xmlns:usercontrols="clr-namespace:CryptoMessenger.Views.UserControls"
         xmlns:viewmodels="clr-namespace:CryptoMessenger.ViewModels"
-        xmlns:behave="clr-namespace:CryptoMessenger.Behaviors"
-        
+
         x:Name="window"
         Style="{StaticResource WindowStyle}"
         ResizeMode="CanMinimize"
@@ -20,7 +18,7 @@
         Height="500" Width="750"
         FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed"
         FontSize="13.5"
-        Title="{Binding Source={x:Static props:Resources.AppName}}" 
+        Title="{Binding Source={x:Static props:Resources.AppName}}"
         Icon="/CryptoMessenger;component/Resources/icon.ico"
         extensions:Extensions.ShowWarning="{Binding ShowWarning}"
         >
@@ -33,15 +31,15 @@
         <DataTemplate DataType="{x:Type viewmodels:MainPanelViewModel}">
             <usercontrols:MainPanel />
         </DataTemplate>
-        
+
         <!-- error appear animation -->
         <Storyboard x:Key="errorAppearStb">
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="border"
                 Storyboard.TargetProperty="(Effect).Radius"
                 From="0" To="20" Duration="0:0:0.3"
                 />
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="warningPanel"
                 Storyboard.TargetProperty="(Grid.Opacity)"
                 From="0.0" To="1.0" Duration="0:0:0.3"
@@ -76,7 +74,7 @@
             Visibility="{Binding Path=ShowWarning, Converter={StaticResource BooleanToVisibilityConverter}}"
             >
             <TextBlock
-                Margin="0,135,0,0"
+                Margin="0,130,0,0"
                 Width="350"
                 TextWrapping="Wrap"
                 TextAlignment="Center"
@@ -88,9 +86,9 @@
                 Foreground="Red"
                 Text="{Binding Source={x:Static props:Resources.ConnectionBreaksNotification}}"
                 />
-            <Button 
+            <Button
                 Cursor="Hand"
-                Margin="210 100 0 0"
+                Margin="210 120 0 0"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Left"
                 Height="35" Width="150"
@@ -108,7 +106,7 @@
                         <Style.Triggers>
                             <!-- mouse pressed -->
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Foreground" 
+                                <Setter Property="Foreground"
                                     Value="{DynamicResource AlertBrush}"
                                     />
                             </Trigger>
@@ -119,12 +117,12 @@
                     <EventTrigger RoutedEvent="Button.Click">
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation 
+                                <DoubleAnimation
                                     Storyboard.TargetName="border"
                                     Storyboard.TargetProperty="(Effect).Radius"
                                     From="20" To="0" Duration="0:0:0.3"
                                     />
-                                <DoubleAnimation 
+                                <DoubleAnimation
                                     Storyboard.TargetName="warningPanel"
                                     Storyboard.TargetProperty="(Grid.Opacity)"
                                     From="1.0" To="0.0" Duration="0:0:0.3"
@@ -136,7 +134,7 @@
             </Button>
             <Button
                 Cursor="Hand"
-                Margin="0 100 210 0"
+                Margin="0 120 210 0"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
                 Height="35" Width="150"
@@ -154,7 +152,7 @@
                         <Style.Triggers>
                             <!-- mouse pressed -->
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Foreground" 
+                                <Setter Property="Foreground"
                                     Value="{DynamicResource AlertBrush}"
                                     />
                             </Trigger>
@@ -171,7 +169,7 @@
         </i:EventTrigger>
 
         <ei:DataTrigger Binding="{Binding ShowWarning, Mode=OneWay}" Value="True">
-            <ei:ControlStoryboardAction Storyboard="{StaticResource errorAppearStb}"     
+            <ei:ControlStoryboardAction Storyboard="{StaticResource errorAppearStb}"
                                         ControlStoryboardOption="Play"/>
         </ei:DataTrigger>
     </i:Interaction.Triggers>

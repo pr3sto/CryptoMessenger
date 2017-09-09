@@ -1,13 +1,12 @@
-﻿<UserControl 
+﻿<UserControl
     x:Class="CryptoMessenger.Views.UserControls.FriendsPanel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    mc:Ignorable="d" 
+    mc:Ignorable="d"
     xmlns:lb="clr-namespace:CryptoMessenger.Behaviors"
-    xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
-    xmlns:props="clr-namespace:CryptoMessenger.Properties" 
+    xmlns:props="clr-namespace:CryptoMessenger.Properties"
     xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
     >
     <Grid Height="460" Width="740">
@@ -31,7 +30,7 @@
             Margin="10"
             TextWrapping="Wrap"
             TextAlignment="Center"
-            FontSize="22" 
+            FontSize="22"
             FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
             Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
             Text="{Binding Source={x:Static props:Resources.EmptyFriendsListboxPlaceholder}}"
@@ -49,7 +48,7 @@
         </TextBlock>
         <!-- list of friends -->
         <ListBox
-            x:Name="friendsListbox" 
+            x:Name="friendsListbox"
             Grid.Row="2"
             Grid.Column="0"
             Style="{StaticResource ListBoxStyle}"
@@ -83,7 +82,7 @@
                             FontSize="10"
                             />
                         <!-- remove from friends button -->
-                        <Button 
+                        <Button
                             x:Name="button"
                             Style="{StaticResource ListBoxButtonStyle}"
                             Cursor="Hand"
@@ -105,16 +104,16 @@
                     <DataTemplate.Triggers>
                         <!-- online status -->
                         <DataTrigger Binding="{Binding IsOnline}" Value="True">
-                            <Setter TargetName="statusTextBlock" Property="Foreground" 
+                            <Setter TargetName="statusTextBlock" Property="Foreground"
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
-                            <Setter TargetName="statusTextBlock" Property="Text" 
+                            <Setter TargetName="statusTextBlock" Property="Text"
                                     Value="{Binding Source={x:Static props:Resources.StatusOnlineText}}"/>
                         </DataTrigger>
                         <!-- offline status -->
                         <DataTrigger Binding="{Binding Path=IsOnline, Converter={StaticResource InverseBooleanConverter}}" Value="True">
-                            <Setter TargetName="statusTextBlock" Property="Foreground" 
+                            <Setter TargetName="statusTextBlock" Property="Foreground"
                                     Value="{DynamicResource UISecondaryBrush}"/>
-                            <Setter TargetName="statusTextBlock" Property="Text" 
+                            <Setter TargetName="statusTextBlock" Property="Text"
                                     Value="{Binding Source={x:Static props:Resources.StatusOfflineText}}"/>
                         </DataTrigger>
                         <!-- on mouse hover -->
@@ -135,7 +134,7 @@
                                 AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
                             Value="True"
                             >
-                            <Setter TargetName="loginTextBlock" Property="Foreground" 
+                            <Setter TargetName="loginTextBlock" Property="Foreground"
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
                         </DataTrigger>
                     </DataTemplate.Triggers>
@@ -156,19 +155,19 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Border 
+            <Border
                 Grid.Row="0"
                 BorderThickness="1 0 0 1"
                 BorderBrush="{DynamicResource UIPrimaryShadeBrush}"
                 Background="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                 />
-            <Border 
+            <Border
                 Grid.Row="1"
                 BorderThickness="1 0 1 1"
                 BorderBrush="{DynamicResource UIPrimaryShadeBrush}"
                 Background="{DynamicResource UIPrimaryBrush}"
                 />
-            <Border 
+            <Border
                 Grid.Row="2"
                 BorderThickness="2"
                 Padding="2"
@@ -199,13 +198,13 @@
                 IsTabStop="False"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                FontSize="22" 
-                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold" 
+                FontSize="22"
+                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
                 Foreground="{DynamicResource UIPrimaryBrush}"
                 Text="{Binding Path=SelectedFriend.Name, Mode=OneWay}"
                 SelectionBrush="{DynamicResource UISecondaryBrush}"
                 SelectionOpacity="0.5"
-                TextWrapping="Wrap" 
+                TextWrapping="Wrap"
                 IsReadOnly="True"
                 />
             <!-- empty list notify -->
@@ -215,8 +214,8 @@
                 HorizontalAlignment="Center"
                 TextOptions.TextRenderingMode="ClearType"
                 TextOptions.TextFormattingMode="Display"
-                FontSize="22" 
-                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold" 
+                FontSize="22"
+                FontFamily="/CryptoMessenger;component/Resources/#Roboto Condensed Bold"
                 Foreground="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                 Text="{Binding Source={x:Static props:Resources.EmptyDialogListboxPlaceholder}}"
                 >
@@ -252,14 +251,17 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="0 0 0 1">
+                        <Border
+                            BorderThickness="0 0 0 1"
+                            BorderBrush="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                            >
                             <Grid Margin="0,0,0,10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <!-- login -->
-                                <TextBox 
+                                <TextBox
                                     Grid.Row="0"
                                     Background="Transparent"
                                     BorderThickness="0"
@@ -272,7 +274,7 @@
                                     SelectionBrush="{DynamicResource UISecondaryBrush}"
                                     SelectionOpacity="0.5"
                                     Text="{Binding Path=Author, Mode=OneWay}"
-                                    TextWrapping="Wrap" 
+                                    TextWrapping="Wrap"
                                     IsReadOnly="True"
                                     />
                                 <!-- time -->
@@ -289,7 +291,7 @@
                                     SelectionBrush="{DynamicResource UISecondaryBrush}"
                                     SelectionOpacity="0.5"
                                     Text="{Binding Path=Time, StringFormat='yyyy-MM-dd HH:mm', Mode=OneWay}"
-                                    TextWrapping="Wrap" 
+                                    TextWrapping="Wrap"
                                     IsReadOnly="True"
                                     />
                                 <!-- message -->
@@ -313,11 +315,10 @@
                             </Grid>
                             <Border.Style>
                                 <Style TargetType="Border">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource UIPrimaryShadeBrush}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=IsMyReply, Converter={StaticResource InverseBooleanConverter}}" Value="True">
-                                            <Setter Property="BorderBrush" 
-                                                    Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource UIPrimaryShadeBrush}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -347,8 +348,8 @@
                 >
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding MessageEnterCommand}"/>
-                    <KeyBinding Key="Enter" 
-                                Modifiers="Shift" 
+                    <KeyBinding Key="Enter"
+                                Modifiers="Shift"
                                 Command="{Binding MessageShiftEnterCommand}"
                                 CommandParameter="{Binding ElementName=msgTextbox}"
                                 />
@@ -376,4 +377,5 @@
             </Button>
         </Grid>
     </Grid>
+
 </UserControl>

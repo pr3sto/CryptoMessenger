@@ -1,8 +1,7 @@
-﻿<ResourceDictionary 
+﻿<ResourceDictionary
     x:Class="CryptoMessenger.Views.Styles.ButtonStyle"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
     >
 
@@ -15,24 +14,24 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
                         <!-- background color -->
-                        <Rectangle 
+                        <Rectangle
                             x:Name="backgroundRect"
                             RenderOptions.EdgeMode="Aliased"
-                            HorizontalAlignment="Stretch" 
-                            VerticalAlignment="Stretch" 
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
                             Fill="{DynamicResource UISecondaryBrush}"
                             />
                         <!-- background image -->
-                        <Rectangle 
+                        <Rectangle
                             x:Name="backgroundImage"
-                            HorizontalAlignment="Stretch" 
-                            VerticalAlignment="Stretch" 
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
                             RenderOptions.BitmapScalingMode="Linear"
                             Fill="{TemplateBinding Foreground}"
                             OpacityMask="{TemplateBinding Background}"
                             />
                         <!-- text -->
-                        <ContentPresenter 
+                        <ContentPresenter
                             x:Name="contentPresenter"
                             Margin="10,0,10,0"
                             TextOptions.TextRenderingMode="ClearType"
@@ -40,30 +39,30 @@
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             TextBlock.Foreground="{TemplateBinding Foreground}"
-                            Content="{TemplateBinding Content}" 
+                            Content="{TemplateBinding Content}"
                             />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="backgroundRect" Property="Fill" 
+                            <Setter TargetName="backgroundRect" Property="Fill"
                                     Value="{DynamicResource UISecondaryShadeBrush}"
                                     />
                         </Trigger>
                         <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="backgroundRect" Property="Fill" 
+                            <Setter TargetName="backgroundRect" Property="Fill"
                                     Value="{DynamicResource UISecondaryBrush}"
                                     />
-                            <Setter Property="Foreground" 
+                            <Setter Property="Foreground"
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
-                                    />                            
+                                    />
                         </Trigger>
                         <!-- button disabled -->
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="backgroundImage" Property="Fill" 
+                            <Setter TargetName="backgroundImage" Property="Fill"
                                     Value="{DynamicResource TextSecondaryBrush}"/>
-                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
+                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground"
                                     Value="{DynamicResource TextSecondaryBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -73,4 +72,3 @@
     </Style>
 
 </ResourceDictionary>
-    

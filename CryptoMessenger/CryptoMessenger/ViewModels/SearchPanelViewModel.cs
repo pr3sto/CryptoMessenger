@@ -55,7 +55,7 @@ namespace CryptoMessenger.ViewModels
 			this.client.PropertyChanged += UsersListChanged;
 
 			UsersList = new ObservableCollection<User>();
-			
+
 			// get users when panel loads
 			this.client.GetAllUsers();
 		}
@@ -71,7 +71,7 @@ namespace CryptoMessenger.ViewModels
 					UsersList.Add(new User(client, name, true));
 
 				foreach (var name in client.OfflineUsersList)
-					UsersList.Add(new User(client, name, false));				
+					UsersList.Add(new User(client, name, false));
 			}
 		}
 

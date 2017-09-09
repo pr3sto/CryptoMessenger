@@ -13,12 +13,12 @@ namespace CryptoMessenger.ViewModels
 	/// <summary>
 	/// View model for login panel (mvvm pattern).
 	/// </summary>
-    class LoginPanelViewModel : ViewModelBase, IWindowPanel
+	class LoginPanelViewModel : ViewModelBase, IWindowPanel
 	{
 		private Client client;
 
 		public LoginPanelViewModel(Client client)
-        {
+		{
 			this.client = client;
 			Notification = Properties.Resources.WelcomeNotification;
 			IsLoading = false;
@@ -32,7 +32,7 @@ namespace CryptoMessenger.ViewModels
 
 		#region Properties
 
-		// is something loading 
+		// is something loading
 		private bool isLoading;
 		public bool IsLoading
 		{
@@ -44,7 +44,7 @@ namespace CryptoMessenger.ViewModels
 			}
 		}
 
-		// is login panel closing 
+		// is login panel closing
 		private bool isClosing;
 		public bool IsClosing
 		{
@@ -154,7 +154,7 @@ namespace CryptoMessenger.ViewModels
 			if (IsUserDataCorrect(password))
 			{
 				IsLoading = true;
-				
+
 				Notification = Properties.Resources.LoginNotification;
 
 				// try login
@@ -167,7 +167,7 @@ namespace CryptoMessenger.ViewModels
 				{
 					Notification = Properties.Resources.ConnectionErrorNotification;
 					isColorsChanged = true;
-					
+
 					IsLoading = false;
 					return;
 				}
@@ -206,10 +206,10 @@ namespace CryptoMessenger.ViewModels
 					Notification = Properties.Resources.AlreadyLoginNotification;
 					isColorsChanged = true;
 				}
-				
+
 				IsLoading = false;
 			}
-		}		
+		}
 
 		// register
 		private DelegateCommand<object> registerCommand;
@@ -227,13 +227,13 @@ namespace CryptoMessenger.ViewModels
 		private async void DoRegister(object passwordBox)
 		{
 			string password = ((PasswordBox)passwordBox).Password;
-		
+
 			SetDefaultColors();
 
 			if (IsUserDataCorrect(password))
 			{
 				IsLoading = true;
-				
+
 				Notification = Properties.Resources.RegistrationNotification;
 
 				// try register
@@ -246,7 +246,7 @@ namespace CryptoMessenger.ViewModels
 				{
 					Notification = Properties.Resources.ConnectionErrorNotification;
 					isColorsChanged = true;
-					
+
 					IsLoading = false;
 					return;
 				}
@@ -254,7 +254,7 @@ namespace CryptoMessenger.ViewModels
 				{
 					Notification = Properties.Resources.CertificateErrorNotification;
 					isColorsChanged = true;
-					
+
 					IsLoading = false;
 					return;
 				}
@@ -278,7 +278,7 @@ namespace CryptoMessenger.ViewModels
 					Notification = Properties.Resources.UnknownErrorNotification;
 					isColorsChanged = true;
 				}
-				
+
 				IsLoading = false;
 			}
 		}
@@ -378,7 +378,7 @@ namespace CryptoMessenger.ViewModels
 				IsPasswordIncorrect = true;
 				isDataCorrect = false;
 			}
-			
+
 			return isDataCorrect;
 		}
 	}

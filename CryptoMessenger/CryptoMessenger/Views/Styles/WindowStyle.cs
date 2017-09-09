@@ -25,10 +25,10 @@ namespace CryptoMessenger.Views.Styles
 
 		internal enum Theme { Light, Dark };
 		Theme currentTheme = Theme.Dark;
-		
+
 		private const string LightThemePath = "Views/Themes/LightTheme.xaml";
 		private const string DarkThemePath = "Views/Themes/DarkTheme.xaml";
-		
+
 
 		private IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
 		{
@@ -111,7 +111,7 @@ namespace CryptoMessenger.Views.Styles
 			storyboard.Children.Add(opacityDownAnim);
 			storyboard.Children.Add(scaleDownAnim);
 
-			storyboard.Completed += delegate 
+			storyboard.Completed += delegate
 			{
 				ChangeTheme();
 				storyboard = new Storyboard();

@@ -41,7 +41,7 @@ namespace CryptoMessenger.ViewModels
 
 		#region Properties
 
-		// warning 
+		// warning
 		private bool showWarning;
 		public bool ShowWarning
 		{
@@ -77,7 +77,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (hideWarningCommand == null)
 				{
-					hideWarningCommand = new DelegateCommand(async delegate 
+					hideWarningCommand = new DelegateCommand(async delegate
 					{
 						// wait for animation
 						await System.Threading.Tasks.Task.Run(() => System.Threading.Thread.Sleep(300));
@@ -96,7 +96,7 @@ namespace CryptoMessenger.ViewModels
 			{
 				if (logoutCommand == null)
 				{
-					logoutCommand = new DelegateCommand(delegate 
+					logoutCommand = new DelegateCommand(delegate
 					{
 						client.Logout();
 						ShowWarning = false;

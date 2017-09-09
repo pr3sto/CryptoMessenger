@@ -1,4 +1,4 @@
-﻿<ResourceDictionary 
+﻿<ResourceDictionary
     x:Class="CryptoMessenger.Views.Styles.WindowStyle"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,19 +6,19 @@
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
     xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
     >
-    
+
     <!-- window buttons style -->
     <Style x:Key="TitleBarButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Background" Value="Transparent"/>
-        
+
         <!-- foreground for color of button -->
         <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
         <!-- borderbrush for color of pressed button -->
         <Setter Property="BorderBrush" Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"/>
-        
+
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -72,7 +72,7 @@
                             </Border.Effect>
                         </Border>
                         <!-- window top panel -->
-                        <DockPanel    
+                        <DockPanel
                             ClipToBounds="True"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Top"
@@ -93,7 +93,7 @@
                                         <ColumnDefinition Width="5"/>
                                     </Grid.ColumnDefinitions>
                                     <!-- icon -->
-                                    <Rectangle 
+                                    <Rectangle
                                         Grid.Column="0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -124,6 +124,7 @@
                                         Width="25"
                                         Height="25"
                                         IsTabStop="False"
+                                        ToolTip="{Binding Source={x:Static props:Resources.WindowThemeButtonTooltip}}"
                                         Style="{StaticResource TitleBarButtonStyle}"
                                         Click="ThemeButton_Click"
                                         extensions:Extensions.ElementSelected="False"
@@ -134,7 +135,7 @@
                                             Stretch="None"
                                             RenderOptions.BitmapScalingMode="Linear"
                                             RenderOptions.EdgeMode="Unspecified"
-                                            Data="M 14,13 A 2,2,180,1,1 18,17 A 2,2,180,1,1 14,13 
+                                            Data="M 14,13 A 2,2,180,1,1 18,17 A 2,2,180,1,1 14,13
                                             M 16,11 L 16,9 M 20,15 L 22,15 M 16,19 L 16,21 M 12,15 L 10,15
                                             M 19,12 L 20,11 M 19,18 L 20,19 M 13,18 L 12,19 M 13,12 L 12,11"
                                             />
@@ -147,6 +148,7 @@
                                         Width="25"
                                         Height="25"
                                         IsTabStop="False"
+                                        ToolTip="{Binding Source={x:Static props:Resources.WindowMinimizeButtonTooltip}}"
                                         Style="{StaticResource TitleBarButtonStyle}"
                                         Click="MinimizeButton_Click"
                                         >
@@ -167,6 +169,7 @@
                                         Width="30"
                                         Height="30"
                                         IsTabStop="False"
+                                        ToolTip="{Binding Source={x:Static props:Resources.WindowCloseButtonTooltip}}"
                                         Style="{StaticResource TitleBarButtonStyle}"
                                         Click="CloseButton_Click"
                                         >
@@ -195,8 +198,8 @@
                         </Trigger>
                         <!-- show warning -->
                         <Trigger Property="extensions:Extensions.ShowWarning" Value="True">
-                            <Setter TargetName="windowBorder" 
-                                    Property="BorderBrush" 
+                            <Setter TargetName="windowBorder"
+                                    Property="BorderBrush"
                                     Value="{DynamicResource AlertBrush}"
                                     />
                             <Setter TargetName="windowBorder" Property="Effect">
@@ -214,9 +217,9 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-                
+
             </Setter.Value>
         </Setter>
     </Style>
+
 </ResourceDictionary>
-    

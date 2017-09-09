@@ -1,4 +1,4 @@
-﻿<UserControl 
+﻿<UserControl
     x:Class="CryptoMessenger.Views.UserControls.LoginPanel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,9 +7,8 @@
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:local="clr-namespace:CryptoMessenger.Views.UserControls"
-    xmlns:props="clr-namespace:CryptoMessenger.Properties"    
-    xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"  
+    xmlns:props="clr-namespace:CryptoMessenger.Properties"
+    xmlns:extensions="clr-namespace:CryptoMessenger.Extensions"
     >
 
     <Grid UseLayoutRounding="True" Height="460" Width="740" Background="Transparent">
@@ -26,7 +25,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <Border 
+        <Border
             Grid.Row="9"
             BorderThickness="0 1 0 0"
             BorderBrush="{DynamicResource UISecondaryBrush}"
@@ -42,19 +41,19 @@
                 Source="/CryptoMessenger;component/Resources/icon.ico"
                 />
             <!-- loading indicator -->
-            <Ellipse 
+            <Ellipse
                 Canvas.Bottom="1"
                 Canvas.Left="319"
                 Width="102"
                 Height="102"
-                Stroke="{DynamicResource UISecondaryBrush}" 
-                StrokeThickness="2"            
+                Stroke="{DynamicResource UISecondaryBrush}"
+                StrokeThickness="2"
                 />
             <Ellipse
                 Width="6"
                 Height="6"
-                Fill="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}" 
-                Visibility="{Binding Path=IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"            
+                Fill="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
+                Visibility="{Binding Path=IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
                 >
                 <!-- animation -->
                 <Ellipse.Style>
@@ -92,7 +91,7 @@
                 <EventTrigger RoutedEvent="Canvas.Loaded">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(Canvas.Opacity)"
                                   From="0.0" To="1.0" Duration="0:0:1.5"
                                   />
@@ -103,7 +102,7 @@
         </Canvas>
 
         <!-- notification label -->
-        <TextBlock 
+        <TextBlock
             x:Name="notifyTextblock"
             Grid.Row="2"
             HorizontalAlignment="Center"
@@ -126,7 +125,7 @@
                                     <PathGeometry Figures="M 300,0 L 0,0" />
                                 </MatrixAnimationUsingPath.PathGeometry>
                             </MatrixAnimationUsingPath>
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(TextBlock.Opacity)"
                                   From="0.0" To="1.0" Duration="0:0:1.0"
                                   />
@@ -180,11 +179,11 @@
                                     <PathGeometry Figures="M 350,0 L 0,0" />
                                 </MatrixAnimationUsingPath.PathGeometry>
                             </MatrixAnimationUsingPath>
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(TextBox.Opacity)"
                                   From="0.0" To="0.0" Duration="0:0:0.1"
                                   />
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(TextBox.Opacity)"
                                   From="0.0" To="1.0" Duration="0:0:1.0"
                                   BeginTime="0:0:0.1"
@@ -238,11 +237,11 @@
                                     <PathGeometry Figures="M 250,0 L 0,0" />
                                 </MatrixAnimationUsingPath.PathGeometry>
                             </MatrixAnimationUsingPath>
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(PasswordBox.Opacity)"
                                   From="0.0" To="0.0" Duration="0:0:0.2"
                                   />
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(PasswordBox.Opacity)"
                                   From="0.0" To="1.0" Duration="0:0:1.0"
                                   BeginTime="0:0:0.2"
@@ -287,11 +286,11 @@
                                     <PathGeometry Figures="M 400,0 L 0,0" />
                                 </MatrixAnimationUsingPath.PathGeometry>
                             </MatrixAnimationUsingPath>
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(Button.Opacity)"
                                   From="0.0" To="0.0" Duration="0:0:0.3"
                                   />
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(Button.Opacity)"
                                   From="0.0" To="1.0" Duration="0:0:1.0"
                                   BeginTime="0:0:0.3"
@@ -336,23 +335,23 @@
                                     <PathGeometry Figures="M 300,0 L 0,0" />
                                 </MatrixAnimationUsingPath.PathGeometry>
                             </MatrixAnimationUsingPath>
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(Button.Opacity)"
                                   From="0.0" To="0.0" Duration="0:0:0.4"
                                   />
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(Button.Opacity)"
                                   From="0.0" To="1.0" Duration="0:0:1.0"
                                   BeginTime="0:0:0.4"
-                                  />                            
+                                  />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
             </Button.Triggers>
         </Button>
-        
+
         <!-- credits -->
-        <TextBlock 
+        <TextBlock
             x:Name="creditsTextblock"
             Grid.Row="9"
             Cursor="Hand"
@@ -380,7 +379,7 @@
                 <EventTrigger RoutedEvent="TextBlock.Loaded">
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation 
+                            <DoubleAnimation
                                   Storyboard.TargetProperty="(TextBlock.Opacity)"
                                   From="0.0" To="1.0" Duration="0:0:1.5"
                                   />
@@ -406,7 +405,7 @@
     <UserControl.Resources>
         <Storyboard x:Key="closingStb">
             <!-- logo -->
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="logoCanvas"
                 Storyboard.TargetProperty="(Canvas.Opacity)"
                 From="1.0" To="0.0" Duration="0:0:1.5"
@@ -421,7 +420,7 @@
                     <PathGeometry Figures="M 0,0 L -300,0" />
                 </MatrixAnimationUsingPath.PathGeometry>
             </MatrixAnimationUsingPath>
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="notifyTextblock"
                 Storyboard.TargetProperty="(TextBlock.Opacity)"
                 From="1.0" To="0.0" Duration="0:0:1.0"
@@ -436,7 +435,7 @@
                     <PathGeometry Figures="M 0,0 L -350,0" />
                 </MatrixAnimationUsingPath.PathGeometry>
             </MatrixAnimationUsingPath>
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="loginTextbox"
                 Storyboard.TargetProperty="(TextBox.Opacity)"
                 From="1.0" To="0.0" Duration="0:0:1.0"
@@ -452,7 +451,7 @@
                     <PathGeometry Figures="M 0,0 L -250,0" />
                 </MatrixAnimationUsingPath.PathGeometry>
             </MatrixAnimationUsingPath>
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="passwordTextbox"
                 Storyboard.TargetProperty="(PasswordBox.Opacity)"
                 From="1.0" To="0.0" Duration="0:0:1.0"
@@ -468,7 +467,7 @@
                     <PathGeometry Figures="M 0,0 L -400,0" />
                 </MatrixAnimationUsingPath.PathGeometry>
             </MatrixAnimationUsingPath>
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="loginButton"
                 Storyboard.TargetProperty="(Button.Opacity)"
                 From="1.0" To="0.0" Duration="0:0:1.0"
@@ -484,27 +483,27 @@
                     <PathGeometry Figures="M 0,0 L -300,0" />
                 </MatrixAnimationUsingPath.PathGeometry>
             </MatrixAnimationUsingPath>
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="registerButton"
                 Storyboard.TargetProperty="(Button.Opacity)"
                 From="1.0" To="0.0" Duration="0:0:1.0"
                 BeginTime="0:0:0.4"
                 />
             <!-- credits -->
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetName="creditsTextblock"
                 Storyboard.TargetProperty="(TextBlock.Opacity)"
                 From="1.0" To="0.0" Duration="0:0:1.5"
                 />
         </Storyboard>
     </UserControl.Resources>
-    
+
     <!-- play animation when user control is closing -->
     <i:Interaction.Triggers>
         <ei:DataTrigger Binding="{Binding IsClosing, Mode=OneWay}" Value="True">
-            <ei:ControlStoryboardAction Storyboard="{StaticResource closingStb}"     
+            <ei:ControlStoryboardAction Storyboard="{StaticResource closingStb}"
                                         ControlStoryboardOption="Play"/>
         </ei:DataTrigger>
     </i:Interaction.Triggers>
-    
+
 </UserControl>

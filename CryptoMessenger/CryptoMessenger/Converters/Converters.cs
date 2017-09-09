@@ -72,7 +72,7 @@ namespace CryptoMessenger.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			return this.Aggregate(value, (current, converter) => 
+			return this.Aggregate(value, (current, converter) =>
 				converter.Convert(current, targetType, parameter, culture));
 		}
 

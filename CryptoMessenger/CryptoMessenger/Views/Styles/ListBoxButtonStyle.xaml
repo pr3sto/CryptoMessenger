@@ -1,8 +1,7 @@
-﻿<ResourceDictionary 
+﻿<ResourceDictionary
     x:Class="CryptoMessenger.Views.Styles.ListBoxButtonStyle"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
     >
 
@@ -15,15 +14,15 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
                         <!-- background image -->
-                        <Rectangle 
+                        <Rectangle
                             x:Name="backgroundImage"
-                            HorizontalAlignment="Stretch" 
-                            VerticalAlignment="Stretch" 
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
                             Fill="{DynamicResource UISecondaryBrush}"
                             OpacityMask="{TemplateBinding Background}"
                             />
                         <!-- text -->
-                        <ContentPresenter 
+                        <ContentPresenter
                             x:Name="contentPresenter"
                             Margin="10,0,10,0"
                             TextOptions.TextRenderingMode="ClearType"
@@ -31,22 +30,22 @@
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             TextBlock.Foreground="{TemplateBinding Foreground}"
-                            Content="{TemplateBinding Content}" 
+                            Content="{TemplateBinding Content}"
                             />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="backgroundImage" Property="Fill" 
+                            <Setter TargetName="backgroundImage" Property="Fill"
                                     Value="{DynamicResource UISecondaryShadeBrush}"
                                     />
                         </Trigger>
                         <!-- mouse pressed -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="backgroundImage" Property="Fill" 
+                            <Setter TargetName="backgroundImage" Property="Fill"
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                     />
-                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground" 
+                            <Setter TargetName="contentPresenter" Property="TextBlock.Foreground"
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
@@ -57,4 +56,3 @@
     </Style>
 
 </ResourceDictionary>
-    

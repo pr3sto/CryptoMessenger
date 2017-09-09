@@ -1,8 +1,7 @@
-﻿<ResourceDictionary 
+﻿<ResourceDictionary
     x:Class="CryptoMessenger.Views.Styles.ScrollBarStyle"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:CryptoMessenger.Views.Styles"
     xmlns:props="clr-namespace:CryptoMessenger.Properties"
     >
 
@@ -13,21 +12,21 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border 
-                        x:Name="border" 
+                    <Border
+                        x:Name="border"
                         RenderOptions.EdgeMode="Aliased"
                         Background="{DynamicResource UISecondaryBrush}"
                         />
                     <ControlTemplate.Triggers>
                         <!-- mouse hover -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" 
+                            <Setter TargetName="border" Property="Background"
                                     Value="{DynamicResource UISecondaryShadeBrush}"
                                     />
                         </Trigger>
                         <!-- mouse dragging -->
                         <Trigger Property="IsDragging" Value="True">
-                            <Setter TargetName="border" Property="Background" 
+                            <Setter TargetName="border" Property="Background"
                                     Value="{Binding Path=SpecialBrush, Source={x:Static props:Settings.Default}}"
                                     />
                         </Trigger>
@@ -45,7 +44,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <Border 
+                    <Border
                         RenderOptions.EdgeMode="Aliased"
                         Background="{DynamicResource UIPrimaryShadeBrush}"
                         />
@@ -75,7 +74,7 @@
             </Track>
         </Grid>
     </ControlTemplate>
-    
+
     <!-- horizontal scrollbar template -->
     <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
         <Grid>
@@ -97,7 +96,7 @@
             </Track>
         </Grid>
     </ControlTemplate>
-    
+
     <!-- scrollbar style -->
     <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -116,4 +115,3 @@
     </Style>
 
 </ResourceDictionary>
-    
