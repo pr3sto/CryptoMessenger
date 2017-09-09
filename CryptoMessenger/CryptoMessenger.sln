@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{CDDF981C-897E-40F4-A597-9EC433DB7449}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageProtocol", "MessageProtocol\MessageProtocol.csproj", "{1DD39EEC-8A7D-4BD9-BB0F-84DE13795A73}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoMessenger", "CryptoMessenger\CryptoMessenger.csproj", "{41DE055A-66CB-4261-882B-792E302A9EA0}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CryptoMessengerSetup", "CryptoMessengerSetup\CryptoMessengerSetup.vdproj", "{40601D60-215A-4AF0-A640-34142DBAD3FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,8 +43,15 @@ Global
 		{41DE055A-66CB-4261-882B-792E302A9EA0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41DE055A-66CB-4261-882B-792E302A9EA0}.Release|x64.ActiveCfg = Release|Any CPU
 		{41DE055A-66CB-4261-882B-792E302A9EA0}.Release|x64.Build.0 = Release|Any CPU
+		{40601D60-215A-4AF0-A640-34142DBAD3FE}.Debug|Any CPU.ActiveCfg = Debug
+		{40601D60-215A-4AF0-A640-34142DBAD3FE}.Debug|x64.ActiveCfg = Debug
+		{40601D60-215A-4AF0-A640-34142DBAD3FE}.Release|Any CPU.ActiveCfg = Release
+		{40601D60-215A-4AF0-A640-34142DBAD3FE}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6026F235-DA62-46D0-AD03-6236A12E6455}
 	EndGlobalSection
 EndGlobal
