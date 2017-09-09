@@ -58,8 +58,8 @@ namespace Server
 		/// </summary>
 		public async void Start()
 		{
-			#region Test code
 
+#if DEBUG
 			DBoperations.Register("13", "13");
 			for (int i = 0; i < 10; i++)
 			{
@@ -84,8 +84,7 @@ namespace Server
 				DBoperations.Register(login, login);
 				DBoperations.SetFriendship(DBoperations.GetUserId("13"), DBoperations.GetUserId(login), true);
 			}
-
-			#endregion
+#endif
 
 			if (isStarted) return;
 			if (certificate == null) return;

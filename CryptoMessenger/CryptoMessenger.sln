@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{356079
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{D0FB4964-09F5-419F-ABBF-5B2AA2F9E466}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ServerSetup", "ServerSetup\ServerSetup.vdproj", "{A964CF9A-758F-4573-A916-3E4F168D4A36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|x64.ActiveCfg = Release|Any CPU
 		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|x64.Build.0 = Release|Any CPU
 		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A}.Release|x64.Deploy.0 = Release|Any CPU
+		{A964CF9A-758F-4573-A916-3E4F168D4A36}.Debug|Any CPU.ActiveCfg = Debug
+		{A964CF9A-758F-4573-A916-3E4F168D4A36}.Debug|x64.ActiveCfg = Debug
+		{A964CF9A-758F-4573-A916-3E4F168D4A36}.Release|Any CPU.ActiveCfg = Release
+		{A964CF9A-758F-4573-A916-3E4F168D4A36}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{41DE055A-66CB-4261-882B-792E302A9EA0} = {D0FB4964-09F5-419F-ABBF-5B2AA2F9E466}
 		{40601D60-215A-4AF0-A640-34142DBAD3FE} = {D0FB4964-09F5-419F-ABBF-5B2AA2F9E466}
 		{1BC9C2F1-9345-4B18-AB53-AEBBA4E0856A} = {35607918-CA0C-4E4A-9969-FD261ED0D393}
+		{A964CF9A-758F-4573-A916-3E4F168D4A36} = {35607918-CA0C-4E4A-9969-FD261ED0D393}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6026F235-DA62-46D0-AD03-6236A12E6455}
